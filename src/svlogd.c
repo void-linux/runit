@@ -34,7 +34,7 @@
 #include "ndelay.h"
 
 #define USAGE " [-tv] [-r c] [-R abc] [-l n ] [-b n] dir ..."
-#define VERSION "$Id: svlogd.c,v 1.10 2004/01/12 13:22:28 pape Exp $"
+#define VERSION "$Id: svlogd.c,v 1.11 2004/01/19 12:20:03 pape Exp $"
 
 #define FATAL "svlogd: fatal: "
 #define WARNING "svlogd: warning: "
@@ -542,11 +542,18 @@ unsigned int lineflush(struct logdir *ld, char *s, int len) {
     linestart(ld, s, len);
     break;
   case '+':
-    ld->match =0;
-    if (ld->udponly) return(0);
+    if (ld->udponly) {
+      ld->match =0;
+      return(0);
+    }
     buffer_put(&ld->b, s, len);
+    ld->size +=len;
+    break;
+  }
+  if (ld->match == '+') {
     buffer_putflush(&ld->b, "\n", 1);
-    ld->size +=len +1;
+    ld->size +=1;
+    ld->match =0;
     if (ld->sizemax)
       if ((linelen > ld->sizemax) || (ld->size >= (ld->sizemax -linelen)))
 	rotate(ld);

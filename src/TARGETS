@@ -27,6 +27,9 @@ fmt_ptime.o
 uidgid.o
 reboot_system.h
 uw_tmp.h
+socket.lib
+trysocketlib
+trysocketlib.o
 alloc.o
 alloc_re.o
 buffer.o

@@ -1,4 +1,4 @@
-ld="`head -1 conf-ld`"
+ld="`head -n1 conf-ld`"
 systype="`cat systype`"
 
 cat warn-auto.sh
