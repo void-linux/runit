@@ -1,0 +1,175 @@
+
+
+
+<HTML>
+<HEAD>
+<TITLE>svlogd(8) manual page</TITLE>
+</HEAD>
+<BODY bgcolor=white>
+<a href="http://smarden.org/pape/">G. Pape</a><br><A HREF="index.html">runit</A><hr><P>
+
+<H2><A NAME="sect0">Name</A></H2>
+svlogd - runit's service logging daemon 
+<H2><A NAME="sect1">Synopsis</A></H2>
+<B>svlogd</B> [-tv] [-r <I>c]</I> [-R
+<I>abc]</I> [-l <I>n]</I> [-b <I>n]</I> <I>logs</I> 
+<H2><A NAME="sect2">Description</A></H2>
+<I>logs</I> consists of one or more arguments,
+each specifying a directory. <P>
+<B>svlogd</B> continuously reads log data from its
+standard input, optionally filters log messages, and writes the data to
+one or more automatically rotated <I>logs</I>. <P>
+Recent log files can automatically
+be processed by an arbitrary processor program when they are rotated, and
+<B>svlogd</B> can be told to alert selected log messages to standard error. <P>
+<B>svlogd</B>
+runs until it sees end-of-file on standard input or is sent a TERM signal,
+see below. <P>
+ 
+<H3><A NAME="sect3">Log Directory</A></H3>
+A log directory <I>log</I> contains some number of old
+log files, and the current log file <I>current</I>. Old log files have a file name
+starting with <I>@</I> followed by a precise timestamp (see <B><I>tai64n</B>(8)</I>), indicating
+when <I>current</I> was rotated and renamed to this file. <P>
+A log directory additionally
+contains the lock file <I>lock</I>, maybe <I>state</I> and <I>newstate</I>, and optionally the
+file <I>config</I>. <B>svlogd</B> creates necessary files if they don't exist. 
+<H3><A NAME="sect4">Log File
+Rotation</A></H3>
+<B>svlogd</B> appends selected log messages to the <I>current</I> log file. If
+<I>current</I> has <I>size</I> bytes or more size (or there is a new-line withing the
+last <I>len</I> of <I>size</I> bytes) <I>current</I> is rotated: <P>
+<B>svlogd</B> closes <I>current</I>, changes
+permission of <I>current</I> to 0755, renames <I>current</I> to @<I>timestamp.s,</I> and starts
+with a new empty <I>current</I>. If <B>svlogd</B> sees <I>num</I> or more old log files in <I>dir</I>,
+it removes the oldest. 
+<H3><A NAME="sect5">Processor</A></H3>
+If <B>svlogd</B> is told to process recent log
+files, it saves <I>current</I> to @<I>timestamp.u,</I> feeds @<I>timestamp.u</I> through ``sh -c
+"<I>processor</I>"'' and writes the output to @<I>timestamp.t.</I> If the <I>processor</I> finishes
+successfully, @<I>timestamp.u</I> is deleted and @<I>timestamp.t</I> is renamed to @<I>timestamp.s,</I>
+otherwise @<I>timestamp.t</I> is deleted and the <I>processor</I> is started again. <B>svlogd</B>
+also saves any output that the <I>processor</I> writes to filedescriptor 5, and
+make that output available on filedescriptor 4 when it runs <I>processor</I> on
+the next log file rotation. <P>
+A <I>processor</I> is run in the background. If <B>svlogd</B>
+sees a previously started <I>processor</I> still running when trying to start
+a new one for the same <I>log</I>, it blocks until the currently running <I>processor</I>
+has finished successfully. Only the HUP signal works in that situation. Note
+that this may block any program feeding its log data to <B>svlogd.</B> <P>
+ 
+<H3><A NAME="sect6">Config</A></H3>
+On
+startup, and after receiving a HUP signal, <B>svlogd</B> checks for each <I>log</I> if
+the configuration file <I>log/config</I> exists, and if so, reads the file line
+by line and adjusts configuration for <I>log</I> as follows: <P>
+If the line is empty,
+less than two characters long, or starts with a ``#'', it is ignored. A line
+of the form 
+<DL>
+
+<DT>s<I>size</I> </DT>
+<DD>sets the maximum file size of <I>current</I> when <B>svlogd</B> should
+rotate the current log file to <I>size</I> bytes. Default is 1000000. </DD>
+
+<DT>n<I>num</I> </DT>
+<DD>sets
+the maximum number of old log files <B>svlogd</B> should maintain to <I>num</I>. If <B>svlogd</B>
+sees more that <I>num</I> old log files in <I>log</I> after log file rotation, it deletes
+the oldest one. Default is 10. </DD>
+
+<DT>!<I>processor</I> </DT>
+<DD>tells <B>svlogd</B> to feed each recent
+log file through <I>processor</I> (see above) on log file rotation. By default
+log files are not processed. </DD>
+</DL>
+<P>
+If a line starts with a <I>-</I>, <I>+</I>, <I>e</I>, or <I>E</I>, <B>svlogd</B>
+matches the first <I>len</I> characters of each log message against <I>pattern</I> and
+acts accordingly: 
+<DL>
+
+<DT>-<I>pattern</I> </DT>
+<DD>the log message is deselected. </DD>
+
+<DT>+<I>pattern</I> </DT>
+<DD>the log
+message is selected </DD>
+
+<DT>e<I>pattern</I> </DT>
+<DD>log messages matching <I>pattern</I> are printed
+to standard error. </DD>
+
+<DT>E<I>pattern</I> </DT>
+<DD>log messages not matching <I>pattern</I> are printed
+to standard error. </DD>
+</DL>
+<P>
+Initially each line is selected. Deselected log messages
+are discarded from <I>log</I>. 
+<H2><A NAME="sect7">Options</A></H2>
+
+<DL>
+
+<DT><B>-t</B> </DT>
+<DD>timestamp. Prefix each selected line with
+a precise timestamp (see <B><I>tai64n</B>(8)</I>) when writing to <I>log</I> or to standard
+error. </DD>
+
+<DT><B>-r <I>c</B> </I></DT>
+<DD>replace. <I>c</I> must be a single character. Replace non-printable characters
+in log messages with <I>c</I>. Character are replaced before pattern matching is
+applied. </DD>
+
+<DT><B>-R <I>abc</B> </I></DT>
+<DD>replace characters. Additionally to non-printable characters,
+replace all characters found in <I>abc</I> with <I>c</I> (default ``_''). </DD>
+
+<DT><B>-l <I>len</B> </I></DT>
+<DD>line length.
+Pattern matching applies to the first <I>len</I> characters of a log message only.
+Default is 1000. </DD>
+
+<DT><B>-b <I>buflen</B> </I></DT>
+<DD>buffer size. Set the size of the buffer <B>svlogd</B>
+uses when reading from standard input and writing to <I>logs</I> to <I>buflen</I>. Default
+is 1024. <I>buflen</I> must be greater than <I>len</I>. </DD>
+</DL>
+
+<H2><A NAME="sect8">Signals</A></H2>
+If <B>svlogd</B> is sent a HUP
+signal, it closes and reopens all <I>logs</I>, and updates their configuration
+according to <I>log/config</I>. <P>
+If <B>svlogd</B> is sent a TERM signal, or if it sees
+end-of-file on standard input, it closes standard input, waits for all <I>processor</I>
+subprocesses to finish if any, and exits 0 as soon as possible. <P>
+If <B>svlogd</B>
+is sent an ALRM signal, it tries for all <I>logs</I> to rotate the current log
+file, if it is not empty. 
+<H2><A NAME="sect9">See Also</A></H2>
+<I>runsvstat(8)</I>, <I>runit(8)</I>, <I>runit-init(8)</I>,
+<I>runsv(8)</I>, <I>runsvstat(8)</I>, <I>runsvctrl(8)</I>, <I>runsvdir(8)</I>, <I>runsvchdir(8)</I>, <I>svwaitdown(8)</I>,
+<I>svwaitup(8)</I> <P>
+<I>http://smarden.org/runit/</I> 
+<H2><A NAME="sect10">Author</A></H2>
+Gerrit Pape &lt;pape@smarden.org&gt;
+<P>
+
+<HR><P>
+<A NAME="toc"><B>Table of Contents</B></A><P>
+<UL>
+<LI><A NAME="toc0" HREF="#sect0">Name</A></LI>
+<LI><A NAME="toc1" HREF="#sect1">Synopsis</A></LI>
+<LI><A NAME="toc2" HREF="#sect2">Description</A></LI>
+<UL>
+<LI><A NAME="toc3" HREF="#sect3">Log Directory</A></LI>
+<LI><A NAME="toc4" HREF="#sect4">Log File Rotation</A></LI>
+<LI><A NAME="toc5" HREF="#sect5">Processor</A></LI>
+<LI><A NAME="toc6" HREF="#sect6">Config</A></LI>
+</UL>
+<LI><A NAME="toc7" HREF="#sect7">Options</A></LI>
+<LI><A NAME="toc8" HREF="#sect8">Signals</A></LI>
+<LI><A NAME="toc9" HREF="#sect9">See Also</A></LI>
+<LI><A NAME="toc10" HREF="#sect10">Author</A></LI>
+</UL>
+</BODY></HTML>

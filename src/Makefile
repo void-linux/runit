@@ -1,5 +1,5 @@
 IT=sysdeps runit runit-init runsv runsvdir runsvchdir svwaitup svwaitdown \
-utmpset
+utmpset svlogd
 
 default: $(IT)
 
@@ -33,6 +33,9 @@ utmpset: load utmpset.o unix.a byte.a
 runsvchdir: load runsvchdir.o unix.a byte.a
 	./load runsvchdir unix.a byte.a
 
+svlogd: load svlogd.o pmatch.o fmt_ptime.o unix.a byte.a time.a
+	./load svlogd pmatch.o fmt_ptime.o unix.a byte.a time.a
+
 runit.o: compile sysdeps runit.c
 	./compile runit.c
 
@@ -62,6 +65,17 @@ utmpset.o: compile utmpset.c
 
 runsvchdir.o: compile runsvchdir.c
 	./compile runsvchdir.c
+
+svlogd.o: compile svlogd.c
+	./compile svlogd.c
+
+
+pmatch.o: compile pmatch.c
+	./compile pmatch.c
+
+fmt_ptime.o: compile fmt_ptime.c
+	./compile fmt_ptime.c
+
 
 clean:
 	find . -name \*~ -exec rm -f {} \;
@@ -337,6 +351,7 @@ uint64.h
 	grep sysdep hasmkffo.h >> sysdeps
 	grep sysdep hasflock.h >> sysdeps
 	grep sysdep hasshsgr.h >> sysdeps
+	cat sysdeps
 
 systype: find-systype.sh trycpp.c x86cpuid.c
 	sh find-systype.sh > systype
