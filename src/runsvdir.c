@@ -80,7 +80,7 @@ void runsvdir() {
   int i;
   struct stat s;
 
-  if (! (dir =opendir(svdir))) {
+  if (! (dir =opendir("."))) {
     warn("unable to open directory ", svdir);
     return;
   }
@@ -162,6 +162,7 @@ int main(int argc, char **argv) {
   struct stat s;
   time_t mtime =0;
   int wstat;
+  int curdir;
   int pid;
   struct taia deadline;
   struct taia now;
@@ -179,7 +180,8 @@ int main(int argc, char **argv) {
       warn3x("log service disabled.", 0, 0);
     }
   }
-
+  if ((curdir =open_read(".")) == -1)
+    fatal("unable to open current directory", 0);
 
   for (;;) {
     /* collect children */
@@ -194,12 +196,18 @@ int main(int argc, char **argv) {
 	}
       }
     }
-    if (stat(".", &s) != -1) {
+    if (stat(svdir, &s) != -1) {
       if (check || s.st_mtime > mtime) {
 	/* svdir modified */
 	mtime =s.st_mtime;
 	check =0;
-	runsvdir();
+        if (chdir(svdir) == -1)
+	  warn("unable to change directory to", svdir);
+	else {
+	  runsvdir();
+	  if (fchdir(curdir) == -1)
+            warn("unable to change directory", 0);
+        }
       }
     }
     else
