@@ -1,8 +1,5 @@
 #!/bin/sh
 
-LAST=0
-test -r /etc/runit/reboot && LAST=6
-
 echo 'Stopping getties...'
 /command/svc -d /service/getty-*
 /command/svwaitdown -t14 /service/getty-* || \
@@ -18,6 +15,10 @@ echo 'Stopping log services...'
 /command/svwaitdown -t35 /service/*/log
 
 echo 'Shutdown...'
-/etc/init.d/rc $LAST
+if test -r /etc/runit/reboot; then
+  /sbin/reboot
+else
+  /sbin/halt
+fi
 
 exit 0

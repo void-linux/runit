@@ -13,14 +13,14 @@ Check that you have the recent version of
 <a href="http://cr.yp.to/daemontools.html">daemontools</a> installed.
 <p>
 Download
-<a href="runit-0.2.3.tar.gz">runit-0.2.3.tar.gz</a> into <tt>/package</tt>
+<a href="runit-0.2.6.tar.gz">runit-0.2.6.tar.gz</a> into <tt>/package</tt>
 and unpack the archive
 <pre>
   # cd /package
-  # gunzip runit-0.2.3.tar
-  # tar -xpf runit-0.2.3.tar
-  # rm runit-0.2.3.tar
-  # cd admin/runit-0.2.3
+  # gunzip runit-0.2.6.tar
+  # tar -xpf runit-0.2.6.tar
+  # rm runit-0.2.6.tar
+  # cd admin/runit-0.2.6
 </pre>
 Compile and install the <i>runit</i> programs
 <pre>
@@ -32,13 +32,15 @@ gzip the man pages and copy them into a reasonable directory in your
   # mkdir -p /usr/local/man/man8/
   # gzip man/runit.8 && cp -f man/runit.8.gz /usr/local/man/man8/
   # gzip man/runit-init.8 && cp -f man/runit-init.8.gz /usr/local/man/man8/
+  # gzip man svwaitdown.8 && cp -f man/svwaitdown.8.gz /usr/local/man/man8/
+  # gzip man svwaitup.8 && cp -f man/svwaitup.8.gz /usr/local/man/man8/
 </pre>
 Refer to <a href="replaceinit.html">replacing init</a> for
-replacing <i>sysvinit</i> with <i>runit</i>.
+replacing <i>init</i> with <i>runit</i>.
 <hr>
 <address><a href="mailto:pape@smarden.org">
 Gerrit Pape &lt;pape@smarden.org&gt;
 </a></address>
-<small>$Id: install.html,v 1.7 2001/12/27 13:44:04 pape Exp $</small>
+<small>$Id: install.html,v 1.9 2001/12/30 16:50:11 pape Exp $</small>
 </body>
 </html>

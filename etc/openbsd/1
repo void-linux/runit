@@ -1,0 +1,7 @@
+#!/bin/sh
+# system one time tasks
+rm -f /etc/runit/stopit
+
+/bin/sh /etc/rc autoboot
+
+exit 0

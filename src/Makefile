@@ -8,10 +8,10 @@ CFLAGS=-Isupport
 all: runit runit-init svwaitup svwaitdown
 
 runit: djb-publicdomain runit.o
-	$(LD) runit support/unix.a support/byte.a
+	$(LD) runit support/unix.a support/byte.a -static
 
 runit-init: djb-publicdomain runit-init.o
-	$(LD) runit-init support/unix.a support/byte.a
+	$(LD) runit-init support/unix.a support/byte.a -static
 
 svwaitup: djb-publicdomain svwaitup.o
 	$(LD) svwaitup support/unix.a support/byte.a support/time.a
