@@ -135,15 +135,17 @@ A character not a star (&lsquo;&lsquo;*&rsquo;&rsquo;) and not a plus (&lsquo;&l
 the next character in <i>pattern</i> in the log message one or more times. A star
 before the end of <i>pattern</i> matches any string in the log message that does
 not include the next character in <i>pattern</i>. A star at the end of <i>pattern</i>
-matches any string. 
+matches any string. <p>
+Timestamps optionally added by <b>svlogd</b> are not considered
+part of the log message. 
 <h2><a name='sect8'>Options</a></h2>
 
 <dl>
 
 <dt><b>-t</b> </dt>
-<dd>timestamp. Prefix each selected line with a
-precise timestamp (see <i><b>tai64n</b>(8)</i>) when writing to <i>log</i> or to standard error.
-</dd>
+<dd>timestamp. Prefix each selected line with
+a precise timestamp (see <i><b>tai64n</b>(8)</i>) when writing to <i>log</i> or to standard
+error. </dd>
 
 <dt><b>-tt</b> </dt>
 <dd>timestamp. Prefix each selected line with a human readable, sortable

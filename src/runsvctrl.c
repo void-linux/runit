@@ -3,7 +3,7 @@
 #include "error.h"
 #include "open.h"
 
-#define USAGE " u|d|o|p|c|h|a|i|1|2|t|k|x|e service ..."
+#define USAGE " u|d|o|p|c|h|a|i|q|1|2|t|k|x|e service ..."
 
 #define VERSION "$Id$"
 
@@ -53,7 +53,8 @@ int main(int argc, char **argv) {
 
   switch ((c =**argv)) {
   case 'u': case 'd': case 'o': case 'x': case 'e': case 'p': case 'c':
-  case 'h': case 'a': case 'i': case 't': case 'k': case '1': case '2':
+  case 'h': case 'a': case 'i': case 't': case 'k': case 'q': case '1':
+  case '2':
     break;
   default:
     usage();

@@ -86,8 +86,7 @@ After it stops, do not restart service.
 .B o
 Once.
 If the service is not running, start it.
-Do not restart it if it
-stops.
+Do not restart it if it stops.
 .TP
 .B p
 Pause.
@@ -109,6 +108,9 @@ If the service is running, send it a ALRM signal.
 Interrupt.
 If the service is running, send it a INT signal.
 .TP
+.B q
+Quit.
+If the service is running, send it a QUIT signal.
 .B 1
 User-defined 1.
 If the service is running, send it a USR1 signal.
@@ -172,13 +174,13 @@ exits 0 if it was told to exit.
 .SH SEE ALSO
 runsvctrl(8),
 runsvstat(8),
+chpst(8),
+svlogd(8),
 runit(8),
 runit-init(8),
 runsvdir(8),
 runsvchdir(8),
-svlogd(8),
-svwaitdown(8),
-svwaitup(8),
+utmpset(8)
 .P
 http://smarden.org/runit/
 .SH AUTHOR

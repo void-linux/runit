@@ -308,6 +308,9 @@ int ctrl(struct svdir *s, char c) {
   case 'i': /* sig int */
     if (s->pid) kill(s->pid, SIGINT);
     break;
+  case 'q': /* sig quit */
+    if (s->pid) kill(s->pid, SIGQUIT);
+    break;
   case '1': /* sig usr1 */
     if (s->pid) kill(s->pid, SIGUSR1);
     break;
@@ -512,7 +515,7 @@ int main(int argc, char **argv) {
     if (haslog)
       if (read(svd[1].fdcontrol, &ch, 1) == 1) ctrl(&svd[1], ch);
 
-    if (svd[0].want == W_EXIT && svd[0].pid == 0) {
+    if (svd[0].want == W_EXIT && svd[0].state == S_DOWN) {
       if (svd[1].pid == 0) _exit(0);
       if (svd[1].want != W_EXIT) {
 	svd[1].want =W_EXIT;

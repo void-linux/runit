@@ -349,7 +349,7 @@ unsigned int logdir_open(struct logdir *ld, const char *fn) {
     unsigned long port;
 
     if (verbose) strerr_warn4(INFO, "read: ", ld->name, "/config", 0);
-    for (i =0; i < sa.len -1; ++i) {
+    for (i =0; i +1 < sa.len; ++i) {
       if ((len =byte_chr(&sa.s[i], sa.len -i, '\n')) == 1) {
 	++i; continue;
       }

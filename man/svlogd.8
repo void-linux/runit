@@ -122,8 +122,8 @@ is started again.
 .B svlogd
 also saves any output that the
 .I processor
-writes to file descriptor 5, and make that output available on
-file descriptor 4 when it runs
+writes to file descriptor 5, and make that output available on file
+descriptor 4 when it runs
 .I processor
 on the next log file rotation.
 .P
@@ -282,6 +282,10 @@ character in
 A star at the end of
 .I pattern
 matches any string.
+.P
+Timestamps optionally added by
+.B svlogd
+are not considered part of the log message.
 .SH OPTIONS
 .TP
 .B \-t
@@ -370,12 +374,14 @@ with a non empty
 log file.
 .SH SEE ALSO
 runsv(8),
-runsvstat(8),
 runsvctrl(8),
-runsvdir(8),
-runsvchdir(8),
+runsvstat(8),
+chpst(8),
 runit(8),
 runit-init(8),
+runsvdir(8),
+runsvchdir(8),
+utmpset(8),
 multilog(8)
 .P
 http://smarden.org/runit/
