@@ -14,36 +14,36 @@ runit - the UNIX process no 1
 <B>runit</B> 
 <H2><A NAME="sect2">Description</A></H2>
 <B>runit</B> must be
-run as Unix process no 1. It performs the system's booting, running and shutdown
-in three stages: 
+run as Unix process no 1. It performs the system's booting, running, and
+shutdown in three Stages: 
 <H2><A NAME="sect3">Stage 1</A></H2>
-<B>runit</B> runs <I>/etc/runit/1</I> and waits for it to terminate.
-The system's one time tasks are done here. 
+<B>runit</B> runs <I>/etc/runit/1</I> and waits for
+it to terminate. The system's one time tasks are done here. 
 <H2><A NAME="sect4">Stage 2</A></H2>
-<B>runit</B> runs <I>/etc/runit/2</I>,
-which should not return until system shutdown. Normally <I>/etc/runit/2</I> starts
-<B><I>svscanboot</B>(8)</I>. <B>runit</B> is able to handle the ctrl-alt-del keyboard request in
-stage 2, see below. 
-<H2><A NAME="sect5">Stage 3</A></H2>
-If <B>runit</B> is told to halt or reboot the system,
-or the Stage 2 returns without errors, it terminates Stage 2 if it is running
-and runs <I>/etc/runit/3</I>. The systems tasks to shutdown and halt or reboot
-are done here. 
-<H2><A NAME="sect6">Ctrl-alt-del</A></H2>
-If <B>runit</B> receives the ctrl-alt-del keyboard request
-and the file <I>/etc/runit/ctrlaltdel</I> exists, <B>runit</B> runs <I>/etc/runit/ctrlaltdel</I>,
-waits for it to terminate and then enters stage 3 for system shutdown. 
-<H2><A NAME="sect7">Signals</A></H2>
-<B>runit</B>
-only accepts signals in stage 2. <P>
-If <B>runit</B> receives a CONT signal and the
-file <I>/etc/runit/stopit</I> exists, <B>runit</B> is told to shutdown the system. <P>
-Normally
-in stage 3 <I>/etc/runit/3</I> checks for the file <I>/etc/runit/reboot</I>. If it exists,
+<B>runit</B> runs
+<I>/etc/runit/2</I>, which should not return until system shutdown; if it crashes,
+it will be restarted. Normally <I>/etc/runit/2</I> starts <B><I>svscanboot</B>(8)</I>. <B>runit</B> is
+able to handle the ctrl-alt-del keyboard request in Stage 2, see below. 
+<H2><A NAME="sect5">Stage
+3</A></H2>
+If <B>runit</B> is told to shutdown the system, or the Stage 2 returns without
+errors, it terminates Stage 2 if it is running, and runs <I>/etc/runit/3</I>. The
+systems tasks to shutdown and halt or reboot are done here. Normally in
+Stage 3 <I>/etc/runit/3</I> checks for the file <I>/etc/runit/reboot</I>. If it exists,
 the system is rebooted, it is halted otherwise. 
+<H2><A NAME="sect6">Ctrl-alt-del</A></H2>
+If <B>runit</B> receives
+the ctrl-alt-del keyboard request and the file <I>/etc/runit/ctrlaltdel</I> exists,
+<B>runit</B> runs <I>/etc/runit/ctrlaltdel</I>, waits for it to terminate and then enters
+Stage 3 for system shutdown. 
+<H2><A NAME="sect7">Signals</A></H2>
+<B>runit</B> only accepts signals in Stage
+2. <P>
+If <B>runit</B> receives a CONT signal and the file <I>/etc/runit/stopit</I> exists,
+<B>runit</B> is told to shutdown the system. 
 <H2><A NAME="sect8">See Also</A></H2>
-<I>init(8)</I>, <I>runit-halt(8)</I>,
-<I>runit-reboot(8)</I> 
+<I>init(8)</I>, <I>runit-halt(8)</I>, <I>runit-reboot(8)</I>
+
 <H2><A NAME="sect9">Author</A></H2>
 Gerrit Pape &lt;pape@smarden.org&gt; <P>
 
