@@ -1,5 +1,5 @@
 runit 1.2.1
-Fri, 14 Jan 2005 22:52:42 +0000
+Sat, 15 Jan 2005 11:57:46 +0000
   * chpst.c: typo.
   * svwaitdown.c: minimum timeout is 1 second; service directories no longer
     must start with /.
