@@ -1,0 +1,51 @@
+
+
+
+<HTML>
+<HEAD>
+<TITLE>runit-init(8) manual page</TITLE>
+</HEAD>
+<BODY bgcolor=white>
+<a href="http://innominate.org/~pape/">G. Pape</a><br><A HREF="index.html">runit</A><hr><P>
+
+<H2><A NAME="sect0">Name</A></H2>
+init - the UNIX process no 1 
+<H2><A NAME="sect1">Synopsis</A></H2>
+<B>init</B> [ 0 | 6 ] 
+<H2><A NAME="sect2">Description</A></H2>
+<B>runit-init</B>
+is the first process the kernel starts. If <B>runit-init</B> is started as process
+no 1, it runs and replaces itself with <B><I>runit</B>(8)</I>. <P>
+If <B>runit-init</B> is started
+while the system is up, it must be either called as <B>init 0</B> or <B>init 6:</B> 
+<DL>
+
+<DT><B>init
+0</B> </DT>
+<DD>run <B><I>runit-halt</B>(8)</I> to halt the system. </DD>
+
+<DT><B>init 6</B> </DT>
+<DD>run <B><I>runit-reboot</B>(8)</I> to reboot
+the system. </DD>
+</DL>
+
+<H2><A NAME="sect3">Exit Codes</A></H2>
+<B>runit-init</B> returns 111 on error, 0 in all other cases.
+
+<H2><A NAME="sect4">See Also</A></H2>
+<I>runit(8)</I>, <I>runit-halt(8)</I>, <I>runit-reboot(8)</I> 
+<H2><A NAME="sect5">Author</A></H2>
+Gerrit Pape &lt;pape@smarden.org&gt;
+<P>
+
+<HR><P>
+<A NAME="toc"><B>Table of Contents</B></A><P>
+<UL>
+<LI><A NAME="toc0" HREF="#sect0">Name</A></LI>
+<LI><A NAME="toc1" HREF="#sect1">Synopsis</A></LI>
+<LI><A NAME="toc2" HREF="#sect2">Description</A></LI>
+<LI><A NAME="toc3" HREF="#sect3">Exit Codes</A></LI>
+<LI><A NAME="toc4" HREF="#sect4">See Also</A></LI>
+<LI><A NAME="toc5" HREF="#sect5">Author</A></LI>
+</UL>
+</BODY></HTML>

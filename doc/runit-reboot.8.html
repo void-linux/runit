@@ -1,0 +1,41 @@
+
+
+
+<HTML>
+<HEAD>
+<TITLE>runit-reboot(8) manual page</TITLE>
+</HEAD>
+<BODY bgcolor=white>
+<a href="http://innominate.org/~pape/">G. Pape</a><br><A HREF="index.html">runit</A><hr><P>
+
+<H2><A NAME="sect0">Name</A></H2>
+runit-reboot - reboot the system 
+<H2><A NAME="sect1">Synopsis</A></H2>
+<B>init</B> 6 <BR>
+<B>runit-reboot</B> 
+<H2><A NAME="sect2">Description</A></H2>
+<B>runit-reboot</B> causes the Unix process no 1 <B><I>runit</B>(8)</I>
+to reboot the system. Normally <B>runit-reboot</B> is run by <B><I>runit-init</B>(8)</I> if called
+as <B>init 6.</B> <P>
+To signal <B><I>runit</B>(8)</I> the system reboot request, <B>runit-reboot</B> touches
+the /etc/runit/reboot and /etc/runit/stopit files. Then a CONT signal is
+sent to <B><I>runit</B>(8)</I>. 
+<H2><A NAME="sect3">Exit Codes</A></H2>
+<B>runit-reboot</B> always returns 0. 
+<H2><A NAME="sect4">See Also</A></H2>
+<I>runit-init(8)</I>,
+<I>runit(8)</I>, <I>runit-halt(8)</I> 
+<H2><A NAME="sect5">Author</A></H2>
+Gerrit Pape &lt;pape@smarden.org&gt; <P>
+
+<HR><P>
+<A NAME="toc"><B>Table of Contents</B></A><P>
+<UL>
+<LI><A NAME="toc0" HREF="#sect0">Name</A></LI>
+<LI><A NAME="toc1" HREF="#sect1">Synopsis</A></LI>
+<LI><A NAME="toc2" HREF="#sect2">Description</A></LI>
+<LI><A NAME="toc3" HREF="#sect3">Exit Codes</A></LI>
+<LI><A NAME="toc4" HREF="#sect4">See Also</A></LI>
+<LI><A NAME="toc5" HREF="#sect5">Author</A></LI>
+</UL>
+</BODY></HTML>
