@@ -31,6 +31,7 @@ Create also a getty service directory:
 <pre>
   # mkdir -p /etc/runit/getty-5
   # cp -p /package/admin/runit/etc/debian/getty-tty5/run /etc/runit/getty-5/
+  # cp -p /package/admin/runit/etc/debian/getty-tty5/finish /etc/runit/getty-5/
 </pre>
 If you want <i>runit</i> to handle the ctrl-alt-del keyboard request, do:
 <pre>
@@ -106,7 +107,7 @@ default Unix process no 1 <i>runit</i>.
 </pre>
 To report success:
 <pre>
-  # ( uname -a ; cat /etc/runit/[123] ) | mail pape-runit-0.9.3@smarden.org
+  # ( uname -a ; cat /etc/runit/[123] ) | mail pape-runit-0.9.4@smarden.org
 </pre>
 <hr>
 
@@ -149,12 +150,12 @@ run on the virtual console no 5, create the getty-5 service directory:
   # mkdir -p /etc/runit/getty-5
 
 OpenBSD 2.9:
-  # cp -p /package/admin/runit/etc/openbsd/getty-ttyC4/run \
-      /etc/runit/getty-5/
+  # cp -p /package/admin/runit/etc/openbsd/getty-ttyC4/run /etc/runit/getty-5/
+  # cp -p /package/admin/runit/etc/openbsd/getty-ttyC4/finish /etc/runit/getty-5/
 
 FreeBSD 4.4:
-  # cp -p /package/admin/runit/etc/freebsd/getty-ttyv4/run \
-      /etc/runit/getty-5/
+  # cp -p /package/admin/runit/etc/freebsd/getty-ttyv4/run /etc/runit/getty-5/
+  # cp -p /package/admin/runit/etc/freebsd/getty-ttyv4/finish /etc/runit/getty-5/
 </pre>
 and tell
 <a href="http://cr.yp.to/daemontools/svscan.html">svscan</a>
@@ -187,7 +188,7 @@ Use <b>init 6</b> to reboot and <b>init 0</b> to halt a system that runs
 <p>
 To report success:
 <pre>
-  # ( uname -a ; cat /etc/runit/[123] ) | mail pape-runit-0.9.3@smarden.org
+  # ( uname -a ; cat /etc/runit/[123] ) | mail pape-runit-0.9.4@smarden.org
 </pre>
 <h3>Step 5: Service migration</h3>
 The goal is to migrate all services from <i>/etc/rc.*</i> scheme to the

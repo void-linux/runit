@@ -5,7 +5,7 @@ svlogd \- runit's service logging daemon
 .B svlogd
 [\-tv] [\-r
 .I c\fR] [\-R
-.I abc\fR] [\-l
+.I xyz\fR] [\-l
 .I n\fR] [\-b
 .I n\fR]
 .I logs
@@ -260,10 +260,10 @@ Replace non-printable characters in log messages with
 .IR c .
 Characters are replaced before pattern matching is applied.
 .TP
-.B \-R \fIabc
+.B \-R \fIxyz
 replace charset.
 Additionally to non-printable characters, replace all characters found in
-.I abc
+.I xyz
 with
 .I c
 (default ``_'').
@@ -287,6 +287,10 @@ Default is 1024.
 .I buflen
 must be greater than
 .IR len .
+.TP
+.B \-v
+verbose.
+Print verbose messages to standard error.
 .SH SIGNALS
 If
 .B svlogd

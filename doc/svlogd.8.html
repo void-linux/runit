@@ -12,7 +12,7 @@
 svlogd - runit's service logging daemon 
 <H2><A NAME="sect1">Synopsis</A></H2>
 <B>svlogd</B> [-tv] [-r <I>c]</I> [-R
-<I>abc]</I> [-l <I>n]</I> [-b <I>n]</I> <I>logs</I> 
+<I>xyz]</I> [-l <I>n]</I> [-b <I>n]</I> <I>logs</I> 
 <H2><A NAME="sect2">Description</A></H2>
 <I>logs</I> consists of one or more arguments,
 each specifying a directory. <P>
@@ -131,9 +131,9 @@ standard error. </DD>
 characters in log messages with <I>c</I>. Characters are replaced before pattern
 matching is applied. </DD>
 
-<DT><B>-R <I>abc</B> </I></DT>
+<DT><B>-R <I>xyz</B> </I></DT>
 <DD>replace charset. Additionally to non-printable
-characters, replace all characters found in <I>abc</I> with <I>c</I> (default ``_''). </DD>
+characters, replace all characters found in <I>xyz</I> with <I>c</I> (default ``_''). </DD>
 
 <DT><B>-l <I>len</B>
 </I></DT>
@@ -144,26 +144,29 @@ message only. Default is 1000. </DD>
 <DD>buffer size. Set the size of the buffer
 <B>svlogd</B> uses when reading from standard input and writing to <I>logs</I> to <I>buflen</I>.
 Default is 1024. <I>buflen</I> must be greater than <I>len</I>. </DD>
+
+<DT><B>-v</B> </DT>
+<DD>verbose. Print verbose
+messages to standard error. </DD>
 </DL>
 
 <H2><A NAME="sect9">Signals</A></H2>
-If <B>svlogd</B> is sent
-a HUP signal, it closes and reopens all <I>logs</I>, and updates their configuration
-according to <I>log/config</I>. <P>
-If <B>svlogd</B> is sent a TERM signal, or if it sees
-end-of-file on standard input, it stops reading standard input, processes
-the data in the buffer, waits for all <I>processor</I> subprocesses to finish
-if any, and exits 0 as soon as possible. <P>
-If <B>svlogd</B> is sent an ALRM signal,
-it forces log file rotation for all <I>logs</I> with a non empty <I>current</I> log file.
-
+If <B>svlogd</B> is sent a HUP signal, it closes
+and reopens all <I>logs</I>, and updates their configuration according to <I>log/config</I>.
+<P>
+If <B>svlogd</B> is sent a TERM signal, or if it sees end-of-file on standard input,
+it stops reading standard input, processes the data in the buffer, waits
+for all <I>processor</I> subprocesses to finish if any, and exits 0 as soon as
+possible. <P>
+If <B>svlogd</B> is sent an ALRM signal, it forces log file rotation
+for all <I>logs</I> with a non empty <I>current</I> log file. 
 <H2><A NAME="sect10">See Also</A></H2>
-<I>runsv(8)</I>, <I>runsvstat(8)</I>, <I>runsvctrl(8)</I>, <I>runsvdir(8)</I>, <I>runsvchdir(8)</I>,
-<I>runit(8)</I>, <I>runit-init(8)</I>, <I>multilog(8)</I> <P>
+<I>runsv(8)</I>, <I>runsvstat(8)</I>,
+<I>runsvctrl(8)</I>, <I>runsvdir(8)</I>, <I>runsvchdir(8)</I>, <I>runit(8)</I>, <I>runit-init(8)</I>, <I>multilog(8)</I>
+<P>
 <I>http://smarden.org/runit/</I> 
 <H2><A NAME="sect11">Author</A></H2>
-Gerrit
-Pape &lt;pape@smarden.org&gt; <P>
+Gerrit Pape &lt;pape@smarden.org&gt; <P>
 
 <HR><P>
 <A NAME="toc"><B>Table of Contents</B></A><P>

@@ -1,3 +1,2 @@
 #!/bin/sh
-/command/utmpset -w ttyv4
 exec /usr/libexec/getty Pc ttyv4
