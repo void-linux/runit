@@ -1,4 +1,4 @@
-runit (0.9.4-0) unstable; urgency=medium
+runit (0.9.4-1) unstable; urgency=medium
 
   * new upstream version.
   * debian/diff/defaultsize.diff: remove; applied upstream.
@@ -8,7 +8,7 @@ runit (0.9.4-0) unstable; urgency=medium
     replacement for daemontools' setuidgid).
   * debian/control: Standards-Version: 3.5.10.
 
- -- Gerrit Pape <pape@smarden.org>  Fri,  6 Jun 2003 10:28:09 +0200
+ -- Gerrit Pape <pape@smarden.org>  Tue, 10 Jun 2003 09:45:28 +0200
 
 runit (0.9.3-2) unstable; urgency=low
 
