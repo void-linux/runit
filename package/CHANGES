@@ -1,15 +1,18 @@
 runit 1.0.5
 Mon, 20 Sep 2004 20:12:14 +0000
   * svlogd.c: fix line buffer handling for pattern matching (thx Enrico
-    Scholz); minor bug fixes.
+    Scholz); properly retry writing to current on error; minor.
   * doc/index.html: wording; add link to useinit.html; remove link to runit
-    on LinuxFromScratch.
+    on linuxfromscratch.
   * doc/runscripts.html: add hint, some getties need to be run in a new
     session/process group (thx Dan Melomedman).
   * man/svlogd.8: minor fixes.
   * man/svwaitdown.8: remove hint about -x option.
   * package/check, package/compile, package/install, package/install-man,
     package/upgrade: use set -e instead of #!/bin/sh -e.
+  * runsvdir.c: new option -P, run each runsv process in a new session and
+    process group (thx Charlie Brady).
+  * man/runsvdir.8: adapt; typo.
 
 runit 1.0.4
 Sun, 01 Aug 2004 18:29:36 +0000

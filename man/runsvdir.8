@@ -3,6 +3,7 @@
 runsvdir \- starts and monitors a collection of runsv(8) processes
 .SH SYNOPSIS
 .B runsvdir
+[\-P]
 .I dir
 [
 .I log
@@ -27,12 +28,12 @@ must be in
 .BR runsvdir 's
 PATH.
 .P
-At least every five seconds,
+At least every five seconds
 .B runsvdir
-checks if
+checks whether the services directory
 .I dir
 has changed.
-If it sees a new subdirectory in services directory
+If it sees a new subdirectory in
 .IR dir ,
 it starts a new
 .BR runsv (8)
@@ -66,12 +67,14 @@ To see the most recent error messages, use a process-listing tool such as
 .B runsvdir
 writes a dot to the readproctitle log every 15 minutes so that old error
 messages expire.
-.P
-Normally
-.B runsvdir
-is started by
-.BR runit (8)
-in stage 2.
+.SH OPTIONS
+.TP
+.B \-P
+use
+.BR setsid (2)
+to run each
+.BR runsv (8)
+process in a new session and separate process group.
 .SH SIGNALS
 If
 .B runsvdir
@@ -93,7 +96,8 @@ chpst(8),
 svlogd(8),
 utmpset(8),
 svwaitdown(8),
-svwaitup(8)
+svwaitup(8),
+setsid(2)
 .P
 http://smarden.org/runit/
 .SH AUTHOR
