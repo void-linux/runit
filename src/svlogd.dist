@@ -1,8 +1,8 @@
-usage: svlogd [-tv] [-r c] [-R abc] [-l n ] [-b n] dir ...
+usage: svlogd [-ttv] [-r c] [-R abc] [-l len] [-b buflen] dir ...
 
 111
 $Id$
-usage: svlogd [-tv] [-r c] [-R abc] [-l n ] [-b n] dir ...
+usage: svlogd [-ttv] [-r c] [-R abc] [-l len] [-b buflen] dir ...
 
 111
 0
@@ -18,3 +18,4 @@ baz
 :oo
 :ar
 :az
+0
