@@ -81,7 +81,6 @@ Wed, 04 Jun 2003 13:56:33 +0200
   * doc/replaceinit.html: adapt.
   * setuidgid.c: new: daemontools' setuidgid drop in replacement (not
     installed by default).
-  A
   * Makefile: build setuidgid.
   * doc/index.html: update.
 
@@ -115,7 +114,7 @@ Fri, 25 Apr 2003 09:22:03 +0200
   * runit.c: print warning for each state that exits non-zero; restart
     stage 2 if it exits non-zero.
   * svlogd.c: code cleanup.
-  * svwaitdown.c: send command "d" (and "x" if -x is set) to each service if
+  * svwaitdown.c: send command 'd' (and 'x' if -x is set) to each service if
     it's not in state 'want down'.
   * svwaitup.c: minor code cleanup.
   * man/runsvdir.8, man/svwaitdown.8: adapt.
@@ -175,7 +174,7 @@ Wed, 23 Oct 2002 11:40:24 +0200
 runit 0.7.0
 Mon, 07 Oct 2002 11:26:27 +0200
   * runsvdir.c: check service directory's inode and device in addition
-    to mtime; sleep at least 1 second before restarting run svprocesses.
+    to mtime; sleep at least 1 second before restarting runsv processes.
   * runsv.c: use status[19] for state information; control pipe supports e.
   * runsvstat.c: new option -l: only show log service if -l is given; use
     status[19] for state.
@@ -206,7 +205,7 @@ Mon, 23 Sep 2002 16:25:07 +0200
 
 runit 0.5.0
 Wed, 28 Aug 2002 11:18:28 +0200
-  * utmpset: avoids libutil; compiles with deitlibc; built by default.
+  * utmpset: avoids libutil; compiles with dietlibc; built by default.
   * doc/usedietlibc.html: fix description.
   * getty-*/run: add utmpset.
 
