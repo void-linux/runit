@@ -17,12 +17,14 @@
 #include "ndelay.h"
 
 #define USAGE " dir"
-#define VERSION "$Id: runsvdir.c,v 1.6 2002/09/26 11:12:57 pape Exp $"
+#define VERSION "$Id: runsvdir.c,v 1.8 2002/10/06 09:53:57 pape Exp $"
 
 #define MAXSERVICES 1000
 
 char *progname;
 char *svdir;
+unsigned long dev =0;
+unsigned long ino =0;
 struct {
   unsigned long dev;
   unsigned long ino;
@@ -63,9 +65,6 @@ void runsv(int no, char *name) {
   if (pid == 0) {
     /* child */
     const char *prog[3];
-
-    if (chdir(svdir) == -1)
-      fatal("unable to change directory to", svdir);
 
     prog[0] ="runsv";
     prog[1] =name;
@@ -171,6 +170,7 @@ int main(int argc, char **argv) {
   int pid;
   struct taia deadline;
   struct taia now;
+  struct taia stampcheck;
   char ch;
   int i;
 
@@ -189,6 +189,8 @@ int main(int argc, char **argv) {
   if ((curdir =open_read(".")) == -1)
     fatal("unable to open current directory", 0);
 
+  taia_now(&stampcheck);
+
   for (;;) {
     /* collect children */
     for (;;) {
@@ -202,24 +204,34 @@ int main(int argc, char **argv) {
 	}
       }
     }
-    if (stat(svdir, &s) != -1) {
-      if (check || s.st_mtime > mtime) {
-	/* svdir modified */
-	mtime =s.st_mtime;
-	check =0;
-        if (chdir(svdir) == -1)
-	  warn("unable to change directory to", svdir);
-	else {
-	  runsvdir();
-	  if (fchdir(curdir) == -1)
-            warn("unable to change directory", 0);
-        }
-      }
-    }
-    else
-      warn("unable to stat ", svdir);
 
     taia_now(&now);
+    if (taia_less(&now, &stampcheck) == 0) {
+      /* wait at least a second */
+      taia_uint(&deadline, 1);
+      taia_add(&stampcheck, &now, &deadline);
+      
+      if (stat(svdir, &s) != -1) {
+	if (check || \
+	    s.st_mtime > mtime || s.st_ino != ino || s.st_dev != dev) {
+	  /* svdir modified */
+	  mtime =s.st_mtime;
+	  dev =s.st_dev;
+	  ino =s.st_ino;
+	  check =0;
+	  if (chdir(svdir) == -1)
+	    warn("unable to change directory to ", svdir);
+	  else {
+	    runsvdir();
+	    if (fchdir(curdir) == -1)
+	      warn("unable to change directory", 0);
+	  }
+	}
+      }
+      else
+	warn("unable to stat ", svdir);
+    }
+
     if (log)
       if (taia_less(&now, &stamplog) == 0) {
 	write(logpipe[1], ".", 1);

@@ -3,21 +3,23 @@
 #include <unistd.h>
 #include "strerr.h"
 #include "error.h"
+#include "sgetopt.h"
 #include "open.h"
 #include "buffer.h"
 #include "tai.h"
 #include "fmt.h"
 
-#define USAGE " service ..."
+#define USAGE " [ -l ] service ..."
 
-#define VERSION "$Id: runsvstat.c,v 1.2 2002/09/27 10:22:32 pape Exp $"
+#define VERSION "$Id: runsvstat.c,v 1.4 2002/10/06 09:53:57 pape Exp $"
 
 #define FATAL "runsvstat: fatal: "
 #define WARNING "runsvstat: warning: "
 
-char *progname;
+const char *progname;
 unsigned int rc =0;
 struct stat s;
+int showlog =0;
 
 void usage() {
   strerr_die4x(1, "usage: ", progname, USAGE, "\n");
@@ -35,7 +37,7 @@ void warnx(char *m1, char *m2) {
 }
 
 int show_status(char *name) {
-  char status[19];
+  char status[20];
   int pid;
   int fd;
   int normallyup =0;
@@ -62,8 +64,8 @@ int show_status(char *name) {
     warn(name, "unable to open supervise/status");
     return(-1);
   }
-  switch(read(fd, status, 19)) {
-  case 19:
+  switch(read(fd, status, 20)) {
+  case 20:
     break;
   case -1:
     warn(name, "unable to read supervise/status");
@@ -85,7 +87,11 @@ int show_status(char *name) {
   buffer_puts(buffer_1, name);
   buffer_puts(buffer_1, ": ");
   if (pid) {
-    buffer_puts(buffer_1, "up (pid ");
+    switch (status[19]) {
+    case 1: buffer_puts(buffer_1, "run "); break;
+    case 2: buffer_puts(buffer_1, "finish "); break;
+    }
+    buffer_puts(buffer_1, "(pid ");
     buffer_put(buffer_1, sulong, fmt_ulong(sulong, pid));
     buffer_puts(buffer_1, ") ");
   }
@@ -110,10 +116,24 @@ int show_status(char *name) {
 }
 
 int main(int argc, char **argv) {
+  int opt;
   int curdir;
   char **dir;
 
-  progname =*argv++;
+  progname =*argv;
+
+  while ((opt =getopt(argc, (const char * const *)argv, "lV")) != opteof) {
+    switch(opt) {
+    case 'l':
+      showlog =1;
+      break;
+    case 'V':
+      strerr_warn1(VERSION, 0);
+    case '?':
+      usage();
+    }
+  }
+  argv +=optind;
 
   dir =argv;
   if (! dir || ! *dir) usage();
@@ -128,19 +148,21 @@ int main(int argc, char **argv) {
       continue;
     }
     if (show_status(*dir) == 1) {
-      if (stat("log", &s) == -1) {
-	if (errno != error_noent)
-	  warn("unable to stat()",  "./log");
-      }
-      else {
-	if (! S_ISDIR(s.st_mode))
-	  warnx("./log", "not a directory.");
+      if (showlog) {
+	if (stat("log", &s) == -1) {
+	  if (errno != error_noent)
+	    warn("unable to stat()",  "./log");
+	}
 	else {
-	  if (chdir("log") == -1) {
-	    warn(*dir, "unable to change directory");
-	    continue;
+	  if (! S_ISDIR(s.st_mode))
+	    warnx("./log", "not a directory.");
+	  else {
+	    if (chdir("log") == -1) {
+	      warn(*dir, "unable to change directory");
+	      continue;
+	    }
+	    show_status("\n  log");
 	  }
-	  show_status("\n  log");
 	}
       }
       buffer_putsflush(buffer_1, "\n");

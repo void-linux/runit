@@ -21,7 +21,7 @@
 
 #define USAGE " dir"
 
-#define VERSION "$Id: runsv.c,v 1.6 2002/09/27 11:32:00 pape Exp $"
+#define VERSION "$Id: runsv.c,v 1.8 2002/10/06 09:53:57 pape Exp $"
 
 char *progname;
 int selfpipe[2];
@@ -87,7 +87,7 @@ void s_term() {
 void update_status(struct svdir *s) {
   unsigned long l;
   int fd;
-  char status[19];
+  char status[20];
   char bspace[64];
   buffer b;
   char spid[FMT_ULONG];
@@ -179,6 +179,7 @@ void update_status(struct svdir *s) {
     status[18] =1;
   else
     status[18] =0;
+  status[19] =s->state;
   if ((fd =open_trunc("supervise/status.new")) == -1) {
     warn("unable to open supervise/status.new");
     return;

@@ -1,0 +1,51 @@
+
+
+
+<HTML>
+<HEAD>
+<TITLE>runsvchdir(8) manual page</TITLE>
+</HEAD>
+<BODY bgcolor=white>
+<a href="http://smarden.org/pape/">G. Pape</a><br><A HREF="index.html">runit</A><hr><P>
+
+<H2><A NAME="sect0">Name</A></H2>
+runsvchdir - change service directory of <I>runsvdir(8)</I> 
+<H2><A NAME="sect1">Synopsis</A></H2>
+<B>runsvchdir</B>
+<I>dir</I> 
+<H2><A NAME="sect2">Description</A></H2>
+<I>dir</I> is a directory for the use with <B><I>runsvdir</B>(8)</I>. If <I>dir</I> does
+not start with a slash, it is searched in /etc/runit/runsvdir/. <I>dir</I> must
+not start with a dot. <P>
+<B>runsvchdir</B> switches to the directory <I>/etc/runit/runsvdir</I>,
+copies <I>current</I> to <I>previous</I>, and replaces <I>current</I> with a symlink pointing
+to <I>dir</I>. <P>
+Normally  <I>/service</I> is a symlink to <I>current</I>, and <B><I>runsvdir</B>(8)</I> is running
+<I>/service</I>. 
+<H2><A NAME="sect3">Exit Codes</A></H2>
+<B>runsvchdir</B> prints an error message and exits 111 on
+error. <B>runsvchdir</B> exits 0 on success. 
+<H2><A NAME="sect4">Files</A></H2>
+ /etc/runit/runsvdir/previous<BR>
+  /etc/runit/runsvdir/current<BR>
+  /etc/runit/runsvdir/current.new<BR>
+ 
+<H2><A NAME="sect5">See Also</A></H2>
+<I>runsvdir(8)</I>, <I>runsv(8)</I>, <I>runit(8)</I>, <I>runit-init(8)</I> <P>
+<I>http://smarden.org/runit/</I>
+
+<H2><A NAME="sect6">Author</A></H2>
+Gerrit Pape &lt;pape@smarden.org&gt; <P>
+
+<HR><P>
+<A NAME="toc"><B>Table of Contents</B></A><P>
+<UL>
+<LI><A NAME="toc0" HREF="#sect0">Name</A></LI>
+<LI><A NAME="toc1" HREF="#sect1">Synopsis</A></LI>
+<LI><A NAME="toc2" HREF="#sect2">Description</A></LI>
+<LI><A NAME="toc3" HREF="#sect3">Exit Codes</A></LI>
+<LI><A NAME="toc4" HREF="#sect4">Files</A></LI>
+<LI><A NAME="toc5" HREF="#sect5">See Also</A></LI>
+<LI><A NAME="toc6" HREF="#sect6">Author</A></LI>
+</UL>
+</BODY></HTML>
