@@ -1,6 +1,7 @@
 runit (0.2.2-1) woody; urgency=low
 
   * See /package/admin/runit/package/CHANGES.
+  * Build-Depends on dietlibc, uses diet to compile programs.
 
  -- Gerrit Pape <pape@smarden.org>  Sat, 22 Dec 2001 20:37:03 +0100
 
