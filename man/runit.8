@@ -56,6 +56,10 @@ receives a CONT signal and the file
 exists,
 .B runit
 is told to shutdown the system.
+.P
+if
+.B runit
+receives an INT signal, a ctrl-alt-del keyboard request is triggered.
 .SH SEE ALSO
 init(8),
 runit-halt(8),

@@ -40,10 +40,12 @@ Stage 3 for system shutdown.
 <B>runit</B> only accepts signals in Stage
 2. <P>
 If <B>runit</B> receives a CONT signal and the file <I>/etc/runit/stopit</I> exists,
-<B>runit</B> is told to shutdown the system. 
+<B>runit</B> is told to shutdown the system. <P>
+if <B>runit</B> receives an INT signal, a
+ctrl-alt-del keyboard request is triggered. 
 <H2><A NAME="sect8">See Also</A></H2>
-<I>init(8)</I>, <I>runit-halt(8)</I>, <I>runit-reboot(8)</I>
-
+<I>init(8)</I>, <I>runit-halt(8)</I>,
+<I>runit-reboot(8)</I> 
 <H2><A NAME="sect9">Author</A></H2>
 Gerrit Pape &lt;pape@smarden.org&gt; <P>
 
