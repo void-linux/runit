@@ -8,6 +8,7 @@ CC =diet -v -Os gcc
 STRIP =strip
 
 ifneq ($(DEB_HOST_ARCH),alpha)
+ifneq ($(DEB_HOST_ARCH),amd64)
 ifneq ($(DEB_HOST_ARCH),arm)
 ifneq ($(DEB_HOST_ARCH),hppa)
 ifneq ($(DEB_HOST_ARCH),i386)
@@ -18,6 +19,7 @@ ifneq ($(DEB_HOST_ARCH),powerpc)
 ifneq ($(DEB_HOST_ARCH),s390)
 ifneq ($(DEB_HOST_ARCH),sparc)
   CC =gcc
+endif
 endif
 endif
 endif
