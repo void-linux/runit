@@ -1,9 +1,9 @@
 runit 0.8.1
-Sun, 09 Mar 2003 15:02:30 +0100
+Wed, 12 Mar 2003 15:10:04 +0100
   * runsvdir.c, runsv.c: close-on-exec file descriptors of current dir and
     lock files (thx Lukas Beeler).
   * doc/runscripts.html: add contributed run scripts (thx Robin S. Socha, 
-    Claus Alboege, Paul Jarc, clemens fischer).
+    Claus Alboege, Paul Jarc, clemens fischer, Jesse Cablek).
 
 runit 0.8.0
 Tue, 25 Feb 2003 16:17:34 +0100
