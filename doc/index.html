@@ -91,62 +91,78 @@ These are working examples for debian woody:
 The command <a href="runit-init.8.html">runit-init</a> is intended to
 replace <tt>/sbin/init</tt>. sysvinit's command <tt>shutdown</tt> will
 keep working. On *BSD systems use <b><tt>init 0</tt></b> for system halt
-and <b><tt>init 6</tt></b> for reboot. Runlevels are not implemented in
-this Unix process no 1, such can easily be done in other programs, see
+and <b><tt>init 6</tt></b> for reboot.
+<a href="runlevels.html">Runlevels</a> are handled through the
+<a href="runsvdir.8.html">runsvdir</a> and
+<a href="runsvchdir.8.html">runsvchdir</a> programs. Service dependencies
+are rudimentarily handled through the <a href="svwaitup.8.html">svwaitup</a>
+and <a href="svwaitdown.8.html">svwaitdown</a> programs, see
 <a href="http://smarden.org/pape/djb/daemontools/noinit.html">
-Dependencies and runlevels</a>
-for an example, the amount of code in process no 1 should be minimal.
+Dependencies and runlevels</a> for an example.
+<p>
+<i>runit</i> is optimized for reliability and small size. The amount of
+code in process no 1 should be minimal.
 <hr>
 <b><i>runit</i> in use</b>: I replaced <i>sysvinit</i> with <i>runit</i>
 on several server systems and a laptop running Debian/GNU Linux sarge, woody
 and potato, and did not encounter any problems. Of course also the
 <tt>smarden.org</tt> content server is running with <i>runit</i> as process
-no 1. This is from the second machine where I replaced <i>sysvinit</i> with
-<i>runit</i>:
+no 1, here is an example:
 <pre>
   # strings /proc/1/exe |grep Id
-  &#36;Id: runit.c,v 1.5 2001/12/30 16:28:53 pape Exp &#36;
+  $Id$
   # uptime
-   14:59:36 up 240 days, 21:10,  2 users,  load average: 0.00, 0.00, 0.00
-  # ps axuw |head
+   11:32:18 up 25 days, 18:29,  2 users,  load average: 0.12, 0.03, 0.01
+  # ps axuw |head -n14
   USER       PID %CPU %MEM   VSZ  RSS TTY      STAT START   TIME COMMAND
-  root         1  0.0  0.0    24   24 ?        S     2001   0:06 runit
-  root         2  0.0  0.0     0    0 ?        SW    2001   0:12 [kflushd]
-  root         3  0.0  0.0     0    0 ?        SW    2001   0:14 [kupdate]
-  root         4  0.0  0.0     0    0 ?        SW    2001   1:09 [kswapd]
-  root         5  0.0  0.0     0    0 ?        SW    2001   0:00 [keventd]
-  root       149  0.0  0.1  1692  120 ?        S     2001   0:00 /usr/sbin/cron
-  root       152  0.0  0.0  2196    0 ?        SW    2001   0:00 [svscanboot]
-  root       154  0.0  0.1  1316  104 ?        S     2001   0:00 svscan /service
-  root       155  0.0  0.0  1268   16 ?        S     2001   0:00 readproctitle service errors: ................
+  root         1  0.0  0.0    20   20 ?        S    Sep27   0:06 runit
+  root         2  0.0  0.0     0    0 ?        SW   Sep27   0:00 [kflushd]
+  root         3  0.0  0.0     0    0 ?        SW   Sep27   0:00 [kupdate]
+  root         4  0.0  0.0     0    0 ?        SW   Sep27   0:04 [kswapd]
+  root         5  0.0  0.0     0    0 ?        SW   Sep27   0:00 [keventd]
+  root       153  0.0  1.0  1652  676 ?        S    Sep27   0:00 /usr/sbin/cron
+  root       156  0.0  0.0    40   28 ?        S    Sep27   0:00 runsvdir /service log: .......................................................
+  root       157  0.0  0.0    24   24 ?        S    Sep27   0:00 runsv socklog-unix
+  root       158  0.0  0.0    24   24 ?        S    Sep27   0:00 runsv qmail-smtpd
+  root       159  0.0  0.0    24   24 ?        S    Sep27   0:00 runsv qmail-send
+  root       160  0.0  0.0    24   24 ?        S    Sep27   0:00 runsv sshd
+  root       161  0.0  0.0    24   24 ?        S    Sep27   0:00 runsv getty-tty2
+  root       162  0.0  0.0    24   24 ?        S    Sep27   0:00 runsv getty-tty3
   # pstree
   runit-+-cron
         |-keventd
         |-kflushd
         |-kswapd
         |-kupdate
-        `-svscanboot-+-readproctitle
-                     `-svscan-+-5*[supervise---tcpserver]
-                              |-18*[supervise---multilog]
-                              |-supervise---qmail-send-+-qmail-clean
-                              |                        |-qmail-lspawn
-                              |                        `-qmail-rspawn
-                              |-supervise---sshd---sshd---sshd---bash---bash---ps
-                              |-supervise---bash
-                              |-2*[supervise---getty]
-                              |-supervise---dhcpd-2.2.x
-                              |-supervise---dnscache
-                              |-supervise---tinydns
-                              |-supervise---isdnlog
-                              |-supervise---sleep
-                              |-supervise---klogd
-                              |-2*[supervise]
-                              |-2*[supervise---vboxgetty]
-                              |-supervise---clockspeed
-                              |-supervise---squid---unlinkd
-                              |-supervise---dhclient-2.2.x
-                              |-2*[supervise---socklog]
-                              `-supervise---uncat
+        `-runsvdir-+-2*[runsv-+-multilog]
+                   |          `-socklog]
+                   |-5*[runsv-+-multilog]
+                   |          `-tcpserver]
+                   |-runsv-+-multilog
+                   |       `-qmail-send-+-qmail-clean
+                   |                    |-qmail-lspawn
+                   |                    `-qmail-rspawn
+                   |-runsv-+-multilog
+                   |       `-sshd-+-sshd---sshd---bash---bash---ssh
+                   |              `-sshd---sshd---bash---bash---pstree
+                   |-3*[runsv---getty]
+                   |-runsv---uncat
+                   |-runsv-+-dhcpd-2.2.x
+                   |       `-multilog
+                   |-runsv-+-dnscache
+                   |       `-multilog
+                   |-runsv-+-multilog
+                   |       `-tinydns
+                   |-runsv-+-isdnlog
+                   |       `-multilog
+                   |-runsv---klogd
+                   |-runsv---multilog
+                   |-2*[runsv-+-multilog]
+                   |          `-vboxgetty]
+                   |-runsv---clockspeed
+                   |-runsv-+-dhclient-2.2.x
+                   |       `-multilog
+                   `-runsv---squid---unlinkd
 </pre>
 This is a more busy system:
 <pre>
