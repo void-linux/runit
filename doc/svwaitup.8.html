@@ -9,55 +9,53 @@
 <a href='http://smarden.org/pape/'>G. Pape</a><br><a href='index.html'>runit</A><hr><p>
 
 <h2><a name='sect0'>Name</a></h2>
-svwaitup - waits for services controlled by <i>runsv(8)</i> or <i>supervise(8)</i>
-to be up 
+svwaitup - waits for services controlled by <i>runsv(8)</i> to be up 
 <h2><a name='sect1'>Synopsis</a></h2>
-<b>svwaitup</b> [ <b>-v</b> ] [ <b>-s</b> <i>sec</i> ] <i>services</i> 
+<b>svwaitup</b>
+[ <b>-v</b> ] [ <b>-s</b> <i>sec</i> ] <i>services</i> 
 <h2><a name='sect2'>Description</a></h2>
-<i>services</i>
-consist of one or more arguments. Each <i>service</i> directory must start with
-a slash. <p>
-<b>svwaitup</b> checks each <i>service</i> given at the command line for being
-at least the specified number of seconds <i>sec</i> up. The <i>services</i> given at the
-command line must be controlled by <i><b>runsv</b>(8)</i>, or <i><b>supervise</b>(8)</i>. <p>
-<b>svwaitup</b> blocks
-until all <i>services</i> were up and running at least <i>sec</i> seconds when <b>svwaitup</b>
-was checking or reports errors. 
+<i>services</i> consists of one or more arguments,
+each argument naming a service directory. <p>
+<b>svwaitup</b> checks each <i>service</i> given
+at the command line for being at least the specified number of seconds
+<i>sec</i> up. The <i>services</i> given at the command line must be controlled by <i><b>runsv</b>(8)</i>.
+<p>
+<b>svwaitup</b> blocks until all <i>services</i> were up and running at least <i>sec</i> seconds
+when <b>svwaitup</b> was checking or reports errors. 
 <h2><a name='sect3'>Options</a></h2>
 
 <dl>
 
 <dt><b>-v</b> </dt>
-<dd>verbose. Print verbose messages
-to stderr. </dd>
+<dd>verbose. Print verbose
+messages to stderr. </dd>
 
 <dt><b>-s <i>sec</b> </i></dt>
-<dd>Set the minimum number of seconds each <i>service</i> has to be
-up to <i>sec</i> seconds. <i>sec</i> must be between 2 and 600. Default is 2. </dd>
+<dd>Set the minimum number of seconds each <i>service</i>
+has to be up to <i>sec</i> seconds. <i>sec</i> must be between 1 and 600. Default is 2.
+</dd>
 </dl>
 
 <h2><a name='sect4'>Exit Codes</a></h2>
-<b>svwaitup</b>
-returns 0 as soon as all <i>services</i> were at least <i>sec</i> seconds up. <p>
-<b>Note</b>: If
-<b>svwaitup</b> exits 0, it does not guarantee that all <i>services</i> are actually
-running. A <i>service</i> could have crashed immediatly after <b>svwaitup</b> was successfully
-checking it to be up <i>sec</i> seconds. <i>services</i> should be designed not to rely
-on <b>svwaitup</b> to resolve dependencies. <p>
-For each <i>service</i> that is down and not
-requested to become up, or that causes an error while checking (e.g. <i><b>runsv</b>(8)</i>
-is not running), <b>svwaitup</b> increases the exit code by one and exits non
-zero. The maximum is 100. <p>
+<b>svwaitup</b> returns 0 as soon as all <i>services</i> were at least <i>sec</i>
+seconds up. <p>
+<b>Note</b>: If <b>svwaitup</b> exits 0, it does not guarantee that all <i>services</i>
+are actually running. A <i>service</i> could have crashed immediatly after <b>svwaitup</b>
+was successfully checking it to be up <i>sec</i> seconds. <i>services</i> should be designed
+not to rely on <b>svwaitup</b> to resolve dependencies. <p>
+For each <i>service</i> that is
+down and not requested to become up, or that causes an error while checking
+(e.g. <i><b>runsv</b>(8)</i> is not running), <b>svwaitup</b> increases the exit code by one and
+exits non zero. The maximum is 100. <p>
 <b>svwaitup</b> returns 111 on error. 
 <h2><a name='sect5'>See Also</a></h2>
 <i>svwaitdown(8)</i>,
 <i>runsv(8)</i>, <i>runsvctrl(8)</i>, <i>runsvstat(8)</i>, <i>chpst(8)</i>, <i>svlogd(8)</i>, <i>runit(8)</i>, <i>runit-init(8)</i>,
 <i>runsvdir(8)</i>, <i>runsvchdir(8)</i>, <i>utmpset(8)</i> <p>
- <i>http://smarden.org/runit/</i><br>
-  <i>http://cr.yp.to/daemontools.html</i><br>
- 
+<i>http://smarden.org/runit/</i> 
 <h2><a name='sect6'>Author</a></h2>
-Gerrit Pape &lt;pape@smarden.org&gt; <p>
+Gerrit
+Pape &lt;pape@smarden.org&gt; <p>
 
 <hr><p>
 <a name='toc'><b>Table of Contents</b></a><p>

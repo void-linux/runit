@@ -9,62 +9,61 @@
 <a href='http://smarden.org/pape/'>G. Pape</a><br><a href='index.html'>runit</A><hr><p>
 
 <h2><a name='sect0'>Name</a></h2>
-svwaitdown - waits for services controlled by <i>runsv(8)</i> or <i>supervise(8)</i>
-to be down 
+svwaitdown - waits for services controlled by <i>runsv(8)</i> to be down 
 <h2><a name='sect1'>Synopsis</a></h2>
-<b>svwaitdown</b> [ <b>-v</b> ] [ <b>-k</b> ] [ <b>-t</b> <i>sec</i> ] <i>services</i> 
+<b>svwaitdown</b>
+[ <b>-v</b> ] [ <b>-k</b> ] [ <b>-t</b> <i>sec</i> ] <i>services</i> 
 <h2><a name='sect2'>Description</a></h2>
-<i>services</i>
-consists of one or more arguments. Each <i>service</i> directory must start with
-a slash. <p>
-<b>svwaitdown</b> sends each <i>service</i> given at the command line the &lsquo;&lsquo;down&rsquo;&rsquo;
-command, and waits for it to become down. The <i>services</i> given at the command
-line must be controlled by <i><b>runsv</b>(8)</i>, or <i><b>supervise</b>(8)</i>. <p>
-<b>svwaitdown</b> blocks,
-limited by a <i>timeout</i>, until all <i>services</i> are down or reports errors. 
+<i>services</i> consists of one or more
+arguments, each argument naming a service directory. <p>
+<b>svwaitdown</b> sends each
+<i>service</i> given at the command line the &lsquo;&lsquo;down&rsquo;&rsquo; command, and waits for it to
+become down. The <i>services</i> given at the command line must be controlled by
+<i><b>runsv</b>(8)</i>. <p>
+<b>svwaitdown</b> blocks, limited by a <i>timeout</i>, until all <i>services</i> are
+down or reports errors. 
 <h2><a name='sect3'>Options</a></h2>
 
 <dl>
 
-<dt><b>-v</b>
-</dt>
-<dd>verbose. Print verbose messages to stderr. </dd>
+<dt><b>-v</b> </dt>
+<dd>verbose. Print verbose messages to stderr.
+</dd>
 
 <dt><b>-t <i>sec</b> </i></dt>
-<dd>Set the timeout for waiting
-for <i>services</i> to become down to <i>sec</i> seconds. <i>sec</i> must be between 2 and 6000.
-Default is 600 (10 minutes). </dd>
+<dd>Set the timeout for waiting for <i>services</i> to become down to <i>sec</i> seconds.
+<i>sec</i> must be between 1 and 6000. Default is 600 (10 minutes). </dd>
 
 <dt><b>-k</b> </dt>
-<dd>Kill. If the timeout is reached before all
-<i>services</i> are down, tell the <i><b>runsv</b>(8)</i> processes to send the <i>services</i> a KILL
-signal. </dd>
+<dd>Kill. If the
+timeout is reached before all <i>services</i> are down, tell the <i><b>runsv</b>(8)</i> processes
+to send the <i>services</i> a KILL signal. </dd>
 
 <dt><b>-x</b> </dt>
-<dd>Exit. Send each <i>service</i> the &lsquo;&lsquo;exit&rsquo;&rsquo; command additionally to the &lsquo;&lsquo;down&rsquo;&rsquo;
-command, and wait for the corresponding <i><b>runsv</b>(8)</i> processes to exit instead
-for the <i>services</i> to be down. </dd>
+<dd>Exit. Send each <i>service</i> the &lsquo;&lsquo;exit&rsquo;&rsquo; command
+additionally to the &lsquo;&lsquo;down&rsquo;&rsquo; command, and wait for the corresponding <i><b>runsv</b>(8)</i>
+processes to exit instead for the <i>services</i> to be down. </dd>
 </dl>
 
 <h2><a name='sect4'>Exit Codes</a></h2>
-<b>svwaitdown</b> returns 0 as soon as all
-<i>services</i> are down. <p>
-If a <i>service</i> is usually controlled by <i><b>runsv (8)</b></i> or <i><b>supervise</b>(8)</i>,
-but no supervisor process is currently running, <b>svwaitdown</b> treats this
-<i>service</i> as if it would be down. <p>
-For each <i>service</i> that causes an error while
-checking, <b>svwaitdown</b> increases the exit code by one and exits non zero.
-The maximum is 100. <p>
-<b>svwaitdown</b> returns 111 if the timeout <i>sec</i> was reached.
-
+<b>svwaitdown</b>
+returns 0 as soon as all <i>services</i> are down. <p>
+If a <i>service</i> is usually controlled
+by <i><b>runsv (8)</i>,</b> but no supervisor process is currently running in the directory,
+<b>svwaitdown</b> treats this <i>service</i> as if it would be down. <p>
+For each <i>service</i>
+that causes an error while checking, <b>svwaitdown</b> increases the exit code
+by one and exits non zero. The maximum is 100. <p>
+<b>svwaitdown</b> returns 111 on
+error, or if the timeout <i>sec</i> was reached. 
 <h2><a name='sect5'>See Also</a></h2>
-<i>svwaitup(8)</i>, <i>runsv(8)</i>, <i>runsvctrl(8)</i>, <i>runsvstat(8)</i>, <i>chpst(8)</i>, <i>svlogd(8)</i>,
-<i>runit(8)</i>, <i>runit-init(8)</i>, <i>runsvdir(8)</i>, <i>runsvchdir(8)</i>, <i>utmpset(8)</i> <p>
- <i>http://smarden.org/runit/</i><br>
-  <i>http://cr.yp.to/daemontools.html</i><br>
- 
+<i>svwaitup(8)</i>, <i>runsv(8)</i>,
+<i>runsvctrl(8)</i>, <i>runsvstat(8)</i>, <i>chpst(8)</i>, <i>svlogd(8)</i>, <i>runit(8)</i>, <i>runit-init(8)</i>,
+<i>runsvdir(8)</i>, <i>runsvchdir(8)</i>, <i>utmpset(8)</i> <p>
+<i>http://smarden.org/runit/</i> 
 <h2><a name='sect6'>Author</a></h2>
-Gerrit Pape &lt;pape@smarden.org&gt; <p>
+Gerrit
+Pape &lt;pape@smarden.org&gt; <p>
 
 <hr><p>
 <a name='toc'><b>Table of Contents</b></a><p>
