@@ -65,6 +65,19 @@ int main(int argc, const char * const *argv) {
   if (! argv || ! *argv) usage();
 
   dir =argv;
+  while (*dir) {
+    if ((fd =open_write("supervise/control")) == -1) {
+      dir++; /* bummer */
+      continue;
+    }
+    if (write(fd, "dx", 1 +doexit) != (1 +doexit)) {
+      close(fd); dir++; /* bummer */
+      continue;
+    }
+    close(fd);
+  }
+  dir =argv;
+
   tai_now(&start);
   while (*dir) {
     if (*dir[0] != '/') {
@@ -118,8 +131,10 @@ int main(int argc, const char * const *argv) {
       }
       if (write(fd, "dx", 1 +doexit) != (1 +doexit)) {
 	warn(*dir, ": unable to write to supervise/control: ", &strerr_sys);
+	close(fd);
 	continue;
       }
+      close(fd);
     }
   
     tai_now(&now);
