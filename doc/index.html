@@ -20,6 +20,8 @@ Dependencies and runlevels</a>
 <a href="runit-init.8.html">The <tt>runit-init</tt> program</a><br>
 <a href="svwaitdown.8.html">The <tt>svwaitdown</tt> program</a><br>
 <a href="svwaitup.8.html">The <tt>svwaitup</tt> program</a>
+<p>
+<a href="utmpset.html">The <tt>utmpset</tt> program</a>
 <hr>
 <i>runit</i> cooperates with the
 <a href="http://cr.yp.to/daemontools.html">daemontools</a> package to create
@@ -86,13 +88,13 @@ This is from the second machine where I replaced <i>sysvinit</i> with
   # strings /proc/1/exe |grep Id
   &#36;Id: runit.c,v 1.5 2001/12/30 16:28:53 pape Exp &#36;
   # uptime
-  10:35:18 up 107 days, 15:46,  2 users,  load average: 0.00, 0.00, 0.00
+   19:44:10 up 139 days,  1:09,  3 users,  load average: 0.00, 0.00, 0.00
   # ps axuw |head
   USER       PID %CPU %MEM   VSZ  RSS TTY      STAT START   TIME COMMAND
   root         1  0.0  0.0    24   24 ?        S     2001   0:06 runit
-  root         2  0.0  0.0     0    0 ?        SW    2001   0:07 [kflushd]
-  root         3  0.0  0.0     0    0 ?        SW    2001   0:06 [kupdate]
-  root         4  0.0  0.0     0    0 ?        SW    2001   0:28 [kswapd]
+  root         2  0.0  0.0     0    0 ?        SW    2001   0:09 [kflushd]
+  root         3  0.0  0.0     0    0 ?        SW    2001   0:07 [kupdate]
+  root         4  0.0  0.0     0    0 ?        SW    2001   0:35 [kswapd]
   root         5  0.0  0.0     0    0 ?        SW    2001   0:00 [keventd]
   root       149  0.0  0.1  1692  120 ?        S     2001   0:00 /usr/sbin/cron
   root       152  0.0  0.0  2196    0 ?        SW    2001   0:00 [svscanboot]
@@ -132,18 +134,18 @@ This is from a more busy system:
   # strings /proc/1/exe |grep Id
   &#36;Id: runit.c,v 1.6 2002/01/29 18:56:36 pape Exp &#36;
   # uptime
-  10:44:34 up 68 days, 10:48,  3 users,  load average: 0.24, 0.45, 0.34
+   19:46:24 up 99 days, 19:56,  3 users,  load average: 0.15, 0.12, 0.12
   # ps axuw |head
   USER       PID %CPU %MEM   VSZ  RSS TTY      STAT START   TIME COMMAND
-  root         1  0.0  0.0    24   24 ?        S    Feb07   0:05 runit
+  root         1  0.0  0.0    24    0 ?        SW   Feb07   0:05 runit
   root         2  0.0  0.0     0    0 ?        SW   Feb07   0:01 [keventd]
-  root         3  0.0  0.0     0    0 ?        SW   Feb07   1:00 [kapm-idled]
-  root         4  0.0  0.0     0    0 ?        SWN  Feb07   0:44 [ksoftirqd_CPU0]
-  root         5  0.0  0.0     0    0 ?        SW   Feb07   7:02 [kswapd]
+  root         3  0.0  0.0     0    0 ?        SW   Feb07   1:10 [kapm-idled]
+  root         4  0.0  0.0     0    0 ?        SWN  Feb07   1:09 [ksoftirqd_CPU0]
+  root         5  0.0  0.0     0    0 ?        SW   Feb07  13:23 [kswapd]
   root         6  0.0  0.0     0    0 ?        SW   Feb07   0:00 [bdflush]
-  root         7  0.0  0.0     0    0 ?        SW   Feb07   8:06 [kupdated]
+  root         7  0.0  0.0     0    0 ?        SW   Feb07  10:18 [kupdated]
   root        53  0.0  0.0     0    0 ?        SW   Feb07   0:00 [msp3410 [auto]]
-  daemon     115  0.0  0.0  1412   20 ?        S    Feb07   0:00 /sbin/portmap
+  daemon     115  0.0  0.0  1412    8 ?        S    Feb07   0:00 /sbin/portmap
 </pre>
 <hr>
 See <a href="install.html">How to install runit</a> for installing

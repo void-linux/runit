@@ -1,0 +1,52 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+<head>
+<title>runit - the utmpset program</title>
+</head>
+<body>
+<a href="http://smarden.org/pape/">G. Pape</a><br>
+<a href="index.html">runit</a><br>
+<hr>
+<h1>runit - the utmpset program</h1>
+<hr>
+Ordinary <i>init</i> processes handle <tt>utmp</tt> file records for
+local login accounting. The <a href="runit.8.html">runit</a> program doesn't
+include code to update the <tt>utmp</tt> file, the <tt>getty</tt> processes
+are handled the same as all other services. So normally on systems running
+with <i>runit</i> local login accounting doesn't work as expected: The
+<tt>utmp</tt> file is not updated after a user logs out.
+<p>
+This can be done by the <i>utmpset</i> program.
+<p>
+To compile the <i>utmpset</i> program change to the <i>runit</i> package's
+source directory:
+<pre>
+  # cd /package/admin/runit/src
+</pre>
+The <i>utmpset</i> program cannot be used with the
+<a href="http://www.fefe.de/dietlibc/">diet libc</a> since it needs to be
+linked against <tt>libutil</tt>. Change <tt>conf-cc</tt> and <tt>conf-ld</tt>
+if necessary.
+<p>
+Then build and install the <i>utmpset</i> program:
+<pre>
+  # make utmpset
+  # install -m0755 utmpset ../command/utmpset
+</pre>
+For each <tt>getty</tt> service, add a line to the corresponding <tt>run</tt>
+script like this:
+<pre>
+  #!/bin/sh
+  /package/admin/runit/command/utmpset tty5
+  exec /sbin/getty 38400 tty5 linux
+</pre>
+This will cause the <tt>utmp</tt> record for line <tt>tty5</tt> to be cleared
+before the <tt>getty</tt> is started; login accounting works as expected for
+this line.
+<hr>
+<address><a href="mailto:pape@smarden.org">
+Gerrit Pape &lt;pape@smarden.org&gt;
+</a></address>
+<small>$Id$</small>
+</body>
+</html>

@@ -26,6 +26,12 @@ svwaitup.o: compile svwaitup.c uint64.h
 svwaitdown.o: compile svwaitdown.c uint64.h
 	./compile svwaitdown.c
 
+utmpset: load utmpset.o unix.a byte.a
+	./load utmpset unix.a byte.a -lutil
+
+utmpset.o: compile utmpset.c
+	./compile utmpset.c
+
 clean:
 	find . -name \*~ -exec rm -f {} \;
 	find . -name .??*~ -exec rm -f {} \;

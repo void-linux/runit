@@ -1,7 +1,9 @@
-runit 0.3.3
-Sat, 18 May 2002 19:20:46 +0200
+runit 0.4.0
+Sun, 19 May 2002 12:28:29 +0200
   * src/: include public domain sources to build byte.a, unix.a, time.a:
     runit builds without having daemontools' sources installed.
+  * utmpset.c: new utmpset program.
+  * doc/utmpset.html: new.
 
 runit 0.3.2
 Wed, 13 Feb 2002 10:56:17 +0100
