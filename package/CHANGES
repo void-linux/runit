@@ -1,7 +1,8 @@
 runit 0.11.2
-Tue, 23 Sep 2003 09:59:06 +0200
-  * doc/useinit.html: don't use /etc/runit/2 when using runit service
-    supervision with traditional init, use /sbin/runsvdir-start instead.
+Tue, 23 Sep 2003 10:15:32 +0200
+  * doc/useinit.html, etc/macosx/StartupItems/runit: don't use /etc/runit/2
+    when using runit service supervision with traditional init, use
+    /sbin/runsvdir-start instead.
   * fmt_ptime.c: calculate UTC localtime correctly.
   * runsv.c: support ./supervise as symbolic link, on dangling symlink create
     link target.
