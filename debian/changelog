@@ -1,4 +1,4 @@
-runit (0.13.1-1) unstable; urgency=low
+runit (0.13.0-1) unstable; urgency=low
 
   * new upstream version: svlogd.8 documents -tt option (closes: #213011);
     fixes typos in runsv.8 (closes: #223076).
