@@ -20,10 +20,11 @@ runsvchdir
 runsvchdir.o
 svlogd
 svlogd.o
-setuidgid
-setuidgid.o
+chpst
+chpst.o
 pmatch.o
 fmt_ptime.o
+uidgid.o
 alloc.o
 alloc_re.o
 buffer.o
