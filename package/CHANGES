@@ -1,6 +1,13 @@
+runit 0.4.0
+Sun, 19 May 2002 12:28:29 +0200
+  * src/: include public domain sources to build byte.a, unix.a, time.a:
+    runit builds without having daemontools' sources installed.
+  * utmpset.c: new utmpset program.
+  * doc/utmpset.html: new.
+
 runit 0.3.2
 Wed, 13 Feb 2002 10:56:17 +0100
-  * runit.c: support ctrl-alt-del also on Linux/i386, dietlic.
+  * runit.c: support ctrl-alt-del also on Linux/i386, dietlibc.
   * runscripts.html: more samples. (thx Alessandro Bono)
 
 runit 0.3.1
