@@ -1,4 +1,7 @@
 #!/bin/sh
-MSG="System is going down in 10 seconds..."
-/bin/echo "$MSG" | /usr/bin/wall
-/bin/sleep 10
+MSG="System is going down in 14 seconds..."
+
+#echo 'disabled.' ; exit
+/bin/touch /etc/runit/stopit && \
+  /bin/echo "$MSG" | /usr/bin/wall
+/bin/sleep 14
