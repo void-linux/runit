@@ -15,11 +15,11 @@ build-arch: configure-stamp  build-arch-stamp
 build-arch-stamp:
 	dh_testdir
 
-	tar xfzvp runit-0.9.1.tar.gz
+	tar xfzvp runit-0.9.2.tar.gz
 	( \
 	set -e; \
-	cd admin/runit-0.9.1/src; \
-	ln -s runit-0.9.1 runit; mv runit ../..; \
+	cd admin/runit-0.9.2/src; \
+	ln -s runit-0.9.2 runit; mv runit ../..; \
 	echo 'diet -v -Os gcc -O2 -Wall' >conf-cc; \
 	echo 'diet -v -Os gcc -s -Os -pipe' >conf-ld; \
 	$(MAKE); \
@@ -52,28 +52,28 @@ install: build
 	dh_installdirs
 
 	# runit
-	install -m0500 admin/runit-0.9.1/src/runit \
+	install -m0500 admin/runit-0.9.2/src/runit \
 	  $(CURDIR)/debian/runit/sbin/runit
-	install -m0500 admin/runit-0.9.1/src/runit-init \
+	install -m0500 admin/runit-0.9.2/src/runit-init \
 	  $(CURDIR)/debian/runit/sbin/runit-init
-	install -m0755 admin/runit-0.9.1/src/runsvdir \
+	install -m0755 admin/runit-0.9.2/src/runsvdir \
 	  $(CURDIR)/debian/runit/usr/bin/runsvdir
-	install -m0755 admin/runit-0.9.1/src/runsv \
+	install -m0755 admin/runit-0.9.2/src/runsv \
 	  $(CURDIR)/debian/runit/usr/bin/runsv
-	install -m0755 admin/runit-0.9.1/src/runsvchdir \
+	install -m0755 admin/runit-0.9.2/src/runsvchdir \
 	  $(CURDIR)/debian/runit/usr/sbin/runsvchdir
-	install -m0755 admin/runit-0.9.1/src/svlogd \
+	install -m0755 admin/runit-0.9.2/src/svlogd \
 	  $(CURDIR)/debian/runit/usr/bin/svlogd
-	install -m0755 admin/runit-0.9.1/src/svwaitdown \
+	install -m0755 admin/runit-0.9.2/src/svwaitdown \
 	  $(CURDIR)/debian/runit/usr/bin/svwaitdown
-	install -m0755 admin/runit-0.9.1/src/svwaitup \
+	install -m0755 admin/runit-0.9.2/src/svwaitup \
 	  $(CURDIR)/debian/runit/usr/bin/svwaitup
-	install -m0755 admin/runit-0.9.1/src/utmpset \
+	install -m0755 admin/runit-0.9.2/src/utmpset \
 	  $(CURDIR)/debian/runit/usr/sbin/utmpset
 
-	install -m0755 admin/runit-0.9.1/src/runsvstat \
+	install -m0755 admin/runit-0.9.2/src/runsvstat \
 	  $(CURDIR)/debian/runit/usr/bin/runsvstat
-	install -m0755 admin/runit-0.9.1/src/runsvctrl \
+	install -m0755 admin/runit-0.9.2/src/runsvctrl \
 	  $(CURDIR)/debian/runit/usr/bin/runsvctrl
 
 	install -m0755 debian/getty-tty5.run \
@@ -117,7 +117,7 @@ binary-arch: build install
 #	dh_installdocs -an
 #	dh_installexamples -a
 	dh_installman -a admin/runit/man/*.8
-	dh_installchangelogs -a admin/runit-0.9.1/package/CHANGES
+	dh_installchangelogs -a admin/runit-0.9.2/package/CHANGES
 	dh_strip -a
 #	dh_link -a
 	dh_compress -a
