@@ -1,3 +1,11 @@
+runit (0.9.3-1) unstable; urgency=low
+
+  * new upstream version.
+  * debian/diff/defaultsize.diff: new; fix default max. size for single
+    log files to match the documentation.
+
+ -- Gerrit Pape <pape@smarden.org>  Thu, 15 May 2003 11:50:45 +0200
+
 runit (0.9.2-1) unstable; urgency=low
 
   * new upstream version.
