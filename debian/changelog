@@ -1,3 +1,12 @@
+runit (1.0.5-2) unstable; urgency=low
+
+  * debian/control: Build-Depends: dietlibc-dev (>> 0.28-0) to make diet
+    compiled programs work with a kernel with stack protection (thx Csillag
+    Tamas, closes: 299550).
+  * debian/runit.README.Debian: minor.
+
+ -- Gerrit Pape <pape@smarden.org>  Sun, 20 Mar 2005 19:49:38 +0000
+
 runit (1.0.5-1) unstable; urgency=low
 
   * new upstream release.
