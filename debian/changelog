@@ -10,7 +10,7 @@ runit (1.0.2-2) unstable; urgency=low
   * debian/diff/chpst-chroot.diff: new; chpst supports chroot though -/
     option.
   * debian/rules: new target unpack; apply chpst-chroot.diff; use
-    dietlibc-dev on amd64.
+    dietlibc-dev on amd64 (thx Andreas Jochens).
   * debian/control: Build-Depends: dietlibc-dev +[amd64].
 
  -- Gerrit Pape <pape@smarden.org>  Tue, 27 Apr 2004 17:55:40 +0000
