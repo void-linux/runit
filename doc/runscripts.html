@@ -37,6 +37,7 @@ Thomas Schwinge, Gael Canal, Woon Wai Keen, Richard A Downing.
 <a href="#dhclient">dhclient</a><br>
 <a href="#dhcpcd">dhcpcd</a><br>
 <a href="#dhcpd">dhcpd</a><br>
+<a href="#dropbear">dropbear</a><br>
 <a href="#exim">exim</a><br>
 <a href="#expireproctitle">expireproctitle</a><br>
 <a href="#fam">fam</a><br>
@@ -246,6 +247,28 @@ automatically, but then it's not supervised)
  exec /usr/bin/sleep 5
 </pre>
 The in.dhcpd service needs a
+<a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
+to be set up.
+<hr>
+<h3><a name="dropbear">A <tt>dropbear</tt> run script</a></h3>
+(<i>Linux</i>)
+<pre>
+ #!/bin/sh
+ exec 2&gt;&amp;1
+ exec dropbear -F -E -p 22
+</pre>
+This service needs a
+<a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
+to be set up.
+<p>
+(<i>Linux</i>, running under
+<a href="http://smarden.org/ipsvd/tcpsvd.8.html">tcpsvd</a>)
+<pre>
+ #!/bin/sh
+ exec 2&gt;&amp;1
+ exec tcpsvd -v -i./peers 0 22 dropbear -i -E
+</pre>
+This service needs a
 <a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
 to be set up.
 <hr>
