@@ -1,3 +1,10 @@
+runit (1.2.1-1) unstable; urgency=low
+
+  * new upstream version.
+  * debian/copyright: adapt, 2005.
+
+ -- Gerrit Pape <pape@smarden.org>  Sun, 13 Mar 2005 13:57:08 +0000
+
 runit (1.0.5-3) unstable; urgency=low
 
   * debian/control, debian/rules: add Build-Depends: dietlibc-dev [ppc64];
