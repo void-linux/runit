@@ -9,19 +9,19 @@
 <a href='http://smarden.org/pape/'>G. Pape</a><br><a href='index.html'>runit</A><hr><p>
 
 <h2><a name='sect0'>Name</a></h2>
-runsvchdir - change service directory of <i>runsvdir(8)</i> 
+runsvchdir - change services directory of <i>runsvdir(8)</i> 
 <h2><a name='sect1'>Synopsis</a></h2>
 <b>runsvchdir</b>
 <i>dir</i> 
 <h2><a name='sect2'>Description</a></h2>
-<i>dir</i> is a directory for the use with <i><b>runsvdir</b>(8)</i>. If <i>dir</i> does
-not start with a slash, it is searched in /etc/runit/runsvdir/. <i>dir</i> must
-not start with a dot. <p>
-<b>runsvchdir</b> switches to the directory <i>/etc/runit/runsvdir</i>,
+<i>dir</i> is a services directory for the use with <i><b>runsvdir</b>(8)</i>.
+If <i>dir</i> does not start with a slash, it is searched in /etc/runit/runsvdir/.
+<i>dir</i> must not start with a dot. <p>
+<b>runsvchdir</b> switches to the directory <i>/etc/runit/runsvdir/</i>,
 copies <i>current</i> to <i>previous</i>, and replaces <i>current</i> with a symlink pointing
 to <i>dir</i>. <p>
 Normally  <i>/var/service</i> is a symlink to <i>current</i>, and <i><b>runsvdir</b>(8)</i>
-is running <i>/var/service</i>. 
+is running <i>/var/service/</i>. 
 <h2><a name='sect3'>Exit Codes</a></h2>
 <b>runsvchdir</b> prints an error message and
 exits 111 on error. <b>runsvchdir</b> exits 0 on success. 

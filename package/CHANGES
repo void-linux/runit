@@ -1,3 +1,6 @@
+  * doc/runlevels.html, doc/upgrade.html, doc/useinit.html, man/runsvdir.8,
+    man/runsvchdir.8: minor changes in wording, notations.
+
 runit 1.0.3
 Sat, 26 Jun 2004 14:50:41 +0000
   * chpst.c, man/chpst.8: new option -/ chroot.
