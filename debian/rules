@@ -29,8 +29,8 @@ build-stamp:
 		-C admin/runit-0.2.2/compile
 	( \
 	cd admin/runit-0.2.2/compile ; \
-	ln -s daemontools-pd-0.76 support \
-	echo 'diet gcc -O2 -Wall' > support/conf-cc ; \   
+	ln -s daemontools-pd-0.76 support ; \
+	echo 'diet gcc -O2 -Wall' > support/conf-cc ; \
 	echo 'diet gcc -s -Os -pipe' > support/conf-ld ; \
 	)
 	( \
