@@ -20,7 +20,8 @@ an operating system not stated here, please
 <p>
 Thanks go to the following people for contributing run scripts:
 Alessandro Bono, Robin S. Socha, Claus Alboege, Paul Jarc, clemens fischer,
-Jesse Cablek, Lukas Beeler, Thomas Baden, Ralf Hildebrandt, Antonio Dias.
+Jesse Cablek, Lukas Beeler, Thomas Baden, Ralf Hildebrandt, Antonio Dias,
+Erich Schubert, Lang Martin.
 <hr>
 <a href="#apache">apache</a><br>
 <a href="#apache2">apache2</a><br>
@@ -288,12 +289,18 @@ A run script for <tt>logging Linux kernel messages with multilog</tt></a></h3>
          --socket=/tmp/mysql.sock \
          --pid-file=/pack/mysql/data/mysql.pid 2>&1
 </pre>
-(<i>Linux</i>, mysqld  Ver 3.23.54-max for pc-linux on i686)
+(<i>Debian</i>, ``It's an ugly hack, but it works'')
 <pre>
  #!/bin/sh
- cd /usr/local/mysql
- ./bin/safe_mysqld
- cd
+ cd /
+ umask 077
+ 
+ MYSQLADMIN='/usr/bin/mysqladmin --defaults-extra-file=/etc/mysql/debian.cnf'
+ 
+ trap "$MYSQLADMIN shutdown" 0
+ trap 'exit 2' 1 2 3 15
+ 
+ /usr/bin/mysqld_safe & wait
 </pre>
 <hr>
 <h3><a name="ntpd">A <tt>ntpd</tt> run script</a></h3>
@@ -381,23 +388,27 @@ This service needs a
 to be set up.
 <hr>
 <h3><a name="samba">A <tt>smbd</tt> run script</a></h3>
-(<i>Linux</i>, smbd Version 2.2.7a)
+(<i>Linux</i>, samba
+<a href="http://www.grendel.net/handler/pub/samba-patches/">patched</a>
+to run supervised)
 <pre>
  #!/bin/sh
  PATH="/usr/local/samba/bin"
  exec 2>&1
- exec smbd -i -d3
+ exec smbd -F -S -d3
 </pre>
 This service needs a
 <a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
 to be set up.
 <h3>A <tt>nmbd</tt> run script</h3>
-(<i>Linux</i>, nmbd Version 2.2.7a)
+(<i>Linux</i>, samba
+<a href="http://www.grendel.net/handler/pub/samba-patches/">patched</a>
+to run supervised)
 <pre>
  #!/bin/sh
  PATH="/usr/local/samba/bin"
  exec 2>&1
- exec nmbd -i -d1
+ exec nmbd -F -S -d1
 </pre>
 This service needs a
 <a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
@@ -455,17 +466,21 @@ This service needs a
 <a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
 to be set up.
 <h3><a name="mountd">A <tt>mountd</tt> run script</a></h3>
-(<i>Debian woody</i>)
+(<i>Debian</i>)
 <pre>
- #!/bin/sh
- svwaitup /service/statd
- RPCNFSDCOUNT=8  # Number of servers to be started up by default
- RPCMOUNTDOPTS=-F
- exportfs -r
- rpc.nfsd -- $RPCNFSDCOUNT
- rpcinfo -u localhost nfs 3 >/dev/null 2>&1 ||
-   RPCMOUNTDOPTS="$RPCMOUNTDOPTS --no-nfs-version 3"
- exec rpc.mountd $RPCMOUNTDOPTS
+#!/bin/sh
+svwaitup /var/service/statd
+RPCNFSDCOUNT=8  # Number of servers to be started up by default
+RPCMOUNTDOPTS=
+
+trap '/usr/bin/killall -2 nfsd' 0
+trap 'exit 2' 1 2 3 15
+
+/usr/sbin/exportfs -r
+/usr/sbin/rpc.nfsd -- $RPCNFSDCOUNT
+/usr/bin/rpcinfo -u localhost nfs 3 >/dev/null 2>&1 ||
+  RPCMOUNTDOPTS="$RPCMOUNTDOPTS --no-nfs-version 3"
+/usr/sbin/rpc.mountd -F $RPCMOUNTDOPTS
 </pre>
 <hr>
 <h3><a name="stunnel">A <tt>stunnel</tt> run script</a></h3>
@@ -512,7 +527,7 @@ to be set up.
  exec xdm -nodaemon
 </pre>
 <hr>
-<address><a href="mailto:pape@smarden.org">
+<address><a href="mailto:pape-runscripts@smarden.org">
 Gerrit Pape &lt;pape@smarden.org&gt;
 </a></address>
 <small>$Id$</small>
