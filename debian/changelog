@@ -1,8 +1,8 @@
-runit (0.5.4-1) sarge; urgency=low
+runit (0.6.0-1) sarge; urgency=low
 
   * See /package/admin/runit/package/CHANGES.
 
- -- Gerrit Pape <pape@smarden.org>  Wed, 25 Sep 2002 12:15:00 +0200
+ -- Gerrit Pape <pape@smarden.org>  Fri, 27 Sep 2002 16:35:53 +0200
 
 runit (0.5.2-1) sarge; urgency=low
 

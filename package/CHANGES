@@ -1,5 +1,5 @@
-runit 0.5.4
-Wed, 25 Sep 2002 12:13:46 +0200
+runit 0.6.0
+Fri, 27 Sep 2002 16:34:57 +0200
   * man/runsv.8, man/runsvdir.8: new.
   * doc: use runsvdir/runsv instead of svscanboot/supervise.
   * svwaitdown.c, svwaitup.c, man/svwaitdown.8, man/svwaitup.8: services
@@ -10,16 +10,13 @@ Wed, 25 Sep 2002 12:13:46 +0200
   * stage 3: use new svwaitdown options.
 
 runit 0.5.3
-Tue, 24 Sep 2002 12:14:02 +0200
-  * runsvdir.c, runsv.c: code cleanup.
-  * utmpset.c: setlock utmp and wtmp file.
-
-runit 0.5.2
 Mon, 23 Sep 2002 16:25:07 +0200
   * runsv, runsvdir: new; svscan/supervise replacement.
   * etc/runit/2: use runsvlog instead of svscanboot.
   * runsvstat.c: new; svstat for runsv.
   * runsvctrl.c: new; svc for runsv.
+  * runsvdir.c, runsv.c: code cleanup.
+  * utmpset.c: setlock utmp and wtmp file.
 
 runit 0.5.0
 Wed, 28 Aug 2002 11:18:28 +0200
