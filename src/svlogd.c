@@ -456,6 +456,7 @@ unsigned int lineadd(struct logdir *ld, char *s, int len) {
 unsigned int lineflush(struct logdir *ld, char *s, int len) {
   switch(ld->match) {
   case '-':
+    ld->match =0;
     return(0);
   case 0:
     linestart(ld, s, len);

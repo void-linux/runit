@@ -1,5 +1,3 @@
-#include <poll.h>
-
 #include <sys/types.h>
 #include <sys/reboot.h>
 #include <sys/ioctl.h>
@@ -48,6 +46,9 @@ int main (int argc, const char * const *argv, char * const *envp) {
   int wstat;
   int st;
   iopause_fd x;
+#ifndef IOPAUSE_POLL
+  fd_set rfds;
+#endif
   char ch;
   int ttyfd;
   struct stat s;
@@ -135,14 +136,21 @@ int main (int argc, const char * const *argv, char * const *envp) {
 
     x.fd =selfpipe[0];
     x.events =IOPAUSE_READ;
-
+#ifndef IOPAUSE_POLL
+    FD_ZERO(&rfds);
+    FD_SET(x.fd, &rfds);
+#endif
     for (;;) {
       int child;
 
       sig_unblock(sig_child);
       sig_unblock(sig_cont);
       sig_unblock(sig_int);
+#ifdef IOPAUSE_POLL
       poll(&x, 1, -1);
+#else
+      select(x.fd +1, &rfds, (fd_set*)0, (fd_set*)0, (struct timeval*)0);
+#endif
       sig_block(sig_cont);
       sig_block(sig_child);
       sig_block(sig_int);

@@ -1,5 +1,5 @@
 IT=sysdeps runit runit-init runsv runsvctrl runsvstat runsvdir runsvchdir \
-svwaitup svwaitdown utmpset svlogd
+svwaitup svwaitdown utmpset svlogd setuidgid
 
 default: $(IT)
 

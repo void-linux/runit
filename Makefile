@@ -1,6 +1,6 @@
 DESTDIR=
 
-PACKAGE=runit-0.9.4
+PACKAGE=runit-0.9.5
 DIRS=doc man etc package src
 MANPAGES=runit.8 runit-init.8 runsvdir.8 runsv.8 svwaitdown.8 svwaitup.8 \
 utmpset.8 runsvchdir.8 runsvstat.8 runsvctrl.8 svlogd.8
@@ -16,7 +16,7 @@ all: clean .manpages $(PACKAGE).tar.gz
 	  > doc/$$i.html ; \
 	done ; \
 	echo 'fix up html manually...'
-	echo 'patch -p0 <manpagehtml.diff'
+	echo 'patch -p0 <manpagehtml.diff && exit'
 	sh
 	touch .manpages
 
@@ -26,6 +26,9 @@ $(PACKAGE).tar.gz:
 	make -C src clean
 	cp -a $(DIRS) TEMP/admin/$(PACKAGE)/
 	ln -sf ../etc/debian TEMP/admin/$(PACKAGE)/doc/
+	for i in TEMP/admin/$(PACKAGE)/etc/*; do \
+	  test -d $$i && ln -s ../2 $$i/2; \
+	done
 	chmod -R g-ws TEMP/admin
 	chmod +t TEMP/admin
 	find TEMP -exec touch {} \;

@@ -1,3 +1,12 @@
+runit 0.9.5
+Tue, 17 Jun 2003 10:48:10 +0200
+  * runit.c: user select() on systems that don't provide poll() (builds
+    on Mac OSX).
+  * svlogd.c: reset match flag in lineflush() in all cases.
+  * Makefile: build setuidgid in default target.
+  * doc/useinit.html: add instruction to create /etc/runit/2 first.
+  * doc/install.html: minor.
+
 runit 0.9.4
 Wed, 04 Jun 2003 13:56:33 +0200
   * svlogd.c: default log file size is 1M; print verbose message only if
