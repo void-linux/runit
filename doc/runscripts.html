@@ -19,7 +19,7 @@ an operating system not stated here, please
 <p>
 Thanks go to the following people for contributing run scripts:
 Alessandro Bono, Robin S. Socha, Claus Alboege, Paul Jarc, clemens fischer,
-Jesse Cablek, Lukas Beeler, Thomas Baden.
+Jesse Cablek, Lukas Beeler, Thomas Baden, Ralf Hildebrandt.
 <hr>
 <a href="#apache">apache</a><br>
 <a href="#apache2">apache2</a><br>
@@ -82,6 +82,13 @@ logging console messages</a><br>
  exec env -i /command/pgrphack \
  /pack/apache/2.0.43-1/sbin/httpd -DFOREGROUND 2>&1
 </pre>
+(<i>HP-UX/GNU</i>, <i>Linux</i>)
+<pre>
+ #!/bin/sh
+ TZ=MET-1METDST
+ export TZ
+ exec /usr/local/apache2/bin/httpd -DNO_DETACH
+</pre>
 <hr>
 <h3><a name="bind9">A <tt>bind9</tt> run script</a></h3>
 (<i>Linux</i>)
@@ -91,6 +98,11 @@ logging console messages</a><br>
  CHROOT="`head -1 ./env/CHROOT`"
  exec softlimit -m "${MEM}" \
    named -u bind -t "${CHROOT}" -g 2>&1
+</pre>
+(<i>HP-UX/GNU</i>, <i>Linux</i>)
+<pre>
+ #!/bin/sh
+ exec /usr/sbin/named -f -t /var/spool/named/ -u named
 </pre>
 <hr>
 <h3><a name="boa">A <tt>boa</tt> run script</a></h3>
