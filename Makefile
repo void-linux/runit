@@ -22,7 +22,7 @@ $(PACKAGE).tar.gz:
 	mkdir -p TEMP/admin/$(PACKAGE)
 	make -C src clean
 	cp -a $(DIRS) TEMP/admin/$(PACKAGE)/
-	ln -s ../etc/debian TEMP/admin/$(PACKAGE)/doc/
+	ln -sf ../etc/debian TEMP/admin/$(PACKAGE)/doc/
 	chmod -R g-ws TEMP/admin
 	chmod +t TEMP/admin
 	find TEMP -exec touch {} \;
