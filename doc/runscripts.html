@@ -21,13 +21,14 @@ an operating system not stated here, please
 Thanks go to the following people for contributing run scripts:
 Alessandro Bono, Robin S. Socha, Claus Alboege, Paul Jarc, clemens fischer,
 Jesse Cablek, Lukas Beeler, Thomas Baden, Ralf Hildebrandt, Antonio Dias,
-Erich Schubert, Lang Martin.
+Erich Schubert, Lang Martin, Tomasz Nidecki.
 <hr>
 <a href="#apache">apache</a><br>
 <a href="#apache2">apache2</a><br>
 <a href="#bind9">bind9</a><br>
 <a href="#boa">boa</a><br>
 <a href="#cfengine">cfengine</a><br>
+<a href="#clamav">clamav</a><br>
 <a href="#courier-imap">courier-imap</a></br>
 <a href="#cups">cups</a><br>
 <a href="#dhclient">dhclient</a><br>
@@ -39,6 +40,7 @@ Erich Schubert, Lang Martin.
 <a href="#getty">getty</a><br>
 <a href="#identd">identd</a><br>
 <a href="#inn">inn</a><br>
+<a href="#jabberd">jabberd</a><br>
 <a href="#klogd">klogd</a><br>
 <a href="#loglinuxkernel">logging Linux kernel messages</a><br>
 <a href="http://multivac.cwru.edu./fdtools/grabconsole/">
@@ -46,6 +48,7 @@ logging console messages</a><br>
 <a href="#mysql">mysql</a><br>
 <a href="#ntpd">ntpd</a><br>
 <a href="#pop3-ssl">pop3-ssl</a><br>
+<a href="#pop3vscan">pop3vscan</a><br>
 <a href="#postgresql">postgresql</a><br>
 <a href="#ppp">ppp</a><br>
 <a href="#proftpd">proftpd</a><br>
@@ -53,13 +56,16 @@ logging console messages</a><br>
 <a href="#radiusd">radiusd</a><br>
 <a href="#rsyncd">rsyncd</a><br>
 <a href="#samba">samba (smbd, nmbd)</a><br>
+<a href="#shoutcast">shoutcast</a><br>
 <a href="#squid">squid</a><br>
 <a href="#sshd">sshd</a><br>
 <a href="#sshdtcpserver">sshd under tcpserver</a><br>
 <a href="#statd">statd</a>, <a href="#mountd">mountd</a><br>
 <a href="#stunnel">stunnel</a><br>
 <a href="#taiclockd">taiclockd</a><br>
+<a href="#tmda-ofmipd">tmda-ofmipd</a><br>
 <a href="#tomcat">tomcat</a><br>
+<a href="#vsftpd">vsftpd</a><br>
 <a href="#wvdial">wvdial</a><br>
 <a href="#xdm">xdm</a><br>
 <hr>
@@ -126,6 +132,18 @@ logging console messages</a><br>
  /pack/cfengine/sbin/cfagent --file /pack/cfengine/etc/cfagent.conf \
    -L -v -q exec sleep 3600
 </pre>
+<hr>
+<h3><a name="clamav">A <tt>clamd</tt> run script</a></h3>
+(<i>RedHat 7</i>)
+<pre>
+ #!/bin/sh
+ exec 2>&1
+ exec /usr/local/bin/setuidgid clamav \
+   /usr/local/bin/softlimit -a 40000000 /usr/local/sbin/clamd
+</pre>
+This service needs a
+<a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
+to be set up.
 <hr>
 <h3><a name="courier-imap">A <tt>courier-imap</tt> run script</a></h3>
 (<i>SunOS</i>)
@@ -262,6 +280,31 @@ to be set up.
    /usr/sw/bin/news/inndstart -f -r
 </pre>
 <hr>
+<h3><a name="jabberd"><tt>jabberd</tt> run scripts</a></h3>
+(<i>RedHat 7</i>)
+<pre>
+ #!/bin/sh
+ exec 2>&1
+ if [ -f /usr/local/jabber/jabber.pid ]; then
+   rm /usr/local/jabber/jabber.pid
+ fi
+ exec /usr/local/bin/setuidgid jabberd \
+   /usr/local/jabber/jabberd/jabberd -D -c /etc/jabber.xml
+</pre>
+This service needs a
+<a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
+to be set up.
+<pre>
+ #!/bin/sh
+ exec 2>&1
+ sleep 5 # so that jit starts after jabberd is up
+ exec /usr/local/bin/setuidgid jabberd \
+   /usr/local/jabber/jit/jabberd/jabberd -c /etc/jit.xml
+</pre>
+This service needs a
+<a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
+to be set up.
+<hr>
 <h3><a name="klogd">A <tt>klogd</tt> run script</a></h3>
 (<i>Debian woody</i>)
 <pre>
@@ -320,6 +363,17 @@ A run script for <tt>logging Linux kernel messages with multilog</tt></a></h3>
  -f  -p /etc/ssl/stunnel.pem \
  -l /var/qmail/bin/qmail-popup -- /var/qmail/bin/qmail-popup
  "`cat /var/qmail/control/me`" vchkpw /var/qmail/bin/qmail-pop3d Maildir 2>&1
+</pre>
+This service needs a
+<a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
+to be set up.
+<hr>
+<h3><a name="pop3vscan">A <tt>pop3vscan</tt> run script</a></h3>
+(<i>RedHat 7</i>)
+<pre>
+ #!/bin/sh
+ exec 2>&1
+ exec /usr/local/bin/setuidgid pop3vscan /usr/sbin/pop3vscan -d
 </pre>
 This service needs a
 <a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
@@ -414,6 +468,18 @@ This service needs a
 <a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
 to be set up.
 <hr>
+<h3><a name="shoutcast">A <tt>shoutcast</tt> run script</a></h3>
+(<i>RedHat 7</i>)
+<pre>
+ #!/bin/sh
+ exec 2>&1
+ exec /usr/local/bin/setuidgid sc_serv \
+   /usr/local/sc_serv/bin/sc_serv /etc/sc_serv.conf
+</pre>
+This service needs a
+<a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
+to be set up.
+<hr>
 <h3><a name="squid">A <tt>squid</tt> run script</a></h3>
 (<i>Debian woody</i>)
 <pre>
@@ -497,6 +563,16 @@ trap 'exit 2' 1 2 3 15
  exec setuidgid taiclock /usr/local/clockspeed/bin/taiclockd
 </pre>
 <hr>
+<h3><a name="tmda-ofmipd">A <tt>tmda-ofmipd</tt> run script</a></h3>
+(<i>RedHat 7</i>)
+<pre>
+ #!/bin/sh
+ exec /usr/local/tmda/bin/tmda-ofmipd -f -d -R pop3 -p my.host.name:8025 2>&1
+</pre>
+This service needs a
+<a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
+to be set up.
+<hr>
 <h3><a name="tomcat">A <tt>tomcat</tt> run script</a></h3>
 (<i>SunOS</i>)
 <pre>
@@ -506,6 +582,19 @@ trap 'exit 2' 1 2 3 15
  setuidgid apache \
  /pack/tomcat/current/bin/catalina.sh run
 </pre>
+<hr>
+<h3><a name="vsftpd">A <tt>vsftpd</tt> run script</a></h3>
+(<i>RedHat 7</i>)
+<pre>
+ #!/bin/sh
+ exec 2>&1
+ exec /usr/local/bin/tcpserver -c30 -Xv -llocalhost \
+   -x/etc/tcp.ftp.cdb -uvsftpd -gvsftpd 0 ftp \
+     softlimit -d300000 /var/vsftpd/bin/vsftpd
+</pre>
+This service needs a
+<a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
+to be set up.
 <hr>
 <h3><a name="wvdial">A <tt>wvdial</tt> run script</a></h3>
 (<i>Slackware Linux 9.0</i>, the service should have a <tt>down</tt>
