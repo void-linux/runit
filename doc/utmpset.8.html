@@ -24,7 +24,7 @@ other services. <P>
 To enable local login accounting, add <B>utmpset</B> to the <B><I>getty</B>(8)</I>
 run scripts, e.g.: <P>
  #!/bin/sh<BR>
-  /package/admin/runit/command/utmpset -w tty5<BR>
+  /command/utmpset -w tty5<BR>
   exec /sbin/getty 38400 tty5 linux<BR>
  
 <H2><A NAME="sect3">Options</A></H2>
