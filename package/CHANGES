@@ -1,3 +1,8 @@
+  * doc/index.html, doc/replaceinit.html: no longer refer to sysvinit's
+    shutdown program.
+  * man/svlogd.8: svlogd doesn't decrease the number of log files in a log
+    directory; with n0 don't remove any log files.
+
 runit 1.2.1
 Sat, 15 Jan 2005 11:57:46 +0000
   * chpst.c: typo.
