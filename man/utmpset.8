@@ -30,11 +30,13 @@ To enable local login accounting, add
 .B utmpset
 to the
 .BR getty (8)
-run scripts, e.g.:
+.I finish
+scripts, e.g.:
 .P
+ $ cat /var/service/getty-5/finish
  #!/bin/sh
- /command/utmpset \-w tty5
- exec /sbin/getty 38400 tty5 linux
+ exec utmpset \-w tty5
+ $
 .SH OPTIONS
 .TP
 .B \-w

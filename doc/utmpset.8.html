@@ -22,10 +22,11 @@ for local login accounting. The <i><b>runit</b>(8)</i> program doesn&rsquo;t inc
 update the utmp file, the <i><b>getty</b>(8)</i> processes are handled the same as all
 other services. <p>
 To enable local login accounting, add <b>utmpset</b> to the <i><b>getty</b>(8)</i>
-run scripts, e.g.: <p>
- #!/bin/sh<br>
-  /command/utmpset -w tty5<br>
-  exec /sbin/getty 38400 tty5 linux<br>
+<i>finish</i> scripts, e.g.: <p>
+ $ cat /var/service/getty-5/finish<br>
+  #!/bin/sh<br>
+  exec utmpset -w tty5<br>
+  $<br>
  
 <h2><a name='sect3'>Options</a></h2>
 
