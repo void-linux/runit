@@ -18,4 +18,6 @@ and tell sysvinit about the change:
 
 # init q
 
+[0] http://smarden.org/runit/replaceinit.html
+
  -- Gerrit Pape <pape@smarden.org>, Wed, 16 Oct 2002 13:24:32 +0200

@@ -105,10 +105,6 @@ install: build
 	chmod 0700 $(CURDIR)/debian/runit/etc/runit/3
 	install -m0700 admin/runit/etc/debian/ctrlaltdel \
 	  $(CURDIR)/debian/runit/etc/runit/ctrlaltdel
-#	sed -e 's}^/command/utmpset}utmpset}g' \
-#	  <admin/runit/etc/debian/getty-tty5/run \
-#	    >$(CURDIR)/debian/runit/etc/runit/getty-5/run
-#	chmod 0755 $(CURDIR)/debian/runit/etc/runit/getty-5/run
 	install -m0755 debian/getty-tty5.run \
 	  $(CURDIR)/debian/runit/etc/runit/getty-5/run
 	install -m0755 debian/getty-tty5.finish \
@@ -119,39 +115,8 @@ install: build
 	install -m0644 debian/runit.lintian \
 	  $(CURDIR)/debian/runit/usr/share/lintian/overrides/runit
 
-	# runit-run
-	( \
-	cd runit-run; \
-	$(MAKE) install DESTDIR=$(CURDIR)/debian/runit-run; \
-	)
-
 # Build architecture-independent files here.
-# Pass -i to all debhelper commands in this target to reduce clutter.
 binary-indep: build install
-#	dh_testdir -i
-#	dh_testroot -i
-#	dh_installdebconf -i
-#	dh_installdocs -i
-#	dh_installexamples -i
-#	dh_installmenu -i
-#	dh_installlogrotate -i
-#	dh_installemacsen -i
-#	dh_installpam -i
-#	dh_installmime -i
-#	dh_installinit -i
-#	dh_installcron -i
-#	dh_installman -i
-#	dh_installinfo -i
-#	dh_undocumented -i
-#	dh_installchangelogs -i
-#	dh_link -i
-#	dh_compress -i
-#	dh_fixperms -i
-#	dh_installdeb -i
-#	dh_perl -i
-#	dh_gencontrol -i
-#	dh_md5sums -i
-#	dh_builddeb -i
 
 # Build architecture-dependent files here.
 binary-arch: build install
@@ -160,15 +125,7 @@ binary-arch: build install
 #	dh_installdebconf -a
 	dh_installdocs -a
 #	dh_installexamples -a
-#	dh_installmenu -a
-#	dh_installlogrotate -a
-#	dh_installemacsen -a
-#	dh_installpam -a
-#	dh_installmime -a
-#	dh_installinit -a
-#	dh_installcron -a
 	dh_installman -a admin/runit/man/*.8 debian/runsv*.8
-#	dh_installinfo -a
 #	dh_undocumented -a
 	dh_installchangelogs -a admin/runit-0.7.0/package/CHANGES
 	dh_strip -a
@@ -177,7 +134,6 @@ binary-arch: build install
 	dh_fixperms -a -X/sbin
 #	dh_makeshlibs -a
 	dh_installdeb -a
-#	dh_perl -a
 #	dh_shlibdeps -a
 	dh_gencontrol -a
 	dh_md5sums -a
