@@ -214,7 +214,7 @@ void stopservice(struct svdir *s) {
 void startservice(struct svdir *s) {
   int p;
   char *run[2];
-  
+
   if (s->state == S_FINISH)
     run[0] ="./finish";
   else
@@ -232,12 +232,14 @@ void startservice(struct svdir *s) {
       if (s->islog) {
 	if (fd_copy(0, logpipe[0]) == -1)
 	  fatal("unable to setup filedescriptor for ./log/run");
+	close(logpipe[1]);
 	if (chdir("./log") == -1)
-	  fatal("unable to change directory ./log");
+	  fatal("unable to change directory to ./log");	
       }
       else {
 	if (fd_copy(1, logpipe[1]) == -1)
 	  fatal("unable to setup filedescriptor for ./run");
+	close(logpipe[0]);
       }
     }
     sig_uncatch(sig_child);
@@ -349,6 +351,7 @@ int main(int argc, char **argv) {
   svd[0].ctrl =C_NOOP;
   svd[0].want =W_UP;
   svd[0].islog =0;
+  svd[1].pid =0;
   taia_now(&svd[0].start);
   if (stat("down", &s) != -1)
     svd[0].want =W_DOWN;
@@ -362,7 +365,6 @@ int main(int argc, char **argv) {
       warnx("./log: not a directory.");
     else {
       haslog =1;
-      svd[1].pid =0;
       svd[1].state =S_DOWN;
       svd[1].ctrl =C_NOOP;
       svd[1].want =W_UP;
@@ -458,12 +460,14 @@ int main(int argc, char **argv) {
       if (child == svd[0].pid) {
 	svd[0].pid =0;
 	pidchanged =1;
-	if ((svd[0].state != S_FINISH) && (open_read("finish") != -1)) {
-	  svd[0].state =S_FINISH;
-	  startservice(&svd[0]);
-	  update_status(&svd[0]);
-	  break;
-	}
+	if (svd[0].state != S_FINISH)
+	  if ((fd =open_read("finish")) != -1) {
+	    close(fd);
+	    svd[0].state =S_FINISH;
+	    startservice(&svd[0]);
+	    update_status(&svd[0]);
+	    break;
+	  }
 	svd[0].state =S_DOWN;
 	svd[0].ctrl &=~C_TERM;
 	taia_now(&svd[0].start);
@@ -499,7 +503,12 @@ int main(int argc, char **argv) {
 	exit(0);
       if (svd[1].want != W_EXIT) {
 	svd[1].want =W_EXIT;
+	/*
 	stopservice(&svd[1]);
+	*/
+	update_status(&svd[1]);
+	if (close(logpipe[1]) == -1) warn("unable to close logpipe[1]");
+	if (close(logpipe[0]) == -1) warn("unable to close logpipe[0]");
       }
     }
   }

@@ -38,11 +38,11 @@ Dependencies</a><br>
 <a href="http://cr.yp.to/daemontools.html">daemontools</a> alike
 replacement for
 <a href="ftp://ftp.cistron.nl/pub/people/miquels/sysvinit/">sysvinit</a>
-and other init schemes. <i>runit</i> runs on <b>Debian GNU/Linux</b>,
-<b>OpenBSD 2.9</b>, <b>FreeBSD 4.4</b>. <i>runit</i> reportedly runs on
-<b>FreeBSD 4.3</b>, and can easily be adapted to other unix operating
-systems. If <i>runit</i> runs for you on any other operating system or
-linux distribution, please let me know.
+and other init schemes. <i>runit</i> runs on <b>GNU/Linux</b>,
+<b>OpenBSD</b>, <b>FreeBSD</b>, and can easily be adapted to other unix
+operating systems.
+If <i>runit</i> runs for you on any other operating system or linux
+distribution, please let me know.
 <p>
 <b>Warning:</b> Replacing <i>sysvinit</i> or <i>init</i> can cause the
 system's boot to fail. Make sure you are able to recover and repair your
@@ -110,61 +110,63 @@ and potato, and did not encounter any problems. Of course also the
 no 1, here is an example:
 <pre>
   # strings /proc/1/exe |grep Id
-  $Id$
+  &#36;Id: runit.c,v 1.7 2002/02/13 09:59:52 pape Exp &#36;
   # uptime
-   11:32:18 up 25 days, 18:29,  2 users,  load average: 0.12, 0.03, 0.01
-  # ps axuw |head -n14
+   14:36:29 up 88 days,  1:51,  2 users,  load average: 0.20, 0.13, 0.04
+  # ps axuw |head -n20
   USER       PID %CPU %MEM   VSZ  RSS TTY      STAT START   TIME COMMAND
-  root         1  0.0  0.0    20   20 ?        S    Sep27   0:06 runit
-  root         2  0.0  0.0     0    0 ?        SW   Sep27   0:00 [kflushd]
-  root         3  0.0  0.0     0    0 ?        SW   Sep27   0:00 [kupdate]
-  root         4  0.0  0.0     0    0 ?        SW   Sep27   0:04 [kswapd]
-  root         5  0.0  0.0     0    0 ?        SW   Sep27   0:00 [keventd]
-  root       153  0.0  1.0  1652  676 ?        S    Sep27   0:00 /usr/sbin/cron
-  root       156  0.0  0.0    40   28 ?        S    Sep27   0:00 runsvdir /service log: .......................................................
-  root       157  0.0  0.0    24   24 ?        S    Sep27   0:00 runsv socklog-unix
-  root       158  0.0  0.0    24   24 ?        S    Sep27   0:00 runsv qmail-smtpd
-  root       159  0.0  0.0    24   24 ?        S    Sep27   0:00 runsv qmail-send
-  root       160  0.0  0.0    24   24 ?        S    Sep27   0:00 runsv sshd
-  root       161  0.0  0.0    24   24 ?        S    Sep27   0:00 runsv getty-tty2
-  root       162  0.0  0.0    24   24 ?        S    Sep27   0:00 runsv getty-tty3
-  # pstree
-  runit-+-cron
+  root         1  0.0  0.0    20   16 ?        S     2002   0:05 runit
+  root         2  0.0  0.0     0    0 ?        SW    2002   0:00 [keventd]
+  root         3  0.0  0.0     0    0 ?        SWN   2002   0:00 [ksoftirqd_CPU0]
+  root         4  0.0  0.0     0    0 ?        SW    2002   0:16 [kswapd]
+  root         5  0.0  0.0     0    0 ?        SW    2002   0:00 [bdflush]
+  root         6  0.0  0.0     0    0 ?        SW    2002   0:01 [kupdated]
+  root       168  0.0  0.2  1652  584 ?        S     2002   0:00 /usr/sbin/cron
+  root       174  0.0  0.0    36   24 ?        S     2002   0:00 runsvdir /service log: ........................................................................................................
+  root       176  0.0  0.0    20   20 ?        S     2002   0:00 runsv qmail-send
+  root       177  0.0  0.0    20   20 ?        S     2002   0:00 runsv getty-5
+  root       178  0.0  0.0    20   20 ?        S     2002   0:00 runsv getty-4
+  root       179  0.0  0.0    20   20 ?        S     2002   0:00 runsv getty-3
+  root       180  0.0  0.0    20   20 ?        S     2002   0:00 runsv getty-2
+  root       181  0.0  0.0    20   20 ?        S     2002   0:00 runsv qmail-smtpd
+  root       182  0.0  0.0    20   20 ?        S     2002   0:00 runsv socklog-unix
+  root       183  0.0  0.1  1256  384 tty5     S     2002   0:00 getty 38400 tty5 linux
+  root       184  0.0  0.1  1256  384 tty3     S     2002   0:00 getty 38400 tty3 linux
+  root       185  0.0  0.0    20   20 ?        S     2002   0:00 runsv socklog-klog
+  root       186  0.0  0.0    20   20 ?        S     2002   0:00 runsv ssh
+# pstree
+  runit-+-bdflush
+        |-cron
         |-keventd
-        |-kflushd
+        |-ksoftirqd_CPU0
         |-kswapd
-        |-kupdate
-        `-runsvdir-+-2*[runsv-+-multilog]
-                   |          `-socklog]
-                   |-5*[runsv-+-multilog]
-                   |          `-tcpserver]
-                   |-runsv-+-multilog
+        |-kupdated
+        `-runsvdir-+-runsv-+-multilog
                    |       `-qmail-send-+-qmail-clean
                    |                    |-qmail-lspawn
                    |                    `-qmail-rspawn
+                   |-4*[runsv---getty]
                    |-runsv-+-multilog
-                   |       `-sshd-+-sshd---sshd---bash---bash---ssh
+                   |       `-tcpserver---qmail-smtpd
+                   |-2*[runsv-+-multilog]
+                   |          `-socklog]
+                   |-runsv-+-multilog
+                   |       `-sshd-+-2*[sshd---sshd---tail]
+                   |              |-sshd---sshd---bash
                    |              `-sshd---sshd---bash---bash---pstree
-                   |-3*[runsv---getty]
-                   |-runsv---uncat
-                   |-runsv-+-dhcpd-2.2.x
-                   |       `-multilog
+                   |-runsv---clockspeed
                    |-runsv-+-dnscache
                    |       `-multilog
-                   |-runsv-+-multilog
-                   |       `-tinydns
-                   |-runsv-+-isdnlog
-                   |       `-multilog
-                   |-runsv---klogd
-                   |-runsv---multilog
-                   |-2*[runsv-+-multilog]
-                   |          `-vboxgetty]
-                   |-runsv---clockspeed
-                   |-runsv-+-dhclient-2.2.x
-                   |       `-multilog
-                   `-runsv---squid---unlinkd
+                   |-runsv---apache-ssl-+-20*[apache-ssl]
+                   |                    |-gcache
+                   |                    `-4*[multilog]
+                   |-6*[runsv-+-multilog]
+                   |          `-tcpserver]
+                   |-3*[runsv-+-multilog]
+                   |          `-tinydns]
+                   `-runsv---uncat
 </pre>
-This is a more busy system:
+This is from a more busy system:
 <pre>
   # strings /proc/1/exe |grep Id
   &#36;Id: runit.c,v 1.6 2002/01/29 18:56:36 pape Exp &#36;
@@ -189,11 +191,11 @@ smoothly escaping from <i>sysvinit</i>.
 <hr>
 If <i>runit</i> on linux is compiled and linked with
 <a href="http://www.fefe.de/dietlibc/">dietlibc</a> it yields in a statically
-linked <tt>runit</tt> binary of 14k size and this <tt>ps axuw</tt> output
+linked <tt>runit</tt> binary of 9.7k size and this <tt>ps axuw</tt> output
 on my system:
 <pre>
   USER       PID %CPU %MEM   VSZ  RSS TTY      STAT START   TIME COMMAND
-  root         1  0.0  0.0    24   20 ?        S    Nov22   0:01 runit
+  root         1  0.0  0.0    20   16 ?        S     2002   0:02 runit
 </pre>
 I recommend doing this; for instructions, see
 <a href="usedietlibc.html">How to use dietlibc</a>.

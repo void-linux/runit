@@ -10,5 +10,3 @@ echo '/etc/rc failed. Press <enter> for emergency shell...'
 read input
 /bin/sh -l
 /sbin/reboot
-
-exit
