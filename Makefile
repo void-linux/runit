@@ -18,6 +18,7 @@ all: clean .manpages $(PACKAGE).tar.gz
 	echo 'fix up html manually...'
 	echo 'patch -p0 <manpagehtml.diff && exit'
 	sh
+	find . -name '*.orig' |xargs rm
 	touch .manpages
 
 $(PACKAGE).tar.gz:
