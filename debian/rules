@@ -106,9 +106,9 @@ install: build
 	install -m0755 admin/runit-0.9.4/src/setuidgid \
 	  $(CURDIR)/debian/runit/usr/sbin/setuidgid
 
-	install -m0755 etc/debian/getty-tty5/run \
+	install -m0755 admin/runit-0.9.4/etc/debian/getty-tty5/run \
 	  $(CURDIR)/debian/runit/etc/runit/getty-5/run
-	install -m0755 etc/debian/getty-tty5/finish \
+	install -m0755 admin/runit-0.9.4/etc/debian/getty-tty5/finish \
 	  $(CURDIR)/debian/runit/etc/runit/getty-5/finish
 
 	# lintian overrides
