@@ -17,25 +17,9 @@ Description: a UNIX init scheme with service supervision
  services (via the runsvdir program). Stage 3 handles the tasks necessary
  to shutdown and halt or reboot. 
  .
+ The runit programs are compiled and linked statically with the diet libc.
+ .
  See http://smarden.org/runit/ for more information.
  .
  This package does not replace the /sbin/init binary. To do so you need
  to follow the documentation or install the runit-run package.
-
-Package: runit-run
-Architecture: all
-Depends: runit, sysvinit (>> 2.84-0)
-Replaces: daemontools-run
-Description: a UNIX init scheme with service supervision
- runit is a daemontools alike replacement for SysV-init and other init
- schemes. runit currently runs on Debian GNU/Linux, OpenBSD, FreeBSD,
- and may be easily adapted to other unix operating systems. runit
- implements a simple three-stage concept. Stage 1 performs the system's
- one-time initialization tasks. Stage 2 starts the system's uptime
- services (via the runsvdir program). Stage 3 handles the tasks necessary
- to shutdown and halt or reboot. 
- .
- See http://smarden.org/runit/ for more information.
- .
- This package replaces the /sbin/init binary and configures runit to run
- as process no 1 after the next reboot.

@@ -128,10 +128,10 @@ install: build
 # Build architecture-independent files here.
 # Pass -i to all debhelper commands in this target to reduce clutter.
 binary-indep: build install
-	dh_testdir -i
-	dh_testroot -i
+#	dh_testdir -i
+#	dh_testroot -i
 #	dh_installdebconf -i
-	dh_installdocs -i
+#	dh_installdocs -i
 #	dh_installexamples -i
 #	dh_installmenu -i
 #	dh_installlogrotate -i
@@ -143,15 +143,15 @@ binary-indep: build install
 #	dh_installman -i
 #	dh_installinfo -i
 #	dh_undocumented -i
-	dh_installchangelogs -i
-	dh_link -i
-	dh_compress -i
-	dh_fixperms -i
-	dh_installdeb -i
+#	dh_installchangelogs -i
+#	dh_link -i
+#	dh_compress -i
+#	dh_fixperms -i
+#	dh_installdeb -i
 #	dh_perl -i
-	dh_gencontrol -i
-	dh_md5sums -i
-	dh_builddeb -i
+#	dh_gencontrol -i
+#	dh_md5sums -i
+#	dh_builddeb -i
 
 # Build architecture-dependent files here.
 binary-arch: build install

@@ -1,2 +1,0 @@
-#!/bin/sh
-exec getty 38400 tty2 linux
