@@ -14,17 +14,23 @@ the <i>init</i> scheme of the system.
 Simply run the <i>stage 2</i> of <i>runit</i> as a service with your
 current <i>init</i>.
 <p>
-Normally this is done by either adding <tt>/etc/runit/2</tt> as command to
-</tt>/etc/rc.local</tt>, or by adding an entry for <tt>/etc/runit/2</tt> to
-<tt>/etc/inittab</tt>.
+Normally this is done by either adding an entry for <tt>/etc/runit/2</tt>
+to <tt>/etc/inittab</tt>, or by adding <tt>/etc/runit/2</tt> as command to
+</tt>/etc/rc.local</tt>, or by adding <tt>/etc/runit/2</tt> to the system's
+<tt>StartupItems</tt>.
 <p>
-In either case, you first need to copy the <i>stage 2</i> script to
+In any case, you first need to copy the <i>stage 2</i> script to
 <tt>/etc/runit/2</tt>:
 <pre>
   # mkdir -p /etc/runit
   # cp -p /package/admin/runit/etc/2 /etc/runit/
 </pre>
 <hr>
+<a href="#sysv">How to use with sysvinit</a><br>
+<a href="#bsd">How to use with *BSD init</a><br>
+<a href="#macosx">How to use with MacOSX init</a>
+<hr>
+<a name="sysv"><h2>Using with sysvinit</h2></a>
 If your system uses a sysvinit alike init scheme with a <tt>/etc/inittab</tt>
 file, do:
 <pre>
@@ -37,12 +43,23 @@ and tell <i>init</i> to reread its configuration, e.g.:
   # init q
 </pre>
 <hr>
+<a name="bsd"><h2>Using with *BSD init</h2></a>
 If your system uses a BSD alike init scheme with a <tt>/etc/rc.local</tt>
 script, do:
 <pre>
   # cat &gt;&gt;/etc/rc.local &lt;&lt;EOT
-  /etc/runit/2 &amp;
+  csh -cf '/etc/runit/2 &amp;'
   EOT
+</pre>
+and reboot your system.
+<hr>
+<a name="macosx"><h2>Using with MacOSX init</h2></a>
+On MacOSX 10.2 create an entry for <i>runit</i> in
+<tt>/System/Library/StartupItems/</tt>:
+<pre>
+ # cd /System/Library/StartupItems
+ # mkdir -p runit
+ # cp -p /package/admin/runit/etc/macosx/StartupItems/* runit/
 </pre>
 and reboot your system.
 <hr>

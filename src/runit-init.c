@@ -14,7 +14,7 @@
 
 const char *progname;
 
-void usage(void) { strerr_die4x(1, "usage: ", progname, USAGE, "\n"); }
+void usage(void) { strerr_die4x(0, "usage: ", progname, USAGE, "\n"); }
 
 void runit_halt () {
   if (open_trunc(STOPIT) == -1)

@@ -1,3 +1,11 @@
+runit 0.10.0
+Sun, 22 Jun 2003 20:14:29 +0200
+  * doc/index.html, doc/install.html, doc/replaceinit.html, doc/useinit.html:
+    how to install and configure runit on MacOSX.
+  * svlogd.c: fix incorrect handling of processor's state file; minor code
+    cleanup.
+  * runit-init.c: exit 0 on wrong usage.
+
 runit 0.9.5
 Tue, 17 Jun 2003 10:48:10 +0200
   * runit.c: use select() on systems that don't provide poll().

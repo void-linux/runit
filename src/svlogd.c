@@ -180,10 +180,12 @@ unsigned int processorstop(struct logdir *ld) {
   ld->fnsave[26] ='t';
   byte_copy(f, 26, ld->fnsave);
   f[26] ='s'; f[27] =0;
-  while (rename(ld->fnsave, f) == .1)
+  while (rename(ld->fnsave, f) == -1)
     pause2("unable to rename processed", ld->name);
   while (chmod(f, 0744) == -1)
     pause2("unable to set mode of processed", ld->name);
+  while (rename("newstate", "state") == -1)
+    pause2("unable to rename state", ld->name);
   while (fchdir(fdwdir) == -1)
     pause1("unable to change to initial working directory");
   return(1);
@@ -242,15 +244,13 @@ unsigned int rotate(struct logdir *ld) {
   while ((f =readdir(d)))
     if ((f->d_name[0] == '@') && (str_len(f->d_name) == 27)) {
       ++n;
-      if (str_diff(f->d_name, oldest) < 0)
-	byte_copy(oldest, 27, f->d_name);
+      if (str_diff(f->d_name, oldest) < 0) byte_copy(oldest, 27, f->d_name);
     }
   if (errno) warn2("unable to read directory", ld->name);
   closedir(d);
   
   if (ld->nmax && (n >= ld->nmax)) {
-    if (verbose)
-      strerr_warn5(INFO, "delete: ", ld->name, "/", oldest, 0);
+    if (verbose) strerr_warn5(INFO, "delete: ", ld->name, "/", oldest, 0);
     if ((*oldest == '@') && (unlink(oldest) == -1))
       warn2("unable to unlink oldest logfile", ld->name);
   }
@@ -258,7 +258,6 @@ unsigned int rotate(struct logdir *ld) {
   if (ld->processor.len) {
     processorstart(ld);
   }
-  
   while (fchdir(fdwdir) == -1)
     pause1("unable to change to initial working directory");
   return(1);
@@ -269,15 +268,16 @@ void logdir_close(struct logdir *ld) {
   if (verbose) strerr_warn3(INFO, "close: ", ld->name, 0);
   close(ld->fddir);
   ld->fddir =-1;
-  if (ld->fdcur) {
-    buffer_flush(&ld->b);
-    while (fsync(ld->fdcur) == -1)
-      pause2("unable to fsync current logfile", ld->name);
-    while (fchmod(ld->fdcur, 0744) == -1)
-      pause2("unable to set mode of current", ld->name);
-    close(ld->fdcur);
-  }
-  if (ld->fdlock) close(ld->fdlock);
+  if (ld->fdcur == -1) return; /* impossible */
+  buffer_flush(&ld->b);
+  while (fsync(ld->fdcur) == -1)
+    pause2("unable to fsync current logfile", ld->name);
+  while (fchmod(ld->fdcur, 0744) == -1)
+    pause2("unable to set mode of current", ld->name);
+  close(ld->fdcur);
+  ld->fdcur =-1;
+  if (ld->fdlock == -1) return; /* impossible */
+  close(ld->fdlock);
   ld->fdlock =-1;
 }
 
@@ -346,8 +346,7 @@ unsigned int logdir_open(struct logdir *ld, const char *fn) {
 	if (ld->nmax == 1) ld->nmax =2;
 	break;
       case '!':
-	while (! stralloc_copys(&ld->processor, &sa.s[i +1]))
-	  pause_nomem();
+	while (! stralloc_copys(&ld->processor, &sa.s[i +1])) pause_nomem();
 	while (! stralloc_0(&ld->processor)) pause_nomem();
 	break;
       }
@@ -440,7 +439,8 @@ unsigned int linestart(struct logdir *ld, char *s, int len) {
   if (ld->match == '-') return(0);
   if (timestamp) {
     buffer_puts(&ld->b, stamp);
-    ld->size +=26;
+    if (timestamp != 3) ld->size +=26;
+    else ld->size +=20;
   }
   buffer_put(&ld->b, s, len);
   ld->size +=len;
@@ -561,7 +561,7 @@ int main(int argc, const char **argv) {
   dir =(struct logdir*)alloc(dirn *sizeof(struct logdir));
   if (! dir) die_nomem();
   for (i =0; i < dirn; ++i) {
-    dir[i].fddir =-1;
+    dir[i].fddir =-1; dir[i].fdcur =-1;
     dir[i].btmp =(char*)alloc(buflen *sizeof(char));
     if (! dir[i].btmp) die_nomem();
     dir[i].ppid =0;

@@ -9,10 +9,11 @@
 <hr>
 <h1>runit - replacing init</h1>
 <hr>
-<a href="#sysvinit">How to replace sysvinit on GNU/Linux</a><br>
-<a href="#bsdinit">How to replace init on *BSD</a>
+<a href="#sysv">How to replace sysvinit on GNU/Linux</a><br>
+<a href="#bsd">How to replace init on *BSD</a><br>
+<a href="#macosx">How to replace init on MacOSX</a>
 <hr>
-<a name="sysvinit"><h2>Replacing sysvinit (GNU/Linux)</h2></a>
+<a name="sysv"><h2>Replacing sysvinit (GNU/Linux)</h2></a>
 Follow these steps to migrate from <i>sysvinit</i> to <i>runit</i> on
 <a href="http://www.debian.org/releases/woody/">Debian GNU/Linux (woody)</a>.
 The <tt>/sbin/init</tt> binary is not replaced until step 6, <i>runit</i> is
@@ -107,11 +108,11 @@ default Unix process no 1 <i>runit</i>.
 </pre>
 To report success:
 <pre>
-  # ( uname -a ; cat /etc/runit/[123] ) | mail pape-runit-0.9.5@smarden.org
+  # ( uname -a ; cat /etc/runit/[123] ) | mail pape-runit-0.10.0@smarden.org
 </pre>
 <hr>
 
-<a name="bsdinit"><h2>Replacing init (*BSD)</h2></a>
+<a name="bsd"><h2>Replacing init (*BSD)</h2></a>
 Follow these steps to migrate from <i>init</i> to <i>runit</i> on
 <a href="http://www.openbsd.org/">OpenBSD 2.9</a> or
 <a href="http://www.freebsd.org/">FreeBSD 4.4</a>. The
@@ -188,7 +189,7 @@ Use <b>init 6</b> to reboot and <b>init 0</b> to halt a system that runs
 <p>
 To report success:
 <pre>
-  # ( uname -a ; cat /etc/runit/[123] ) | mail pape-runit-0.9.5@smarden.org
+  # ( uname -a ; cat /etc/runit/[123] ) | mail pape-runit-0.10.0@smarden.org
 </pre>
 <h3>Step 5: Service migration</h3>
 The goal is to migrate all services from <i>/etc/rc.*</i> scheme to the
@@ -210,6 +211,12 @@ To migrate a service, create a service directory, disable the service if
 it is running, disable the service in <tt>/etc/rc.conf</tt> or remove the
 service startup from the <tt>/etc/rc.*</tt> scripts and tell
 <a href="runsvdir.8.html">runsvdir</a> about the new service.
+<hr>
+
+<a name="macosx"><h2>Replacing init on MacOSX</h2></a>
+Replacing init on MacOSX is not yet supported.
+Please refer to the <a href="useinit.html">instructions</a> on how to use
+<i>runit</i> service supervision with the MacOSX init scheme.
 <hr>
 <address><a href="mailto:pape@smarden.org">
 Gerrit Pape &lt;pape@smarden.org&gt;
