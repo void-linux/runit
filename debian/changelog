@@ -1,14 +1,14 @@
-runit (0.9.4-0) unstable; urgency=low
+runit (0.9.4-0) unstable; urgency=medium
 
   * new upstream version.
   * debian/diff/defaultsize.diff: remove; applied upstream.
   * debian/getty.run, debian/getty.finish: remove; obsolete.
   * debian/rules: remove temporary patch; install upstream example
-    getty service directory; build and install setuidgid.
-  * debian/control: Replaces: daemontools (drop-in replacement
-    setuidgid plus manpage).
+    getty service directory; build and install setuidgid (drop-in
+    replacement for daemontools' setuidgid).
+  * debian/control: Standards-Version: 3.5.10.
 
- -- Gerrit Pape <pape@smarden.org>  Wed,  4 Jun 2003 14:26:58 +0200
+ -- Gerrit Pape <pape@smarden.org>  Fri,  6 Jun 2003 10:28:09 +0200
 
 runit (0.9.3-2) unstable; urgency=low
 

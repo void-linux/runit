@@ -2,13 +2,13 @@ Source: runit
 Section: admin
 Priority: optional
 Maintainer: Gerrit Pape <pape@smarden.org>
-Build-Depends: dietlibc-dev (>> 0.22-0), debhelper (>> 3.0.0)
-Standards-Version: 3.5.9
+Build-Depends: dietlibc-dev (>> 0.22-0) [alpha arm hppa i386 ia64 mips mipsel powerpc sparc], debhelper (>> 3.0.0)
+Standards-Version: 3.5.10
 
 Package: runit
 Architecture: any
+Depends: ${shlibs:Depends}
 Suggests: runit-run
-Replaces: dameontools
 Description: a UNIX init scheme with service supervision
  runit is a daemontools alike replacement for SysV-init and other init
  schemes. runit currently runs on Debian GNU/Linux, OpenBSD, FreeBSD,
@@ -18,7 +18,8 @@ Description: a UNIX init scheme with service supervision
  services (via the runsvdir program). Stage 3 handles the tasks necessary
  to shutdown and halt or reboot. 
  .
- The runit programs are compiled and linked statically with the diet libc.
+ The runit programs are compiled and linked statically with the diet libc
+ on architectures the diet libc is available for.
  .
  See http://smarden.org/runit/ for more information.
  .
