@@ -1,0 +1,4 @@
+sbin
+usr/sbin
+usr/bin
+etc/runit/getty-5

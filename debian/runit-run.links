@@ -1,0 +1,9 @@
+/sbin/runit-init /sbin/init
+/usr/share/man/man8/runit-init.8.gz /usr/share/man/man8/init.8.gz
+/etc/runit/runsvdir/default /etc/runit/runsvdir/current
+/etc/runit/runsvdir/current /var/service
+/etc/runit/getty-5 /etc/runit/runsvdir/single/getty-5
+/etc/runit/getty-2 /etc/runit/runsvdir/default/getty-2
+/etc/runit/getty-3 /etc/runit/runsvdir/default/getty-3
+/etc/runit/getty-4 /etc/runit/runsvdir/default/getty-4
+/etc/runit/getty-5 /etc/runit/runsvdir/default/getty-5

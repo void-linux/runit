@@ -25,6 +25,7 @@ Description: a UNIX init scheme with service supervision
 Package: runit-run
 Architecture: all
 Depends: runit, sysvinit (>> 2.84-0)
+Replaces: daemontools-run
 Description: a UNIX init scheme with service supervision
  runit is a daemontools alike replacement for SysV-init and other init
  schemes. runit currently runs on Debian GNU/Linux, OpenBSD, FreeBSD,

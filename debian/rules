@@ -97,9 +97,8 @@ install: build
 
 	install -m0700 admin/runit/etc/debian/1 \
 	  $(CURDIR)/debian/runit/etc/runit/1
-	sed -e 's}^PATH=/command:}PATH=}g;\
-	  s}^runsvdir /service}runsvdir /var/service}g' \
-	    <admin/runit/etc/debian/2 >$(CURDIR)/debian/runit/etc/runit/2
+	install -m0700 debian/2 \
+	  $(CURDIR)/debian/runit/etc/runit/2
 	chmod 0700 $(CURDIR)/debian/runit/etc/runit/2
 	sed -e 's}^PATH=.*}PATH=/sbin:/bin:/usr/sbin:/usr/bin}g' \
 	  <admin/runit/etc/debian/3 >$(CURDIR)/debian/runit/etc/runit/3

@@ -1,0 +1,17 @@
+runit-run for Debian
+--------------------
+
+This package diverts sysvinit's /sbin/init binary. Use
+
+  # /sbin/init.sysv 6
+
+to reboot the system with runit as process no 1 after the first
+installation of runit-run.
+
+This package also sets up the runit package to support runlevels, see
+http://smarden.org/runit/runlevels.html .
+
+For service migration from sysvinit to runit, please see
+http://smarden.org/runit/replaceinit.html step 5.
+
+ -- Gerrit Pape <pape@smarden.org>, Fri, 11 Oct 2002 14:14:06 +0200
