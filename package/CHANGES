@@ -1,5 +1,6 @@
 runit 1.0.1
-Sun, 07 Mar 2004 10:07:06 +0000
+Sun, 07 Mar 2004 10:40:40 +0000
+  * doc/usedietlibc.html: minor.
   * fmt_ptime.c: create timestamps in UTC, not localtime.
   * chpst.c: -e dir: silently ignore directories, print warning if verbose.
   * runsv.c: allow also log/supervise to be a dangling symlink; more
