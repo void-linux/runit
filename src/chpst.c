@@ -303,7 +303,10 @@ int main(int argc, const char *const *argv) {
   
   if (pgrp) setsid();
   if (env_dir) edir(env_dir);
-  if (root) if (chroot(root) == -1) fatal("unable to change root directory");
+  if (root) {
+    if (chdir(root) == -1) fatal2("unable to change directory", root);
+    if (chroot(".") == -1) fatal("unable to change root directory");
+  }
   if (env_user) euidgid(env_user, 1);
   if (set_user) suidgid(set_user, 1);
   slimit();
