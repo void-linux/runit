@@ -1,0 +1,7 @@
+usage: utmpset [-w] line
+
+1
+$Id: utmpset.c,v 1.7 2003/10/28 12:06:45 pape Exp $
+usage: utmpset [-w] line
+
+1

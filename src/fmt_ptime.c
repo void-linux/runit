@@ -1,3 +1,4 @@
+#include <time.h>
 #include "fmt_ptime.h"
 #include "fmt.h"
 
@@ -7,7 +8,7 @@ unsigned int fmt_ptime(char *s, struct taia *ta) {
 
   if (ta->sec.x < 4611686018427387914ULL) return(0); /* impossible? */
   u =ta->sec.x -4611686018427387914ULL;
-  if (! (t =localtime((time_t*)&u))) return(0);
+  if (! (t =gmtime((time_t*)&u))) return(0);
   fmt_ulong(s, 1900 +t->tm_year);
   s[4] ='-'; fmt_uint0(&s[5], t->tm_mon +1, 2);
   s[7] ='-'; fmt_uint0(&s[8], t->tm_mday, 2);

@@ -106,9 +106,17 @@ void edir(const char *dirname) {
       break;
     }
     if (d->d_name[0] == '.') continue;
-    if (openreadclose(d->d_name, &sa, 256) == -1)
-      strerr_die6sys(111, FATAL, "unable to read ", dirname, "/",
-		     d->d_name, ": ");
+    if (openreadclose(d->d_name, &sa, 256) == -1) {
+      if ((errno == error_isdir) && env_dir) {
+	if (verbose)
+	  strerr_warn6(WARNING, "unable to read ", dirname, "/",
+	               d->d_name, ": ", &strerr_sys);
+	continue;
+      }
+      else
+        strerr_die6sys(111, FATAL, "unable to read ", dirname, "/",
+	      	       d->d_name, ": ");
+    }
     if (sa.len) {
       sa.len =byte_chr(sa.s, sa.len, '\n');
       while (sa.len && (sa.s[sa.len -1] == ' ' || sa.s[sa.len -1] == '\t'))
@@ -284,7 +292,7 @@ int main(int argc, const char *const *argv) {
     case '0': nostdin =1; break;
     case '1': nostdout =1; break;
     case '2': nostderr =1; break;
-    case 'V': strerr_warn1("$Id: chpst.c,v 1.1 2003/08/05 20:41:19 pape Exp $", 0);
+    case 'V': strerr_warn1("$Id: chpst.c,v 1.2 2004/03/02 20:20:08 pape Exp $", 0);
     case '?': usage();
     }
   argv +=optind;

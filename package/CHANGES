@@ -1,3 +1,22 @@
+runit 1.0.1
+Sun, 07 Mar 2004 10:40:40 +0000
+  * doc/usedietlibc.html: minor.
+  * fmt_ptime.c: create timestamps in UTC, not localtime.
+  * chpst.c: -e dir: silently ignore directories, print warning if verbose.
+  * runsv.c: allow also log/supervise to be a dangling symlink; more
+    meaningful error message if opening lock or locking fails.
+  * check-diff, check-dist, check-local, package/check: new; run checks on
+    programs.
+  * package/install: run package/check.
+  * chpst.check, runit-init.check, runit.check, runsv.check,
+    runsvchdir.check, runsvctrl.check, runsvdir.check, runsvstat.check,
+    svlogd.check, svwaitdown.check, svwaitup.check, utmpset.check: new;
+    check program.
+  * chpst.dist, runit-init.dist, runit.dist, runsv.dist, runsvchdir.dist,
+    runsvctrl.dist, runsvdir.dist, runsvstat.dist, svlogd.dist,
+    svwaitdown.dist, svwaitup.dist, utmpset.dist: new; dist check program
+    output.
+
 runit 1.0.0
 Tue, 10 Feb 2004 13:37:28 +0000
   * doc/benefits.html, doc/dependencies.html, doc/index.html,

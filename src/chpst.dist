@@ -1,0 +1,13 @@
+usage: chpst [-vP012] [-u user[:group]] [-U user[:group]] [-e dir] [-l|-L lock] [-m n] [-o n] [-p n] [-f n] [-c n] prog
+
+100
+$Id: chpst.c,v 1.2 2004/03/02 20:20:08 pape Exp $
+usage: chpst [-vP012] [-u user[:group]] [-U user[:group]] [-e dir] [-l|-L lock] [-m n] [-o n] [-p n] [-f n] [-c n] prog
+
+100
+test=1
+0
+0
+0
+0
+0

@@ -1,0 +1,12 @@
+usage: runsvstat [ -l ] service ...
+
+1
+$Id: runsvstat.c,v 1.7 2003/05/04 09:41:10 pape Exp $
+usage: runsvstat [ -l ] service ...
+
+1
+1
+starting
+0
+0
+1

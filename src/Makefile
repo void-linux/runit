@@ -1,7 +1,10 @@
-IT=sysdeps runit runit-init runsv runsvctrl runsvstat runsvdir runsvchdir \
-svwaitup svwaitdown utmpset svlogd chpst
+IT=chpst runit runit-init runsv runsvchdir runsvctrl runsvdir runsvstat \
+  svlogd svwaitdown svwaitup utmpset
 
-default: $(IT)
+default: sysdeps $(IT)
+
+check: $(IT)
+	./check-local $(IT)
 
 runit: load runit.o unix.a byte.a
 	./load runit unix.a byte.a -static

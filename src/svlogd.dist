@@ -1,0 +1,20 @@
+usage: svlogd [-tv] [-r c] [-R abc] [-l n ] [-b n] dir ...
+
+111
+$Id: svlogd.c,v 1.11 2004/01/19 12:20:03 pape Exp $
+usage: svlogd [-tv] [-r c] [-R abc] [-l n ] [-b n] dir ...
+
+111
+0
+foo
+0
+foo
+bar
+baz
+0
+foo
+bar
+baz
+:oo
+:ar
+:az

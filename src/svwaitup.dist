@@ -1,0 +1,14 @@
+usage: svwaitup [-v] [-s 2..600] service ...
+
+1
+$Id: svwaitup.c,v 1.7 2003/04/24 11:12:47 pape Exp $
+usage: svwaitup [-v] [-s 2..600] service ...
+
+1
+starting
+0
+run
+0
+run
+0
+1
