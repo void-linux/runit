@@ -25,7 +25,7 @@ void usage() {
   strerr_die4x(1, "usage: ", progname, USAGE, "\n");
 }
 void fatal(char *m1) {
-  strerr_die3sys(rc, FATAL, m1, ": ");
+  strerr_die3sys(111, FATAL, m1, ": ");
 }
 void warn(char *m1, char *m2) {
   rc++;
