@@ -29,13 +29,9 @@ build-stamp:
 	echo 'diet gcc -O2 -Wall' > src/conf-cc ; \
 	echo 'diet gcc -s -Os -pipe' > src/conf-ld ; \
 	package/compile ; \
-	echo 'gcc -O2 -Wall' > src/conf-cc ; \
-	echo 'gcc -s' > src/conf-ld ; \
-	( cd compile ; make utmpset ) ; \
 	echo "/package/admin/runit-0.5.0" > compile/home ; \
 	rm -f compile/src ; \
 	ln -s /package/admin/runit-0.5.0/src compile/src ; \
-	install -m0755 compile/utmpset command/utmpset ; \
 	)
 	touch build-stamp
 
@@ -76,7 +72,7 @@ install: build
 		debian/runit/etc/runit/
 	cp -p admin/runit-0.5.0/etc/debian/ctrlaltdel \
 		debian/runit/etc/runit/
-	cp -p admin/runit-0.5.0/etc/debian/getty-tty5/run.utmpset \
+	cp -p admin/runit-0.5.0/etc/debian/getty-tty5/run \
 		debian/runit/etc/runit/getty-5/run
 
 	# runit programs

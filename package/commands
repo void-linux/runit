@@ -2,3 +2,4 @@ runit
 runit-init
 svwaitdown
 svwaitup
+utmpset

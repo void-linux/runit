@@ -20,7 +20,7 @@ echo 'Compiling everything in ./compile...'
 ( cd compile; exec make )
 
 echo 'Copying commands into ./command...'
-for i in `cat package/commands` utmpset
+for i in `cat package/commands`
 do
   rm -f command/$i'{new}'
   cp -p compile/$i command/$i'{new}'
