@@ -150,5 +150,6 @@ int main(int argc, char **argv) {
       fatal("unable to change directory");
     }
   }
+  if (rc > 100) rc =100;
   exit(rc);
 }
