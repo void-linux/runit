@@ -1,30 +1,19 @@
 #!/usr/bin/make -f
-# Sample debian/rules that uses debhelper. 
-# GNU copyright 1997 by Joey Hess.
-#
-# This version is for a hypothetical package that builds an
-# architecture-dependant package, as well as an architecture-independent
-# package.
 
 # Uncomment this to turn on verbose mode. 
 #export DH_VERBOSE=1
 
-# This is the debhelper compatibility version to use.
 export DH_COMPAT=3
 
 configure: configure-stamp
 configure-stamp:
 	dh_testdir
-	# Add here commands to configure the package.
 
 	touch configure-stamp
 
 build-arch: configure-stamp  build-arch-stamp
 build-arch-stamp:
 	dh_testdir
-
-	# Add here command to compile/build the package.
-	#	$(MAKE)
 
 	tar xfzvp runit-0.9.0.tar.gz
 	( \
@@ -43,11 +32,6 @@ build-indep:  configure-stamp build-indep-stamp
 build-indep-stamp:
 	dh_testdir
 
-	# Add here command to compile/build the arch indep package.
-	# It's ok not to do anything here, if you don't need to build
-	#  anything for this package.
-	#/usr/bin/docbook-to-man debian/runit.sgml > runit.1
-
 	touch build-indep-stamp
 
 build: build-arch build-indep
@@ -57,10 +41,7 @@ clean:
 	dh_testroot
 	rm -f build-arch-stamp build-indep-stamp configure-stamp
 
-	# Add here commands to clean up after the build process.
-	#	-$(MAKE) clean
 	rm -rf admin
-
 	dh_clean
 
 install: DH_OPTIONS=
@@ -69,9 +50,6 @@ install: build
 	dh_testroot
 	dh_clean -k
 	dh_installdirs
-
-	# Add here commands to install the package into debian/runit.
-	#	$(MAKE) install DESTDIR=$(CURDIR)/debian/runit
 
 	# runit
 	install -m0500 admin/runit-0.9.0/src/runit \
@@ -98,14 +76,6 @@ install: build
 	install -m0755 admin/runit-0.9.0/src/runsvctrl \
 	  $(CURDIR)/debian/runit/usr/bin/runsvctrl
 
-#	install -m0700 debian/1 \
-#	  $(CURDIR)/debian/runit/etc/runit/1
-#	install -m0700 debian/2 \
-#	  $(CURDIR)/debian/runit/etc/runit/2
-#	install -m0700 debian/3 \
-#	  $(CURDIR)/debian/runit/etc/runit/3
-#	install -m0700 admin/runit/etc/debian/ctrlaltdel \
-#	  $(CURDIR)/debian/runit/etc/runit/ctrlaltdel
 	install -m0755 debian/getty-tty5.run \
 	  $(CURDIR)/debian/runit/etc/runit/getty-5/run
 	install -m0755 debian/getty-tty5.finish \
@@ -147,7 +117,6 @@ binary-arch: build install
 #	dh_installdocs -an
 #	dh_installexamples -a
 	dh_installman -a admin/runit/man/*.8
-#	dh_undocumented -a
 	dh_installchangelogs -a admin/runit-0.9.0/package/CHANGES
 	dh_strip -a
 #	dh_link -a

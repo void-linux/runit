@@ -1,8 +1,9 @@
 runit (0.9.0-1) unstable; urgency=low
 
   * new upstream version.
+  * debian/rules: minor cleanup.
 
- -- Gerrit Pape <pape@smarden.org>  Thu, 24 Apr 2003 15:08:44 +0200
+ -- Gerrit Pape <pape@smarden.org>  Thu, 24 Apr 2003 15:58:34 +0200
 
 runit (0.8.4-1) unstable; urgency=low
 
