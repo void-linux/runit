@@ -20,6 +20,8 @@ runsvchdir
 runsvchdir.o
 svlogd
 svlogd.o
+setuidgid
+setuidgid.o
 pmatch.o
 fmt_ptime.o
 alloc.o

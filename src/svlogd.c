@@ -30,7 +30,7 @@
 #include "fmt.h"
 
 #define USAGE " [-tv] [-r c] [-R abc] [-l n ] [-b n] dir ..."
-#define VERSION "$Id: svlogd.c,v 1.5 2003/05/03 15:57:56 pape Exp $"
+#define VERSION "$Id: svlogd.c,v 1.6 2003/06/05 11:39:12 pape Exp $"
 
 #define FATAL "svlogd: fatal: "
 #define WARNING "svlogd: warning: "
@@ -305,7 +305,7 @@ unsigned int logdir_open(struct logdir *ld, const char *fn) {
   coe(ld->fdlock);
 
   ld->size =0;
-  ld->sizemax =9000;
+  ld->sizemax =1000000;
   ld->nmax =10;
   ld->name =(char*)fn;
   ld->match =0;
@@ -486,7 +486,7 @@ int buffer_pread(int fd, char *s, unsigned int len) {
 }
 void sig_term_handler(void) {
   exitasap =1;
-  strerr_warn2(INFO, "sigterm received.", 0);
+  if (verbose) strerr_warn2(INFO, "sigterm received.", 0);
 }
 void sig_child_handler(void) {
   int pid, l;
@@ -498,7 +498,7 @@ void sig_child_handler(void) {
 	processorstop(&dir[l]);
 	break;
       }
-  strerr_warn2(INFO, "sigchild received.", 0);
+  if (verbose) strerr_warn2(INFO, "sigchild received.", 0);
 }
 void sig_alarm_handler(void) {
   int l;
@@ -507,11 +507,11 @@ void sig_alarm_handler(void) {
     if (dir[l].fddir != -1)
       if (dir[l].size > 0)
 	rotate(&dir[l]);
-  strerr_warn2(INFO, "sigalarm received.", 0);
+  if (verbose) strerr_warn2(INFO, "sigalarm received.", 0);
 }
 void sig_hangup_handler(void) {
   logdirs_reopen();
-  strerr_warn2(INFO, "sighangup received.", 0);
+  if (verbose) strerr_warn2(INFO, "sighangup received.", 0);
 }
 
 int main(int argc, const char **argv) {

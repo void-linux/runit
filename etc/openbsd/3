@@ -10,7 +10,7 @@ echo 'Waiting for services to stop...'
 svwaitdown -xk -t350 /service/*
 
 echo 'Shutdown...'
-if test -r /etc/runit/reboot; then
+if test -x /etc/runit/reboot; then
   exec reboot
 else
   exec halt
