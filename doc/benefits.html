@@ -16,24 +16,24 @@
 <a href="#portability">Portability</a><br>
 <a href="#packaging">Packaging friendly</a><br>
 <a href="#smallcode">Small code size</a>
-
 <hr>
-<i>runit</i>'s service concept is heavily based on the
+<i>runit</i>'s service supervision concept is heavily based on the
 <a href="http://cr.yp.to/daemontools.html">daemontools</a>' one, and mostly
-compatible with it.  The benefits described in the
-<a href="http://cr.yp.to/daemontools/faq/create.html#why">daemontools faq</a>
-also apply to <i>runit</i>'s service supervision.
+compatible with it.
+The benefits described in the
+<a href="http://cr.yp.to/daemontools/faq/create.html#why">
+daemontools faq</a> also apply to <i>runit</i>'s service supervision.
 Many of the benefits described here also apply to the
 <a href="http://cr.yp.to/daemontools.html">daemontools</a> package.
 Some are described in both places.
-
 <hr>
 <a name="supervision"><h3>Service supervision</h3></a>
 Each service is associated with a <i>service directory</i>, and each
 service daemon runs as a child process of a supervising
 <a href="runsv.8.html">runsv</a> process running in this directory.
 The <a href="runsv.8.html">runsv</a> program provides a reliable interface
-for signalling the service daemon and controlling the service and supervisor.
+for signalling the service daemon and controlling the service and
+supervisor.
 Normally the <a href="runsvctrl.8.html">runsvctrl</a> program is used to
 send commands through this interface.
 The <a href="runsvstat.8.html">runsvstat</a> program can be used to print
@@ -46,15 +46,16 @@ dies, it will be restarted.
 Of course you can <a href="runsvctrl.8.html">tell runsv</a> otherwise.
 <p>
 You don't have such a control interface with <i>sysv init</i> for example.
-Using the control interface to send signals to the service daemon saves a lot
-of extra (non trivial) work to reliably find out the daemon's process id.
-Also <i>sysv init</i> only supports 'respawning' of services started from
-<tt>inittab</tt>.
-
+Using the control interface to send signals to the service daemon saves a
+lot of extra (non trivial) work to reliably find out the daemon's process
+id.
+Also <i>sysv init</i> only supports &quot;respawning&quot; of services
+started from <tt>inittab</tt>.
 <hr>
 <a name="state"><h3>Clean process state</h3></a>
 <i>runit</i> guarantees each service a clean process state, no matter if the
-service is activated for the first time, reactivated, or simply restarted.
+service is activated for the first time or automatically at boot time,
+reactivated, or simply restarted.
 This means that the service always is started with the same environment,
 resource limits, open file descriptors, and controlling terminals.
 <p>
@@ -79,8 +80,8 @@ After rebooting the system this shows up on the screen:
  failed.
  ...
 </pre>
-The <tt>food</tt> program is installed in <tt>/opt/foo/bin/</tt>.  When
-starting the service for the first time using the init script, the
+The <tt>food</tt> program is installed in <tt>/opt/foo/bin/</tt>.
+When starting the service for the first time using the init script, the
 <tt>PATH</tt> environment variable contained <tt>/opt/foo/bin</tt>.
 After reboot <tt>init</tt> started the service using the init script, but
 with a different value for the <tt>PATH</tt> variable, not containing
@@ -94,7 +95,6 @@ With bad init scripts miraculous things could also happen when just doing
  # /etc/init.d/foo-daemon restart
 </pre>
 at the command line.
-
 <hr>
 <a name="log"><h3>Reliable logging facility</h3></a>
 The <a href="runsv.8.html">runsv</a> program provides a reliable logging
@@ -103,7 +103,8 @@ If configured, <a href="runsv.8.html">runsv</a> creates a pipe, starts and
 supervises an additional log service, redirects the log daemon's standard
 input to read from the pipe, and redirects the service daemon's standard
 output to write to the pipe.
-Restarting the service does not require restarting the log service.
+Restarting the service does not require restarting the log service, and vice
+versa.
 A good choice for a log daemon is <i>runit</i>'s service logging daemon
 <a href="svlogd.8.html">svlogd</a>, or
 <a href="http://cr.yp.to/daemontools/multilog.html">multilog</a> from the
@@ -117,7 +118,6 @@ chroot'ed.
 If <a href="runsv.8.html">runsv</a> is told to shutdown a service, e.g. at
 system shutdown, it ensures that the log service stays up as long as the
 corresponding service daemon is running and possibly writing to the log.
-
 <hr>
 <a name="fast"><h3>Fast system boot up and shutdown</h3></a>
 After the system's one time tasks (stage 1) are done, the system services
@@ -129,8 +129,7 @@ On system shutdown, stage 3 uses <a href="runsv.8.html">runsv</a>'s control
 interface to wait until each service daemon is terminated and all logs are
 written.
 Again, services are taken down in parallel.
-As soon as all services are done, system halt or system reboot is initiated.
-
+As soon as all services are down, system halt or system reboot is initiated.
 <hr>
 <a name="portability"><h3>Portability</h3></a>
 <i>runit</i> comes ready-to-run for Debian GNU/Linux and BSD systems, and
@@ -148,13 +147,12 @@ system's uptime.
 <i>runit</i>'s stage 2 is portable across UNIX systems.
 <i>runit</i> is well suited for server systems and embedded systems, and
 also does its job well on desktop systems.
-
 <hr>
 <a name="packaging"><h3>Packaging friendly</h3></a>
 <i>runit</i>'s stages 1 and 3 are distribution specific.
-They are shell scripts, and an operating system distribution with software
-package management should adapt these scripts if they need support for their
-package management.
+They normally are shell scripts, and an operating system distribution with
+software package management should adapt these scripts if they need support
+for their package management.
 The
 <a href="http://packages.debian.org/unstable/admin/runit-run.html">
 runit-run</a>
@@ -166,26 +164,27 @@ sysvinit</a>.
 <p>
 Stage 2 already is packaging friendly:
 all a software package that provides a service needs to do is to include
-a <i>service directory</i> in the package and to provide a symbolic link
+a <i>service directory</i> in the package, and to provide a symbolic link
 to this directory in <tt>/var/service/</tt>.
-The service will be started within five seconds.
+The service will be started within five seconds, and automatically at boot
+time.
 The package's install and update scripts can use the reliable control
 interface to stop, start, restart, or send signals to the service.
 On package removal, the symbolic link simply is removed.
+The service will be taken down automatically.
 <hr>
 <a name="smallcode"><h3>Small code size</h3></a>
 One of the <i>runit</i> project's principles is to keep the code size
-small. As of version 0.8.0 of <i>runit</i>, the <tt>runit.c</tt>
-source contains only about 300 lines of code; the <tt>runsvdir.c</tt>
-source is also about 300 lines of code, the <tt>runsv.c</tt> source about
-500.
+small.
+As of version 0.13.1 of <i>runit</i>, the <tt>runit.c</tt> source contains
+330 lines of code; the <tt>runsvdir.c</tt> source is  274 lines of code, the
+<tt>runsv.c</tt> source 509.
 This minimizes the possibility of bugs introduced by programmer's fault,
 and makes it more easy for security related people to proofread the source
 code.
 <p>
-The <i>runit</i> programs have a very small memory footprint and do not
+The <i>runit</i> core programs have a very small memory footprint and do not
 allocate memory dynamically.
-
 <hr>
 <address><a href="mailto:pape@smarden.org">
 Gerrit Pape &lt;pape@smarden.org&gt;

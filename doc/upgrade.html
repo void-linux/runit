@@ -24,8 +24,8 @@ Replacing init on Solaris is not yet supported.
 The service directory now defaults to /var/service instead of /service.
 <h3>0.10.0 to 0.11.0 or 0.11.1 or 0.11.2</h3>
 This version introduces the new <a href="chpst.8.html">chpst</a> program,
-which changes the process state as specified by command line options, and runs
-another program with this process state.
+which changes the process state as specified by command line options, and
+runs another program with this process state.
 <h3>0.9.x to 0.10.0</h3>
 No further action from you is required.
 <h3>0.8.0 or 0.8.1 to 0.9.x</h3>
@@ -56,23 +56,24 @@ This version introduces runlevel support with the new
 <p>
 The <a href="runsvdir.8.html">runsvdir</a> and
 <a href="runsv.8.html">runsv</a> programs have changed and should be
-restarted. If you want to switch runlevels, <tt>runsvdir</tt> must be
-restarted. This is done on the next reboot or by following these steps:
+restarted.
+If you want to switch runlevels, <tt>runsvdir</tt> must be restarted.
+This is done on the next reboot or by following these steps:
 <p>
 <ul>
-  <li>
+<li>
 Login on console 5. Bring all services other than the <tt>getty-5</tt>
 service down:
 <pre>
  # cd /service
  # for i in *; do if test "$i" != getty-5; then svc -d $i; fi; done
 </pre>
-  <li>
+<li>
 Check for the services being down:
 <pre>
  # svstat /service/*
 </pre>
-  <li>
+<li>
 If all services other than the <tt>getty-5</tt> service are down, kill
 <tt>runsvdir</tt> by sending it a HUP signal:
 <pre>
@@ -90,20 +91,22 @@ combination of daemontools. Please adapt <tt>runit</tt>'s stage 2
 (<tt>/etc/runit/2</tt>) to use <tt>runsvdir</tt> instead of
 <tt>svscanboot</tt>; see the examples in <tt>/package/admin/runit/etc/</tt>.
 The change takes effect on the next reboot or if you stop all services and
-kill <tt>svscan</tt> and <tt>readproctitle</tt>. <tt>runit</tt> then
-automatically restarts stage 2.
+kill <tt>svscan</tt> and <tt>readproctitle</tt>.
+<tt>runit</tt> then automatically restarts stage 2.
 <p>
 The <a href="svwaitdown.8.html">svwaitdown</a> program has new options: -k
-and -x. They are used in <tt>runit</tt>'s stage 3 (<tt>/etc/runit/3</tt>).
+and -x.
+They are used in <tt>runit</tt>'s stage 3 (<tt>/etc/runit/3</tt>).
 Please adapt your <tt>/etc/runit/3</tt> script after the changes to stage 2
 have taken effect (<tt>runsvdir</tt> must run instead of
 <tt>svscanboot</tt>); see the examples in
 <tt>/package/admin/runit/etc/</tt>.
 <h3>0.4.1 to 0.5.0</h3>
-There is a new program: <a href="utmpset.8.html">utmpset</a>. This program
-is used in the getty run scripts to enable local login accounting. You might
-want to adapt your getty run scripts <tt>/service/getty-*/run</tt>, see the
-examples in <tt>/package/admin/runit/etc/</tt>. 
+There is a new program: <a href="utmpset.8.html">utmpset</a>.
+This program is used in the getty run scripts to enable local login
+accounting.
+You might want to adapt your getty run scripts <tt>/service/getty-*/run</tt>,
+see the examples in <tt>/package/admin/runit/etc/</tt>. 
 <hr>
 <address><a href="mailto:pape@smarden.org">
 Gerrit Pape &lt;pape@smarden.org&gt;

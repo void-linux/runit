@@ -10,15 +10,15 @@
 <h1>runit - service dependencies</h1>
 <hr>
 <i>runit</i>'s service supervision resolves dependencies for service daemons
-designed to be run by an supervisor process automatically.
-The service daemon (or the corresponding <tt>run</tt> and <tt>finish</tt>
-scripts) should behave as follows:
+designed to be run by a supervisor process automatically.
+The service daemon (or the corresponding <tt>run</tt> scripts) should behave
+as follows:
 <ul>
   <li>before providing the service, check if all services it depends on are
   available.
   If not, exit with an error, the supervisor will then try again.
   <li>write all logs through <i>runit</i>'s logging facility.
-  The <a href="runsv.8.html">runsv</a> program takes care that all logs of
+  The <a href="runsv.8.html">runsv</a> program takes care that all logs for
   the service are written safely to disk.
   Therefore there's no need to depend on a system logging service.
   <li>optionally when the service is told to become down, take down other

@@ -23,8 +23,8 @@ In any case, you first need to copy the <i>stage 2</i> script to
 <tt>/sbin/runsvdir-start</tt>, and create the service directory
 <tt>/var/service</tt>:
 <pre>
-  # install -m0750 /package/admin/runit/etc/2 /sbin/runsvdir-start
-  # mkdir -p /var/service
+ # install -m0750 /package/admin/runit/etc/2 /sbin/runsvdir-start
+ # mkdir -p /var/service
 </pre>
 <hr>
 <a href="#sysv">How to use with sysvinit</a><br>
@@ -35,22 +35,22 @@ In any case, you first need to copy the <i>stage 2</i> script to
 If your system uses a sysvinit alike init scheme with a <tt>/etc/inittab</tt>
 file, do:
 <pre>
-  # cat &gt;&gt;/etc/inittab &lt;&lt;EOT
-  SV:123456:respawn:/sbin/runsvdir-start
-  EOT
+ # cat &gt;&gt;/etc/inittab &lt;&lt;EOT
+ SV:123456:respawn:/sbin/runsvdir-start
+ EOT
 </pre>
 and tell <i>init</i> to re-read its configuration, e.g.:
 <pre>
-  # init q
+ # init q
 </pre>
 <hr>
 <a name="bsd"><h2>Using with *BSD init</h2></a>
 If your system uses a BSD alike init scheme with a <tt>/etc/rc.local</tt>
 script, do:
 <pre>
-  # cat &gt;&gt;/etc/rc.local &lt;&lt;EOT
-  csh -cf '/sbin/runsvdir-start &amp;'
-  EOT
+ # cat &gt;&gt;/etc/rc.local &lt;&lt;EOT
+ csh -cf '/sbin/runsvdir-start &amp;'
+ EOT
 </pre>
 and reboot your system.
 <hr>
