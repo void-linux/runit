@@ -1,0 +1,38 @@
+.TH runit-init 8
+.SH NAME
+init \- the UNIX process no 1
+.SH SYNOPSIS
+.B init
+[ 0 | 6 ]
+.SH DESCRIPTION
+.B runit-init
+is the first process the kernel starts. If
+.B runit-init
+is started as process no 1, it runs and replaces itself with
+.BR runit (8).
+.P
+If
+.B runit-init
+is started while the system is up, it must be either called as
+.B init 0
+or
+.B init 6\fR:
+.TP
+.B init 0
+run
+.BR runit-halt (8)
+to halt the system.
+.TP
+.B init 6
+run
+.BR runit-reboot (8)
+to reboot the system.
+.SH EXIT CODES
+.B runit-init
+returns 111 on error, 0 in all other cases.
+.SH SEE ALSO
+runit(8),
+runit-halt(8),
+runit-reboot(8)
+.SH AUTHOR
+Gerrit Pape <pape@smarden.org>

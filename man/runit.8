@@ -1,0 +1,64 @@
+.TH runit 8
+.SH NAME
+runit \- the UNIX process no 1
+.SH SYNOPSIS
+.B runit
+.SH DESCRIPTION
+.B runit
+must be run as Unix process no 1. It performs the system's
+booting, running and shutdown in three stages:
+.SH STAGE 1
+.B runit
+runs
+.I /etc/runit/1
+and waits for it to terminate. The system's one time tasks are done here.
+.SH STAGE 2
+.B runit
+runs
+.IR /etc/runit/2 ,
+which should not return until system shutdown. Normally
+.I /etc/runit/2
+starts
+.BR svscanboot (8).
+.B runit
+is able to handle the ctrl-alt-del keyboard request in stage 2, see below.
+.SH STAGE 3
+If
+.B runit
+is told to halt or reboot the system, or the Stage 2
+returns without errors, it terminates Stage 2 if it is running and runs
+.IR /etc/runit/3 .
+The systems tasks to shutdown and halt or reboot are done here.
+.SH CTRL-ALT-DEL
+If
+.B runit
+receives the ctrl-alt-del keyboard request and the file
+.I /etc/runit/ctrlaltdel
+exists,
+.B runit
+runs
+.IR /etc/runit/ctrlaltdel ,
+waits for it to terminate and then enters stage 3 for system shutdown.
+.SH SIGNALS
+.B runit
+only accepts signals in stage 2.
+.P
+If
+.B runit
+receives a CONT signal and the file
+.I /etc/runit/stopit
+exists,
+.B runit
+is told to shutdown the system.
+.P
+Normally in stage 3
+.I /etc/runit/3
+checks for the file
+.IR /etc/runit/reboot .
+If it exists, the system is rebooted, it is halted otherwise.
+.SH SEE ALSO
+init(8),
+runit-halt(8),
+runit-reboot(8)
+.SH AUTHOR
+Gerrit Pape <pape@smarden.org>
