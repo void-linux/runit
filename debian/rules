@@ -20,7 +20,7 @@ ifneq ($(DEB_HOST_ARCH),mips)
 ifneq ($(DEB_HOST_ARCH),mipsel)
 ifneq ($(DEB_HOST_ARCH),powerpc)
 ifneq ($(DEB_HOST_ARCH),sparc)
-        CC =gcc
+	CC =gcc
 endif
 endif
 endif
@@ -97,13 +97,15 @@ install: build
 	  $(CURDIR)/debian/runit/usr/bin/svwaitup
 	install -m0755 admin/runit-0.11.0/src/utmpset \
 	  $(CURDIR)/debian/runit/usr/sbin/utmpset
-
 	install -m0755 admin/runit-0.11.0/src/runsvstat \
 	  $(CURDIR)/debian/runit/usr/bin/runsvstat
 	install -m0755 admin/runit-0.11.0/src/runsvctrl \
 	  $(CURDIR)/debian/runit/usr/bin/runsvctrl
-	install -m0755 admin/runit-0.11.0/src/setuidgid \
-	  $(CURDIR)/debian/runit/usr/sbin/setuidgid
+	install -m0755 admin/runit-0.11.0/src/chpst \
+	  $(CURDIR)/debian/runit/usr/sbin/chpst
+
+	# temporary?
+	( cd $(CURDIR)/debian/runit/usr/sbin/ && ln -s chpst setuidgid )
 
 	install -m0755 admin/runit-0.11.0/etc/debian/getty-tty5/run \
 	  $(CURDIR)/debian/runit/etc/runit/getty-5/run
