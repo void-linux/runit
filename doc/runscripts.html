@@ -22,7 +22,8 @@ Thanks go to the following people for contributing run scripts:
 Alessandro Bono, Robin S. Socha, Claus Alboege, Paul Jarc, clemens fischer,
 Jesse Cablek, Lukas Beeler, Thomas Baden, Ralf Hildebrandt, Antonio Dias,
 Erich Schubert, Lang Martin, Tomasz Nidecki, Marek Bartnikowski,
-Thomas Schwinge, Gael Canal, Woon Wai Keen, Richard A Downing, Phil Genera.
+Thomas Schwinge, Gael Canal, Woon Wai Keen, Richard A Downing, Phil Genera,
+Stefan Karrmann, Kevin Berry.
 <hr>
 <a href="#atftpd">atftpd</a><br>
 <a href="#apache">apache</a><br>
@@ -37,6 +38,7 @@ Thomas Schwinge, Gael Canal, Woon Wai Keen, Richard A Downing, Phil Genera.
 <a href="#dhclient">dhclient</a><br>
 <a href="#dhcpcd">dhcpcd</a><br>
 <a href="#dhcpd">dhcpd</a><br>
+<a href="#dictd">dictd</a><br>
 <a href="#dropbear">dropbear</a><br>
 <a href="#exim">exim</a><br>
 <a href="#expireproctitle">expireproctitle</a><br>
@@ -49,6 +51,7 @@ Thomas Schwinge, Gael Canal, Woon Wai Keen, Richard A Downing, Phil Genera.
 <a href="#identd">identd</a><br>
 <a href="#inn">inn</a><br>
 <a href="#jabberd">jabberd</a><br>
+<a href="#junkbuster">junkbuster</a><br>
 <a href="#keepalived">keepalived</a><br>
 <a href="#klogd">klogd</a><br>
 <a href="#leafnode">leafnode</a><br>
@@ -56,6 +59,7 @@ Thomas Schwinge, Gael Canal, Woon Wai Keen, Richard A Downing, Phil Genera.
 <a href="http://multivac.cwru.edu./fdtools/grabconsole/">
 logging console messages</a><br>
 <a href="#minidentd">minidentd</a><br>
+<a href="#mpd">mpd</a><br>
 <a href="#mysql">mysql</a><br>
 <a href="#ntpd">ntpd</a><br>
 <a href="#polipo">polipo</a><br>
@@ -250,6 +254,14 @@ The in.dhcpd service needs a
 <a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
 to be set up.
 <hr>
+<h3><a name="dictd">A <tt>dictd</tt> run script</a></h3>
+(<i>Debian sarge</i>)
+<pre>
+ #!/bin/sh
+ exec 2>&1
+ exec dictd -d nodetach
+</pre>
+<hr>
 <h3><a name="dropbear">A <tt>dropbear</tt> run script</a></h3>
 (<i>Linux</i>)
 <pre>
@@ -418,6 +430,15 @@ This service needs a
 <a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
 to be set up.
 <hr>
+<h3><a name="junkbuster">A <tt>junkbuster</tt> run script</a></h3>
+(<i>Debian sarge</i>)
+<pre>
+ #!/bin/sh
+ exec 2>&1
+ DAEMON=junkbuster
+ exec "$DAEMON" /etc/junkbuster/config
+</pre>
+<hr>
 <h3><a name="keepalived">A <tt>keepalived</tt> run script</a></h3>
 (<i>Linux</i>)
 <pre>
@@ -465,6 +486,17 @@ A run script for <tt>logging Linux kernel messages with multilog</tt></a></h3>
    tcpserver -vUR 0 113 \
    timeoutafter 60 \
    minidentd -v
+</pre>
+This service needs a
+<a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
+to be set up.
+<hr>
+<h3><a name="mpd">A <tt>mpd</tt> run script</a></h3>
+(<i>Debian sid</i>, <i>FreeBSD 5.3-REL</i>)
+<pre>
+ #!/bin/sh
+ MPDCONF=/etc/mpd.conf
+ exec mpd --stdout --no-daemon $MPDCONF
 </pre>
 This service needs a
 <a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>

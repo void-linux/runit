@@ -1,5 +1,5 @@
 runit 1.2.0
-Mon, 13 Dec 2004 19:28:08 +0000
+Fri, 17 Dec 2004 21:08:50 +0000
   * doc/upgrade.html: typo.
   * runsv.c: support custom control commands through control/ directory,
     optionally switch off sending signal; don't update timestamp in status
@@ -8,6 +8,8 @@ Mon, 13 Dec 2004 19:28:08 +0000
     up, want up.
   * man/runsv.8: document custom control commands.
   * runsv.check, runsv.dist: check custom control commands.
+  * doc/runscripts.html: add contributed run scripts (thx Stefan Karrmann,
+    Kevin Berry).
 
 runit 1.1.0
 Sat, 06 Nov 2004 17:21:11 +0000
