@@ -4,6 +4,8 @@ runsv
 runsvdir
 runsvchdir
 svwaitdown
+runsvctrl
+runsvstat
 svwaitup
 svlogd
 utmpset

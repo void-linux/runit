@@ -19,13 +19,13 @@ service
 switches to the directory <I>service</I> and starts ./run. if ./run exits and ./finish
 exists, <B>runsv</B> starts ./finish. If ./finish doesn't exist or ./finish exits,
 <B>runsv</B> restarts ./run. <P>
-If ./run or ./finish exit immediatly, <B>runsv</B> waits a second
-before starting ./finish or restarting ./run. <P>
-If the file <I>service</I>/down exists,
-<B>runsv</B> does not start ./run immediately. The control interface (see below)
-can be used to start the service and to give other commands to <B>runsv</B>. <P>
-If
-the directory <I>service</I>/log exists, <B>runsv</B> creates a pipe, redirects <I>service</I>/run's
+If ./run or ./finish exit immediately, <B>runsv</B> waits a
+second before starting ./finish or restarting ./run. <P>
+If the file <I>service</I>/down
+exists, <B>runsv</B> does not start ./run immediately. The control interface (see
+below) can be used to start the service and to give other commands to <B>runsv</B>.
+<P>
+If the directory <I>service</I>/log exists, <B>runsv</B> creates a pipe, redirects <I>service</I>/run's
 and <I>service</I>/finish's standard output to the pipe, switches to the directory
 <I>service</I>/log and starts ./run (and ./finish) exactly as described above for
 the <I>service</I> directory. The standard input of the log service a redirected

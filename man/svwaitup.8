@@ -1,6 +1,6 @@
 .TH svwaitup 8
 .SH NAME
-svwaitup \- waits for services controlled by supervise(8) to be up
+svwaitup \- waits for services controlled by runsv(8) or supervise(8) to be up
 .SH SYNOPSIS
 .B svwaitup
 [
@@ -25,6 +25,8 @@ given at the command line for being at least the specified number of seconds
 up. The
 .I services
 given at the command line must be controlled by
+.BR runsv (8),
+or
 .BR supervise (8).
 .P
 .B svwaitup
@@ -77,7 +79,7 @@ For each
 .I service
 that is down and not requested to become up, or that causes an error while
 checking (e.g.
-.BR supervise (8)
+.BR runsv (8)
 is not running),
 .B svwaitup
 increases the exit code by one and exits non zero. The maximum is 100.
