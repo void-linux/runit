@@ -163,5 +163,5 @@ int main(int argc, char **argv) {
     }
   }
   if (rc > 100) rc =100;
-  exit(rc);
+  _exit(rc);
 }
