@@ -7,6 +7,10 @@ LDFLAGS=-Wall -O3 -s
 
 all: runit runit-init
 
+set-tcp-env: djb-publicdomain set-tcp-env.o
+	$(CC) $(LDFLAGS) -o set-tcp-env \
+		set-tcp-env.o support/unix.a support/byte.a
+
 runit: djb-publicdomain runit.o
 	$(CC) $(LDFLAGS) -o runit \
 		runit.o support/unix.a support/byte.a

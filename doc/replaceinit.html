@@ -4,7 +4,7 @@
 <title>runit - replacing init</title>
 </head>
 <body>
-<a href="http://innominate.org/~pape/">G. Pape</a><br>
+<a href="http://smarden.org/pape/">G. Pape</a><br>
 <a href="index.html">runit</a>
 <hr>
 <h1>runit - replacing init</h1>
@@ -56,7 +56,7 @@ the default boot behavior of your system, <i>lilo</i> will be told to use
   <li>reboot the system
   <li>enter the following on the lilo prompt:<br>
   <tt>init=/sbin/runit-init</tt>
-  <li>watch the console output while runit boots up the system
+  <li>watch the console output while <i>runit</i> boots up the system
   <li>switch to <tt>tty5</tt> when stage 2 is reached, a <tt>getty</tt>
   should run there, you are able to login.
 </ul>
@@ -102,7 +102,7 @@ default Unix process no 1 <i>runit</i>.
 </pre>
 To report success:
 <pre>
-  # ( uname -a ; cat /etc/runit/[123] ) | mail pape-runit-0.1.0@smarden.org
+  # ( uname -a ; cat /etc/runit/[123] ) | mail pape-runit-0.1.1@smarden.org
 </pre>
 <hr>
 <address><a href="mailto:pape@smarden.org">

@@ -1,8 +1,8 @@
-runit (0.1.0-1) unstable; urgency=low
+runit (0.1.1-1) unstable; urgency=low
 
   * Initial Release.
 
- -- Gerrit Pape <pape@smarden.org>  Fri, 16 Nov 2001 14:01:27 +0100
+ -- Gerrit Pape <pape@smarden.org>  Tue, 20 Nov 2001 11:56:58 +0100
 
 Local variables:
 mode: debian-changelog

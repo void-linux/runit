@@ -4,7 +4,7 @@
 <title>runit - minimal replacement for sysvinit</title>
 </head>
 <body>
-<a href="http://innominate.org/~pape/">G. Pape</a>
+<a href="http://smarden.org/pape/">G. Pape</a>
 <hr>
 <h1>runit - minimal replacement for <i>sysvinit</i></h1>
 <hr>
@@ -27,20 +27,20 @@ you on any other operating system or linux distribution, please let me know.
 <p>
 <b>Warning:</b> Replacing <i>sysvinit</i> can cause the system's boot to fail.
 Make sure you are able to recover and repair your system, for example if you
-run a bootloader, it should be able to pass <tt>init=/bin/sh</tt> to the
+run a boot loader, it should be able to pass <tt>init=/bin/sh</tt> to the
 kernel.
 <hr>
 The command <a href="runit.8.html">runit</a> is intended to run as Unix
 process no 1, it is automatically started by the
-<a href="runit-init.8.html">runit-init</a> replacement if this is started
-by the kernel.
+<a href="runit-init.8.html">runit-init</a> <tt>/sbin/init</tt>-replacement
+if this is started by the kernel.
 <p>
 <a href="runit.8.html">runit</a> performs the system's <i>booting</i>,
 <i>running</i> and <i>shutting down</i> in <b>three stages</b>:
 <ul>
   <li><b>Stage 1:</b><br>
   <i>runit</i> starts <tt>/etc/runit/1</tt> and waits for it to
-  terminate. The system's one time tasks are done here.
+  terminate. The system's one time initialization tasks are done here.
   <li><b>Stage 2:</b><br>
   <i>runit</i> starts <tt>/etc/runit/2</tt> which should not return
   until the system is going to halt or reboot, if it crashes, it will be
@@ -63,15 +63,14 @@ The command <a href="runit-init.8.html">runit-init</a> is intended to replace
 <tt>/sbin/init</tt>. sysvinit's command <tt>shutdown</tt> will keep working.
 Runlevels are not implemented in this Unix process no 1, such can easily be
 done in other programs, see
-<a href="http://innominate.org/~pape/djb/daemontools/noinit.html">
+<a href="http://smarden.org/pape/djb/daemontools/noinit.html">
 Dependencies and runlevels</a>
 for an example, the amount of code in process no 1 should be minimal.
 <hr>
 See <a href="replaceinit.html">How to replace init</a> for smoothly migrating
 from <i>sysvinit</i>.
 <hr>
-See <a href="http://innominate.org/~pape/runit/">
-http://innominate.org/~pape/runit/</a>
+See <a href="http://smarden.org/runit/">http://smarden.org/runit/</a>
 for recent informations.
 <hr>
 <address><a href="mailto:pape@smarden.org">
