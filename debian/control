@@ -23,5 +23,5 @@ Description: a UNIX init scheme with service supervision
  .
  See http://smarden.org/runit/ for more information.
  .
- This package does not replace the /sbin/init binary. To do so you need
+ This package does not replace the /sbin/init binary.  To do so you need
  to follow the documentation or install the runit-run package.

@@ -9,6 +9,6 @@ if grep '#-- runit begin' /etc/inittab >/dev/null; then
   sed -e '/#-- runit begin/,/#-- runit end/d' \
     </etc/inittab >/etc/inittab'{new}'
   mv -f /etc/inittab'{new}' /etc/inittab
-  kill -HUP 1
+  kill -s HUP 1 || :
 fi
 test "$1" != 'purge' || rm -rf /var/run/getty-5

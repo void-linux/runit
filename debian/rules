@@ -85,7 +85,7 @@ install: deb-checkdir deb-checkuid build-stamp
 	install -d -m0755 '$(DIR)'/usr/share/doc/runit/debian
 	for i in 1 2 3 ctrlaltdel; do \
 	  install -m0644 admin/runit/etc/debian/$$i \
-	    '$(DIR)'/usr/share/doc/runit/debian/; \
+	    '$(DIR)'/usr/share/doc/runit/debian/ || exit 1; \
 	done
 	# changelog
 	rm -f changelog && ln -s admin/runit/package/CHANGES changelog
