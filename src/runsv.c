@@ -457,7 +457,7 @@ int main(int argc, char **argv) {
       if (child == svd[0].pid) {
 	svd[0].pid =0;
 	pidchanged =1;
-	if (open_read("finish") != -1) {
+	if ((svd[0].state != S_FINISH) && (open_read("finish") != -1)) {
 	  svd[0].state =S_FINISH;
 	  startservice(&svd[0]);
 	  update_status(&svd[0]);
