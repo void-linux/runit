@@ -16,6 +16,7 @@ build-arch-stamp:
 	dh_testdir
 
 	tar xfzvp runit-0.9.3.tar.gz
+	-gcc -v
 
 	# temporary patch
 	( set -e; cd admin/runit-0.9.3; patch -p0 ) \
