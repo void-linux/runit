@@ -6,7 +6,7 @@ runit \- a UNIX process no 1
 .SH DESCRIPTION
 .B runit
 must be run as Unix process no 1.
-It performs the system's booting, running, and shutdown in three Stages:
+It performs the system's booting, running, and shutdown in three stages:
 .SH STAGE 1
 .B runit
 runs
@@ -19,29 +19,30 @@ has full control of
 to be able to start an emergency shell if the one time initialization tasks
 fail. If
 .I /etc/runit/1
-itself crashes,
+crashes, or exits 100,
 .B runit
 will skip stage 2 and enter stage 3.
 .SH STAGE 2
 .B runit
 runs
 .IR /etc/runit/2 ,
-which should not return until system shutdown; if it crashes, it will be
-restarted.
+which should not return until system shutdown; if it crashes, or exits 111,
+it will be restarted.
 Normally
 .I /etc/runit/2
 starts
 .BR runsvdir (8).
 .B runit
-is able to handle the ctrl-alt-del keyboard request in Stage 2, see below.
+is able to handle the ctrl-alt-del keyboard request in stage 2, see below.
 .SH STAGE 3
 If
 .B runit
-is told to shutdown the system, or the Stage 2 returns without errors, it
-terminates Stage 2 if it is running, and runs
+is told to shutdown the system, or stage 2 returns, it terminates stage 2 if
+it is running, and runs
 .IR /etc/runit/3 .
-The systems tasks to shutdown and halt or reboot are done here.
-If Stage 3 returns,
+The systems tasks to shutdown and possibly halt or reboot the system are
+done here.
+If stage 3 returns,
 .B runit
 checks if the file
 .I /etc/runit/reboot
@@ -59,7 +60,7 @@ runs
 waits for it to terminate, and then sends itself a CONT signal.
 .SH SIGNALS
 .B runit
-only accepts signals in Stage 2.
+only accepts signals in stage 2.
 .P
 If
 .B runit

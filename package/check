@@ -1,8 +1,8 @@
 #!/bin/sh -e
 
 umask 022
-test -d package || ( echo 'Wrong working directory.'; exit 1 ) || exit 1
-test -d compile || ( echo 'Wrong working directory.'; exit 1 ) || exit 1
+test -d package || sh -cx '! : Wrong working directory.'
+test -d compile || sh -cx '! : Wrong working directory.'
 
 echo 'Checking commands in ./command...'
-( cd compile; exec make check ) || exit 1
+sh -cxe 'cd compile; exec make check'
