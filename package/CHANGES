@@ -1,3 +1,5 @@
+  * doc/runscripts.html: use html named entities (thx Taj Khattra).
+
 runit 0.12.1
 Tue, 18 Nov 2003 15:42:44 +0000
   * doc/runscripts: add pppd run script (with chpst) next to the ppp one.

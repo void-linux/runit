@@ -74,14 +74,14 @@ logging console messages</a><br>
 (<i>SunOS</i>, Apache 1.*, patched to run under supervise)
 <pre>
  #!/bin/sh
- exec 2>&1
+ exec 2&gt;&amp;1
  exec env -i \
- /pack/apache/1.3.27-1/sbin/httpd -F 2>&1
+ /pack/apache/1.3.27-1/sbin/httpd -F 2&gt;&amp;1
 </pre>
 (<i>Debian woody</i>)
 <pre>
  #!/bin/sh
- exec 1>&2
+ exec 1&gt;&amp;2
  exec apache-ssl -F
 </pre>
 <hr>
@@ -89,9 +89,9 @@ logging console messages</a><br>
 (<i>SunOS</i>)
 <pre>
  #!/bin/sh
- exec 2>&1
+ exec 2&gt;&amp;1
  exec env -i /command/pgrphack \
- /pack/apache/2.0.43-1/sbin/httpd -DFOREGROUND 2>&1
+ /pack/apache/2.0.43-1/sbin/httpd -DFOREGROUND 2&gt;&amp;1
 </pre>
 (<i>HP-UX/GNU</i>, <i>Linux</i>)
 <pre>
@@ -108,7 +108,7 @@ logging console messages</a><br>
  MEM="`head -1 ./env/MEM`"
  CHROOT="`head -1 ./env/CHROOT`"
  exec softlimit -m "${MEM}" \
-   named -u bind -t "${CHROOT}" -g 2>&1
+   named -u bind -t "${CHROOT}" -g 2&gt;&amp;1
 </pre>
 (<i>HP-UX/GNU</i>, <i>Linux</i>)
 <pre>
@@ -120,9 +120,9 @@ logging console messages</a><br>
 (<i>SunOS</i>)
 <pre>
  #!/bin/sh
- exec 2>&1
+ exec 2&gt;&amp;1
  ulimit -n 1024
- exec /pack/boa/current/boa -c /pack/boa/current -d 2>&1
+ exec /pack/boa/current/boa -c /pack/boa/current -d 2&gt;&amp;1
 </pre>
 <hr>
 <h3><a name="cfengine">A <tt>cfengine</tt> run script</a></h3>
@@ -137,7 +137,7 @@ logging console messages</a><br>
 (<i>RedHat 7</i>)
 <pre>
  #!/bin/sh
- exec 2>&1
+ exec 2&gt;&amp;1
  exec /usr/local/bin/setuidgid clamav \
    /usr/local/bin/softlimit -a 40000000 /usr/local/sbin/clamd
 </pre>
@@ -149,7 +149,7 @@ to be set up.
 (<i>SunOS</i>)
 <pre>
  #!/bin/sh
- exec 2>&1
+ exec 2&gt;&amp;1
  PREFIX="/usr/lib/courier-imap"
  exec envdir ./env \
    tcpserver -v -R 0 143 \
@@ -165,7 +165,7 @@ this page</a>.
 (<i>Debian woody</i>, a.bono)
 <pre>
  #!/bin/sh
- exec 2>&1
+ exec 2&gt;&amp;1
  exec /usr/sbin/cupsd -f
 </pre>
 <hr>
@@ -187,7 +187,7 @@ this page</a>.
 (<i>Debian woody</i>)
 <pre>
  #!/bin/sh
- exec 2>&1
+ exec 2&gt;&amp;1
  exec dhcpd-2.2.x -f -d -cf ./config eth0
 </pre>
 This service needs a
@@ -198,14 +198,14 @@ to be set up.
 automatically, but then it's not supervised)
 <pre>
  #!/bin/sh
- exec 2>&1
+ exec 2&gt;&amp;1
  exec /command/envdir ./env /usr/lib/inet/dsvclockd -f
 </pre>
 <pre>
  #!/bin/sh
  if /command/svok /service/dsvclockd; then
    /usr/bin/sleep 2 # wait to make sure dsvclockd is initialized
-   exec 2>&1
+   exec 2&gt;&amp;1
    exec /command/envdir ./env /usr/lib/inet/in.dhcpd -b manual -d # -v
  fi
  echo dsvclockd is not running - aborting
@@ -228,7 +228,7 @@ to be set up.
 (<i>Slackware Linux 9.0</i>)
 <pre>
  #!/bin/sh
- exec 2>&1
+ exec 2&gt;&amp;1
  exec /usr/bin/fam -L -f -v
 </pre>
 This service needs a
@@ -263,7 +263,7 @@ records. Debian's <tt>mingetty</tt> does create his own utmp record.
 (<i>Linux</i>, oidentd version 2.0.6)
 <pre>
  #!/bin/sh
- exec 2>&1
+ exec 2&gt;&amp;1
  exec oidentd -i -S -t 10 -u daemon -g daemon
 </pre>
 This service needs a
@@ -284,7 +284,7 @@ to be set up.
 (<i>RedHat 7</i>)
 <pre>
  #!/bin/sh
- exec 2>&1
+ exec 2&gt;&amp;1
  if [ -f /usr/local/jabber/jabber.pid ]; then
    rm /usr/local/jabber/jabber.pid
  fi
@@ -296,7 +296,7 @@ This service needs a
 to be set up.
 <pre>
  #!/bin/sh
- exec 2>&1
+ exec 2&gt;&amp;1
  sleep 5 # so that jit starts after jabberd is up
  exec /usr/local/bin/setuidgid jabberd \
    /usr/local/jabber/jit/jabberd/jabberd -c /etc/jit.xml
@@ -317,7 +317,7 @@ A run script for <tt>logging Linux kernel messages with multilog</tt></a></h3>
 (<i>Linux</i>)
 <pre>
  #!/bin/sh -e
- exec < /proc/kmsg \
+ exec &lt; /proc/kmsg \
  setuidgid loguser \
  multilog t n64 ./main
 </pre>
@@ -330,7 +330,7 @@ A run script for <tt>logging Linux kernel messages with multilog</tt></a></h3>
          --basedir=/pack/mysql/current \
          --datadir=/pack/mysql/data/ \
          --socket=/tmp/mysql.sock \
-         --pid-file=/pack/mysql/data/mysql.pid 2>&1
+         --pid-file=/pack/mysql/data/mysql.pid 2&gt;&amp;1
 </pre>
 (<i>Debian</i>, ``It's an ugly hack, but it works'')
 <pre>
@@ -343,7 +343,7 @@ A run script for <tt>logging Linux kernel messages with multilog</tt></a></h3>
  trap "$MYSQLADMIN shutdown" 0
  trap 'exit 2' 1 2 3 15
  
- /usr/bin/mysqld_safe & wait
+ /usr/bin/mysqld_safe &amp; wait
 </pre>
 <hr>
 <h3><a name="ntpd">A <tt>ntpd</tt> run script</a></h3>
@@ -362,7 +362,7 @@ A run script for <tt>logging Linux kernel messages with multilog</tt></a></h3>
  exec /usr/local/bin/tcpserver -R -v -c 50 0 995 /usr/local/sbin/stunnel
  -f  -p /etc/ssl/stunnel.pem \
  -l /var/qmail/bin/qmail-popup -- /var/qmail/bin/qmail-popup
- "`cat /var/qmail/control/me`" vchkpw /var/qmail/bin/qmail-pop3d Maildir 2>&1
+ "`cat /var/qmail/control/me`" vchkpw /var/qmail/bin/qmail-pop3d Maildir 2&gt;&amp;1
 </pre>
 This service needs a
 <a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
@@ -372,7 +372,7 @@ to be set up.
 (<i>RedHat 7</i>)
 <pre>
  #!/bin/sh
- exec 2>&1
+ exec 2&gt;&amp;1
  exec /usr/local/bin/setuidgid pop3vscan /usr/sbin/pop3vscan -d
 </pre>
 This service needs a
@@ -384,14 +384,14 @@ to be set up.
 <pre>
  #!/bin/sh
  exec setuidgid postgres /pack/postgresql/current/bin/postmaster \
-   -D /pack/postgresql/data 2>&1
+   -D /pack/postgresql/data 2&gt;&amp;1
 </pre>
 <hr>
 <h3><a name="ppp">A <tt>ppp</tt> run script</a></h3>
 (<i>FreeBSD</i>)
 <pre>
  #!/bin/sh
- exec 2>&1
+ exec 2&gt;&amp;1
  echo "ppp -ddial dsl "
  exec /usr/sbin/ppp -unit0 -foreground dsl
 </pre>
@@ -399,7 +399,7 @@ to be set up.
 (<i>Linux</i>)
 <pre>
  #!/bin/sh
- exec 2>&1
+ exec 2&gt;&amp;1
  exec chpst -P pppd call isp nodetach
 </pre>
 <hr>
@@ -408,7 +408,7 @@ to be set up.
 configure it to use 'ErrorLog "/dev/stdout"')
 <pre>
  #!/bin/sh
- exec 2>&1
+ exec 2&gt;&amp;1
  exec proftpd -n -d 1
 </pre>
 This service needs a
@@ -419,7 +419,7 @@ to be set up.
 (<i>Debian woody</i>, a.bono)
 <pre>
  #!/bin/sh
- exec 2>&1
+ exec 2&gt;&amp;1
  exec /usr/sbin/pure-ftpd -a 50 -E -l pam -u 100
 </pre>
 <hr>
@@ -427,7 +427,7 @@ to be set up.
 (<i>Slackware Linux 9.0</i>, cistron radius 1.6.1)
 <pre>
  #!/bin/sh
- exec 2>&1
+ exec 2&gt;&amp;1
  exec radiusd -f -y -z -lstdout
 </pre>
 This service needs a
@@ -438,7 +438,7 @@ to be set up.
 (<i>SunOS</i>)
 <pre>
  #!/bin/sh
- exec 2>&1
+ exec 2&gt;&amp;1
  exec softlimit -d 100000000 /usr/local/bin/tcpserver \
    -x /pack/rsync/rsync.service/tcp.rsync.cdb -v -c 100 -U -H -l 0 -R \
    1.2.3.4 873 nice -2 /pack/rsync/bin/rsync --daemon --no-detach \
@@ -455,7 +455,7 @@ to run supervised)
 <pre>
  #!/bin/sh
  PATH="/usr/local/samba/bin"
- exec 2>&1
+ exec 2&gt;&amp;1
  exec smbd -F -S -d3
 </pre>
 This service needs a
@@ -468,7 +468,7 @@ to run supervised)
 <pre>
  #!/bin/sh
  PATH="/usr/local/samba/bin"
- exec 2>&1
+ exec 2&gt;&amp;1
  exec nmbd -F -S -d1
 </pre>
 This service needs a
@@ -479,7 +479,7 @@ to be set up.
 (<i>RedHat 7</i>)
 <pre>
  #!/bin/sh
- exec 2>&1
+ exec 2&gt;&amp;1
  exec /usr/local/bin/setuidgid sc_serv \
    /usr/local/sc_serv/bin/sc_serv /etc/sc_serv.conf
 </pre>
@@ -498,7 +498,7 @@ to be set up.
 (<i>Debian woody</i>, sshd version OpenSSH_2.9p2)
 <pre>
  #!/bin/sh
- exec 2>&1
+ exec 2&gt;&amp;1
  exec sshd -D -e
 </pre>
 This service needs a
@@ -510,7 +510,7 @@ A <tt>sshd (under tcpserver)</tt> run script</a></h3>
 (<i>Linux</i>, sshd version OpenSSH_3.4p1)
 <pre>
  #!/bin/sh -e
- exec 2>&1
+ exec 2&gt;&amp;1
  exec \
  tcpserver -1vpdl0 -Xxtcp.cdb 0 ssh \
  sshd -ief config
@@ -523,7 +523,7 @@ to be set up.
 (<i>Debian woody</i>)
 <pre>
  #!/bin/sh
- exec 2>&1
+ exec 2&gt;&amp;1
  NEED_LOCKD=yes
  if test -f /proc/ksyms; then
    # We need to be conservative and run lockd,
@@ -551,7 +551,7 @@ trap 'exit 2' 1 2 3 15
 
 /usr/sbin/exportfs -r
 /usr/sbin/rpc.nfsd -- $RPCNFSDCOUNT
-/usr/bin/rpcinfo -u localhost nfs 3 >/dev/null 2>&1 ||
+/usr/bin/rpcinfo -u localhost nfs 3 &gt;/dev/null 2&gt;&amp;1 ||
   RPCMOUNTDOPTS="$RPCMOUNTDOPTS --no-nfs-version 3"
 /usr/sbin/rpc.mountd -F $RPCMOUNTDOPTS
 </pre>
@@ -560,13 +560,13 @@ trap 'exit 2' 1 2 3 15
 (<i>BSD</i>)
 <pre>
  #!/bin/sh
- exec /usr/local/sbin/stunnel -f -d 1234 -r 25 -v3 -a /etc/ssl/mailcerts 2>&1
+ exec /usr/local/sbin/stunnel -f -d 1234 -r 25 -v3 -a /etc/ssl/mailcerts 2&gt;&amp;1
 </pre>
 <hr>
 <h3><a name="taiclockd">A <tt>taiclockd</tt> run script</a></h3>
 <pre>
  #!/bin/sh
- exec 2>&1
+ exec 2&gt;&amp;1
  exec setuidgid taiclock /usr/local/clockspeed/bin/taiclockd
 </pre>
 <hr>
@@ -574,7 +574,7 @@ trap 'exit 2' 1 2 3 15
 (<i>RedHat 7</i>)
 <pre>
  #!/bin/sh
- exec /usr/local/tmda/bin/tmda-ofmipd -f -d -R pop3 -p my.host.name:8025 2>&1
+ exec /usr/local/tmda/bin/tmda-ofmipd -f -d -R pop3 -p my.host.name:8025 2&gt;&amp;1
 </pre>
 This service needs a
 <a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
@@ -584,7 +584,7 @@ to be set up.
 (<i>SunOS</i>)
 <pre>
  #!/bin/sh
- exec 2>&1
+ exec 2&gt;&amp;1
  exec \
  setuidgid apache \
  /pack/tomcat/current/bin/catalina.sh run
@@ -594,7 +594,7 @@ to be set up.
 (<i>RedHat 7</i>)
 <pre>
  #!/bin/sh
- exec 2>&1
+ exec 2&gt;&amp;1
  exec /usr/local/bin/tcpserver -c30 -Xv -llocalhost \
    -x/etc/tcp.ftp.cdb -uvsftpd -gvsftpd 0 ftp \
      softlimit -d300000 /var/vsftpd/bin/vsftpd
@@ -608,7 +608,7 @@ to be set up.
 file, use <tt>svc -o /service/wvdial</tt> to bring up a ppp connection)
 <pre>
  #!/bin/sh
- exec 2>&1
+ exec 2&gt;&amp;1
  exec wvdial ISP
 </pre>
 This service needs a
