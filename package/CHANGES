@@ -1,3 +1,7 @@
+runit 0.9.1
+Wed, 30 Apr 2003 22:10:57 +0200
+  * svlogd.c: reset match flag on deselection, fixes pattern matching.
+ 
 runit 0.9.0
 Fri, 25 Apr 2003 09:22:03 +0200
   * runsvdir.c: don't propagate sig_term to runsv processes when receiving

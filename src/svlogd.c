@@ -30,7 +30,7 @@
 #include "fmt.h"
 
 #define USAGE " [-tv] [-r c] [-R abc] [-l n ] [-b n] dir ..."
-#define VERSION "$Id: svlogd.c,v 1.3 2003/04/24 11:12:47 pape Exp $"
+#define VERSION "$Id: svlogd.c,v 1.4 2003/04/30 20:14:37 pape Exp $"
 
 #define FATAL "svlogd: fatal: "
 #define WARNING "svlogd: warning: "
@@ -471,6 +471,7 @@ unsigned int lineflush(struct logdir *ld, char *s, int len) {
 	rotate(ld);
     return(1);
   }
+  ld->match =0;
   return(0);
 }
 int buffer_pread(int fd, char *s, unsigned int len) {
