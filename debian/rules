@@ -27,12 +27,14 @@ build-stamp:
 	mkdir -p admin/runit-0.2.2/compile
 	tar xfzvp daemontools-pd-0.76.tar.gz \
 		-C admin/runit-0.2.2/compile
-	( cd admin/runit-0.2.2/compile ; \
-		ln -s daemontools-pd-0.76 support )
+	( \
+	cd admin/runit-0.2.2/compile ; \
+	ln -s daemontools-pd-0.76 support \
+	echo 'diet gcc -O2 -Wall' > support/conf-cc ; \   
+	echo 'diet gcc -s -Os -pipe' > support/conf-ld ; \
+	)
 	( \
 	cd admin/runit-0.2.2 ; \
-	echo 'diet gcc -O2 -Wall' > support/conf-cc ; \
-	echo 'diet gcc -s -Os -pipe' > support/conf-ld ; \
 	package/compile ; \
 	echo "/package/admin/runit-0.2.2" > compile/home ; \
 	rm -f compile/src ; \
