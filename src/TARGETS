@@ -1,7 +1,7 @@
 runit
 runit.o
 runit-init
-init.o
+runit-init.o
 svwaitdown
 svwaitdown.o
 svwaitup
