@@ -96,12 +96,17 @@ int main (int argc, const char * const *argv, const char * const *envp) {
   ndelay_on(selfpipe[1]);
 
 #ifdef RB_DISABLE_CAD
-  /* activate ctrlaltdel handling */
+  /* activate ctrlaltdel handling, glibc */
   if (RB_DISABLE_CAD == 0)
     reboot(0);
 #endif
+#ifdef LINUX_REBOOT_CMD_CAD_OFF
+  /* activate ctrlaltdel handling, dietlibc */
+  if (LINUX_REBOOT_CMD_CAD_OFF == 0)
+    reboot(0);
+#endif
 
-  strerr_warn3(INFO, "$Id: runit.c,v 1.6 2002/01/29 18:56:36 pape Exp $",
+  strerr_warn3(INFO, "$Id: runit.c,v 1.7 2002/02/13 09:59:52 pape Exp $",
 	       ": booting.", 0);
 
   /* runit */
