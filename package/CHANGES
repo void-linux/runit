@@ -1,5 +1,5 @@
 runit 0.8.0
-Tue, 25 Feb 2003 13:31:21 +0100
+Tue, 25 Feb 2003 16:17:34 +0100
   * doc/benefits.html: new.
   * doc/index.html, doc/upgrade.html: adapt.
   * etc/*/1, etc/*/3, etc/*/ctrlaltdel: set permissions on the magic files
