@@ -2,10 +2,10 @@ Index: src/chpst.c
 ===================================================================
 RCS file: /var/lib/cvs/runit/src/chpst.c,v
 retrieving revision 1.2
-retrieving revision 1.3
-diff -u -r1.2 -r1.3
+retrieving revision 1.4
+diff -u -r1.2 -r1.4
 --- src/chpst.c	2 Mar 2004 20:19:46 -0000	1.2
-+++ src/chpst.c	27 Apr 2004 17:32:26 -0000	1.3
++++ src/chpst.c	30 Apr 2004 18:51:04 -0000	1.4
 @@ -20,7 +20,7 @@
  #include "openreadclose.h"
  #include "direntry.h"
@@ -50,11 +50,14 @@ diff -u -r1.2 -r1.3
      case '?': usage();
      }
    argv +=optind;
-@@ -300,6 +303,7 @@
+@@ -300,6 +303,10 @@
    
    if (pgrp) setsid();
    if (env_dir) edir(env_dir);
-+  if (root) if (chroot(root) == -1) fatal("unable to change root directory");
++  if (root) {
++    if (chdir(root) == -1) fatal2("unable to change directory", root);
++    if (chroot(".") == -1) fatal("unable to change root directory");
++  }
    if (env_user) euidgid(env_user, 1);
    if (set_user) suidgid(set_user, 1);
    slimit();
@@ -277,3 +280,223 @@ diff -u -r1.4 -r1.5
   <i>http://smarden.org/runit/</i><br>
    <i>http://cr.yp.to/daemontools.html</i><br>
   
+Index: doc/runscripts.html
+===================================================================
+RCS file: /var/lib/cvs/runit/doc/runscripts.html,v
+retrieving revision 1.20
+retrieving revision 1.21
+diff -u -r1.20 -r1.21
+--- doc/runscripts.html	29 Feb 2004 16:12:15 -0000	1.20
++++ doc/runscripts.html	30 Apr 2004 18:42:29 -0000	1.21
+@@ -22,7 +22,7 @@
+ Alessandro Bono, Robin S. Socha, Claus Alboege, Paul Jarc, clemens fischer,
+ Jesse Cablek, Lukas Beeler, Thomas Baden, Ralf Hildebrandt, Antonio Dias,
+ Erich Schubert, Lang Martin, Tomasz Nidecki, Marek Bartnikowski,
+-Thomas Schwinge.
++Thomas Schwinge, Gael Canal, Woon Wai Keen, Richard A Downing.
+ <hr>
+ <a href="#atftpd">atftpd</a><br>
+ <a href="#apache">apache</a><br>
+@@ -30,19 +30,25 @@
+ <a href="#bind9">bind9</a><br>
+ <a href="#boa">boa</a><br>
+ <a href="#cfengine">cfengine</a><br>
++<a href="#chrony">chrony</a><br>
+ <a href="#clamav">clamav</a><br>
+-<a href="#courier-imap">courier-imap</a></br>
++<a href="#courier-imap">courier-imap</a><br>
+ <a href="#cups">cups</a><br>
+ <a href="#dhclient">dhclient</a><br>
+ <a href="#dhcpcd">dhcpcd</a><br>
+ <a href="#dhcpd">dhcpd</a><br>
++<a href="#exim">exim</a><br>
+ <a href="#expireproctitle">expireproctitle</a><br>
+ <a href="#fam">fam</a><br>
++<a href="#fcron">fcron</a><br>
+ <a href="#gdm">gdm</a><br>
+ <a href="#getty">getty</a><br>
++<a href="#gpm">gpm</a><br>
++<a href="#hotwayd">hotwayd</a><br>
+ <a href="#identd">identd</a><br>
+ <a href="#inn">inn</a><br>
+ <a href="#jabberd">jabberd</a><br>
++<a href="#keepalived">keepalived</a><br>
+ <a href="#klogd">klogd</a><br>
+ <a href="#leafnode">leafnode</a><br>
+ <a href="#loglinuxkernel">logging Linux kernel messages</a><br>
+@@ -54,6 +60,7 @@
+ <a href="#polipo">polipo</a><br>
+ <a href="#pop3-ssl">pop3-ssl</a><br>
+ <a href="#pop3vscan">pop3vscan</a><br>
++<a href="#portmap">portmap</a><br>
+ <a href="#postgresql">postgresql</a><br>
+ <a href="#ppp">ppp</a><br>
+ <a href="#proftpd">proftpd</a><br>
+@@ -68,6 +75,7 @@
+ <a href="#sshdtcpserver">sshd under tcpserver</a><br>
+ <a href="#statd">statd</a>, <a href="#mountd">mountd</a><br>
+ <a href="#stunnel">stunnel</a><br>
++<a href="#swat">swat</a><br>
+ <a href="#taiclockd">taiclockd</a><br>
+ <a href="#tmda-ofmipd">tmda-ofmipd</a><br>
+ <a href="#tomcat">tomcat</a><br>
+@@ -148,6 +156,17 @@
+    -L -v -q exec sleep 3600
+ </pre>
+ <hr>
++<h3><a name="chrony">A <tt>chrony</tt> run script</a></h3>
++(<i>LFS</i>)
++<pre>
++ #!/bin/sh
++ exec 2&gt;&amp;1
++ exec  /usr/sbin/chronyd -d -r -s
++</pre>
++This service needs a
++<a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
++to be set up.
++<hr>
+ <h3><a name="clamav">A <tt>clamd</tt> run script</a></h3>
+ (<i>RedHat 7</i>)
+ <pre>
+@@ -177,7 +196,7 @@
+ this page</a>.
+ <hr>
+ <h3><a name="cups">A <tt>cups</tt> run script</a></h3>
+-(<i>Debian woody</i>, a.bono)
++(<i>Debian woody</i>)
+ <pre>
+  #!/bin/sh
+  exec 2&gt;&amp;1
+@@ -230,6 +249,13 @@
+ <a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
+ to be set up.
+ <hr>
++<h3><a name="exim">An <tt>exim</tt> run script</a></h3>
++(<i>Linux</i>, <i>FreeBSD</i>)
++<pre>
++ #!/bin/sh
++ exec /usr/local/sbin/exim -bdf -q30m
++</pre>
++<hr>
+ <h3><a name="expireproctitle">
+ <tt>expireproctitle</tt> run script examples</a></h3>
+ (<i>Linux</i>)
+@@ -250,8 +276,19 @@
+ <a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
+ to be set up.
+ <hr>
++<h3><a name="fcron">A <tt>fcron</tt> run script</a></h3>
++(<i>LFS</i>)
++<pre>
++ #!/bin/sh
++ exec 2&gt;&amp;1
++ exec /usr/sbin/fcron -f -y
++</pre>
++This service needs a
++<a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
++to be set up.
++<hr>
+ <h3><a name="gdm">A <tt>gdm</tt> run script</a></h3>
+-<i>(Debian woody)</i>
++(<i>Debian woody</i>)
+ <pre>
+  #!/bin/sh
+  exec gdm -nodaemon
+@@ -273,6 +310,23 @@
+  exec /sbin/agetty 38400 tty1 linux
+ </pre>
+ <hr>
++<h3><a name="gpm">A <tt>gpm</tt> run script</a></h3>
++(<i>LFS</i>)
++<pre>
++ #!/bin/sh
++ exec 2&gt;&amp;1
++ . /etc/sysconfig/mouse
++ exec gpm -D -m $MDEVICE -t $PROTOCOL
++</pre>
++<hr>
++<h3><a name="hotwayd">A <tt>hotwayd</tt> run script</a></h3>
++(<i>LFS</i>)
++<pre>
++ #!/bin/sh
++ exec 2&gt,&amp;1
++ exec tcpsvd -l0 -u nobody 127.0.0.1 110 /usr/sbin/hotwayd
++</pre>
++<hr>
+ <h3><a name="identd">An <tt>oidentd</tt> run script</a></h3>
+ (<i>Linux</i>, oidentd version 2.0.6)
+ <pre>
+@@ -329,6 +383,14 @@
+ <a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
+ to be set up.
+ <hr>
++<h3><a name="keepalived">A <tt>keepalived</tt> run script</a></h3>
++(<i>Linux</i>)
++<pre>
++ #!/bin/sh
++ exec 2&gt;&amp;1
++ exec keepalived -n
++</pre>
++<hr>
+ <h3><a name="klogd">A <tt>klogd</tt> run script</a></h3>
+ (<i>Debian woody</i>)
+ <pre>
+@@ -383,6 +445,12 @@
+          --socket=/tmp/mysql.sock \
+          --pid-file=/pack/mysql/data/mysql.pid 2&gt;&amp;1
+ </pre>
++(<i>LFS</i>)
++<pre>
++ #!/bin/sh
++ exec 2&gt;&amp;1
++ exec /usr/sbin/mysqld -u mysql
++</pre>
+ (<i>Debian</i>, ``It's an ugly hack, but it works'')
+ <pre>
+  #!/bin/sh
+@@ -442,6 +510,14 @@
+ <a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
+ to be set up.
+ <hr>
++<h3><a name="portmap">A <tt>portmap</tt> run script</a></h3>
++(<i>LFS</i>)
++<pre>
++ #!/bin/sh
++ exec 2&gt;&amp;1
++ exec /sbin/portmap -d
++</pre>
++<hr>
+ <h3><a name="postgresql">A <tt>postgresql</tt> run script</a></h3>
+ (<i>SunOS</i>)
+ <pre>
+@@ -479,7 +555,7 @@
+ to be set up.
+ <hr>
+ <h3><a name="pure-ftpd">A <tt>pure-ftpd</tt> run script</a></h3>
+-(<i>Debian woody</i>, a.bono)
++(<i>Debian woody</i>)
+ <pre>
+  #!/bin/sh
+  exec 2&gt;&amp;1
+@@ -636,6 +712,13 @@
+  exec /usr/local/sbin/stunnel -f -d 1234 -r 25 -v3 -a /etc/ssl/mailcerts 2&gt;&amp;1
+ </pre>
+ <hr>
++<h3><a name="swat">A <tt>swat</tt> run script</a></h3>
++<pre>
++ #!/bin/sh
++ exec 2&gt;&amp;1
++ exec tcpsvd -l0 127.0.0.1 901 /usr/sbin/swat
++</pre>
++<hr>
+ <h3><a name="taiclockd">A <tt>taiclockd</tt> run script</a></h3>
+ <pre>
+  #!/bin/sh
+@@ -699,6 +782,6 @@
+ <address><a href="mailto:pape-runscripts@smarden.org">
+ Gerrit Pape &lt;pape@smarden.org&gt;
+ </a></address>
+-<small>$Id$</small>
++<small>$Id$</small>
+ </body>
+ </html>
