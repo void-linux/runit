@@ -10,7 +10,7 @@ Architecture: any
 Depends: ${shlibs:Depends}
 Description: minimal replacement for sysvinit using daemontools
  runit cooperates with djb's daemontools package to create a replacement for
- sysvinit. runit currently runs on Debian GNU/Linux but may be easily adopted
+ sysvinit. runit currently runs on Debian GNU/Linux but may be easily adapted
  to other unix operating systems using glibc. If runit runs for you on any
  other operating system or linux distribution, please let me know.
  .
