@@ -8,12 +8,13 @@ Standards-Version: 3.5.2
 Package: runit
 Architecture: any
 Suggests: daemontools
-Description: minimal replacement for sysvinit using daemontools
- runit is a daemontools package alike replacement for sysvinit. runit
- currently runs on Debian GNU/Linux, FreeBSD, OpenBSD, and may be easily
- adapted to other unix operating systems. If runit runs for you on any
- other operating system or linux distribution, please let me know.
+Description: UNIX init scheme with service supervision
+ runit is a daemontools package alike replacement for sysvinit and other
+ init schemes. runit currently runs on Debian GNU/Linux, FreeBSD, OpenBSD,
+ and may be easily adapted to other unix operating systems. If runit runs
+ for you on any other operating system or linux distribution, please let
+ me know.
  .
- Warning: Replacing sysvinit can cause the system's boot to fail. Make sure
- you are able to recover and repair your system, for example if you run a
- bootloader, it should be able to pass init=/bin/sh to the kernel.
+ Warning: Replacing sysvinit can cause the system's boot to fail. Make
+ sure you are able to recover and repair your system, for example if you
+ run a bootloader, it should be able to pass init=/bin/sh to the kernel.
