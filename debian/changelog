@@ -1,8 +1,22 @@
-runit (0.11.1-0) unstable; urgency=low
+runit (0.11.1-1) unstable; urgency=low
 
   * new upstream version.
+  * debian/diff/readlink.diff: new; create link target if ./supervise is
+    a dangling symbolic link.
+  * debian/rules: apply patches in debian/diff/; install stage 2 as
+    /usr/sbin/runsvdir-start for the use with /etc/inittab; enable dh_link.
+  * debian/runit.dirs: add /var/service, /var/run/getty-5.
+  * debian/README.Debian: adapt; package now automatically enables service
+    supervision when used with sysvinit.
+  * debian/diff/doc-useinit.diff: new; document runsvdir-start usage.
+  * debian/runit.links: new; create symlink for getty-5 service supervise
+    directory to /var/run/.
+  * debian/runit.postinst: new; add SV entry to /etc/inittab if not present
+    on install and upgrade; barf on fresh install if SV entry is present.
+  * debian/runit.postrm: new; remove SV inittab entry on de-install; force
+    remove /var/run/getty-5/ on purge.
 
- -- Gerrit Pape <pape@smarden.org>  Mon,  1 Sep 2003 13:04:20 +0200
+ -- Gerrit Pape <pape@smarden.org>  Mon, 22 Sep 2003 09:36:59 +0000
 
 runit (0.11.0-1) unstable; urgency=low
 
