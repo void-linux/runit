@@ -3,8 +3,10 @@ runit (0.7.1-5) unstable; urgency=low
   * debian/3: stop getties after all other services.
   * debian/control: Architecture: any, build dependency sorts out;
     build-depends on dietlibc >> 0.22-0 (available on ia64).
+  * debian/rules: use dh_installdocs -n.
+  * debian/runit.preinst: remove #DEBHELPER#.
 
- -- Gerrit Pape <pape@smarden.org>  Thu,  5 Dec 2002 21:41:03 +0100
+ -- Gerrit Pape <pape@smarden.org>  Thu,  5 Dec 2002 22:17:18 +0100
 
 runit (0.7.1-4) unstable; urgency=low
 

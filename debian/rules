@@ -121,7 +121,7 @@ binary-arch: build install
 	dh_testdir -a
 	dh_testroot -a
 #	dh_installdebconf -a
-	dh_installdocs -a
+	dh_installdocs -an
 #	dh_installexamples -a
 	dh_installman -a admin/runit/man/*.8
 #	dh_undocumented -a
