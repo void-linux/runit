@@ -13,9 +13,6 @@ echo 'Stopping services...'
 /command/svwaitdown -t350 /service/* || \
   ( echo 'Killing services...' ; /command/svc -k /service/* )
 
-echo 'Restarting getties...'
-/command/svc -u /service/getty-*
-
 echo 'Stopping log services...'
 /command/svc -d /service/*/log
 /command/svwaitdown -t35 /service/*/log

@@ -2,7 +2,6 @@ runit 0.5.0
 Wed, 28 Aug 2002 11:18:28 +0200
   * utmpset: avoids libutil; compiles with deitlibc; built by default.
   * doc/usedietlibc.html: fix description.
-  * stage 3: restart getties after stopping services.
   * getty-*/run: add utmpset.
 
 runit 0.4.1
