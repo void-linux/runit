@@ -5,7 +5,7 @@
 
 #define USAGE " u|d|o|p|c|h|a|i|1|2|t|k|x|e service ..."
 
-#define VERSION "$Id: runsvctrl.c,v 1.3 2002/10/06 09:53:57 pape Exp $"
+#define VERSION "$Id: runsvctrl.c,v 1.4 2002/10/18 11:27:08 pape Exp $"
 
 #define FATAL "runsvctrl: fatal: "
 #define WARNING "runsvctrl: warning: "
@@ -17,7 +17,7 @@ void usage() {
   strerr_die4x(1, "usage: ", progname, USAGE, "\n");
 }
 void fatal(char *m1) {
-  strerr_die3sys(rc, FATAL, m1, ": ");
+  strerr_die3sys(111, FATAL, m1, ": ");
 }
 void warn(char *m1, char *m2) {
   rc++;

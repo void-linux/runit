@@ -17,7 +17,7 @@
 #include "ndelay.h"
 
 #define USAGE " dir"
-#define VERSION "$Id: runsvdir.c,v 1.8 2002/10/06 09:53:57 pape Exp $"
+#define VERSION "$Id: runsvdir.c,v 1.10 2002/10/22 10:31:22 pape Exp $"
 
 #define MAXSERVICES 1000
 
@@ -95,7 +95,8 @@ void runsvdir() {
     if (d->d_name[0] == '.') continue;
     if (stat(d->d_name, &s) == -1) {
       warn("unable to stat ", d->d_name);
-      return;
+      errno =0;
+      continue;
     }
     if (! S_ISDIR(s.st_mode))
       continue;
