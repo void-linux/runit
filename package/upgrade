@@ -1,4 +1,5 @@
-#!/bin/sh -e
+#!/bin/sh
+set -e
 
 umask 022
 test -d package || sh -cx '! : Wrong working directory.'
@@ -7,9 +8,9 @@ test -d src || sh -cx '! : Wrong working directory.'
 here=`env - PATH=$PATH pwd`
 parent=`dirname $here`
 
-echo 'Creating symlink runit -> runit-1.0.4...'
+echo 'Creating symlink runit -> runit-1.0.5...'
 rm -f runit
-ln -s runit-1.0.4 runit
+ln -s runit-1.0.5 runit
 mv -f runit ..
 
 echo 'Making command links in /command...'

@@ -1,7 +1,7 @@
 usage: svlogd [-tv] [-r c] [-R abc] [-l n ] [-b n] dir ...
 
 111
-$Id: svlogd.c,v 1.12 2004/03/28 18:17:36 pape Exp $
+$Id: svlogd.c,v 1.13 2004/09/20 19:53:10 pape Exp $
 usage: svlogd [-tv] [-r c] [-R abc] [-l n ] [-b n] dir ...
 
 111

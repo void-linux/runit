@@ -1,4 +1,5 @@
-#!/bin/sh -e
+#!/bin/sh
+set -e
 
 umask 022
 test -d package || sh -cx '! : Wrong working directory.'

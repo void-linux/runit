@@ -6,8 +6,8 @@ svlogd \- runit's service logging daemon
 [\-ttv] [\-r
 .I c\fR] [\-R
 .I xyz\fR] [\-l
-.I n\fR] [\-b
-.I n\fR]
+.I len\fR] [\-b
+.I buflen\fR]
 .I logs
 .SH DESCRIPTION
 .I logs
@@ -21,7 +21,8 @@ messages, and writes the data to one or more automatically rotated
 Recent log files can automatically be processed by an arbitrary processor
 program when they are rotated, and
 .B svlogd
-can be told to alert selected log messages to standard error.
+can be told to alert selected log messages to standard error, and through
+udp.
 .P
 .B svlogd
 runs until it sees end-of-file on standard input or is sent a TERM signal,
@@ -68,7 +69,7 @@ If
 .I current
 has
 .I size
-bytes or more size (or there is a new-line within the last
+bytes or more (or there is a new-line within the last
 .I len
 of
 .I size
@@ -93,7 +94,7 @@ sees
 .I num
 or more old log files in
 .IR dir ,
-it removes the oldest.
+it removes the oldest one.
 .SS PROCESSOR
 If
 .B svlogd
@@ -122,8 +123,8 @@ is started again.
 .B svlogd
 also saves any output that the
 .I processor
-writes to file descriptor 5, and make that output available on file
-descriptor 4 when it runs
+writes to file descriptor 5, and makes that output available on file
+descriptor 4 when running
 .I processor
 on the next log file rotation.
 .P

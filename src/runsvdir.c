@@ -16,8 +16,8 @@
 #include "sig.h"
 #include "ndelay.h"
 
-#define USAGE " dir"
-#define VERSION "$Id: runsvdir.c,v 1.15 2004/08/02 14:03:08 pape Exp $"
+#define USAGE " [-P] dir"
+#define VERSION "$Id: runsvdir.c,v 1.16 2004/09/21 18:08:38 pape Exp $"
 
 #define MAXSERVICES 1000
 
@@ -39,6 +39,7 @@ int logpipe[2];
 iopause_fd io[1];
 struct taia stamplog;
 int exitsoon =0;
+int pgrp =0;
 
 void usage () { strerr_die4x(1, "usage: ", progname, USAGE, "\n"); }
 void fatal(char *m1, char *m2) {
@@ -72,6 +73,7 @@ void runsv(int no, char *name) {
 	warn("unable to set filedescriptor for log service", 0);
     sig_uncatch(sig_hangup);
     sig_uncatch(sig_term);
+    if (pgrp) setsid();
     pathexec_run(*prog, prog, (const char* const*)environ);
     fatal("unable to start runsv ", name);
   }
@@ -174,6 +176,13 @@ int main(int argc, char **argv) {
 
   progname =*argv++;
   if (! argv || ! *argv) usage();
+  if (**argv == '-') {
+    switch (*(*argv +1)) {
+    case 'P': pgrp =1;
+    case '-': ++argv;
+    }
+    if (! argv || ! *argv) usage();
+  }
 
   sig_catch(sig_term, s_term);
   sig_catch(sig_hangup, s_hangup);
