@@ -10,44 +10,231 @@
 <hr>
 <h1>runit - collection of run scripts</h1>
 <hr>
-<a href="#getty">getty</a><br>
-<a href="#sshd">sshd</a><br>
-<a href="#klogd">klogd</a><br>
-<a href="#expireproctitle">expireproctitle</a><br>
-<a href="#dhcpd">dhcpd</a><br>
-<a href="#dhclient">dhclient</a><br>
-<a href="#gdm">gdm</a><br>
-<a href="#statd">statd</a>, <a href="#mountd">mountd</a><br>
-<a href="#squid">squid</a><br>
-<a href="#cups">cups</a><br>
-<a href="#pure-ftpd">pure-ftpd</a>
-<hr>
 This is a collection of <tt>run</tt> scripts for popular services to have
 them monitored by the
-<a href="http://cr.yp.to/daemontools.html">daemontools</a> package. If you
-have additional run scripts or one of these run scripts works for you on
+<a href="http://cr.yp.to/daemontools.html">daemontools</a> package.
+If you have additional run scripts or one of these run scripts works for you on
 an operating system not stated here, please
 <a href="mailto:pape-runscripts@smarden.org">let me know</a>. 
 <p>
 Thanks go to the following people for contributing run scripts:
-Alessandro Bono (a.bono).
+Alessandro Bono, Robin S. Socha, Claus Alboege, Paul Jarc, clemens fischer
+<hr>
+<a href="#apache">apache</a><br>
+<a href="#apache2">apache2</a><br>
+<a href="#boa">boa</a><br>
+<a href="#cfengine">cfengine</a><br>
+<a href="#cups">cups</a><br>
+<a href="#dhclient">dhclient</a><br>
+<a href="#dhcpd">dhcpd</a><br>
+<a href="#expireproctitle">expireproctitle</a><br>
+<a href="#gdm">gdm</a><br>
+<a href="#getty">getty</a><br>
+<a href="#klogd">klogd</a><br>
+<a href="#loglinuxkernel">logging Linux kernel messages</a><br>
+<a href="http://multivac.cwru.edu./fdtools/grabconsole/">
+logging console messages</a><br>
+<a href="#mysql">mysql</a><br>
+<a href="#pop3-ssl">pop3-ssl</a><br>
+<a href="#postgresql">postgresql</a><br>
+<a href="#ppp">ppp</a><br>
+<a href="#pure-ftpd">pure-ftpd</a><br>
+<a href="#rsyncd">rsyncd</a><br>
+<a href="#squid">squid</a><br>
+<a href="#sshd">sshd</a><br>
+<a href="#sshdtcpserver">sshd under tcpserver</a><br>
+<a href="#statd">statd</a>, <a href="#mountd">mountd</a><br>
+<a href="#stunnel">stunnel</a><br>
+<a href="#taiclockd">taiclockd</a><br>
+<a href="#tomcat">tomcat</a><br>
+<hr>
+
+<h3><a name="apache">An <tt>apache</tt> run script</a></h3>
+(<i>SunOS</i>, Apache 1.*, patched to run under supervise)
+<pre>
+ #!/bin/sh
+ exec 2>&1
+ exec env -i \
+ /pack/apache/1.3.27-1/sbin/httpd -F 2>&1
+</pre>
+(<i>Debian woody</i>)
+<pre>
+ #!/bin/sh
+ exec 1>&2
+ exec apache-ssl -F
+</pre>
+<hr>
+<h3><a name="apache2">An <tt>apache2</tt> run script</a></h3>
+(<i>SunOS</i>)
+<pre>
+ #!/bin/sh
+ exec 2>&1
+ exec env -i /command/pgrphack \
+ /pack/apache/2.0.43-1/sbin/httpd -DFOREGROUND 2>&1
+</pre>
+<hr>
+<h3><a name="boa">A <tt>boa</tt> run script</a></h3>
+(<i>SunOS</i>)
+<pre>
+ #!/bin/sh
+ exec 2>&1
+ ulimit -n 1024
+ exec /pack/boa/current/boa -c /pack/boa/current -d 2>&1
+</pre>
+<hr>
+<h3><a name="cfengine">A <tt>cfengine</tt> run script</a></h3>
+(<i>SunOS</i>)
+<pre>
+ #!/bin/sh
+ /pack/cfengine/sbin/cfagent --file /pack/cfengine/etc/cfagent.conf \
+   -L -v -q exec sleep 3600
+</pre>
+<hr>
+<h3><a name="cups">A <tt>cups</tt> run script</a></h3>
+(<i>Debian woody</i>, a.bono)
+<pre>
+ #!/bin/sh
+ exec 2>&1
+ exec /usr/sbin/cupsd -f
+</pre>
+<hr>
+<h3><a name="dhclient">A <tt>dhclient</tt> run script</a></h3>
+(<i>Debian woody</i>)
+<pre>
+ #!/bin/sh
+ exec dhclient -e -d -cf ./config -lf ./leases -pf ./pid eth1
+</pre>
+<hr>
+<h3><a name="dhcpd">A <tt>dhcpd</tt> run script</a></h3>
+(<i>Debian woody</i>)
+<pre>
+ #!/bin/sh
+ exec 2>&1
+ exec dhcpd-2.2.x -f -d -cf ./config eth0
+</pre>
+This service needs a
+<a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
+to be set up.
+<hr>
+<h3><a name="expireproctitle">
+<tt>expireproctitle</tt> run script examples</a></h3>
+(<i>Linux</i>)
+<pre>
+ #!/bin/sh
+ echo -n .
+ exec sleep 300
+</pre>
+<hr>
+<h3><a name="gdm">A <tt>gdm</tt> run script</a></h3>
+<i>(Debian woody)</i>
+<pre>
+ #!/bin/sh
+ exec gdm -nodaemon
+</pre>
 <hr>
 <h3><a name="getty">A <tt>mingetty</tt> run script</a></h3>
 (<i>Debian</i>)
 <pre>
-  #!/bin/sh
-  exec mingetty tty5
+ #!/bin/sh
+ exec mingetty tty5
 </pre>
 The <a href="index.html">runit</a> package does not care about utmp records
 for getties. You should choose a getty that handles its own utmp and wtmp
 records. Debian's <tt>mingetty</tt> does create his own utmp record.
 <hr>
+<h3><a name="klogd">A <tt>klogd</tt> run script</a></h3>
+(<i>Debian woody</i>)
+<pre>
+ #!/bin/sh
+ exec /sbin/klogd -n
+</pre>
+<hr>
+<h3><a name="loglinuxkernel">
+A run script for <tt>logging Linux kernel messages with multilog</tt></a></h3>
+(<i>Linux</i>)
+<pre>
+ #!/bin/sh -e
+ exec < /proc/kmsg \
+ setuidgid loguser \
+ multilog t n64 ./main
+</pre>
+<hr>
+<h3><a name="mysql">A <tt>mysql</tt> run script</a></h3>
+(<i>SunOS</i>)
+<pre>
+ #!/bin/sh
+ exec setuidgid mysql /pack/mysql/current/libexec/mysqld \
+         --basedir=/pack/mysql/current \
+         --datadir=/pack/mysql/data/ \
+         --socket=/tmp/mysql.sock \
+         --pid-file=/pack/mysql/data/mysql.pid 2>&1
+</pre>
+<hr>
+<h3><a name="pop3-ssl">A <tt>pop3-ssl</tt> run script</a></h3>
+(<i>BSD</i>)
+<pre>
+ #!/bin/sh
+ exec /usr/local/bin/tcpserver -R -v -c 50 0 995 /usr/local/sbin/stunnel
+ -f  -p /etc/ssl/stunnel.pem \
+ -l /var/qmail/bin/qmail-popup -- /var/qmail/bin/qmail-popup
+ "`cat /var/qmail/control/me`" vchkpw /var/qmail/bin/qmail-pop3d Maildir 2>&1
+</pre>
+This service needs a
+<a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
+to be set up.
+<hr>
+<h3><a name="postgresql">A <tt>postgresql</tt> run script</a></h3>
+(<i>SunOS</i>)
+<pre>
+ #!/bin/sh
+ exec setuidgid postgres /pack/postgresql/current/bin/postmaster \
+   -D /pack/postgresql/data 2>&1
+</pre>
+<hr>
+<h3><a name="ppp">A <tt>ppp</tt> run script</a></h3>
+(<i>FreeBSD</i>)
+<pre>
+ #!/bin/sh
+ exec 2>&1
+ echo "ppp -ddial dsl "
+ exec /usr/sbin/ppp -unit0 -foreground dsl
+</pre>
+<hr>
+<h3><a name="pure-ftpd">A <tt>pure-ftpd</tt> run script</a></h3>
+(<i>Debian woody</i>, a.bono)
+<pre>
+ #!/bin/sh
+ exec 2>&1
+ exec /usr/sbin/pure-ftpd -a 50 -E -l pam -u 100
+</pre>
+<hr>
+<h3><a name="rsyncd">A <tt>rsyncd</tt> run script</a></h3>
+(<i>SunOS</i>)
+<pre>
+ #!/bin/sh
+ exec 2>&1
+ exec softlimit -d 100000000 /usr/local/bin/tcpserver \
+   -x /pack/rsync/rsync.service/tcp.rsync.cdb -v -c 100 -U -H -l 0 -R \
+   1.2.3.4 873 nice -2 /pack/rsync/bin/rsync --daemon --no-detach \
+   --config /pack/rsync/etc/rsyncd.conf
+</pre>
+This service needs a
+<a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
+to be set up.
+<hr>
+<h3><a name="squid">A <tt>squid</tt> run script</a></h3>
+(<i>Debian woody</i>)
+<pre>
+ #!/bin/sh
+ exec squid -f ./config -sN
+</pre>
+<hr>
 <h3><a name="sshd">A <tt>sshd</tt> run script</a></h3>
 (<i>Debian woody</i>)
 <pre>
-  #!/bin/sh
-  exec 2>&1
-  exec sshd -D -e
+ #!/bin/sh
+ exec 2>&1
+ exec sshd -D -e
 </pre>
 This service needs a
 <a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
@@ -55,60 +242,35 @@ to be set up.
 <p>
 The <tt>sshd</tt> program is version <tt>OpenSSH_2.9p2</tt>.
 <hr>
-<h3><a name="klogd">A <tt>klogd</tt> run script</a></h3>
-(<i>Debian woody</i>)
+<h3><a name="sshdtcpserver">
+A <tt>sshd (under tcpserver)</tt> run script</a></h3>
+(<i>Linux</i>)
 <pre>
-  #!/bin/sh
-  exec /sbin/klogd -n
-</pre>
-<hr>
-<h3><a name="expireproctitle">An <tt>expireproctitle</tt> run script</a></h3>
-<pre>
-  #!/bin/sh
-  echo -n .
-  exec sleep 300
-</pre>
-<hr>
-<h3><a name="dhcpd">A <tt>dhcpd</tt> run script</a></h3>
-(<i>Debian woody</i>)
-<pre>
-  #!/bin/sh
-  exec 2>&1
-  exec dhcpd-2.2.x -f -d -cf ./config eth0
+ #!/bin/sh -e
+ exec 2>&1
+ exec \
+ tcpserver -1vpdl0 -Xxtcp.cdb 0 ssh \
+ sshd -ief config
 </pre>
 This service needs a
 <a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
 to be set up.
 <hr>
-<h3><a name="dhclient">A <tt>dhclient</tt> run script</a></h3>
-(<i>Debian woody</i>)
-<pre>
-  #!/bin/sh
-  exec dhclient -e -d -cf ./config -lf ./leases -pf ./pid eth1
-</pre>
-<hr>
-<h3><a name="gdm">A <tt>gdm</tt> run script</a></h3>
-<i>(Debian woody)</i>
-<pre>
-  #!/bin/sh
-  exec gdm -nodaemon
-</pre>
-<hr>
 <h3><a name="statd">A <tt>statd</tt> run script</a></h3>
 (<i>Debian woody</i>)
 <pre>
-  #!/bin/sh
-  exec 2>&1
-  NEED_LOCKD=yes
-  if test -f /proc/ksyms; then
-    # We need to be conservative and run lockd,
-    # unless we can prove that it isn't required.
-    grep -q lockdctl /proc/ksyms || NEED_LOCKD=no
-  fi
-  if [ "$NEED_LOCKD" = yes ]; then
-    /sbin/rpc.lockd
-  fi
-  exec rpc.statd -F -d
+ #!/bin/sh
+ exec 2>&1
+ NEED_LOCKD=yes
+ if test -f /proc/ksyms; then
+   # We need to be conservative and run lockd,
+   # unless we can prove that it isn't required.
+   grep -q lockdctl /proc/ksyms || NEED_LOCKD=no
+ fi
+ if [ "$NEED_LOCKD" = yes ]; then
+   /sbin/rpc.lockd
+ fi
+ exec rpc.statd -F -d
 </pre>
 This service needs a
 <a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
@@ -116,41 +278,40 @@ to be set up.
 <h3><a name="mountd">A <tt>mountd</tt> run script</a></h3>
 (<i>Debian woody</i>)
 <pre>
-  #!/bin/sh
-  svwaitup /service/statd
-  RPCNFSDCOUNT=8  # Number of servers to be started up by default
-  RPCMOUNTDOPTS=-F
-  exportfs -r
-  rpc.nfsd -- $RPCNFSDCOUNT
-  rpcinfo -u localhost nfs 3 >/dev/null 2>&1 ||
-    RPCMOUNTDOPTS="$RPCMOUNTDOPTS --no-nfs-version 3"
-  exec rpc.mountd $RPCMOUNTDOPTS
+ #!/bin/sh
+ svwaitup /service/statd
+ RPCNFSDCOUNT=8  # Number of servers to be started up by default
+ RPCMOUNTDOPTS=-F
+ exportfs -r
+ rpc.nfsd -- $RPCNFSDCOUNT
+ rpcinfo -u localhost nfs 3 >/dev/null 2>&1 ||
+   RPCMOUNTDOPTS="$RPCMOUNTDOPTS --no-nfs-version 3"
+ exec rpc.mountd $RPCMOUNTDOPTS
 </pre>
 <hr>
-<h3><a name="squid">A <tt>squid</tt> run script</a></h3>
-(<i>Debian woody</i>)
+<h3><a name="stunnel">A <tt>stunnel</tt> run script</a></h3>
+(<i>BSD</i>)
 <pre>
-  #!/bin/sh
-  exec squid -f ./config -sN
+ #!/bin/sh
+ exec /usr/local/sbin/stunnel -f -d 1234 -r 25 -v3 -a /etc/ssl/mailcerts 2>&1
 </pre>
 <hr>
-<h3><a name="cups">A <tt>cups</tt> run script</a></h3>
-(<i>Debian woody</i>, a.bono)
+<h3><a name="taiclockd">A <tt>taiclockd</tt> run script</a></h3>
 <pre>
-  #!/bin/sh
-  exec 2>&1
-  exec /usr/sbin/cupsd -f
+ #!/bin/sh
+ exec 2>&1
+ exec setuidgid taiclock /usr/local/clockspeed/bin/taiclockd
 </pre>
 <hr>
-<h3><a name="pure-ftpd">A <tt>pure-ftpd</tt> run script</a></h3>
-(<i>Debian woody</i>, a.bono)
+<h3><a name="tomcat">A <tt>tomcat</tt> run script</a></h3>
+(<i>SunOS</i>)
 <pre>
-  #!/bin/sh
-  exec 2>&1
-  exec /usr/sbin/pure-ftpd -a 50 -E -l pam -u 100
+ #!/bin/sh
+ exec 2>&1
+ exec \
+ setuidgid apache \
+ /pack/tomcat/current/bin/catalina.sh run
 </pre>
-<hr>
-
 <hr>
 <address><a href="mailto:pape@smarden.org">
 Gerrit Pape &lt;pape@smarden.org&gt;
