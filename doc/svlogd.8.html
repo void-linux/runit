@@ -11,7 +11,7 @@
 <h2><a name='sect0'>Name</a></h2>
 svlogd - runit&rsquo;s service logging daemon 
 <h2><a name='sect1'>Synopsis</a></h2>
-<b>svlogd</b> [-tv] [-r <i>c]</i> [-R
+<b>svlogd</b> [-ttv] [-r <i>c]</i> [-R
 <i>xyz]</i> [-l <i>n]</i> [-b <i>n]</i> <i>logs</i> 
 <h2><a name='sect2'>Description</a></h2>
 <i>logs</i> consists of one or more arguments,
@@ -87,10 +87,25 @@ in <i>log</i> after log file rotation, it deletes the oldest one. Default is 10.
 <dd>tells <b>svlogd</b> to feed each recent log file through <i>processor</i>
 (see above) on log file rotation. By default log files are not processed.
 </dd>
+
+<dt>u<i>a.b.c.d[:port]</i> </dt>
+<dd>tells <b>svlogd</b> to transmit the first <i>len</i> characters of selected
+log messages to the IP address <i>a.b.c.d</i>, port number <i>port</i>. If <i>port</i> isn&rsquo;t set,
+the default port for syslog is used (514). <i>len</i> can be set through the -l
+option, see below. If <b>svlogd</b> has trouble sending udp packets, it writes
+error messages to the log directory. Attention: logging through udp is unreliable,
+and should be used in private networks only. </dd>
+
+<dt>U<i>a.b.c.d[:port]</i> </dt>
+<dd>is the same as
+the <i>u</i> line above, but the log messages are no longer written to the log
+directory, but transmitted through udp only. Error messages from <b>svlogd</b>
+concerning sending udp packages still go to the log directory. </dd>
 </dl>
 <p>
-If a line starts with a <i>-</i>, <i>+</i>, <i>e</i>, or <i>E</i>, <b>svlogd</b> matches the first <i>len</i> characters
-of each log message against <i>pattern</i> and acts accordingly: 
+If a line
+starts with a <i>-</i>, <i>+</i>, <i>e</i>, or <i>E</i>, <b>svlogd</b> matches the first <i>len</i> characters of
+each log message against <i>pattern</i> and acts accordingly: 
 <dl>
 
 <dt>-<i>pattern</i> </dt>
@@ -130,33 +145,38 @@ matches any string.
 precise timestamp (see <i><b>tai64n</b>(8)</i>) when writing to <i>log</i> or to standard error.
 </dd>
 
+<dt><b>-tt</b> </dt>
+<dd>timestamp. Prefix each selected line with a human readable, sortable
+timestamp of the form YYYY-MM-DD_HH:MM:SS.xxxxx when writing to <i>log</i> or to
+standard error. </dd>
+
 <dt><b>-r <i>c</b> </i></dt>
-<dd>replace. <i>c</i> must be a single character. Replace non-printable characters
-in log messages with <i>c</i>. Characters are replaced before pattern matching
-is applied. </dd>
+<dd>replace. <i>c</i> must be a single character. Replace non-printable
+characters in log messages with <i>c</i>. Characters are replaced before pattern
+matching is applied. </dd>
 
 <dt><b>-R <i>xyz</b> </i></dt>
-<dd>replace charset. Additionally to non-printable characters,
-replace all characters found in <i>xyz</i> with <i>c</i> (default &lsquo;&lsquo;_&rsquo;&rsquo;). </dd>
+<dd>replace charset. Additionally to non-printable
+characters, replace all characters found in <i>xyz</i> with <i>c</i> (default &lsquo;&lsquo;_&rsquo;&rsquo;). </dd>
 
-<dt><b>-l <i>len</b> </i></dt>
-<dd>line length.
-Pattern matching applies to the first <i>len</i> characters of a log message only.
-Default is 1000. </dd>
+<dt><b>-l <i>len</b>
+</i></dt>
+<dd>line length. Pattern matching applies to the first <i>len</i> characters of a log
+message only. Default is 1000. </dd>
 
 <dt><b>-b <i>buflen</b> </i></dt>
-<dd>buffer size. Set the size of the buffer <b>svlogd</b>
-uses when reading from standard input and writing to <i>logs</i> to <i>buflen</i>. Default
-is 1024. <i>buflen</i> must be greater than <i>len</i>. </dd>
+<dd>buffer size. Set the size of the buffer
+<b>svlogd</b> uses when reading from standard input and writing to <i>logs</i> to <i>buflen</i>.
+Default is 1024. <i>buflen</i> must be greater than <i>len</i>. </dd>
 
 <dt><b>-v</b> </dt>
-<dd>verbose. Print verbose messages
-to standard error. </dd>
+<dd>verbose. Print verbose
+messages to standard error. </dd>
 </dl>
 
 <h2><a name='sect9'>Signals</a></h2>
-If <b>svlogd</b> is sent a HUP signal, it closes and
-reopens all <i>logs</i>, and updates their configuration according to <i>log/config</i>.
+If <b>svlogd</b> is sent a HUP signal, it closes
+and reopens all <i>logs</i>, and updates their configuration according to <i>log/config</i>.
 If <b>svlogd</b> has trouble opening a log directory, it prints a warning, and
 discards this log directory. If <b>svlogd</b> is unable to open all log directories
 given at the command line, it exits with an error. <p>

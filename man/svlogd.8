@@ -3,7 +3,7 @@
 svlogd \- runit's service logging daemon
 .SH SYNOPSIS
 .B svlogd
-[\-tv] [\-r
+[\-ttv] [\-r
 .I c\fR] [\-R
 .I xyz\fR] [\-l
 .I n\fR] [\-b
@@ -289,6 +289,13 @@ timestamp.
 Prefix each selected line with a precise timestamp (see
 .BR tai64n (8))
 when writing to
+.I log
+or to standard error.
+.TP
+.B \-tt
+timestamp.
+Prefix each selected line with a human readable, sortable timestamp of the
+form YYYY-MM-DD_HH:MM:SS.xxxxx when writing to
 .I log
 or to standard error.
 .TP

@@ -1,9 +1,13 @@
 runit 0.13.0
-  * doc/runscripts.html: use html named entities (thx Taj Khattra); add more
-    contributed run scripts (thx Thomas Schwinge).
+Mon, 12 Jan 2004 14:39:38 +0000
+  * doc/runscripts.html: use html named entities (thx Taj Khattra); add
+    more contributed run scripts (thx Marek Bartnikowski, Thomas Schwinge).
   * svlogd.c: support sending log entries to remote host through udp,
     configurable through u and U lines in log dir config file; minor.
-  * man/svlogd.8: adapt.
+  * man/svlogd.8: adapt; document -tt option.
+  * package/compile, package/install-man, package/upgrade: exit 1 on
+    sub-shell failures.
+  * man/runsv.8: fix typos (thx Christian Hammers).
 
 runit 0.12.1
 Tue, 18 Nov 2003 15:42:44 +0000

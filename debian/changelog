@@ -1,3 +1,12 @@
+runit (0.13.1-1) unstable; urgency=low
+
+  * new upstream version: svlogd.8 documents -tt option (closes: #213011);
+    fixes typos in runsv.8 (closes: #223076).
+  * debian/control: Build-Depends: dietlibc, now also on s390.
+  * debian/rules: use dietlibc on s390.
+
+ -- Gerrit Pape <pape@smarden.org>  Mon, 12 Jan 2004 16:07:06 +0100
+
 runit (0.12.1-2) unstable; urgency=low
 
   * debian/control: no longer Build-Depends: debhelper; Standards-Version:
