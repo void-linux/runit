@@ -117,11 +117,13 @@ void runsvdir() {
       sv[i].isgone =0;
       svnum++;
       runsv(i, d->d_name);
+      check =1;
     }
   }
   if (errno) {
     warn("unable to read directory ", svdir);
     closedir(dir);
+    check =1;
     return;
   }
   closedir(dir);
@@ -220,17 +222,19 @@ int main(int argc, char **argv) {
 	if (check || \
 	    s.st_mtime > mtime || s.st_ino != ino || s.st_dev != dev) {
 	  /* svdir modified */
-	  mtime =s.st_mtime;
-	  dev =s.st_dev;
-	  ino =s.st_ino;
-	  check =0;
-	  if (chdir(svdir) == -1)
-	    warn("unable to change directory to ", svdir);
-	  else {
+	  if (chdir(svdir) != -1) {
+	    mtime =s.st_mtime;
+	    dev =s.st_dev;
+	    ino =s.st_ino;
+	    check =0;
 	    runsvdir();
-	    if (fchdir(curdir) == -1)
-	      warn("unable to change directory", 0);
+	    while (fchdir(curdir) == -1) {
+	      warn("unable to change directory, pausing", 0);
+	      sleep(5);
+	    }
 	  }
+	  else
+	    warn("unable to change directory to ", svdir);
 	}
       }
       else
@@ -243,7 +247,7 @@ int main(int argc, char **argv) {
 	taia_uint(&deadline, 900);
 	taia_add(&stamplog, &now, &deadline);
       }
-    taia_uint(&deadline, 5);
+    taia_uint(&deadline, check ? 1 : 5);
     taia_add(&deadline, &now, &deadline);
 
     sig_block(sig_child);
