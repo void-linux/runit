@@ -1,34 +1,15 @@
 #!/usr/bin/make -f
 
-DEB_HOST_ARCH ?=$(shell dpkg-architecture -qDEB_HOST_ARCH)
-
 CFLAGS =-O2 -Wall
-LDFLAGS =-s -Os -pipe
+LDFLAGS =-Os -pipe
 CC =diet -v -Os gcc
 STRIP =strip
 
-ifneq ($(DEB_HOST_ARCH),alpha)
-ifneq ($(DEB_HOST_ARCH),amd64)
-ifneq ($(DEB_HOST_ARCH),arm)
-ifneq ($(DEB_HOST_ARCH),hppa)
-ifneq ($(DEB_HOST_ARCH),i386)
-ifneq ($(DEB_HOST_ARCH),ia64)
-ifneq ($(DEB_HOST_ARCH),mips)
-ifneq ($(DEB_HOST_ARCH),mipsel)
-ifneq ($(DEB_HOST_ARCH),powerpc)
-ifneq ($(DEB_HOST_ARCH),s390)
-ifneq ($(DEB_HOST_ARCH),sparc)
+DIET_ARCHS =alpha amd64 arm hppa i386 ia64 mips mipsel powerpc s390 sparc
+ARCH ?=$(shell dpkg-architecture -qDEB_HOST_ARCH)
+ifneq (,$(findstring $(ARCH),$(DIET_ARCHS)))
   CC =gcc
-endif
-endif
-endif
-endif
-endif
-endif
-endif
-endif
-endif
-endif
+  CFLAGS =-Wall
 endif
 
 ifneq (,$(findstring debug,$(DEB_BUILD_OPTIONS)))
@@ -42,9 +23,8 @@ DIR =`pwd`/debian/runit
 
 unpack: deb-checkdir unpack-stamp
 unpack-stamp:
-	tar xzf runit-1.0.2.tar.gz
-	ln -s runit-1.0.2 admin/runit
-	(cd admin/runit && patch -p0) <debian/diff/chpst-chroot.diff
+	tar xzf runit-1.0.3.tar.gz
+	ln -s runit-1.0.3 admin/runit
 	echo "$(CC) $(CFLAGS)" >admin/runit/src/conf-cc
 	echo "$(CC) $(LDFLAGS)" >admin/runit/src/conf-ld
 	touch unpack-stamp
