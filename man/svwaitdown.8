@@ -14,14 +14,15 @@ svwaitdown \- waits for services controlled by supervise(8) to be down
 .I services
 .SH DESCRIPTION
 .I services
-consist of one or more arguments. Each
+consists of one or more arguments. Each
 .I service
 directory must start with a slash.
 .P
 .B svwaitdown
-checks each
+sends each
 .I service
-given at the command line for being down.
+given at the command line the ``down'' command if not yet done, and waits
+for it to become down.
 The
 .I services
 given at the command line must be controlled by
@@ -57,7 +58,10 @@ processes to send the
 a KILL signal.
 .TP
 .B \-x
-Exit. Wait for the corresponding
+Exit. Send each
+.I service
+the ``exit'' command additionally to the ``down'' command, and wait for the
+corresponding
 .BR runsv (8)
 processes to exit instead for the
 .I services
@@ -97,11 +101,14 @@ returns 111 if the timeout
 .I sec
 was reached.
 .SH SEE ALSO
-svwaitup(8),
+svwaitdown(8),
+runsv(8),
+runsvctrl(8),
+runsvstat(8),
+runsvdir(8),
+runsvchdir(8),
 runit(8),
 runit-init(8),
-runsvdir(8),
-runsv(8),
 supervise(8),
 svscan(8)
 .P

@@ -1,3 +1,14 @@
+runit 0.9.0
+Thu, 24 Apr 2003 13:11:50 +0200
+  * runsvdir.c: don't propagate sig_term to runsv processes when receiving
+    sig_term; send sig_term to all runsv processes and exit 111 when
+    receiving sig_hangup.
+  * svlogd.c: code cleanup.
+  * svwaitdown.c: send command "d" (and "x" if -x is set) to a service if
+    it's not in state 'want down'.
+  * svwaitup.c: minor code cleanup.
+  * man/runsvdir.8, man/svwaitdown.8: adapt.
+
 runit 0.8.4
 Sun, 20 Apr 2003 19:31:24 +0200
   * svlogd.c: new; runit's service logging daemon.

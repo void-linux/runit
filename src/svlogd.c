@@ -95,7 +95,7 @@ void pause2(char *m0, char *m1) {
   sleep(3);
 }
 
-int processorstart(struct logdir *ld) {
+unsigned int processorstart(struct logdir *ld) {
   int pid;
 
   if (! ld->processor.len) return(0);
@@ -126,8 +126,17 @@ int processorstart(struct logdir *ld) {
       fatal2("unable to open output for processor", ld->name);
     if (fd_move(1, fd) == -1)
       fatal2("unable to move filedescriptor for processor", ld->name);
-    if ((fd =open_read("state")) == -1)
-      fatal2("unable to open state for processor", ld->name);
+    if ((fd =open_read("state")) == -1) {
+      if (errno == error_noent) {
+	if ((fd =open_trunc("state")) == -1)
+	  fatal2("unable to create empty state for processor", ld->name);
+	close(fd);
+	if ((fd =open_read("state")) == -1)
+	  fatal2("unable to open state for processor", ld->name);
+      }
+      else
+	fatal2("unable to open state for processor", ld->name);
+    }
     if (fd_move(4, fd) == -1)
       fatal2("unable to move filedescriptor for processor", ld->name);
     if ((fd =open_trunc("newstate")) == -1)
@@ -145,7 +154,7 @@ int processorstart(struct logdir *ld) {
   ld->ppid =pid;
   return(1);  
 }
-int processorstop(struct logdir *ld) {
+unsigned int processorstop(struct logdir *ld) {
   char f[28];
 
   if (ld->ppid) {
@@ -181,7 +190,7 @@ int processorstop(struct logdir *ld) {
   return(1);
 }
 
-int rotate(struct logdir *ld) {
+unsigned int rotate(struct logdir *ld) {
   DIR *d;
   direntry *f;
   int n =0;
@@ -243,13 +252,10 @@ int rotate(struct logdir *ld) {
   if (ld->nmax && (n >= ld->nmax)) {
     if (verbose)
       strerr_warn5(INFO, "delete: ", ld->name, "/", oldest, 0);
-    if (*oldest && (unlink(oldest) == -1))
+    if ((*oldest == '@') && (unlink(oldest) == -1))
       warn2("unable to unlink oldest logfile", ld->name);
   }
 
-  /*
-    start processor
-  */
   if (ld->processor.len) {
     processorstart(ld);
   }
@@ -276,7 +282,7 @@ void logdir_close(struct logdir *ld) {
   ld->fdlock =-1;
 }
 
-int logdir_open(struct logdir *ld, const char *fn) {
+unsigned int logdir_open(struct logdir *ld, const char *fn) {
   if ((ld->fddir =open_read(fn)) == -1) {
     warn2("unable to open log directory", (char*)fn);
     return(0);
@@ -330,10 +336,13 @@ int logdir_open(struct logdir *ld, const char *fn) {
 	break;
       case 's':
 	scan_ulong(&sa.s[i +1], &ld->sizemax);
-	if (ld->sizemax < 2048) ld->sizemax =2048;
+	/*
+	  if (ld->sizemax && (ld->sizemax < linelen)) ld->sizemax =2 *linelen;
+	*/
 	break;
       case 'n':
 	scan_ulong(&sa.s[i +1], &ld->nmax);
+	if (ld->nmax == 1) ld->nmax =2;
 	break;
       case '!':
 	while (! stralloc_copys(&ld->processor, &sa.s[i +1]))
@@ -373,8 +382,6 @@ int logdir_open(struct logdir *ld, const char *fn) {
   coe(ld->fdcur);
   while (fchmod(ld->fdcur, 0644) == -1)
     pause2("unable to set mode of current", ld->name);
-  if (! ld->btmp) 
-    while (! (ld->btmp =(char*)alloc(buflen *sizeof(char)))) pause_nomem();
   buffer_init(&ld->b, buffer_unixwrite, ld->fdcur, ld->btmp, sizeof ld->btmp);
   
   if (verbose) {
@@ -396,7 +403,7 @@ void logdirs_reopen(void) {
   }
 }
 
-int linestart(struct logdir *ld, char *s, int len) {
+unsigned int linestart(struct logdir *ld, char *s, int len) {
   /* check inst, set match */
   ld->match ='+';
   if (ld->inst.len) {
@@ -436,14 +443,14 @@ int linestart(struct logdir *ld, char *s, int len) {
   ld->size +=len;
   return(1);
 }
-int lineadd(struct logdir *ld, char *s, int len) {
+unsigned int lineadd(struct logdir *ld, char *s, int len) {
   if (ld->match != '+') return(0);
   buffer_put(&ld->b, s, len);
   ld->size +=len;
   if (ld->sizemax && (ld->size >= ld->sizemax)) rotate(ld);
   return(1);
 }
-int lineflush(struct logdir *ld, char *s, int len) {
+unsigned int lineflush(struct logdir *ld, char *s, int len) {
   switch(ld->match) {
   case '-':
     return(0);
@@ -459,15 +466,19 @@ int lineflush(struct logdir *ld, char *s, int len) {
     buffer_putflush(&ld->b, "\n", 1);
     ld->size +=1;
     ld->match =0;
-    if (ld->sizemax && (ld->size >= (ld->sizemax -linelen))) rotate(ld);
+    if (ld->sizemax)
+      if ((linelen > ld->sizemax) || (ld->size >= (ld->sizemax -linelen)))
+	rotate(ld);
     return(1);
   }
   return(0);
 }
 int buffer_pread(int fd, char *s, unsigned int len) {
-  len =read(fd, s, len);
-  if ((len == -1) && (errno == error_intr)) return(0);
-  return(len);
+  int rc;
+
+  rc =read(fd, s, len);
+  if ((rc == -1) && (errno == error_intr)) return(0);
+  return(rc);
 }
 void sig_term_handler(void) {
   exitasap =1;
@@ -545,7 +556,9 @@ int main(int argc, const char **argv) {
   if (! dir) die_nomem();
   for (i =0; i < dirn; ++i) {
     dir[i].fddir =-1;
-    dir[i].btmp =0; /* grm */
+    dir[i].btmp =(char*)alloc(buflen *sizeof(char));
+    if (! dir[i].btmp) die_nomem();
+    dir[i].ppid =0;
   }
   databuf =(char*)alloc(buflen *sizeof(char));
   if (! databuf) die_nomem();
@@ -569,12 +582,7 @@ int main(int argc, const char **argv) {
     int r, len;
     char *ch;
 
-    if (exitasap) {
-      /* check for processors */
-      for (i =0; i < dirn; ++i)
-	if (dir[i].ppid) while (! processorstop(&dir[i]));
-      break;
-    }
+    if (exitasap && ! data.p) break; /* buffer is empty */
 
     sig_unblock(sig_term);
     sig_unblock(sig_child);
@@ -608,7 +616,7 @@ int main(int argc, const char **argv) {
 	stamp[26] =0;
 	break;
       case 3:
-	stamp[fmt_ptime(stamp, &now)] =' ';
+	stamp[fmt_ptime(stamp, &now)] =0;
 	stamp[19] =' '; stamp[20] =0;
 	break;
       }
@@ -646,8 +654,7 @@ int main(int argc, const char **argv) {
   }
   
   for (i =0; i < dirn; ++i) {
-    if (dir[i].fddir != -1)
-      buffer_flush(&dir[i].b);
+    if (dir[i].ppid) while (! processorstop(&dir[i]));
     logdir_close(&dir[i]);
   }
   _exit(0);

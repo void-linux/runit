@@ -10,22 +10,21 @@
 #define FATAL "svwaitup: fatal: "
 #define WARNING "svwaitup: warning: "
 #define INFO "svwaitup: "
-#define USAGE " [ -v ] [ -s 2..600 ] service ..."
+#define USAGE " [-v] [-s 2..600] service ..."
 
 const char *progname;
 unsigned long sec =2;
 unsigned int rc =0;
 const char * const *dir;
 
-void usage () { strerr_die4x(1, "usage: ", progname, USAGE, "\n"); }
+void usage() { strerr_die4x(1, "usage: ", progname, USAGE, "\n"); }
 
-void warn (const char *s1, const char *s2, struct strerr *e) {
-  dir++;
-  rc++;
+void warn(const char *s1, const char *s2, struct strerr *e) {
+  dir++; rc++;
   strerr_warn3(WARNING, s1, s2, e);
 }
 
-int main (int argc, const char * const *argv) {
+int main(int argc, const char * const *argv) {
   int opt;
   int verbose =0;
   char status[18];
@@ -66,7 +65,6 @@ int main (int argc, const char * const *argv) {
       warn(*dir, ": unable to change directory: ", &strerr_sys);
       continue;
     }
-    
     if ((fd =open_write("supervise/ok")) == -1) {
       if (errno == error_nodevice)
 	warn(*dir, ": supervise not running.", 0);

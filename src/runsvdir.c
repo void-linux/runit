@@ -51,6 +51,7 @@ void warn3x(char *m1, char *m2, char *m3) {
   strerr_warn6("runsvdir ", svdir, ": warning: ", m1, m2, m3, 0);
 } 
 void s_term() { exitsoon =1; }
+void s_hangup() { exitsoon =2; }
 
 void runsv(int no, char *name) {
   int pid;
@@ -69,6 +70,8 @@ void runsv(int no, char *name) {
     if (log)
       if (fd_move(2, logpipe[1]) == -1)
 	warn("unable to set filedescriptor for log service", 0);
+    sig_uncatch(sig_hangup);
+    sig_uncatch(sig_term);
     pathexec_run(*prog, prog, (const char* const*)environ);
     fatal("unable to start runsv ", name);
   }
@@ -171,6 +174,7 @@ int main(int argc, char **argv) {
   if (! argv || ! *argv) usage();
 
   sig_catch(sig_term, s_term);
+  sig_catch(sig_hangup, s_hangup);
   svdir =*argv++;
   if (argv && *argv) {
     log =*argv;
@@ -257,9 +261,12 @@ int main(int argc, char **argv) {
 	  log[loglen -1] =ch;
 	}
       }
-    if (exitsoon) {
-      for (i =0; i < svnum; i++) if (sv[i].pid) kill(sv[i].pid, SIGTERM);
+    switch(exitsoon) {
+    case 1:
       _exit(0);
+    case 2:
+      for (i =0; i < svnum; i++) if (sv[i].pid) kill(sv[i].pid, SIGTERM);
+      _exit(111);
     }
   }
   /* not reached */

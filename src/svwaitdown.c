@@ -10,7 +10,7 @@
 #define FATAL "svwaitdown: fatal: "
 #define WARNING "svwaitdown: warning: "
 #define INFO "svwaitdown: "
-#define USAGE " [ -v ] [ -t 2..6000 ] service ..."
+#define USAGE " [-v] [-t 2..6000] service ..."
 
 #define VERSION "$Id$"
 
@@ -18,22 +18,21 @@ const char *progname;
 const char * const *dir;
 unsigned int rc =0;
 
-void usage () { strerr_die4x(1, "usage: ", progname, USAGE, "\n"); }
+void usage() { strerr_die4x(1, "usage: ", progname, USAGE, "\n"); }
 
-void warn (const char *s1, const char *s2, struct strerr *e) {
-  dir++;
-  rc++;
+void warn(const char *s1, const char *s2, struct strerr *e) {
+  dir++; rc++;
   strerr_warn3(WARNING, s1, s2, e);
 }
 
-int main (int argc, const char * const *argv) {
+int main(int argc, const char * const *argv) {
   int opt;
   unsigned long sec =600;
   int verbose =0;
   int doexit =0;
   int dokill =0;
   int fd;
-  char status[18];
+  char status[20];
   int r;
   unsigned long pid;
   struct tai start;
@@ -76,7 +75,6 @@ int main (int argc, const char * const *argv) {
       warn(*dir, ": unable to change directory: ", &strerr_sys);
       continue;
     }
-    
     if ((fd =open_write("supervise/ok")) == -1) {
       if (errno == error_nodevice) {
 	if (verbose) strerr_warn3(INFO, *dir, ": supervise not running.", 0);
@@ -88,31 +86,42 @@ int main (int argc, const char * const *argv) {
     }
     close(fd);
 
-    if (! doexit) {
-      if ((fd =open_read("supervise/status")) == -1) {
-	warn(*dir, "unable to open supervise/status: ", &strerr_sys);
+    if ((fd =open_read("supervise/status")) == -1) {
+      warn(*dir, "unable to open supervise/status: ", &strerr_sys);
+      continue;
+    }
+    r =buffer_unixread(fd, status, 20);
+    close(fd);
+    if ((r < 18) || (r == 19)) { /* supervise compatibility */
+      if (r == -1)
+	warn(*dir, "unable to read supervise/status: ", &strerr_sys);
+      else
+	warn(*dir, ": unable to read supervise/status: bad format.", 0);
+      continue;
+    }
+    pid =(unsigned char)status[15];
+    pid <<=8; pid +=(unsigned char)status[14];
+    pid <<=8; pid +=(unsigned char)status[13];
+    pid <<=8; pid +=(unsigned char)status[12];
+
+    if (! doexit && ! pid) {
+      /* ok, service is down */
+      if (verbose) strerr_warn3(INFO, *dir, ": down.", 0);
+      dir++;
+      continue;
+    }
+
+    if (status[17] != 'd') {
+      if ((fd =open_write("supervise/control")) == -1) {
+	warn(*dir, ": unable to open supervise/control: ", &strerr_sys);
 	continue;
       }
-      r =buffer_unixread(fd, status, sizeof status);
-      close(fd);
-      if (r < sizeof status) {
-	if (r == -1)
-	  warn(*dir, "unable to read supervise/status: ", &strerr_sys);
-	else
-	  warn(*dir, ": unable to read supervise/status: bad format.", 0);
-	continue;
-      }
-      pid =(unsigned char)status[15];
-      pid <<=8; pid +=(unsigned char)status[14];
-      pid <<=8; pid +=(unsigned char)status[13];
-      pid <<=8; pid +=(unsigned char)status[12];
-      if (! pid) {
-	/* ok, service is down */
-	if (verbose) strerr_warn3(INFO, *dir, ": down.", 0);
-	dir++;
+      if (write(fd, "dx", 1 +doexit) != (1 +doexit)) {
+	warn(*dir, ": unable to write to supervise/control: ", &strerr_sys);
 	continue;
       }
     }
+  
     tai_now(&now);
     tai_sub(&now, &now, &start);
     if (tai_approx(&now) >= sec) {
