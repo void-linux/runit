@@ -3,8 +3,6 @@ DESTDIR=
 CC=./support/compile
 LD=./support/load
 
-CC=gcc
-
 CFLAGS=-Isupport
 
 all: runit runit-init svwaitup svwaitdown
