@@ -1,8 +1,13 @@
 runit (0.7.0-3) unstable; urgency=low
 
-  * add README.Debian.
+  * runit:
+    * add README.Debian.
+  * runit-run:
+    * getties: move utmpset from run to finish scripts.
+    * runit-run.preinst: wait for ENTER to continue.
+    * add README.Debian.
 
- -- Gerrit Pape <pape@smarden.org>  Wed, 16 Oct 2002 13:51:12 +0200
+ -- Gerrit Pape <pape@smarden.org>  Wed, 16 Oct 2002 14:00:28 +0200
 
 runit (0.7.0-2) unstable; urgency=low
 
