@@ -58,39 +58,39 @@ send it a INT signal. </dd>
 
 <dt><b>quit</b> </dt>
 <dd>If the service is running, send it a QUIT signal.
-</li><b></b><li>User-defined 1. If the service is running, send it a USR1 signal. </li><b></b><li>User-defined
-2. If the service is running, send it a USR2 signal. </dd>
+</li><b></b><li>If the service is running, send it a USR1 signal. </li><b></b><li>If the service is running,
+send it a USR2 signal. </dd>
 
 <dt><b>term</b> </dt>
-<dd>If the service
-is running, send it a TERM signal. </dd>
+<dd>If the service is running, send it a TERM signal.
+</dd>
 
 <dt><b>kill</b> </dt>
-<dd>If the service is running, send
-it a KILL signal. </dd>
+<dd>If the service is running, send it a KILL signal. </dd>
 
 <dt><b>exit</b> </dt>
-<dd>If the service is running, send it a TERM signal.
-Do not restart the service. If the service is down, and no log service exists,
-<i><b>runsv</b>(8)</i> exits. If the service is down and a log service exists, send a
-TERM signal to the log service. If the log service is down, <i><b>runsv</b>(8)</i> exits.
-This command is ignored if it is given to <i>service</i>/log/supervise/control.
-</dd>
+<dd>If the service
+is running, send it a TERM signal. Do not restart the service. If the service
+is down, and no log service exists, <i><b>runsv</b>(8)</i> exits. If the service is down
+and a log service exists, send a TERM signal to the log service. If the
+log service is down, <i><b>runsv</b>(8)</i> exits. This command is ignored if it is given
+to <i>service</i>/log/supervise/control. </dd>
 </dl>
 <p>
-<b>runsvctrl</b> actually looks only at the first character of <i>command</i>. 
+<b>runsvctrl</b> actually looks only at the first
+character of <i>command</i>. 
 <h2><a name='sect4'>Exit Codes</a></h2>
-<b>runsvctrl</b>
-exits 0, if the <i>command</i> was sent successfully to all <i>services</i>. <p>
-For each
-<i>service</i> that caused an error (e.g. the directory is not controlled by a <i><b>runsv</b>(8)</i>
-process), <b>runsvctrl</b> increases the exit code by one and exits non zero. The
-maximum is 100. <p>
-<b>runsvctrl</b> exits 111 on error. 
+<b>runsvctrl</b> exits 0, if the <i>command</i> was sent
+successfully to all <i>services</i>. <p>
+For each <i>service</i> that caused an error (e.g.
+the directory is not controlled by a <i><b>runsv</b>(8)</i> process), <b>runsvctrl</b> increases
+the exit code by one and exits non zero. The maximum is 100. <p>
+<b>runsvctrl</b> exits
+111 on error. 
 <h2><a name='sect5'>See Also</a></h2>
-<i>runsv(8)</i>, <i>runsvstat(8)</i>,
-<i>chpst(8)</i>, <i>svlogd(8)</i>, <i>runit(8)</i>, <i>runit-init(8)</i>, <i>runsvdir(8)</i>, <i>runsvchdir(8)</i>,
-<i>utmpset(8)</i>, <i>svwaitdown(8)</i>, <i>svwaitup(8)</i> <p>
+<i>runsv(8)</i>, <i>runsvstat(8)</i>, <i>chpst(8)</i>, <i>svlogd(8)</i>, <i>runit(8)</i>,
+<i>runit-init(8)</i>, <i>runsvdir(8)</i>, <i>runsvchdir(8)</i>, <i>utmpset(8)</i>, <i>svwaitdown(8)</i>, <i>svwaitup(8)</i>
+<p>
  <i>http://smarden.org/runit/</i><br>
  
 <h2><a name='sect6'>Author</a></h2>
