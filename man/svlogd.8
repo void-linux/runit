@@ -26,7 +26,6 @@ can be told to alert selected log messages to standard error.
 .B svlogd
 runs until it sees end-of-file on standard input or is sent a TERM signal,
 see below.
-
 .SS LOG DIRECTORY
 A log directory
 .I log
@@ -50,6 +49,16 @@ and optionally the file
 .IR config .
 .B svlogd
 creates necessary files if they don't exist.
+.P
+If
+.B svlogd
+has trouble opening a log directory, it prints a warning, and ignores this
+log directory.
+If
+.B svlogd
+is unable to open all log directories given at the command line, it exits
+with an error.
+This can happen on start-up or after receiving a HUP signal.
 .SS LOG FILE ROTATION
 .B svlogd
 appends selected log messages to the
@@ -298,6 +307,14 @@ is sent a HUP signal, it closes and reopens all
 .IR logs ,
 and updates their configuration according to
 .IR log/config .
+If
+.B svlogd
+has trouble opening a log directory, it prints a warning, and discards this
+log directory.
+If
+.B svlogd
+is unable to open all log directories given at the command line, it exits
+with an error.
 .P
 If
 .B svlogd
