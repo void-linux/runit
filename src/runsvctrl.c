@@ -7,8 +7,8 @@
 
 #define VERSION "$Id$"
 
-#define FATAL "rsv-control: fatal: "
-#define WARNING "rsv-control: warning: "
+#define FATAL "runsvctrl: fatal: "
+#define WARNING "runsvctrl: warning: "
 
 char *progname;
 unsigned int rc =0;

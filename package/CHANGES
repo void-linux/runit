@@ -11,7 +11,6 @@ Wed, 25 Sep 2002 12:13:46 +0200
 
 runit 0.5.3
 Tue, 24 Sep 2002 12:14:02 +0200
-  * package/commands: remove rsv-status, rsv-control.
   * runsvdir.c, runsv.c: code cleanup.
   * utmpset.c: setlock utmp and wtmp file.
 
@@ -19,8 +18,8 @@ runit 0.5.2
 Mon, 23 Sep 2002 16:25:07 +0200
   * runsv, runsvdir: new; svscan/supervise replacement.
   * etc/runit/2: use runsvlog instead of svscanboot.
-  * rsv-status: new; svstat for runsv.
-  * rsv-control: new; svc for runsv.
+  * runsvstat.c: new; svstat for runsv.
+  * runsvctrl.c: new; svc for runsv.
 
 runit 0.5.0
 Wed, 28 Aug 2002 11:18:28 +0200

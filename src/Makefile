@@ -14,11 +14,11 @@ runsv: load runsv.o unix.a byte.a time.a
 runsvdir: load runsvdir.o unix.a byte.a time.a
 	./load runsvdir unix.a byte.a time.a
 
-rsv-status: load rsv-status.o unix.a byte.a time.a
-	./load rsv-status unix.a byte.a time.a
+runsvstat: load runsvstat.o unix.a byte.a time.a
+	./load runsvstat unix.a byte.a time.a
 
-rsv-control: load rsv-control.o unix.a byte.a
-	./load rsv-control unix.a byte.a
+runsvctrl: load runsvctrl.o unix.a byte.a
+	./load runsvctrl unix.a byte.a
 
 svwaitup: load svwaitup.o unix.a byte.a time.a
 	./load svwaitup unix.a byte.a time.a
@@ -38,11 +38,11 @@ runsv.o: compile sysdeps runsv.c
 runsvdir.o: compile sysdeps runsvdir.c
 	./compile runsvdir.c
 
-rsv-status.o: compile sysdeps rsv-status.c
-	./compile rsv-status.c
+runsvstat.o: compile sysdeps runsvstat.c
+	./compile runsvstat.c
 
-rsv-control.o: compile rsv-control.c
-	./compile rsv-control.c
+runsvctrl.o: compile runsvctrl.c
+	./compile runsvctrl.c
 
 svwaitup.o: compile sysdeps svwaitup.c
 	./compile svwaitup.c

@@ -12,8 +12,8 @@
 
 #define VERSION "$Id$"
 
-#define FATAL "rsv-status: fatal: "
-#define WARNING "rsv-status: warning: "
+#define FATAL "runsvstat: fatal: "
+#define WARNING "runsvstat: warning: "
 
 char *progname;
 unsigned int rc =0;
