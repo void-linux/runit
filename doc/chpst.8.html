@@ -1,126 +1,127 @@
 
 
 
-<HTML>
-<HEAD>
-<TITLE>chpst(8) manual page</TITLE>
-</HEAD>
-<BODY bgcolor=white>
-<a href="http://smarden.org/pape/">G. Pape</a><br><A HREF="index.html">runit</A><hr><P>
+<html>
+<head>
+<title>chpst(8) manual page</title>
+</head>
+<body bgcolor='white'>
+<a href='#toc'>Table of Contents</a><p>
 
-<H2><A NAME="sect0">Name</A></H2>
+<h2><a name='sect0' href='#toc0'>Name</a></h2>
 chpst - runs a program with a changed process state 
-<H2><A NAME="sect1">Synopsis</A></H2>
-<B>chpst</B> [-vP012]
-[-u <I>user</I>] [-U <I>user</I>] [-e <I>dir</I>] [-l|-L <I>lock</I>] [-m <I>bytes</I>] [-o <I>n</I>] [-p <I>n</I>] [-f <I>bytes</I>] [-c
-<I>bytes</I>] <I>prog</I> 
-<H2><A NAME="sect2">Description</A></H2>
-<I>prog</I> consists of one or more arguments. <P>
-<B>chpst</B> changes
-the process state according to the given options, and runs <I>prog</I>. 
-<H2><A NAME="sect3">Options</A></H2>
+<h2><a name='sect1' href='#toc1'>Synopsis</a></h2>
+<b>chpst</b> [-vP012]
+[-u <i>user</i>] [-U <i>user</i>] [-e <i>dir</i>] [-l|-L <i>lock</i>] [-m <i>bytes</i>] [-o <i>n</i>] [-p <i>n</i>] [-f <i>bytes</i>] [-c
+<i>bytes</i>] <i>prog</i> 
+<h2><a name='sect2' href='#toc2'>Description</a></h2>
+<i>prog</i> consists of one or more arguments. <p>
+<b>chpst</b> changes
+the process state according to the given options, and runs <i>prog</i>. 
+<h2><a name='sect3' href='#toc3'>Options</a></h2>
 
-<DL>
+<dl>
 
-<DT><B>-u
-<I>user[:group]</B> </I></DT>
-<DD>setuidgid. Set uid and gid to the <I>user</I>'s uid and gid. If <I>user</I>
-is followed by a colon and a <I>group</I>, set the gid to <I>group</I>'s gid instead of
-<I>user</I>'s gid. All supplementary groups are removed. </DD>
+<dt><b>-u
+<i>user[:group]</b> </i></dt>
+<dd>setuidgid. Set uid and gid to the <i>user</i>&rsquo;s uid and gid. If <i>user</i>
+is followed by a colon and a <i>group</i>, set the gid to <i>group</i>&rsquo;s gid instead of
+<i>user</i>&rsquo;s gid. All supplementary groups are removed. </dd>
 
-<DT><B>-U <I>user[:group]</B> </I></DT>
-<DD>envuidgid.
-Set the environment variables $UID and $GID to the <I>user</I>'s uid and gid. If
-<I>user</I> is followed by a colon and a <I>group</I>, set $GID to the <I>group</I>'s gid instead
-of <I>user</I>'s gid. </DD>
+<dt><b>-U <i>user[:group]</b> </i></dt>
+<dd>envuidgid.
+Set the environment variables $UID and $GID to the <i>user</i>&rsquo;s uid and gid. If
+<i>user</i> is followed by a colon and a <i>group</i>, set $GID to the <i>group</i>&rsquo;s gid instead
+of <i>user</i>&rsquo;s gid. </dd>
 
-<DT><B>-e <I>dir</B> </I></DT>
-<DD>envdir. Set various environment variables as specified
-by files in the directory <I>dir</I>: If <I>dir</I> contains a file named <I>k</I> whose first
-line is <I>v</I>, <B>chpst</B> removes the environment variable <I>k</I> if it exists, and then
-adds the environment variable <I>k</I> with the value <I>v</I>. The name <I>k</I> must not contain
-=. Spaces and tabs at the end of <I>v</I> are removed, and nulls in <I>v</I> are changed
-to newlines. If the file <I>k</I> is empty (0 bytes long), <B>chpst</B> removes the environment
-variable <I>k</I> if it exists, without adding a new variable. </DD>
+<dt><b>-e <i>dir</b> </i></dt>
+<dd>envdir. Set various environment variables as specified
+by files in the directory <i>dir</i>: If <i>dir</i> contains a file named <i>k</i> whose first
+line is <i>v</i>, <b>chpst</b> removes the environment variable <i>k</i> if it exists, and then
+adds the environment variable <i>k</i> with the value <i>v</i>. The name <i>k</i> must not contain
+=. Spaces and tabs at the end of <i>v</i> are removed, and nulls in <i>v</i> are changed
+to newlines. If the file <i>k</i> is empty (0 bytes long), <b>chpst</b> removes the environment
+variable <i>k</i> if it exists, without adding a new variable. </dd>
 
-<DT><B>-l <I>lock</B> </I></DT>
-<DD>lock. Open
-the file <I>lock</I> for writing, and obtain an exclusive lock on it. <I>lock</I> will
-be created if it does not exist. If <I>lock</I> is locked by another process, wait
-until a new lock can be obtained. </DD>
+<dt><b>-l <i>lock</b> </i></dt>
+<dd>lock. Open
+the file <i>lock</i> for writing, and obtain an exclusive lock on it. <i>lock</i> will
+be created if it does not exist. If <i>lock</i> is locked by another process, wait
+until a new lock can be obtained. </dd>
 
-<DT><B>-L <I>lock</B> </I></DT>
-<DD>The same as -l, but fail immediately
-if <I>lock</I> is locked by another process. </DD>
+<dt><b>-L <i>lock</b> </i></dt>
+<dd>The same as -l, but fail immediately
+if <i>lock</i> is locked by another process. </dd>
 
-<DT><B>-m <I>bytes</B> </I></DT>
-<DD>limit memory. Limit the data
+<dt><b>-m <i>bytes</b> </i></dt>
+<dd>limit memory. Limit the data
 segment, stack segment, locked physical pages, and total of all segment
-per process to <I>bytes</I> bytes each. </DD>
+per process to <i>bytes</i> bytes each. </dd>
 
-<DT><B>-o <I>n</B> </I></DT>
-<DD>limit open files. Limit the number of
-open file descriptors per process to <I>n</I>. </DD>
+<dt><b>-o <i>n</b> </i></dt>
+<dd>limit open files. Limit the number of
+open file descriptors per process to <i>n</i>. </dd>
 
-<DT><B>-p <I>n</B> </I></DT>
-<DD>limit processes. Limit the number
-of processes per uid to <I>n</I>. </DD>
+<dt><b>-p <i>n</b> </i></dt>
+<dd>limit processes. Limit the number
+of processes per uid to <i>n</i>. </dd>
 
-<DT><B>-f <I>bytes</B> </I></DT>
-<DD>limit output size. Limit the output file
-size to <I>bytes</I> bytes. </DD>
+<dt><b>-f <i>bytes</b> </i></dt>
+<dd>limit output size. Limit the output file
+size to <i>bytes</i> bytes. </dd>
 
-<DT><B>-c <I>bytes</B> </I></DT>
-<DD>limit core size. Limit the core file size to
-<I>bytes</I> bytes. </DD>
+<dt><b>-c <i>bytes</b> </i></dt>
+<dd>limit core size. Limit the core file size to
+<i>bytes</i> bytes. </dd>
 
-<DT><B>-v</B> </DT>
-<DD>verbose. Print warnings about limits unsupported by the system
-to standard error. </DD>
+<dt><b>-v</b> </dt>
+<dd>verbose. Print warnings about limits unsupported by the system
+to standard error. </dd>
 
-<DT><B>-P</B> </DT>
-<DD>pgrphack. Run <I>prog</I> in a new process group. </DD>
+<dt><b>-P</b> </dt>
+<dd>pgrphack. Run <i>prog</i> in a new process group. </dd>
 
-<DT><B>-0</B> </DT>
-<DD>Close standard
-input before running <I>prog</I>. </DD>
+<dt><b>-0</b> </dt>
+<dd>Close standard
+input before running <i>prog</i>. </dd>
 
-<DT><B>-1</B> </DT>
-<DD>Close standard output before running <I>prog</I>. </DD>
+<dt><b>-1</b> </dt>
+<dd>Close standard output before running <i>prog</i>. </dd>
 
-<DT><B>-2</B>
-</DT>
-<DD>Close standard error before running <I>prog</I>. </DD>
-</DL>
+<dt><b>-2</b>
+</dt>
+<dd>Close standard error before running <i>prog</i>. </dd>
+</dl>
 
-<H2><A NAME="sect4">Exit Codes</A></H2>
-<B>chpst</B> exits 100 when
+<h2><a name='sect4' href='#toc4'>Exit Codes</a></h2>
+<b>chpst</b> exits 100 when
 called with wrong options. It prints an error message and exits 111 if it
 has trouble changing the process state. Otherwise its exit code is the same
-as that of <I>prog</I>. 
-<H2><A NAME="sect5">Emulation</A></H2>
-If <B>chpst</B> is called as <B><I>envdir</B>(8)</I>, <B><I>envuidgid</B>(8)</I>,
-<B><I>pgrphack</B>(8)</I>, <B><I>setlock</B>(8)</I>, <B><I>setuidgid</B>(8)</I>, or <B><I>softlimit</B>(8)</I>, it emulates the
+as that of <i>prog</i>. 
+<h2><a name='sect5' href='#toc5'>Emulation</a></h2>
+If <b>chpst</b> is called as <i><b>envdir</b>(8)</i>, <i><b>envuidgid</b>(8)</i>,
+<i><b>pgrphack</b>(8)</i>, <i><b>setlock</b>(8)</i>, <i><b>setuidgid</b>(8)</i>, or <i><b>softlimit</b>(8)</i>, it emulates the
 functionality of these programs from the daemontools package respectively.
 
-<H2><A NAME="sect6">See Also</A></H2>
-<I>runsv(8)</I>, <I>runsvctrl(8)</I>, <I>runsvstat(8)</I>, <I>runsvdir(8)</I>, <I>setsid(2)</I> <P>
- <I>http://smarden.org/runit/</I><BR>
-  <I>http://cr.yp.to/daemontools.html</I><BR>
+<h2><a name='sect6' href='#toc6'>See Also</a></h2>
+<i>runsv(8)</i>, <i>runsvctrl(8)</i>, <i>runsvstat(8)</i>, <i>runsvdir(8)</i>, <i>setsid(2)</i> <p>
+ <i>http://smarden.org/runit/</i><br>
+  <i>http://cr.yp.to/daemontools.html</i><br>
  
-<H2><A NAME="sect7">Author</A></H2>
-Gerrit Pape &lt;pape@smarden.org&gt; <P>
+<h2><a name='sect7' href='#toc7'>Author</a></h2>
+Gerrit Pape &lt;pape@smarden.org&gt; <p>
 
-<HR><P>
-<A NAME="toc"><B>Table of Contents</B></A><P>
-<UL>
-<LI><A NAME="toc0" HREF="#sect0">Name</A></LI>
-<LI><A NAME="toc1" HREF="#sect1">Synopsis</A></LI>
-<LI><A NAME="toc2" HREF="#sect2">Description</A></LI>
-<LI><A NAME="toc3" HREF="#sect3">Options</A></LI>
-<LI><A NAME="toc4" HREF="#sect4">Exit Codes</A></LI>
-<LI><A NAME="toc5" HREF="#sect5">Emulation</A></LI>
-<LI><A NAME="toc6" HREF="#sect6">See Also</A></LI>
-<LI><A NAME="toc7" HREF="#sect7">Author</A></LI>
-</UL>
-</BODY></HTML>
+<hr><p>
+<a name='toc'><b>Table of Contents</b></a><p>
+<ul>
+<li><a name='toc0' href='#sect0'>Name</a></li>
+<li><a name='toc1' href='#sect1'>Synopsis</a></li>
+<li><a name='toc2' href='#sect2'>Description</a></li>
+<li><a name='toc3' href='#sect3'>Options</a></li>
+<li><a name='toc4' href='#sect4'>Exit Codes</a></li>
+<li><a name='toc5' href='#sect5'>Emulation</a></li>
+<li><a name='toc6' href='#sect6'>See Also</a></li>
+<li><a name='toc7' href='#sect7'>Author</a></li>
+</ul>
+</body>
+</html>

@@ -1,52 +1,53 @@
 
 
 
-<HTML>
-<HEAD>
-<TITLE>runsvchdir(8) manual page</TITLE>
-</HEAD>
-<BODY bgcolor=white>
-<a href="http://smarden.org/pape/">G. Pape</a><br><A HREF="index.html">runit</A><hr><P>
+<html>
+<head>
+<title>runsvchdir(8) manual page</title>
+</head>
+<body bgcolor='white'>
+<a href='#toc'>Table of Contents</a><p>
 
-<H2><A NAME="sect0">Name</A></H2>
-runsvchdir - change service directory of <I>runsvdir(8)</I> 
-<H2><A NAME="sect1">Synopsis</A></H2>
-<B>runsvchdir</B>
-<I>dir</I> 
-<H2><A NAME="sect2">Description</A></H2>
-<I>dir</I> is a directory for the use with <B><I>runsvdir</B>(8)</I>. If <I>dir</I> does
-not start with a slash, it is searched in /etc/runit/runsvdir/. <I>dir</I> must
-not start with a dot. <P>
-<B>runsvchdir</B> switches to the directory <I>/etc/runit/runsvdir</I>,
-copies <I>current</I> to <I>previous</I>, and replaces <I>current</I> with a symlink pointing
-to <I>dir</I>. <P>
-Normally  <I>/service</I> is a symlink to <I>current</I>, and <B><I>runsvdir</B>(8)</I> is running
-<I>/service</I>. 
-<H2><A NAME="sect3">Exit Codes</A></H2>
-<B>runsvchdir</B> prints an error message and exits 111 on
-error. <B>runsvchdir</B> exits 0 on success. 
-<H2><A NAME="sect4">Files</A></H2>
- /etc/runit/runsvdir/previous<BR>
-  /etc/runit/runsvdir/current<BR>
-  /etc/runit/runsvdir/current.new<BR>
+<h2><a name='sect0' href='#toc0'>Name</a></h2>
+runsvchdir - change service directory of <i>runsvdir(8)</i> 
+<h2><a name='sect1' href='#toc1'>Synopsis</a></h2>
+<b>runsvchdir</b>
+<i>dir</i> 
+<h2><a name='sect2' href='#toc2'>Description</a></h2>
+<i>dir</i> is a directory for the use with <i><b>runsvdir</b>(8)</i>. If <i>dir</i> does
+not start with a slash, it is searched in /etc/runit/runsvdir/. <i>dir</i> must
+not start with a dot. <p>
+<b>runsvchdir</b> switches to the directory <i>/etc/runit/runsvdir</i>,
+copies <i>current</i> to <i>previous</i>, and replaces <i>current</i> with a symlink pointing
+to <i>dir</i>. <p>
+Normally  <i>/service</i> is a symlink to <i>current</i>, and <i><b>runsvdir</b>(8)</i> is running
+<i>/service</i>. 
+<h2><a name='sect3' href='#toc3'>Exit Codes</a></h2>
+<b>runsvchdir</b> prints an error message and exits 111 on
+error. <b>runsvchdir</b> exits 0 on success. 
+<h2><a name='sect4' href='#toc4'>Files</a></h2>
+ /etc/runit/runsvdir/previous<br>
+  /etc/runit/runsvdir/current<br>
+  /etc/runit/runsvdir/current.new<br>
  
-<H2><A NAME="sect5">See Also</A></H2>
-<I>runsvdir(8)</I>, <I>runsv(8)</I>, <I>runsvctrl(8)</I>, <I>runsvstat(8)</I>, <I>runit(8)</I>, <I>runit-init(8)</I>,
-<I>svwaitdown(8)</I>, <I>svwaitup(8)</I> <P>
-<I>http://smarden.org/runit/</I> 
-<H2><A NAME="sect6">Author</A></H2>
+<h2><a name='sect5' href='#toc5'>See Also</a></h2>
+<i>runsvdir(8)</i>, <i>runsv(8)</i>, <i>runsvctrl(8)</i>, <i>runsvstat(8)</i>, <i>runit(8)</i>, <i>runit-init(8)</i>,
+<i>svwaitdown(8)</i>, <i>svwaitup(8)</i> <p>
+<i>http://smarden.org/runit/</i> 
+<h2><a name='sect6' href='#toc6'>Author</a></h2>
 Gerrit Pape &lt;pape@smarden.org&gt;
-<P>
+<p>
 
-<HR><P>
-<A NAME="toc"><B>Table of Contents</B></A><P>
-<UL>
-<LI><A NAME="toc0" HREF="#sect0">Name</A></LI>
-<LI><A NAME="toc1" HREF="#sect1">Synopsis</A></LI>
-<LI><A NAME="toc2" HREF="#sect2">Description</A></LI>
-<LI><A NAME="toc3" HREF="#sect3">Exit Codes</A></LI>
-<LI><A NAME="toc4" HREF="#sect4">Files</A></LI>
-<LI><A NAME="toc5" HREF="#sect5">See Also</A></LI>
-<LI><A NAME="toc6" HREF="#sect6">Author</A></LI>
-</UL>
-</BODY></HTML>
+<hr><p>
+<a name='toc'><b>Table of Contents</b></a><p>
+<ul>
+<li><a name='toc0' href='#sect0'>Name</a></li>
+<li><a name='toc1' href='#sect1'>Synopsis</a></li>
+<li><a name='toc2' href='#sect2'>Description</a></li>
+<li><a name='toc3' href='#sect3'>Exit Codes</a></li>
+<li><a name='toc4' href='#sect4'>Files</a></li>
+<li><a name='toc5' href='#sect5'>See Also</a></li>
+<li><a name='toc6' href='#sect6'>Author</a></li>
+</ul>
+</body>
+</html>
