@@ -1,3 +1,7 @@
+runit 0.7.1
+Mon, 21 Oct 2002 16:50:09 +0200
+  * man/runsv.8, doc/runlevels.html: typos.
+  * runsvctrl.c, runsvstat.c: exit 111 on error.
   * runsvdir.c: continue reading directory when stat() on entry fails.
 
 runit 0.7.0

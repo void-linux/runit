@@ -1,3 +1,9 @@
+runit (0.7.1-1) unstable; urgency=low
+
+  * new upstream version.
+
+ -- Gerrit Pape <pape@smarden.org>  Mon, 21 Oct 2002 16:51:49 +0200
+
 runit (0.7.0-3) unstable; urgency=low
 
   * initial official debian package (closes: #164301).
