@@ -1,0 +1,8 @@
+#!/bin/sh
+# system one time tasks
+rm -f /etc/runit/stopit
+rm -f /sbin/runit.old
+
+/etc/init.d/rcS
+
+/etc/init.d/rmnologin
