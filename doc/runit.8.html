@@ -31,25 +31,27 @@ keyboard request in Stage 2, see below.
 If <B>runit</B> is told to shutdown
 the system, or the Stage 2 returns without errors, it terminates Stage
 2 if it is running, and runs <I>/etc/runit/3</I>. The systems tasks to shutdown
-and halt or reboot are done here. Normally in Stage 3 <I>/etc/runit/3</I> checks
-for the file <I>/etc/runit/reboot</I>. If it exists, the system is rebooted, it
-is halted otherwise. 
+and halt or reboot are done here. If Stage 3 returns, <B>runit</B> checks if the
+file <I>/etc/runit/reboot</I> exists and has the execute by owner permission set.
+If so, the system is rebooted, it's halted otherwise. 
 <H2><A NAME="sect6">Ctrl-alt-del</A></H2>
-If <B>runit</B> receives the ctrl-alt-del keyboard
-request and the file <I>/etc/runit/ctrlaltdel</I> exists, <B>runit</B> runs <I>/etc/runit/ctrlaltdel</I>,
-waits for it to terminate and then sends itself a CONT signal. 
+If <B>runit</B>
+receives the ctrl-alt-del keyboard request and the file <I>/etc/runit/ctrlaltdel</I>
+exists and has the execute by owner permission set, <B>runit</B> runs <I>/etc/runit/ctrlaltdel</I>,
+waits for it to terminate, and then sends itself a CONT signal. 
 <H2><A NAME="sect7">Signals</A></H2>
 <B>runit</B>
 only accepts signals in Stage 2. <P>
 If <B>runit</B> receives a CONT signal and the
-file <I>/etc/runit/stopit</I> exists, <B>runit</B> is told to shutdown the system. <P>
-if
-<B>runit</B> receives an INT signal, a ctrl-alt-del keyboard request is triggered.
-
+file <I>/etc/runit/stopit</I> exists and has the execute by owner permission set,
+<B>runit</B> is told to shutdown the system. <P>
+if <B>runit</B> receives an INT signal, a
+ctrl-alt-del keyboard request is triggered. 
 <H2><A NAME="sect8">See Also</A></H2>
-<I>runit-init(8)</I>, <I>runsvdir(8)</I>, <I>runsv(8)</I>, <I>svwaitdown(8)</I>, <I>svwaitup(8)</I>,
-<I>utmpset(8)</I> <P>
-<I>http://smarden.org/runit/</I> 
+<I>runit-init(8)</I>, <I>runsvdir(8)</I>,
+<I>runsv(8)</I>, <I>svwaitdown(8)</I>, <I>svwaitup(8)</I>, <I>utmpset(8)</I> <P>
+<I>http://smarden.org/runit/</I>
+
 <H2><A NAME="sect9">Author</A></H2>
 Gerrit Pape &lt;pape@smarden.org&gt; <P>
 
