@@ -34,7 +34,7 @@
 #include "iopause.h"
 
 #define USAGE " [-ttv] [-r c] [-R abc] [-l len] [-b buflen] dir ..."
-#define VERSION "$Id: svlogd.c,v 1.14 2004/11/06 15:38:34 pape Exp $"
+#define VERSION "$Id: svlogd.c,v 1.15 2005/04/03 09:21:47 pape Exp $"
 
 #define FATAL "svlogd: fatal: "
 #define WARNING "svlogd: warning: "
@@ -760,6 +760,7 @@ int main(int argc, const char **argv) {
       if (dir[i].fddir != -1) {
         if (dir[i].inst.len) logmatch(&dir[i]);
         if (dir[i].matcherr == 'e') {
+          if (timestamp) buffer_puts(buffer_2, stamp);
           buffer_put(buffer_2, line, linelen);
           if (linelen == linemax) buffer_puts(buffer_2, "...");
           buffer_put(buffer_2, "\n", 1); buffer_flush(buffer_2);

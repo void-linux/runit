@@ -113,11 +113,11 @@ Now it is time to replace the <i>sysvinit</i> <tt>/sbin/init</tt> binary:
 The last step is to do the final reboot to boot the system with the new
 default Unix process no 1 <i>runit</i>.
 <pre>
- # shutdown -r now
+ # init 6
 </pre>
 To report success:
 <pre>
- # ( uname -a ; cat /etc/runit/[123] ) |mail pape-runit-1.2.1@smarden.org
+ # ( uname -a ; cat /etc/runit/[123] ) |mail pape-runit-1.2.2@smarden.org
 </pre>
 <hr>
 
@@ -206,7 +206,7 @@ This will cause <i>runit</i> to enter stage 3 which runs
 <p>
 To report success:
 <pre>
- # ( uname -a ; cat /etc/runit/[123] ) |mail pape-runit-1.2.1@smarden.org
+ # ( uname -a ; cat /etc/runit/[123] ) |mail pape-runit-1.2.2@smarden.org
 </pre>
 <h3>Step 5: Service migration</h3>
 The goal is to migrate all services from <i>/etc/rc.*</i> scheme to the
@@ -245,6 +245,6 @@ Please refer to the <a href="useinit.html">instructions</a> on how to use
 <address><a href="mailto:pape@smarden.org">
 Gerrit Pape &lt;pape@smarden.org&gt;
 </a></address>
-<small>$Id: replaceinit.html,v 1.59 2005/01/12 22:56:40 pape Exp $</small>
+<small>$Id: replaceinit.html,v 1.61 2005/04/03 09:24:36 pape Exp $</small>
 </body>
 </html>

@@ -93,9 +93,11 @@ If
 .B svlogd
 sees
 .I num
-or more old log files in
-.IR dir ,
-it removes the oldest one.
+or more old log files in the log directory, it removes the oldest one.
+Note that this doesn't decrease the number of log files if there are
+already more than
+.I num
+log files.
 .SS PROCESSOR
 If
 .B svlogd
@@ -148,7 +150,7 @@ Note that this may block any program feeding its log data to
 .SS CONFIG
 On startup, and after receiving a HUP signal,
 .B svlogd
-checks for each
+checks for each log directory
 .I log
 if the configuration file
 .I log/config
@@ -180,7 +182,7 @@ to at least (2 *
 .IR len ).
 .TP
 .RI n num
-sets the maximum number of old log files
+sets the number of old log files
 .B svlogd
 should maintain to
 .IR num .
@@ -192,6 +194,11 @@ old log files in
 .I log
 after log file rotation, it deletes the oldest one.
 Default is 10.
+If
+.I num
+is zero,
+.B svlogd
+doesn't remove old log files.
 .TP
 .RI N min
 sets the minimum number of old log files

@@ -12,7 +12,7 @@
 #define INFO "svwaitdown: "
 #define USAGE " [-v] [-t 1..6000] service ..."
 
-#define VERSION "$Id: svwaitdown.c,v 1.12 2005/01/10 19:35:51 pape Exp $"
+#define VERSION "$Id: svwaitdown.c,v 1.13 2005/04/03 09:21:47 pape Exp $"
 
 const char *progname;
 const char * const *dir;
@@ -89,7 +89,7 @@ int main(int argc, const char * const *argv) {
     }
     if ((fd =open_write("supervise/ok")) == -1) {
       if (errno == error_nodevice) {
-	if (verbose) strerr_warn3(INFO, *dir, ": supervise not running.", 0);
+	if (verbose) strerr_warn3(INFO, *dir, ": runsv not running.", 0);
 	dir++;
       }
       else
@@ -149,7 +149,7 @@ int main(int argc, const char * const *argv) {
 	if ((fd =open_write("supervise/control")) == -1) {
 	  if (errno == error_nodevice) {
 	    if (verbose)
-	      strerr_warn3(INFO, *dir, ": supervise not running.", 0);
+	      strerr_warn3(INFO, *dir, ": runsv not running.", 0);
 	    dir++;
 	  }
 	  else

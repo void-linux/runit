@@ -106,9 +106,8 @@ These are working examples for Debian sarge:
 <p>
 The program <a href="runit-init.8.html">runit-init</a> is intended to
 replace <tt>/sbin/init</tt>.
-sysvinit's command <tt>shutdown</tt> will keep working.
-On *BSD systems use <b><tt>init 0</tt></b> for system halt and
-<b><tt>init 6</tt></b> for reboot.
+The command <b><tt>init 0</tt></b> tells <i>runit</i> to halt the system,
+and <b><tt>init 6</tt></b> to reboot.
 <a href="runlevels.html">Runlevels</a> are handled through the
 <a href="runsvdir.8.html">runsvdir</a> and
 <a href="runsvchdir.8.html">runsvchdir</a> programs.
@@ -228,6 +227,6 @@ Linux Boot Scripts</a> - by Richard Gooch
 <address><a href="mailto:pape@smarden.org">
 Gerrit Pape &lt;pape@smarden.org&gt;
 </a></address>
-<small>$Id: index.html,v 1.35 2004/11/06 17:19:59 pape Exp $</small>
+<small>$Id: index.html,v 1.36 2005/02/13 17:30:32 pape Exp $</small>
 </body>
 </html>

@@ -5,7 +5,7 @@
 
 #define USAGE " u|d|o|p|c|h|a|i|q|1|2|t|k|x|e service ..."
 
-#define VERSION "$Id: runsvctrl.c,v 1.7 2004/03/28 18:17:36 pape Exp $"
+#define VERSION "$Id: runsvctrl.c,v 1.8 2005/04/03 09:21:47 pape Exp $"
 
 #define FATAL "runsvctrl: fatal: "
 #define WARNING "runsvctrl: warning: "
@@ -30,7 +30,7 @@ int ctrl(char *name, char c) {
 
   if ((fd =open_write("supervise/control")) == -1) {
     if (errno == error_nodevice)
-      warnx(name, "supervise not running.");
+      warnx(name, "runsv not running.");
     else
       warn(name, "unable to open supervise/control");
     return(-1);
