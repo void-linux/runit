@@ -9,105 +9,21 @@
 <hr>
 <h1>runit - upgrading from previous versions</h1>
 <hr>
-<h3>0.13.0 or 0.13.1 to 1.0.x</h3>
-No further action from you is required.
-<h3>0.12.0 or 0.12.1 to 0.13.0 or 0.13.1</h3>
-runit's service logging daemon <a href="svlogd.8.html">svlogd</a> now can
-be configured to transmit selected log messages through UDP.
-For reliable network logging through TCP with support for authentication,
-authorization, and encryption, and also on how to use the new feature to
-configure syslog compatible remote UDP system logging, see the
-<a href="http://smarden.org/socklog/">socklog</a> package.
-<h3>0.11.x to 0.12.0 or 0.12.1</h3>
-With this version runit supports running under sysvinit on the Solaris
-platform.
-Replacing init on Solaris is not yet supported.
-The services directory now defaults to /var/service/ instead of /service/.
-<h3>0.10.0 to 0.11.0 or 0.11.1 or 0.11.2</h3>
-This version introduces the new <a href="chpst.8.html">chpst</a> program,
-which changes the process state as specified by command line options, and
-runs another program with this process state.
-<h3>0.9.x to 0.10.0</h3>
-No further action from you is required.
-<h3>0.8.0 or 0.8.1 to 0.9.x</h3>
-The <a href="svlogd.8.html">svlogd</a> program is new.
-<i>svlogd</i> is a service logging daemon designed to be run from
-<tt>log/run</tt> files, similar to
-<a href="http://cr.yp.to/daemontools/multilog.html">multilog</a>.
-The <i>runsvdir</i> program no longer propagates the TERM signal to the
-<i>runsv</i> processes if it receives one, but exits immediately, and
-<i>runsvdir</i> now supports handling of the HANGUP signal, see the
-<a href="runsvdir.8.html">man page</a> for details.
-<a href="svwaitdown.8.html">svwaitdown</a> has changed to additionally send
-the <tt>down</tt> command to the <i>services</i> it works on, if not yet
-done.
-<h3>0.7.x to 0.8.0 or 0.8.1</h3>
-With this version <i>runit</i>'s handling of its magic files has changed
-slightly for better support of read-only root filesystems.
-You should adapt stages 1 and 3 and <tt>ctrlaltdel</tt> to set file
-permissions on the magic files instead of creating and removing them; please
-take a look at the examples in <tt>/package/admin/runit/etc/</tt>.
+<h3>1.0.x to 1.1.0</h3>
+The <a href="svlogd.8.html">svlogd</a> program now interprets the ``e'' and
+``E'' configuration options so that they can be combined to select or
+deselect log messages to be written to standard error, similar to the ``+''
+and ``-'' options for the rotated log.
+It also provides the new ``t'' and ``N'' configuration options, see the
+<a href="svlogd.8.html">man page</a> for details.
+The <a href="chpst.8.html">chpst</a> program supports adjusting the nice
+level through the new -n command line option.
 <p>
-The <a href="runit.8.html">runit</a> program now calls the <tt>reboot()</tt>
-function if possible, and if stage 3 didn't take care of this.
-<h3>0.6.0 to 0.7.0 or 0.7.1 or 0.7.2</h3>
-This version introduces runlevel support with the new
-<a href="runsvchdir.8.html">runsvchdir</a> program. See the
-<a href="runlevels.html">runlevels documentation</a> for more information.
-<p>
-The <a href="runsvdir.8.html">runsvdir</a> and
-<a href="runsv.8.html">runsv</a> programs have changed and should be
-restarted.
-If you want to switch runlevels, <tt>runsvdir</tt> must be restarted.
-This is done on the next reboot or by following these steps:
-<p>
-<ul>
-<li>
-Login on console 5. Bring all services other than the <tt>getty-5</tt>
-service down:
-<pre>
- # cd /service
- # for i in *; do if test "$i" != getty-5; then svc -d $i; fi; done
-</pre>
-<li>
-Check for the services being down:
-<pre>
- # svstat /service/*
-</pre>
-<li>
-If all services other than the <tt>getty-5</tt> service are down, kill
-<tt>runsvdir</tt> by sending it a HUP signal:
-<pre>
- # kill -HUP &lt;pid_of_runsvdir&gt;
-</pre>
-Replace <tt>&lt;pid_of_runsvdir&gt;</tt> with the pid of <tt>runsvdir</tt>.
-The <tt>runit</tt> program starts the new <tt>runsvdir</tt> program now,
-which starts the new <tt>runsv</tt> processes.
-</ul>
-<h3>0.5.0 to 0.6.0</h3>
-There are two new programs, <a href="runsvdir.8.html">runsvdir</a> and
-<a href="runsv.8.html">runsv</a>, which replace the
-<tt>svscanboot</tt>/<tt>svscan</tt>/<tt>readproctitle</tt>/<tt>supervise</tt>
-combination of daemontools. Please adapt <tt>runit</tt>'s stage 2
-(<tt>/etc/runit/2</tt>) to use <tt>runsvdir</tt> instead of
-<tt>svscanboot</tt>; see the examples in <tt>/package/admin/runit/etc/</tt>.
-The change takes effect on the next reboot or if you stop all services and
-kill <tt>svscan</tt> and <tt>readproctitle</tt>.
-<tt>runit</tt> then automatically restarts stage 2.
-<p>
-The <a href="svwaitdown.8.html">svwaitdown</a> program has new options: -k
-and -x.
-They are used in <tt>runit</tt>'s stage 3 (<tt>/etc/runit/3</tt>).
-Please adapt your <tt>/etc/runit/3</tt> script after the changes to stage 2
-have taken effect (<tt>runsvdir</tt> must run instead of
-<tt>svscanboot</tt>); see the examples in
-<tt>/package/admin/runit/etc/</tt>.
-<h3>0.4.1 to 0.5.0</h3>
-There is a new program: <a href="utmpset.8.html">utmpset</a>.
-This program is used in the getty run scripts to enable local login
-accounting.
-You might want to adapt your getty run scripts <tt>/service/getty-*/run</tt>,
-see the examples in <tt>/package/admin/runit/etc/</tt>. 
+Staring with this version, <tt>/etc/runit/2</tt> by default runs the
+<a href="runsvdir.8.html">runsvdir</a> program with the -P option.
+To adapt edit <tt>/etc/runit/2</tt> and change the invocation of
+<a href="runsvdir.8.html">runsvdir</a> accordingly, see
+<a href="../etc/2"">here</a>.
 <hr>
 <address><a href="mailto:pape@smarden.org">
 Gerrit Pape &lt;pape@smarden.org&gt;
