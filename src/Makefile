@@ -1,4 +1,5 @@
-IT=sysdeps runit runit-init runsv runsvdir svwaitup svwaitdown utmpset
+IT=sysdeps runit runit-init runsv runsvdir rsv-status rsv-control svwaitup \
+svwaitdown utmpset
 
 default: $(IT)
 
@@ -13,6 +14,12 @@ runsv: load runsv.o unix.a byte.a time.a
 
 runsvdir: load runsvdir.o unix.a byte.a time.a
 	./load runsvdir unix.a byte.a time.a
+
+rsv-status: load rsv-status.o unix.a byte.a time.a
+	./load rsv-status unix.a byte.a time.a
+
+rsv-control: load rsv-control.o unix.a byte.a
+	./load rsv-control unix.a byte.a
 
 svwaitup: load svwaitup.o unix.a byte.a time.a
 	./load svwaitup unix.a byte.a time.a
@@ -29,13 +36,19 @@ runit-init.o: compile runit-init.c
 runsv.o: compile sysdeps runsv.c
 	./compile runsv.c
 
-runsvdir.o: compile runsvdir.c direntry.h iopause.h uint64.h
+runsvdir.o: compile sysdeps runsvdir.c
 	./compile runsvdir.c
 
-svwaitup.o: compile svwaitup.c uint64.h
+rsv-status.o: compile sysdeps rsv-status.c
+	./compile rsv-status.c
+
+rsv-control.o: compile rsv-control.c
+	./compile rsv-control.c
+
+svwaitup.o: compile sysdeps svwaitup.c
 	./compile svwaitup.c
 
-svwaitdown.o: compile svwaitdown.c uint64.h
+svwaitdown.o: compile sysdeps svwaitdown.c
 	./compile svwaitdown.c
 
 utmpset: load utmpset.o unix.a byte.a

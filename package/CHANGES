@@ -1,7 +1,9 @@
 runit 0.5.2
-Mon, 23 Sep 2002 12:07:42 +0200
+Mon, 23 Sep 2002 16:25:07 +0200
   * runsv, runsvdir: new; svscan/supervise replacement.
   * etc/runit/2: use runsvlog instead of svscanboot.
+  * rsv-status: new; svstat for runsv.
+  * rsv-control: new; svc for runsv.
 
 runit 0.5.0
 Wed, 28 Aug 2002 11:18:28 +0200

@@ -6,6 +6,10 @@ runsv
 runsv.o
 runsvdir
 runsvdir.o
+rsv-status
+rsv-status.o
+rsv-control
+rsv-control.o
 svwaitdown
 svwaitdown.o
 svwaitup

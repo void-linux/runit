@@ -48,7 +48,6 @@ struct svdir {
   int fdlock;
   int fdcontrol;
   int fdcontrolwrite;
-  //  int fdok;
   int islog;
 };
 struct svdir svd[2];
@@ -430,6 +429,7 @@ int main(int argc, char **argv) {
 	  break;
 	}
 	svd[0].state =S_DOWN;
+	svd[0].ctrl &=~C_TERM;
 	taia_now(&svd[0].start);
 	update_status(&svd[0]);
 	if (svd[0].want == W_UP) {

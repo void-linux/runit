@@ -2,6 +2,8 @@ runit
 runit-init
 runsv
 runsvdir
+rsv-status
+rsv-control
 svwaitdown
 svwaitup
 utmpset
