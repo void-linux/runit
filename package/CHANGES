@@ -1,3 +1,12 @@
+runit 0.7.2
+Fri, 10 Jan 2003 21:34:13 +0100
+  * runsv.c: close finish script file descriptor.
+  * runsv.c: close logpipe[] instead of sending sigterm to logservice when
+    told to exit, loggers should exit when they see EOF on stdin (thx Paul
+    Jarc).
+  * etc/*/1, etc/*/3: remove explicit 'exit'.
+  * error.h: include <errno.h> (upcoming glibc changes).
+
 runit 0.7.1
 Wed, 23 Oct 2002 11:40:24 +0200
   * man/runsv.8, doc/runlevels.html: typos.

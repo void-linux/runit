@@ -12,5 +12,3 @@ if test -r /etc/runit/reboot; then
 else
   exec halt
 fi
-
-exit 0

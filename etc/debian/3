@@ -14,5 +14,3 @@ svwaitdown -xk -t350 /service/*
 
 echo 'Shutdown...'
 /etc/init.d/rc $LAST
-
-exit 0

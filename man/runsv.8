@@ -110,13 +110,18 @@ Kill. If the service is running, send it a KILL signal.
 .TP
 .B x \fRor \fBe
 Exit.
-If the service is running, send it a TERM signal. Do not restart the
-service. If the service is down, and no log service exists,
+If the service is running, send it a TERM signal.
+Do not restart the service.
+If the service is down, and no log service exists,
 .B runsv
-exits. If the service is down and a log service exists, send a TERM signal
-to the log service. If the log service is down,
+exits.
+If the service is down and a log service exists,
 .B runsv
-exits. This command is ignored if it is given to
+closes the standard input of the log service, and waits for it to terminate.
+If the log service is down,
+.B runsv
+exits.
+This command is ignored if it is given to
 .IR service /log/supervise/control.
 .P
 For example, to send a TERM signal to /service/socklog-unix, either do

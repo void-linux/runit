@@ -71,9 +71,15 @@ send it a HUP signal. </DD>
 signal. </DD>
 
 <DT><B>i</B> </DT>
-<DD>Interrupt. If the service is running, send it a INT signal. </LI><B></B><LI>User-defined
-1. If the service is running, send it a USR1 signal. </LI><B></B><LI>User-defined 2. If the
-service is running, send it a USR2 signal. </DD>
+<DD>Interrupt. If the service is running, send it a INT signal. </DD>
+
+<DT><B>1</B> </DT>
+<DD>User-defined 1.
+If the service is running, send it a USR1 signal. </DD>
+
+<DT><B>2</B> </DT>
+<DD>User-defined 2.
+If the service is running, send it a USR2 signal. </DD>
 
 <DT><B>t</B> </DT>
 <DD>Terminate. If the service is
@@ -86,14 +92,14 @@ a KILL signal. </DD>
 <DT><B>x or <B>e</B> </B></DT>
 <DD>Exit. If the service is running, send it a TERM signal.
 Do not restart the service. If the service is down, and no log service exists,
-<B>runsv</B> exits. If the service is down and a log service exists, send a TERM
-signal to the log service. If the log service is down, <B>runsv</B> exits. This
-command is ignored if it is given to <I>service</I>/log/supervise/control. </DD>
+<B>runsv</B> exits. If the service is down and a log service exists, <B>runsv</B> closes
+the standard input of the log service, and waits for it to terminate. If
+the log service is down, <B>runsv</B> exits. This command is ignored if it is given
+to <I>service</I>/log/supervise/control. </DD>
 </DL>
 <P>
-For
-example, to send a TERM signal to /service/socklog-unix, either do   # svc
--t /service/socklog-unix<BR>
+For example, to send a TERM signal to
+/service/socklog-unix, either do   # svc -t /service/socklog-unix<BR>
   or<BR>
    # echo -n t &gt;/service/socklog-unix/supervise/control<BR>
  <P>

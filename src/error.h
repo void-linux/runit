@@ -3,7 +3,10 @@
 #ifndef ERROR_H
 #define ERROR_H
 
-extern int errno;
+/* 20030124: include <errno.h> -upcoming glibc changes */
+#include <errno.h>
+ 
+/* extern int errno; */
 
 extern int error_intr;
 extern int error_nomem;

@@ -20,8 +20,8 @@ Change to the package directory of <i>runit</i>:
 </pre>
 Change the <tt>conf-cc</tt> and <tt>conf-ld</tt> to use <tt>diet</tt>:
 <pre>
-  # echo 'diet gcc -O2 -Wall' &gt;src/conf-cc
-  # echo 'diet gcc -s -Os -pipe' &gt;src/conf-ld
+  # echo 'diet -Os gcc -O2 -Wall' &gt;src/conf-cc
+  # echo 'diet -Os gcc -s -Os -pipe' &gt;src/conf-ld
 </pre>
 Rebuild and install the <i>runit</i> programs:
 <pre>
@@ -31,6 +31,6 @@ Rebuild and install the <i>runit</i> programs:
 <address><a href="mailto:pape@smarden.org">
 Gerrit Pape &lt;pape@smarden.org&gt;
 </a></address>
-<small>$Id: usedietlibc.html,v 1.5 2002/09/06 20:29:13 pape Exp $</small>
+<small>$Id: usedietlibc.html,v 1.6 2002/10/25 11:53:15 pape Exp $</small>
 </body>
 </html>
