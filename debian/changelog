@@ -4,7 +4,7 @@ runit (0.7.0-2) unstable; urgency=low
   * runit: add lintian override: statically-linked-binary; the runit
     programs are knowingly compiled statically with the diet libc.
 
- -- Gerrit Pape <pape@smarden.org>  Fri, 11 Oct 2002 13:59:57 +0200
+ -- Gerrit Pape <pape@smarden.org>  Fri, 11 Oct 2002 14:21:25 +0200
 
 runit (0.7.0-1) sarge; urgency=low
 
