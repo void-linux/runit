@@ -26,6 +26,7 @@ chkshsgr
 choose
 coe.o
 compile
+direntry.h
 env.o
 error.o
 error_str.o
@@ -80,6 +81,7 @@ stralloc_pend.o
 strerr_die.o
 strerr_sys.o
 subgetopt.o
+sysdeps
 systype
 tai_now.o
 tai_pack.o
