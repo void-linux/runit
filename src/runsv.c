@@ -18,10 +18,11 @@
 #include "fd.h"
 #include "buffer.h"
 #include "fmt.h"
+#include "byte.h"
 
 #define USAGE " dir"
 
-#define VERSION "$Id: runsv.c,v 1.18 2004/11/06 15:38:34 pape Exp $"
+#define VERSION "$Id: runsv.c,v 1.21 2004/12/13 19:26:20 pape Exp $"
 
 char *progname;
 int selfpipe[2];
@@ -137,14 +138,15 @@ void update_status(struct svdir *s) {
   }
   if (s->ctrl & C_PAUSE) buffer_puts(&b, ", paused");
   if (s->ctrl & C_TERM) buffer_puts(&b, ", got TERM");
-  switch(s->want) {
-  case W_DOWN:
-    if (s->state != S_DOWN) buffer_puts(&b, ", want down");
-    break;
-  case W_EXIT:
-    buffer_puts(&b, ", want exit");
-    break;
-  }
+  if (s->state != S_DOWN)
+    switch(s->want) {
+    case W_DOWN:
+      buffer_puts(&b, ", want down");
+      break;
+    case W_EXIT:
+      buffer_puts(&b, ", want exit");
+      break;
+    }
   buffer_putsflush(&b, "\n");
   close(fd);
   if (s->islog) {
@@ -200,7 +202,40 @@ void update_status(struct svdir *s) {
       warn("unable to rename supervise/status.new to supervise/status");
   }
 }
+unsigned int custom(struct svdir *s, char c) {
+  int pid;
+  int w;
+  char a[10];
+  struct stat st;
+  char *prog[2];
 
+  if (s->islog) return(0);
+  byte_copy(a, 10, "control/?");
+  a[8] =c;
+  if (stat(a, &st) == 0) {
+    if (st.st_mode & S_IXUSR) {
+      if ((pid =fork()) == -1) {
+        warn("unable to fork for ctrl/?");
+        return(0);
+      }
+      if (! pid) {
+        if (haslog && fd_copy(1, logpipe[1]) == -1)
+          warn("unable to setup stdout for ctrl/?");
+        prog[0] =a;
+        prog[1] =0;
+        execve(a, prog, environ);
+      }
+      if (wait_pid(&w, pid) == -1) {
+        warn("unable to wait for child ctrl/?");
+        return(0);
+      }
+      return(! wait_exitcode(w));
+    }
+  }
+  else
+    if (errno != error_noent) warn("unable to stat ctrl/?");
+  return(0);
+}
 void stopservice(struct svdir *s) {
   if (s->pid) kill(s->pid, SIGTERM);
   s->ctrl |=C_TERM;
@@ -214,8 +249,10 @@ void startservice(struct svdir *s) {
 
   if (s->state == S_FINISH)
     run[0] ="./finish";
-  else
+  else {
     run[0] ="./run";
+    custom(s, 'u');
+  }
   run[1] =0;
 
   if (s->pid != 0) stopservice(s); /* should never happen */
@@ -257,66 +294,65 @@ void startservice(struct svdir *s) {
   pidchanged =1;
   s->ctrl =C_NOOP;
   update_status(s);
-  sleep(1);
 }
-
 int ctrl(struct svdir *s, char c) {
   switch(c) {
   case 'd': /* down */
     s->want =W_DOWN;
-    if (s->pid && s->state != S_FINISH) stopservice(s);
-    else update_status(s);
+    update_status(s);
+    if (s->pid && s->state != S_FINISH && ! custom(s, c)) stopservice(s);
     break;
   case 'u': /* up */
     s->want =W_UP;
+    update_status(s);
     if (s->pid == 0) startservice(s);
-    else update_status(s);
     break;
   case 'e':
   case 'x': /* exit */
     if (s->islog) break;
     s->want =W_EXIT;
-    if (s->pid && s->state != S_FINISH) stopservice(s);
+    update_status(s);
+    if (s->pid && s->state != S_FINISH && ! custom(s, c)) stopservice(s);
     break;
   case 't': /* sig term */
-    if (s->pid && s->state != S_FINISH) stopservice(s);
+    if (s->pid && s->state != S_FINISH && ! custom(s, c)) stopservice(s);
     break;
   case 'k': /* sig kill */
     if (s->pid) kill(s->pid, SIGKILL);
     s->state =S_DOWN;
     break;
   case 'p': /* sig pause */
-    kill(s->pid, SIGSTOP);
+    if (s->pid && ! custom(s, c)) kill(s->pid, SIGSTOP);
     s->ctrl |=C_PAUSE;
     update_status(s);
     break;
   case 'c': /* sig cont */
-    kill(s->pid, SIGCONT);
+    if (s->pid && ! custom(s, c)) kill(s->pid, SIGCONT);
     if (s->ctrl & C_PAUSE) s->ctrl &=~C_PAUSE;
     update_status(s);
     break;
   case 'o': /* once */
     s->want =W_DOWN;
+    update_status(s);
     if (! s->pid) startservice(s);
-    else update_status(s);
     break;
   case 'a': /* sig alarm */
-    if (s->pid) kill(s->pid, SIGALRM);
+    if (s->pid && ! custom(s, c)) kill(s->pid, SIGALRM);
     break;
   case 'h': /* sig hup */
-    if (s->pid) kill(s->pid, SIGHUP);
+    if (s->pid && ! custom(s, c)) kill(s->pid, SIGHUP);
     break;
   case 'i': /* sig int */
-    if (s->pid) kill(s->pid, SIGINT);
+    if (s->pid && ! custom(s, c)) kill(s->pid, SIGINT);
     break;
   case 'q': /* sig quit */
-    if (s->pid) kill(s->pid, SIGQUIT);
+    if (s->pid && ! custom(s, c)) kill(s->pid, SIGQUIT);
     break;
   case '1': /* sig usr1 */
-    if (s->pid) kill(s->pid, SIGUSR1);
+    if (s->pid && ! custom(s, c)) kill(s->pid, SIGUSR1);
     break;
   case '2': /* sig usr2 */
-    if (s->pid) kill(s->pid, SIGUSR2);
+    if (s->pid && ! custom(s, c)) kill(s->pid, SIGUSR2);
     break;
   }
   return(1);
@@ -490,7 +526,6 @@ int main(int argc, char **argv) {
         svd[0].pid =0;
         pidchanged =1;
         svd[0].ctrl &=~C_TERM;
-        taia_now(&svd[0].start);
         if (svd[0].state != S_FINISH)
           if ((fd =open_read("finish")) != -1) {
             close(fd);
@@ -499,7 +534,11 @@ int main(int argc, char **argv) {
             break;
           }
         svd[0].state =S_DOWN;
+        taia_uint(&deadline, 1);
+        taia_add(&deadline, &svd[0].start, &deadline);
+        taia_now(&svd[0].start);
         update_status(&svd[0]);
+        if (taia_less(&svd[0].start, &deadline)) sleep(1);
       }
       if (haslog) {
         if (child == svd[1].pid) {
