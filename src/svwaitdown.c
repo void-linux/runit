@@ -89,7 +89,7 @@ int main(int argc, const char * const *argv) {
     }
     if ((fd =open_write("supervise/ok")) == -1) {
       if (errno == error_nodevice) {
-	if (verbose) strerr_warn3(INFO, *dir, ": supervise not running.", 0);
+	if (verbose) strerr_warn3(INFO, *dir, ": runsv not running.", 0);
 	dir++;
       }
       else
@@ -149,7 +149,7 @@ int main(int argc, const char * const *argv) {
 	if ((fd =open_write("supervise/control")) == -1) {
 	  if (errno == error_nodevice) {
 	    if (verbose)
-	      strerr_warn3(INFO, *dir, ": supervise not running.", 0);
+	      strerr_warn3(INFO, *dir, ": runsv not running.", 0);
 	    dir++;
 	  }
 	  else

@@ -760,6 +760,7 @@ int main(int argc, const char **argv) {
       if (dir[i].fddir != -1) {
         if (dir[i].inst.len) logmatch(&dir[i]);
         if (dir[i].matcherr == 'e') {
+          if (timestamp) buffer_puts(buffer_2, stamp);
           buffer_put(buffer_2, line, linelen);
           if (linelen == linemax) buffer_puts(buffer_2, "...");
           buffer_put(buffer_2, "\n", 1); buffer_flush(buffer_2);

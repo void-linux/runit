@@ -71,7 +71,7 @@ int main(int argc, const char * const *argv) {
     }
     if ((fd =open_write("supervise/ok")) == -1) {
       if (errno == error_nodevice)
-	warn(*dir, ": supervise not running.", 0);
+	warn(*dir, ": runsv not running.", 0);
       else
 	warn(*dir, ": unable to open supervise/ok: ", &strerr_sys);
       continue;

@@ -30,7 +30,7 @@ int ctrl(char *name, char c) {
 
   if ((fd =open_write("supervise/control")) == -1) {
     if (errno == error_nodevice)
-      warnx(name, "supervise not running.");
+      warnx(name, "runsv not running.");
     else
       warn(name, "unable to open supervise/control");
     return(-1);
