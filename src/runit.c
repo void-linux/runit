@@ -3,6 +3,7 @@
 
 #include <sys/types.h>
 #include <sys/reboot.h>
+#include <sys/ioctl.h>
 #include <signal.h>
 #include <unistd.h>
 
@@ -54,6 +55,7 @@ int main (int argc, const char * const *argv, const char * const *envp) {
   int st;
   iopause_fd x;
   char ch;
+  int ttyfd;
 
   if (getpid() != 1) {
     strerr_die2x(111, FATAL, "must be run as process no 1.");
@@ -72,6 +74,15 @@ int main (int argc, const char * const *argv, const char * const *envp) {
   sig_block(sig_pipe);
   sig_block(sig_term);
 
+  /* console */
+  if ((ttyfd =open_write("/dev/console")) != -1) {
+    if (ioctl(ttyfd, TIOCSCTTY, (char *)NULL) != -1) {
+      dup2(ttyfd, 0); dup2(ttyfd, 1); dup2(ttyfd, 2);
+      if (ttyfd > 2)
+	close(ttyfd);
+    }
+  }
+
   /* create selfpipe */
   while (pipe(selfpipe) == -1) {
     strerr_warn2(FATAL, "unable to create selfpipe, pausing: ", &strerr_sys);
@@ -82,14 +93,20 @@ int main (int argc, const char * const *argv, const char * const *envp) {
   ndelay_on(selfpipe[0]);
   ndelay_on(selfpipe[1]);
 
+#ifdef RB_DISABLE_CAD
   /* activate ctrlaltdel handling */
-  reboot(0);
+  if (RB_DISABLE_CAD == 0)
+    reboot(0);
+#endif
 
   strerr_warn3(INFO, "$Id$",
 	       ": booting.", 0);
 
   /* runit */
   for (st =0; st < 3; st++) {
+    /*
+      if (st == 2) logwtmp("~", "reboot", "");
+    */
     while ((pid =fork()) == -1) {
       strerr_warn4(FATAL, "unable to fork for \"", stage[st], "\" pausing: ",
 		   &strerr_sys);
@@ -163,6 +180,14 @@ int main (int argc, const char * const *argv, const char * const *envp) {
 	strerr_warn2(WARNING, "poll: ", &strerr_sys);
 #endif
 	continue;
+      }
+      /* console */
+      if ((ttyfd =open_write("/dev/console")) != -1) {
+	if (ioctl(ttyfd, TIOCSCTTY, (char *)NULL) != -1) {
+	  dup2(ttyfd, 0); dup2(ttyfd, 1); dup2(ttyfd, 2);
+	  if (ttyfd > 2)
+	    close(ttyfd);
+	}
       }
       if (st != 1) {
 	strerr_warn2(WARNING, "signals only work in stage 2.", 0);
@@ -250,6 +275,9 @@ int main (int argc, const char * const *argv, const char * const *envp) {
     }
   }
 
+  for (;;) {
+    sig_pause();
+  }
   /* not reached */
   strerr_die2x(0, INFO, "exit.");
   return(0);

@@ -3,14 +3,21 @@
 LAST=0
 test -r /etc/runit/reboot && LAST=6
 
+echo 'Stopping getties...'
+/command/svc -d /service/getty-*
+/command/svwaitdown -t14 /service/getty-* || \
+  ( echo 'Killing getties...' ; /command/svc -k /service/getty-* )
+
 echo 'Stopping services...'
 /command/svc -d /service/*
-/command/svwaitdown /service/* || ( echo 'Killing services...' ; \
-				    /command/svc -k /service/* )
+/command/svwaitdown -t350 /service/* || \
+  ( echo 'Killing services...' ; /command/svc -k /service/* )
+
 echo 'Stopping log services...'
 /command/svc -d /service/*/log
-/bin/sleep 5
+/command/svwaitdown -t35 /service/*/log
 
+echo 'Shutdown...'
 /etc/init.d/rc $LAST
 
 exit 0

@@ -9,6 +9,10 @@
 <hr>
 <h1>runit - replacing init</h1>
 <hr>
+<a href="#sysvinit">How to replace sysvinit on Linux</a><br>
+<a href="#bsdinit">How to replace init on OpenBSD</a>
+<hr>
+<a name="sysvinit"><h2>Replacing sysvinit (Linux)</h2></a>
 Follow these steps to migrate from <i>sysvinit</i> to <i>runit</i> on
 <a href="http://www.debian.org/releases/woody/">Debian GNU/Linux (woody)</a>.
 The <tt>/sbin/init</tt> binary is not replaced until step 6, <i>runit</i> is
@@ -105,6 +109,95 @@ To report success:
 <pre>
   # ( uname -a ; cat /etc/runit/[123] ) | mail pape-runit-0.2.3@smarden.org
 </pre>
+<hr>
+
+<a name="bsdinit"><h2>Replacing init (OpenBSD)</h2></a>
+Follow these steps to migrate from <i>init</i> to <i>runit</i> on
+<a href="http://www.openbsd.org/">OpenBSD 2.9</a>. The
+<tt>/sbin/init</tt> binary is not replaced until step 4.
+<h3>Step 1: The three stages</h3>
+<i>runit</i> looks for the three stages implementing the system's
+<i>booting</i>, <i>running</i> and <i>shutdown</i> in <tt>/etc/runit/1</tt>,
+<tt>/etc/runit/2</tt> and <tt>/etc/runit/3</tt>, create the files now:
+<pre>
+  # mkdir -p /etc/runit
+  # cp -p /package/admin/runit/etc/openbsd/[123] /etc/runit/
+</pre>
+Remove the <tt>svscanboot</tt> startup from <tt>/etc/rc.local</tt> by
+deleting the line <tt>csh -cf '/command/svscanboot &'</tt> (this normally
+is the last one); <i>runit</i> will start <tt>svscanboot</tt> in stage 2
+after running <tt>rc.local</tt> in stage 1.
+<pre>
+  # vi /etc/rc.local
+</pre>
+Create also a getty service directory:
+<pre>
+  # mkdir -p /etc/runit/getty-ttyC4
+  # cp -p /package/admin/runit/etc/openbsd/getty-ttyC4/run \
+      /etc/runit/getty-ttyC4
+</pre>
+<h3>Step 2: The runit programs</h3>
+The <i>runit</i> programs must reside on the root partition, install them
+into <tt>/sbin</tt>:
+<pre>
+  # install -m0500 /package/admin/runit/command/runit* /sbin/
+</pre>
+<h3>Step 3: The getties</h3>
+At least one getty must run in stage 2 so you are able to login, choose a
+local <tt>tty</tt>, say <tt>ttyC4</tt> and tell
+<a href="http://cr.yp.to/daemontools/svscan.html">svscan</a>
+about the <tt>getty-ttyC4</tt> <i>service</i>:
+<pre>
+  # ln -s /etc/runit/getty-ttyC4 /service/
+</pre>
+<h3>Step 4: Replace the <tt>/sbin/init</tt> binary</h3>
+Before replacing the <tt>init</tt> binary, make sure that you are able
+to boot your system alternatively, e.g. with a boot floppy, to restore the
+former <tt>/sbin/init</tt> if anything goes wrong.
+<p>
+Make a backup copy of the current <tt>/sbin/init</tt> program and replace
+it with <tt>/sbin/runit-init</tt>:
+<pre>
+  # cp -p /sbin/init /sbin/init.bsd
+  # install /sbin/runit-init /sbin/init
+</pre>
+Boot your system with <i>runit</i> for the first time:
+<pre>
+  # reboot
+</pre>
+Watch the console output while <i>runit</i> boots up the system. Switch
+to ttyC4 (CTRL-ALT-F5) when stage 2 is reached, a getty should run there,
+you are able to login.
+<p>
+Use <b>init 6</b> to reboot and <b>init 0</b> to halt a system that runs
+<i>runit</i>. This will cause <i>runit</i> to enter stage 3 which runs
+<tt>/sbin/reboot</tt> or <tt>/sbin/halt</tt> as last command.
+<p>
+To report success:
+<pre>
+  # ( uname -a ; cat /etc/runit/[123] ) | mail pape-runit-0.2.3@smarden.org
+</pre>
+<h3>Step 5: Service migration</h3>
+The goal is to migrate all services from <i>/etc/rc.*</i> scheme to the
+<a href="http://cr.yp.to/daemontools.html">daemontools</a> design; take a
+look at these <a href="runscripts.html">run scripts</a> for popular
+services. The migration can be done smoothly. By default <i>runit</i>
+runs the <tt>/etc/rc</tt> scripts in stage 1 as a one time task, so the
+services are started automatically:
+<pre>
+  #!/bin/sh
+  # system one time tasks
+  rm -f /etc/runit/stopit
+
+  /bin/sh /etc/rc autoboot
+
+  exit 0
+</pre>
+To migrate a service, create a service directory, disable the service if
+it is running, remove the service startup from the <tt>/etc/rc.*</tt>
+script and tell <tt>svscan</tt> about the new service.
+
+
 <hr>
 <address><a href="mailto:pape@smarden.org">
 Gerrit Pape &lt;pape@smarden.org&gt;
