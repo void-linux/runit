@@ -55,6 +55,10 @@ int main (int argc, const char * const *argv, const char * const *envp) {
   iopause_fd x;
   char ch;
 
+  if (getpid() != 1) {
+    strerr_die2x(111, FATAL, "must be run as process no 1.");
+  }
+  
   setsid();
 
   sig_block(sig_alarm);

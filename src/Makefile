@@ -5,7 +5,7 @@ CC=gcc
 CFLAGS=-Wall -O3 -Isupport
 LDFLAGS=-Wall -O3 -s
 
-all: runit runit-init
+all: runit runit-init svwaitup svwaitdown
 
 set-tcp-env: djb-publicdomain set-tcp-env.o
 	$(CC) $(LDFLAGS) -o set-tcp-env \
@@ -18,6 +18,14 @@ runit: djb-publicdomain runit.o
 runit-init:	djb-publicdomain init.o
 	$(CC) $(LDFLAGS) -o runit-init \
 		init.o support/unix.a support/byte.a
+
+svwaitup:	djb-publicdomain svwaitup.o
+	$(CC) $(LDFLAGS) -o svwaitup \
+		svwaitup.o support/unix.a support/byte.a support/time.a
+
+svwaitdown:	djb-publicdomain svwaitdown.o
+	$(CC) $(LDFLAGS) -o svwaitdown \
+		svwaitdown.o support/unix.a support/byte.a support/time.a
 
 djb-publicdomain:
 	( cd support ; make )

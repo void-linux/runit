@@ -5,7 +5,8 @@ test -r /etc/runit/reboot && LAST=6
 
 echo 'Stopping services...'
 /command/svc -d /service/*
-/bin/sleep 5
+/command/svwaitdown /service/* || ( echo 'Killing services...' ; \
+				    /command/svc -k /service/* )
 echo 'Stopping log services...'
 /command/svc -d /service/*/log
 /bin/sleep 5

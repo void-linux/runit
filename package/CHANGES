@@ -1,3 +1,9 @@
+runit 0.2.2
+Sat, 22 Dec 2001 20:37:03 +0100
+  * runit: checks for pid == 1
+  * new: svwaitdown, svwaitup
+  * stage3: uses svwaitdown
+
 runit 0.2.0
 Mon, 26 Nov 2001 12:29:44 +0100
   * runit-halt, runit-reboot removed, integrated into runit-init
