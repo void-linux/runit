@@ -1,7 +1,7 @@
 DESTDIR=
 
 CC=./support/compile
-LOAD=./support/load
+LD=./support/load
 
 CC=gcc
 
@@ -10,16 +10,16 @@ CFLAGS=-Isupport
 all: runit runit-init svwaitup svwaitdown
 
 runit: djb-publicdomain runit.o
-	$(LOAD) runit support/unix.a support/byte.a
+	$(LD) runit support/unix.a support/byte.a
 
 runit-init: djb-publicdomain runit-init.o
-	$(LOAD) runit-init support/unix.a support/byte.a
+	$(LD) runit-init support/unix.a support/byte.a
 
 svwaitup: djb-publicdomain svwaitup.o
-	$(LOAD) svwaitup support/unix.a support/byte.a support/time.a
+	$(LD) svwaitup support/unix.a support/byte.a support/time.a
 
 svwaitdown: djb-publicdomain svwaitdown.o
-	$(LOAD) svwaitdown support/unix.a support/byte.a support/time.a
+	$(LD) svwaitdown support/unix.a support/byte.a support/time.a
 
 djb-publicdomain:
 	( cd support ; make )
