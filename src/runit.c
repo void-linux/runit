@@ -96,8 +96,13 @@ int main (int argc, const char * const *argv, const char * const *envp) {
   ndelay_on(selfpipe[1]);
 
 #ifdef RB_DISABLE_CAD
-  /* activate ctrlaltdel handling */
+  /* activate ctrlaltdel handling, glibc */
   if (RB_DISABLE_CAD == 0)
+    reboot(0);
+#endif
+#ifdef LINUX_REBOOT_CMD_CAD_OFF
+  /* activate ctrlaltdel handling, dietlibc */
+  if (LINUX_REBOOT_CMD_CAD_OFF == 0)
     reboot(0);
 #endif
 

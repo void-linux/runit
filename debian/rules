@@ -23,22 +23,22 @@ build-stamp:
 	#	$(MAKE)
 	#/usr/bin/docbook-to-man debian/runit.sgml > runit.1
 
-	tar xfzvp runit-0.3.1.tar.gz
-	mkdir -p admin/runit-0.3.1/compile
+	tar xfzvp runit-0.3.2.tar.gz
+	mkdir -p admin/runit-0.3.2/compile
 	tar xfzvp daemontools-pd-0.76.tar.gz \
-		-C admin/runit-0.3.1/compile
+		-C admin/runit-0.3.2/compile
 	( \
-	cd admin/runit-0.3.1/compile ; \
+	cd admin/runit-0.3.2/compile ; \
 	ln -s daemontools-pd-0.76 support ; \
 	echo 'diet gcc -O2 -Wall' > support/conf-cc ; \
 	echo 'diet gcc -s -Os -pipe' > support/conf-ld ; \
 	)
 	( \
-	cd admin/runit-0.3.1 ; \
+	cd admin/runit-0.3.2 ; \
 	package/compile ; \
-	echo "/package/admin/runit-0.3.1" > compile/home ; \
+	echo "/package/admin/runit-0.3.2" > compile/home ; \
 	rm -f compile/src ; \
-	ln -s /package/admin/runit-0.3.1/src compile/src ; \
+	ln -s /package/admin/runit-0.3.2/src compile/src ; \
 	)
 	touch build-stamp
 
@@ -65,40 +65,40 @@ install: build
 
 	chmod 1755 debian/runit/package
 	cp -a admin debian/runit/package/
-	rm -rf debian/runit/package/admin/runit-0.3.1/compile
-	cp -a debian/runit/package/admin/runit-0.3.1/man .
-	rm -rf debian/runit/package/admin/runit-0.3.1/man
-	cp -a debian/runit/package/admin/runit-0.3.1/doc .
-	rm -rf debian/runit/package/admin/runit-0.3.1/doc
-	cp -a debian/runit/package/admin/runit-0.3.1/etc .
-	rm -rf debian/runit/package/admin/runit-0.3.1/etc
-	cp -a debian/runit/package/admin/runit-0.3.1/package .
+	rm -rf debian/runit/package/admin/runit-0.3.2/compile
+	cp -a debian/runit/package/admin/runit-0.3.2/man .
+	rm -rf debian/runit/package/admin/runit-0.3.2/man
+	cp -a debian/runit/package/admin/runit-0.3.2/doc .
+	rm -rf debian/runit/package/admin/runit-0.3.2/doc
+	cp -a debian/runit/package/admin/runit-0.3.2/etc .
+	rm -rf debian/runit/package/admin/runit-0.3.2/etc
+	cp -a debian/runit/package/admin/runit-0.3.2/package .
 
 	# /etc/runit
-	cp -p admin/runit-0.3.1/etc/debian/[123] \
+	cp -p admin/runit-0.3.2/etc/debian/[123] \
 		debian/runit/etc/runit/
-	cp -p admin/runit-0.3.1/etc/debian/ctrlaltdel \
+	cp -p admin/runit-0.3.2/etc/debian/ctrlaltdel \
 		debian/runit/etc/runit/
-	cp -p admin/runit-0.3.1/etc/debian/getty-tty5/run \
+	cp -p admin/runit-0.3.2/etc/debian/getty-tty5/run \
 		debian/runit/etc/runit/getty-tty5
 
 	# runit programs
-	cp -p debian/runit/package/admin/runit-0.3.1/command/runit* \
+	cp -p debian/runit/package/admin/runit-0.3.2/command/runit* \
 		debian/runit/sbin/
 
 	# cleanup
-	rm -rf debian/runit/package/admin/runit-0.3.1/compile
+	rm -rf debian/runit/package/admin/runit-0.3.2/compile
 
 	# create debian/links
 	rm -f debian/links
 	for i in \
-	 `cat debian/runit/package/admin/runit-0.3.1/package/commands` ; \
+	 `cat debian/runit/package/admin/runit-0.3.2/package/commands` ; \
 	do \
 	  echo "/package/admin/runit/command/$$i /command/$$i" \
 		>> debian/links ; \
 	done
 #	for i in \
-#	 `cat debian/runit/package/admin/runit-0.3.1/package/commands` ; \
+#	 `cat debian/runit/package/admin/runit-0.3.2/package/commands` ; \
 #	do \
 #	  echo "/command/$$i /usr/local/bin/$$i" \
 #		>> debian/links ; \

@@ -18,7 +18,9 @@
 <a href="#dhclient">dhclient</a><br>
 <a href="#gdm">gdm</a><br>
 <a href="#statd">statd</a>, <a href="#mountd">mountd</a><br>
-<a href="#squid">squid</a>
+<a href="#squid">squid</a><br>
+<a href="#cups">cups</a><br>
+<a href="#pure-ftpd">pure-ftpd</a>
 <hr>
 This is a collection of <tt>run</tt> scripts for popular services to have
 them monitored by the
@@ -26,9 +28,12 @@ them monitored by the
 have additional run scripts or one of these run scripts works for you on
 an operating system not stated here, please
 <a href="mailto:pape@smarden.org">let me know</a>. 
+<p>
+Thanks go to the following people for contributing run scripts:
+Alessandro Bono (a.bono).
 <hr>
 <h3><a name="getty">A <tt>mingetty</tt> run script</a></h3>
-<i>(Debian)</i>
+(<i>Debian</i>)
 <pre>
   #!/bin/sh
   exec mingetty tty5
@@ -38,7 +43,7 @@ for getties. You should choose a getty that handles its own utmp and wtmp
 records. Debian's <tt>mingetty</tt> does create his own utmp record.
 <hr>
 <h3><a name="sshd">A <tt>sshd</tt> run script</a></h3>
-<i>(Debian woody)</i>
+(<i>Debian woody</i>)
 <pre>
   #!/bin/sh
   exec 2>&1
@@ -51,7 +56,7 @@ to be set up.
 The <tt>sshd</tt> program is version <tt>OpenSSH_2.9p2</tt>.
 <hr>
 <h3><a name="klogd">A <tt>klogd</tt> run script</a></h3>
-<i>(Debian woody)</i>
+(<i>Debian woody</i>)
 <pre>
   #!/bin/sh
   exec /sbin/klogd -n
@@ -65,7 +70,7 @@ The <tt>sshd</tt> program is version <tt>OpenSSH_2.9p2</tt>.
 </pre>
 <hr>
 <h3><a name="dhcpd">A <tt>dhcpd</tt> run script</a></h3>
-<i>(Debian woody)</i>
+(<i>Debian woody</i>)
 <pre>
   #!/bin/sh
   exec 2>&1
@@ -76,7 +81,7 @@ This service needs a
 to be set up.
 <hr>
 <h3><a name="dhclient">A <tt>dhclient</tt> run script</a></h3>
-<i>(Debian woody)</i>
+(<i>Debian woody</i>)
 <pre>
   #!/bin/sh
   exec dhclient -e -d -cf ./config -lf ./leases -pf ./pid eth1
@@ -90,7 +95,7 @@ to be set up.
 </pre>
 <hr>
 <h3><a name="statd">A <tt>statd</tt> run script</a></h3>
-<i>(Debian woody)</i>
+(<i>Debian woody</i>)
 <pre>
   #!/bin/sh
   exec 2>&1
@@ -109,7 +114,7 @@ This service needs a
 <a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
 to be set up.
 <h3><a name="mountd">A <tt>mountd</tt> run script</a></h3>
-<i>(Debian woody)</i>
+(<i>Debian woody</i>)
 <pre>
   #!/bin/sh
   svwaitup /service/statd
@@ -123,11 +128,29 @@ to be set up.
 </pre>
 <hr>
 <h3><a name="squid">A <tt>squid</tt> run script</a></h3>
-<i>(Debian woody)</i>
+(<i>Debian woody</i>)
 <pre>
   #!/bin/sh
   exec squid -f ./config -sN
 </pre>
+<hr>
+<h3><a name="cups">A <tt>cups</tt> run script</a></h3>
+(<i>Debian woody</i>, a.bono)
+<pre>
+  #!/bin/sh
+  exec 2>&1
+  exec /usr/sbin/cupsd -f
+</pre>
+<hr>
+<h3><a name="pure-ftpd">A <tt>pure-ftpd</tt> run script</a></h3>
+(<i>Debian woody</i>, a.bono)
+<pre>
+  #!/bin/sh
+  exec 2>&1
+  exec /usr/sbin/pure-ftpd -a 50 -E -l pam -u 100
+</pre>
+<hr>
+
 <hr>
 <address><a href="mailto:pape@smarden.org">
 Gerrit Pape &lt;pape@smarden.org&gt;
