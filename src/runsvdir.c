@@ -59,6 +59,9 @@ void runsv(int no, char *name) {
     /* child */
     const char *prog[3];
 
+    if (chdir(svdir) == -1)
+      fatal("unable to change directory to", svdir);
+
     prog[0] ="runsv";
     prog[1] =name;
     prog[2] =0;
@@ -77,7 +80,7 @@ void runsvdir() {
   int i;
   struct stat s;
 
-  if (! (dir =opendir("."))) {
+  if (! (dir =opendir(svdir))) {
     warn("unable to open directory ", svdir);
     return;
   }
@@ -177,8 +180,6 @@ int main(int argc, char **argv) {
     }
   }
 
-  if (chdir(svdir) == -1)
-    fatal("unable to change directory to ", svdir);
 
   for (;;) {
     /* collect children */
