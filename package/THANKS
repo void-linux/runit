@@ -1,0 +1,3 @@
+Thanks to D. J. Bernstein for his daemontools package and for putting
+daemontools' library code into the public domain, this package wouldn't
+exist if Bernstein did not make the daemontools package available.

@@ -1,4 +1,4 @@
-IT=runit runit-init svwaitup svwaitdown utmpset sysdeps
+IT=sysdeps runit runit-init runsv runsvdir svwaitup svwaitdown utmpset
 
 default: $(IT)
 
@@ -8,22 +8,46 @@ runit: load runit.o unix.a byte.a
 runit-init: load runit-init.o unix.a byte.a
 	./load runit-init unix.a byte.a -static
 
+runsv: load runsv.o unix.a byte.a time.a
+	./load runsv unix.a byte.a time.a
+
+runsvdir: load runsvdir.o unix.a byte.a time.a
+	./load runsvdir unix.a byte.a time.a
+
+runsvstat: load runsvstat.o unix.a byte.a time.a
+	./load runsvstat unix.a byte.a time.a
+
+runsvctrl: load runsvctrl.o unix.a byte.a
+	./load runsvctrl unix.a byte.a
+
 svwaitup: load svwaitup.o unix.a byte.a time.a
 	./load svwaitup unix.a byte.a time.a
 
 svwaitdown: load svwaitdown.o unix.a byte.a time.a
 	./load svwaitdown unix.a byte.a time.a
 
-runit.o: compile runit.c iopause.h uint64.h
+runit.o: compile sysdeps runit.c
 	./compile runit.c
 
 runit-init.o: compile runit-init.c
 	./compile runit-init.c
 
-svwaitup.o: compile svwaitup.c uint64.h
+runsv.o: compile sysdeps runsv.c
+	./compile runsv.c
+
+runsvdir.o: compile sysdeps runsvdir.c
+	./compile runsvdir.c
+
+runsvstat.o: compile sysdeps runsvstat.c
+	./compile runsvstat.c
+
+runsvctrl.o: compile runsvctrl.c
+	./compile runsvctrl.c
+
+svwaitup.o: compile sysdeps svwaitup.c
 	./compile svwaitup.c
 
-svwaitdown.o: compile svwaitdown.c uint64.h
+svwaitdown.o: compile sysdeps svwaitdown.c
 	./compile svwaitdown.c
 
 utmpset: load utmpset.o unix.a byte.a

@@ -1,3 +1,23 @@
+runit 0.6.0
+Fri, 27 Sep 2002 16:34:57 +0200
+  * man/runsv.8, man/runsvdir.8: new.
+  * doc: use runsvdir/runsv instead of svscanboot/supervise.
+  * svwaitdown.c, svwaitup.c, man/svwaitdown.8, man/svwaitup.8: services
+    must start with slash.
+  * svwaitdown: new option -x: wait for runsv to exit instead for the
+    service to be down; new option -k: SIGKILL still running services if
+    timeout is reached.
+  * stage 3: use new svwaitdown options.
+
+runit 0.5.3
+Mon, 23 Sep 2002 16:25:07 +0200
+  * runsv, runsvdir: new; svscan/supervise replacement.
+  * etc/runit/2: use runsvlog instead of svscanboot.
+  * runsvstat.c: new; svstat for runsv.
+  * runsvctrl.c: new; svc for runsv.
+  * runsvdir.c, runsv.c: code cleanup.
+  * utmpset.c: setlock utmp and wtmp file.
+
 runit 0.5.0
 Wed, 28 Aug 2002 11:18:28 +0200
   * utmpset: avoids libutil; compiles with deitlibc; built by default.

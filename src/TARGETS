@@ -2,6 +2,14 @@ runit
 runit.o
 runit-init
 runit-init.o
+runsv
+runsv.o
+runsvdir
+runsvdir.o
+runsvstat
+runsvstat.o
+runsvctrl
+runsvctrl.o
 svwaitdown
 svwaitdown.o
 svwaitup

@@ -19,13 +19,15 @@ Dependencies and runlevels</a>
 <p>
 <a href="runit.8.html">The <tt>runit</tt> program</a><br>
 <a href="runit-init.8.html">The <tt>runit-init</tt> program</a><br>
+<a href="runsvdir.8.html">The <tt>runsvdir</tt> program</a><br>
+<a href="runsv.8.html">The <tt>runsv</tt> program</a><br>
+<a href="utmpset.8.html">The <tt>utmpset</tt> program</a><br>
 <a href="svwaitdown.8.html">The <tt>svwaitdown</tt> program</a><br>
-<a href="svwaitup.8.html">The <tt>svwaitup</tt> program</a><br>
-<a href="utmpset.8.html">The <tt>utmpset</tt> program</a>
+<a href="svwaitup.8.html">The <tt>svwaitup</tt> program</a>
 <hr>
-<i>runit</i> cooperates with the
-<a href="http://cr.yp.to/daemontools.html">daemontools</a> package to create
-a replacement for
+<i>runit</i> is a
+<a href="http://cr.yp.to/daemontools.html">daemontools</a> alike
+replacement for
 <a href="ftp://ftp.cistron.nl/pub/people/miquels/sysvinit/">sysvinit</a>.
 <i>runit</i> runs on <b>Debian GNU/Linux</b>, <b>OpenBSD 2.9</b>,
 <b>FreeBSD 4.4</b>. <i>runit</i> reportedly runs on <b>FreeBSD 4.3</b>,
@@ -38,7 +40,9 @@ system's boot to fail. Make sure you are able to recover and repair your
 system, for example if you run a boot loader, it should be able to pass
 <tt>init=/bin/sh</tt> to the kernel.
 <hr>
-<i>runit</i> is discussed on the <tt>&lt;supervision@list.skarnet.org&gt;</tt>
+<i>runit</i> is discussed on the
+<a href="http://skarnet.org/lists/#supervision">
+&lt;supervision@list.skarnet.org&gt;</a>
 mailing list. To subscribe send an empty email to
 <a href="mailto:supervision-subscribe@list.skarnet.org">
 &lt;supervision-subscribe@list.skarnet.org&gt;</a>.
@@ -61,7 +65,7 @@ if this is started by the kernel.
   <i>runit</i> starts <tt>/etc/runit/2</tt> which should not return
   until the system is going to halt or reboot, if it crashes, it will be
   restarted. Normally, <tt>/etc/runit/2</tt> runs
-  <a href="http://cr.yp.to/daemontools/svscanboot.html">svscanboot</a>.
+  <a href="runsvdir.8.html">runsvdir</a>.
   In Stage 2 <i>runit</i> optionally handles an INT signal
   (ctrl-alt-del keyboard request on Linux/i386).
   <li><b>Stage 3:</b><br>
@@ -189,6 +193,6 @@ Related links:
 <address><a href="mailto:pape@smarden.org">
 Gerrit Pape &lt;pape@smarden.org&gt;
 </a></address>
-<small>$Id: index.html,v 1.14 2002/08/29 08:08:27 pape Exp $</small>
+<small>$Id: index.html,v 1.16 2002/09/26 11:12:57 pape Exp $</small>
 </body>
 </html>

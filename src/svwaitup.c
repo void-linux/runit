@@ -52,7 +52,7 @@ int main (int argc, const char * const *argv) {
       verbose =1;
       break;
     case 'V':
-      strerr_warn1("$Id: svwaitup.c,v 1.4 2002/01/01 10:25:50 pape Exp $", 0);
+      strerr_warn1("$Id: svwaitup.c,v 1.5 2002/09/26 11:12:57 pape Exp $", 0);
     case '?':
       usage();
     }
@@ -65,6 +65,10 @@ int main (int argc, const char * const *argv) {
   dir =argv;
 
   while (*dir) {
+    if (*dir[0] != '/') {
+      warn(*dir, ": service directory must start with a slash.", 0);
+      continue;
+    }
     if (chdir(*dir) == -1) {
       warn(*dir, ": unable to change directory: ", &strerr_sys);
       continue;
