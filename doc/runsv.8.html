@@ -92,14 +92,14 @@ a KILL signal. </DD>
 <DT><B>x or <B>e</B> </B></DT>
 <DD>Exit. If the service is running, send it a TERM signal.
 Do not restart the service. If the service is down, and no log service exists,
-<B>runsv</B> exits. If the service is down and a log service exists, send a TERM
-signal to the log service. If the log service is down, <B>runsv</B> exits. This
-command is ignored if it is given to <I>service</I>/log/supervise/control. </DD>
+<B>runsv</B> exits. If the service is down and a log service exists, <B>runsv</B> closes
+the standard input of the log service, and waits for it to terminate. If
+the log service is down, <B>runsv</B> exits. This command is ignored if it is given
+to <I>service</I>/log/supervise/control. </DD>
 </DL>
 <P>
-For
-example, to send a TERM signal to /service/socklog-unix, either do   # svc
--t /service/socklog-unix<BR>
+For example, to send a TERM signal to
+/service/socklog-unix, either do   # svc -t /service/socklog-unix<BR>
   or<BR>
    # echo -n t &gt;/service/socklog-unix/supervise/control<BR>
  <P>
