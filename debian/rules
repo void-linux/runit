@@ -40,10 +40,10 @@ DIR =`pwd`/debian/runit
 
 build: deb-checkdir build-stamp
 build-stamp:
-	tar xfzp runit-1.0.0.tar.gz
+	tar xfzp runit-1.0.1.tar.gz
 	-gcc -v
-	( cd admin/runit-1.0.0/src && \
-	ln -s runit-1.0.0 runit && mv runit ../.. && \
+	( cd admin/runit-1.0.1/src && \
+	ln -s runit-1.0.1 runit && mv runit ../.. && \
 	echo "$(CC) $(CFLAGS)" >conf-cc && \
 	echo "$(CC) $(LDFLAGS)" >conf-ld && \
 	$(MAKE) )

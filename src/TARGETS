@@ -30,6 +30,7 @@ uw_tmp.h
 socket.lib
 trysocketlib
 trysocketlib.o
+check
 alloc.o
 alloc_re.o
 buffer.o
@@ -125,3 +126,15 @@ uint64.h
 unix.a
 wait_nohang.o
 wait_pid.o
+chpst.local
+runit-init.local
+runit.local
+runsv.local
+runsvchdir.local
+runsvctrl.local
+runsvdir.local
+runsvstat.local
+svlogd.local
+svwaitdown.local
+svwaitup.local
+utmpset.local

@@ -1,0 +1,20 @@
+usage: svlogd [-tv] [-r c] [-R abc] [-l n ] [-b n] dir ...
+
+111
+$Id$
+usage: svlogd [-tv] [-r c] [-R abc] [-l n ] [-b n] dir ...
+
+111
+0
+foo
+0
+foo
+bar
+baz
+0
+foo
+bar
+baz
+:oo
+:ar
+:az
