@@ -2,19 +2,39 @@ Source: runit
 Section: admin
 Priority: optional
 Maintainer: Gerrit Pape <pape@smarden.org>
-Build-Depends: debhelper (>> 3.0.0), dietlibc-dev
+Build-Depends: dietlibc-dev, debhelper (>> 3.0.0)
 Standards-Version: 3.5.2
 
 Package: runit
-Architecture: any
-Suggests: daemontools
-Description: UNIX init scheme with service supervision
- runit is a daemontools package alike replacement for sysvinit and other
- init schemes. runit currently runs on Debian GNU/Linux, FreeBSD, OpenBSD,
- and may be easily adapted to other unix operating systems. If runit runs
- for you on any other operating system or linux distribution, please let
- me know.
+Architecture: i386 alpha arm powerpc sparc mips mipsel s390 hppa
+Suggests: runit-run
+Description: a UNIX init scheme with service supervision
+ runit is a daemontools alike replacement for SysV-init and other init
+ schemes. runit currently runs on Debian GNU/Linux, OpenBSD, FreeBSD,
+ and may be easily adapted to other unix operating systems. runit
+ implements a simple three-stage concept. Stage 1 performs the system's
+ one-time initialization tasks. Stage 2 starts the system's uptime
+ services (via the runsvdir program). Stage 3 handles the tasks necessary
+ to shutdown and halt or reboot. 
  .
- Warning: Replacing sysvinit can cause the system's boot to fail. Make
- sure you are able to recover and repair your system, for example if you
- run a bootloader, it should be able to pass init=/bin/sh to the kernel.
+ See http://smarden.org/runit/ for more information.
+ .
+ This package does not replace the /sbin/init binary. To do so you need
+ to follow the documentation or install the runit-run package.
+
+Package: runit-run
+Architecture: all
+Depends: runit, sysvinit (>> 2.84-0)
+Description: a UNIX init scheme with service supervision
+ runit is a daemontools alike replacement for SysV-init and other init
+ schemes. runit currently runs on Debian GNU/Linux, OpenBSD, FreeBSD,
+ and may be easily adapted to other unix operating systems. runit
+ implements a simple three-stage concept. Stage 1 performs the system's
+ one-time initialization tasks. Stage 2 starts the system's uptime
+ services (via the runsvdir program). Stage 3 handles the tasks necessary
+ to shutdown and halt or reboot. 
+ .
+ See http://smarden.org/runit/ for more information.
+ .
+ This package replaces the /sbin/init binary and configures runit to run
+ as process no 1 after the next reboot.

@@ -1,7 +1,6 @@
 runit for Debian
 ----------------
 
-If you do not want sysvinit to replace /sbin/init on upgrade, use
-# dpkg-divert --add --package runit /sbin/init
+<possible notes regarding this package - if none, delete this file>
 
- -- Gerrit Pape <pape@smarden.org>, Tue, 29 Jan 2002 19:54:06 +0100
+ -- Gerrit Pape <pape@smarden.org>, Fri, 11 Oct 2002 10:13:39 +0200

@@ -1,52 +1,68 @@
 #!/usr/bin/make -f
-# Sample debian/rules that uses debhelper.
-# GNU copyright 1997 to 1999 by Joey Hess.
+# Sample debian/rules that uses debhelper. 
+# GNU copyright 1997 by Joey Hess.
+#
+# This version is for a hypothetical package that builds an
+# architecture-dependant package, as well as an architecture-independent
+# package.
 
-# Uncomment this to turn on verbose mode.
+# Uncomment this to turn on verbose mode. 
 #export DH_VERBOSE=1
 
-# This is the debhelper compatability version to use.
+# This is the debhelper compatibility version to use.
 export DH_COMPAT=3
 
 configure: configure-stamp
 configure-stamp:
 	dh_testdir
 	# Add here commands to configure the package.
-	
+
 	touch configure-stamp
 
-build: configure-stamp build-stamp
-build-stamp:
+build-arch: configure-stamp  build-arch-stamp
+build-arch-stamp:
 	dh_testdir
 
-	# Add here commands to compile the package.
+	# Add here command to compile/build the package.
 	#	$(MAKE)
-	#/usr/bin/docbook-to-man debian/runit.sgml > runit.1
 
 	tar xfzvp runit-0.7.0.tar.gz
 	( \
-	cd admin/runit-0.7.0 ; \
-	echo 'diet gcc -O2 -Wall' > src/conf-cc ; \
-	echo 'diet gcc -s -Os -pipe' > src/conf-ld ; \
-	package/compile ; \
-	echo "/package/admin/runit-0.7.0" > compile/home ; \
-	rm -f compile/src ; \
-	ln -s /package/admin/runit-0.7.0/src compile/src ; \
+	cd admin/runit-0.7.0/src; \
+	ln -s runit-0.7.0 runit; mv runit ../..; \
+	echo 'diet gcc -O2 -Wall' >conf-cc; \
+	echo 'diet gcc -s -Os -pipe' >conf-ld; \
+	$(MAKE); \
+	$(MAKE) runsvstat runsvctrl; \
 	)
-	touch build-stamp
+
+	touch build-arch-stamp
+
+build-indep:  configure-stamp build-indep-stamp
+build-indep-stamp:
+	dh_testdir
+
+	# Add here command to compile/build the arch indep package.
+	# It's ok not to do anything here, if you don't need to build
+	#  anything for this package.
+	#/usr/bin/docbook-to-man debian/runit.sgml > runit.1
+
+	touch build-indep-stamp
+
+build: build-arch build-indep
 
 clean:
 	dh_testdir
 	dh_testroot
-	rm -f build-stamp configure-stamp
+	rm -f build-arch-stamp build-indep-stamp configure-stamp
 
 	# Add here commands to clean up after the build process.
 	#	-$(MAKE) clean
-
 	rm -rf admin
-	rm -f debian/links
+
 	dh_clean
 
+install: DH_OPTIONS=
 install: build
 	dh_testdir
 	dh_testroot
@@ -56,71 +72,113 @@ install: build
 	# Add here commands to install the package into debian/runit.
 	#	$(MAKE) install DESTDIR=$(CURDIR)/debian/runit
 
-	chmod 1755 debian/runit/package
-	cp -a admin debian/runit/package/
-	rm -rf debian/runit/package/admin/runit-0.7.0/compile
-	cp -a debian/runit/package/admin/runit-0.7.0/man .
-	rm -rf debian/runit/package/admin/runit-0.7.0/man
-	cp -a debian/runit/package/admin/runit-0.7.0/doc .
-	rm -rf debian/runit/package/admin/runit-0.7.0/doc
-	cp -a debian/runit/package/admin/runit-0.7.0/etc .
-	rm -rf debian/runit/package/admin/runit-0.7.0/etc
-	cp -a debian/runit/package/admin/runit-0.7.0/package .
+	# runit
+	install -m0500 admin/runit-0.7.0/src/runit \
+	  $(CURDIR)/debian/runit/sbin/runit
+	install -m0500 admin/runit-0.7.0/src/runit-init \
+	  $(CURDIR)/debian/runit/sbin/runit-init
+	install -m0755 admin/runit-0.7.0/src/runsvdir \
+	  $(CURDIR)/debian/runit/usr/bin/runsvdir
+	install -m0755 admin/runit-0.7.0/src/runsv \
+	  $(CURDIR)/debian/runit/usr/bin/runsv
+	install -m0755 admin/runit-0.7.0/src/runsvchdir \
+	  $(CURDIR)/debian/runit/usr/sbin/runsvchdir
+	install -m0755 admin/runit-0.7.0/src/svwaitdown \
+	  $(CURDIR)/debian/runit/usr/bin/svwaitdown
+	install -m0755 admin/runit-0.7.0/src/svwaitup \
+	  $(CURDIR)/debian/runit/usr/bin/svwaitup
+	install -m0755 admin/runit-0.7.0/src/utmpset \
+	  $(CURDIR)/debian/runit/usr/sbin/utmpset
 
-	# /etc/runit
-	cp -p admin/runit-0.7.0/etc/debian/[123] \
-		debian/runit/etc/runit/
-	cp -p admin/runit-0.7.0/etc/debian/ctrlaltdel \
-		debian/runit/etc/runit/
-	cp -p admin/runit-0.7.0/etc/debian/getty-tty5/run \
-		debian/runit/etc/runit/getty-5/run
+	install -m0755 admin/runit-0.7.0/src/runsvstat \
+	  $(CURDIR)/debian/runit/usr/bin/runsvstat
+	install -m0755 admin/runit-0.7.0/src/runsvctrl \
+	  $(CURDIR)/debian/runit/usr/bin/runsvctrl
 
-	# runit programs
-	cp -p debian/runit/package/admin/runit-0.7.0/command/runit* \
-		debian/runit/sbin/
+	install -m0700 admin/runit/etc/debian/1 \
+	  $(CURDIR)/debian/runit/etc/runit/1
+	sed -e 's}^PATH=/command:}PATH=}g;\
+	  s}^runsvdir /service}runsvdir /var/service}g' \
+	    <admin/runit/etc/debian/2 >$(CURDIR)/debian/runit/etc/runit/2
+	chmod 0700 $(CURDIR)/debian/runit/etc/runit/2
+	sed -e 's}^PATH=.*}PATH=/sbin:/bin:/usr/sbin:/usr/bin}g' \
+	  <admin/runit/etc/debian/3 >$(CURDIR)/debian/runit/etc/runit/3
+	chmod 0700 $(CURDIR)/debian/runit/etc/runit/3
+	install -m0700 admin/runit/etc/debian/ctrlaltdel \
+	  $(CURDIR)/debian/runit/etc/runit/ctrlaltdel
+	sed -e 's}^/command/utmpset}utmpset}g' \
+	  <admin/runit/etc/debian/getty-tty5/run \
+	    >$(CURDIR)/debian/runit/etc/runit/getty-5/run
+	chmod 0755 $(CURDIR)/debian/runit/etc/runit/getty-5/run
 
-	# cleanup
-	rm -rf debian/runit/package/admin/runit-0.7.0/compile
+	# lintian overrides
+	install -m0755 -d $(CURDIR)/debian/runit/usr/share/lintian/overrides
+	install -m0644 debian/runit.lintian \
+	  $(CURDIR)/debian/runit/usr/share/lintian/overrides/runit
 
-	# create debian/links
-	rm -f debian/links
-	for i in \
-	 `cat debian/runit/package/admin/runit-0.7.0/package/commands` ; \
-	do \
-	  echo "/package/admin/runit/command/$$i /command/$$i" \
-		>> debian/links ; \
-	done
-	for i in \
-	 `cat debian/runit/package/admin/runit-0.7.0/package/commands` ; \
-	do \
-	  echo "/command/$$i /usr/local/bin/$$i" \
-		>> debian/links ; \
-	done
-
+	# runit-run
+	( \
+	cd runit-run; \
+	$(MAKE) install DESTDIR=$(CURDIR)/debian/runit-run; \
+	)
 
 # Build architecture-independent files here.
+# Pass -i to all debhelper commands in this target to reduce clutter.
 binary-indep: build install
-# We have nothing to do by default.
+	dh_testdir -i
+	dh_testroot -i
+#	dh_installdebconf -i
+	dh_installdocs -i
+#	dh_installexamples -i
+#	dh_installmenu -i
+#	dh_installlogrotate -i
+#	dh_installemacsen -i
+#	dh_installpam -i
+#	dh_installmime -i
+#	dh_installinit -i
+#	dh_installcron -i
+#	dh_installman -i
+#	dh_installinfo -i
+#	dh_undocumented -i
+	dh_installchangelogs -i
+	dh_link -i
+	dh_compress -i
+	dh_fixperms -i
+	dh_installdeb -i
+#	dh_perl -i
+	dh_gencontrol -i
+	dh_md5sums -i
+	dh_builddeb -i
 
 # Build architecture-dependent files here.
 binary-arch: build install
-	dh_testdir
-	dh_testroot
-#	dh_installdebconf	
-	dh_installdocs
-	dh_installman man/run*.8 man/svwait*.8 man/utmpset.8
-	dh_installchangelogs 
-	dh_link
-	dh_strip
-	dh_compress
-	dh_fixperms -X/package
-#	dh_makeshlibs
-	dh_installdeb
-#	dh_perl
-	dh_shlibdeps
-	dh_gencontrol
-	dh_md5sums
-	dh_builddeb
+	dh_testdir -a
+	dh_testroot -a
+#	dh_installdebconf -a
+	dh_installdocs -a
+#	dh_installexamples -a
+#	dh_installmenu -a
+#	dh_installlogrotate -a
+#	dh_installemacsen -a
+#	dh_installpam -a
+#	dh_installmime -a
+#	dh_installinit -a
+#	dh_installcron -a
+	dh_installman -a admin/runit/man/*.8 debian/runsv*.8
+#	dh_installinfo -a
+#	dh_undocumented -a
+	dh_installchangelogs -a admin/runit-0.7.0/package/CHANGES
+	dh_strip -a
+#	dh_link -a
+	dh_compress -a
+	dh_fixperms -a -X/sbin
+#	dh_makeshlibs -a
+	dh_installdeb -a
+#	dh_perl -a
+#	dh_shlibdeps -a
+	dh_gencontrol -a
+	dh_md5sums -a
+	dh_builddeb -a
 
 binary: binary-indep binary-arch
 .PHONY: build clean binary-indep binary-arch binary install configure
