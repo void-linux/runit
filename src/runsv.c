@@ -21,7 +21,7 @@
 
 #define USAGE " dir"
 
-#define VERSION "$Id: runsv.c,v 1.10 2003/02/25 12:51:39 pape Exp $"
+#define VERSION "$Id: runsv.c,v 1.11 2003/03/09 14:05:49 pape Exp $"
 
 char *progname;
 int selfpipe[2];
@@ -371,12 +371,14 @@ int main(int argc, char **argv) {
   if ((svd[0].fdlock =open_append("supervise/lock")) == -1)
     fatal("unable to open lock");
   if (lock_exnb(svd[0].fdlock) == -1) fatal("unable to lock");
+  coe(svd[0].fdlock);
   if (haslog) {
     mkdir("log/supervise", 0700);
     if ((svd[1].fdlock =open_append("log/supervise/lock")) == -1)
       fatal("unable to open log/lock");
     if (lock_ex(svd[1].fdlock) == -1)
       fatal("unable to log/lock");
+    coe(svd[1].fdlock);
   }
 
   fifo_make("supervise/control", 0600);

@@ -17,7 +17,7 @@
 #include "ndelay.h"
 
 #define USAGE " dir"
-#define VERSION "$Id: runsvdir.c,v 1.11 2003/02/25 12:51:39 pape Exp $"
+#define VERSION "$Id: runsvdir.c,v 1.12 2003/03/09 14:05:49 pape Exp $"
 
 #define MAXSERVICES 1000
 
@@ -181,6 +181,7 @@ int main(int argc, char **argv) {
   }
   if ((curdir =open_read(".")) == -1) 
     fatal("unable to open current directory", 0);
+  coe(curdir);
 
   taia_now(&stampcheck);
 
