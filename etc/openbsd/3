@@ -11,6 +11,9 @@ svc -d /service/*
 svwaitdown -t350 /service/* || ( echo 'Killing services...' ; \
   svc -k /service/* ; svwaitdown /service/* )
 
+echo 'Restarting getties...'
+/command/svc -u /service/getty-*
+
 echo 'Stopping log services...'
 svc -d /service/*/log
 svwaitdown -t35 /service/*/log || ( echo 'Killing log services...' ; \

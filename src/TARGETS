@@ -6,6 +6,8 @@ svwaitdown
 svwaitdown.o
 svwaitup
 svwaitup.o
+utmpset
+utmpset.o
 alloc.o
 alloc_re.o
 buffer.o
@@ -23,6 +25,7 @@ byte_cr.o
 byte_diff.o
 byte_rchr.o
 chkshsgr
+chkshsgr.o
 choose
 coe.o
 compile
@@ -98,7 +101,5 @@ taia_uint.o
 time.a
 uint64.h
 unix.a
-utmpset
-utmpset.o
 wait_nohang.o
 wait_pid.o

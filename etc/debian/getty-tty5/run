@@ -1,2 +1,3 @@
 #!/bin/sh
+/package/admin/runit/command/utmpset -w tty5
 exec /sbin/getty 38400 tty5 linux

@@ -9,40 +9,22 @@
 <hr>
 <h1>runit - use dietlibc</h1>
 <hr>
-Check that you have the recent version of
+To recompile the <i>socklog</i> programs with the
+<a href="http://www.fefe.de/dietlibc/">diet libc</a>, check that you have
+the recent version of
 <a href="http://www.fefe.de/dietlibc/">dietlibc</a> installed.
 <p>
-Change to the source directory of <i>runit</i>:
+Change to the package directory of <i>runit</i>:
 <pre>
-  # cd /package/admin/runit/src
+  # cd /package/admin/runit/
 </pre>
-Download
-<a href="http://smarden.org/pape/djb/manpages/daemontools-pd-0.76.tar.gz">
-daemontools-pd-0.76.tar.gz</a>
-into <tt>/package/admin/runit/src</tt> and unpack the archive (this
-contains code from the daemontools-0.76 package which are in the Public
-domain):
+Change the <tt>conf-cc</tt> and <tt>conf-ld</tt> to use <tt>diet</tt>:
 <pre>
-  # gunzip daemontools-pd-0.76.tar
-  # tar -xpf daemontools-pd-0.76.tar
-  # rm daemontools-pd-0.76.tar
+  # echo 'diet gcc -O2 -Wall' &gt;src/conf-cc
+  # echo 'diet gcc -s -Os -pipe' &gt;src/conf-ld
 </pre>
-Tell <i>runit</i> to use this archive instead of the <i>daemontools</i>
-sources:
+Rebuild and install the <i>runit</i> programs:
 <pre>
-  # rm -f support
-  # ln -s daemontools-pd-0.76 support
-</pre>
-Change the <tt>cc</tt> and <tt>ld</tt> settings for
-<tt>support</tt> to use <tt>diet</tt>:
-<pre>
-  # echo 'diet gcc -O2 -Wall' &gt; support/conf-cc
-  # echo 'diet gcc -s -Os -pipe' &gt; support/conf-ld
-</pre>
-Finally rebuild and install the <i>runit</i> programs:
-<pre>
-  # make clean
-  # cd ..
   # package/install
 </pre>
 <hr>

@@ -1,8 +1,9 @@
 DESTDIR=
 
-PACKAGE=runit-0.4.1
+PACKAGE=runit-0.5.0
 DIRS=doc man etc package src
-MANPAGES=man/runit.8 man/runit-init.8 man/svwaitdown.8 man/svwaitup.8
+MANPAGES=man/runit.8 man/runit-init.8 man/svwaitdown.8 man/svwaitup.8 \
+man/utmpset.8
 
 all: clean .manpages $(PACKAGE).tar.gz
 
