@@ -25,7 +25,7 @@ stage 2 and enter stage 3.
 <H2><A NAME="sect4">Stage 2</A></H2>
 <B>runit</B> runs <I>/etc/runit/2</I>, which should
 not return until system shutdown; if it crashes, it will be restarted. Normally
-<I>/etc/runit/2</I> starts <B><I>svscanboot</B>(8)</I>. <B>runit</B> is able to handle the ctrl-alt-del
+<I>/etc/runit/2</I> starts <B><I>runsvdir</B>(8)</I>. <B>runit</B> is able to handle the ctrl-alt-del
 keyboard request in Stage 2, see below. 
 <H2><A NAME="sect5">Stage 3</A></H2>
 If <B>runit</B> is told to shutdown
@@ -47,9 +47,9 @@ if
 <B>runit</B> receives an INT signal, a ctrl-alt-del keyboard request is triggered.
 
 <H2><A NAME="sect8">See Also</A></H2>
-<I>runit-init(8)</I>, <I>svwaitdown(8)</I>, <I>svwaitup(8)</I>, <I>utmpset(8)</I> <P>
-<I>http://smarden.org/runit/</I>
-
+<I>runit-init(8)</I>, <I>runsvdir(8)</I>, <I>runsv(8)</I>, <I>svwaitdown(8)</I>, <I>svwaitup(8)</I>,
+<I>utmpset(8)</I> <P>
+<I>http://smarden.org/runit/</I> 
 <H2><A NAME="sect9">Author</A></H2>
 Gerrit Pape &lt;pape@smarden.org&gt; <P>
 

@@ -131,8 +131,9 @@ FreeBSD 4.4:
 </pre>
 Remove the <tt>svscanboot</tt> startup from <tt>/etc/rc.local</tt> by
 deleting the line <tt>csh -cf '/command/svscanboot &'</tt> (this normally
-is the last one); <i>runit</i> will start <tt>svscanboot</tt> in stage 2
-after running <tt>rc.local</tt> in stage 1.
+is the last one); <i>runit</i> will start
+<a href="runsvdir.8.html">runsvdir</a> in stage 2 after running
+<tt>rc.local</tt> in stage 1.
 <pre>
   # vi /etc/rc.local
 </pre>
@@ -207,8 +208,8 @@ services are started automatically:
 </pre>
 To migrate a service, create a service directory, disable the service if
 it is running, disable the service in <tt>/etc/rc.conf</tt> or remove the
-service startup from the <tt>/etc/rc.*</tt> scripts and tell <tt>svscan</tt>
-about the new service.
+service startup from the <tt>/etc/rc.*</tt> scripts and tell
+<a href="runsvdir.8.html">runsvdir</a> about the new service.
 <hr>
 <address><a href="mailto:pape@smarden.org">
 Gerrit Pape &lt;pape@smarden.org&gt;

@@ -29,7 +29,7 @@ which should not return until system shutdown; if it crashes, it will be
 restarted. Normally
 .I /etc/runit/2
 starts
-.BR svscanboot (8).
+.BR runsvdir (8).
 .B runit
 is able to handle the ctrl-alt-del keyboard request in Stage 2, see below.
 .SH STAGE 3
@@ -71,6 +71,8 @@ if
 receives an INT signal, a ctrl-alt-del keyboard request is triggered.
 .SH SEE ALSO
 runit-init(8),
+runsvdir(8),
+runsv(8),
 svwaitdown(8),
 svwaitup(8),
 utmpset(8)
