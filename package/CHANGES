@@ -2,7 +2,10 @@ runit 1.2.0
 Sun, 12 Dec 2004 20:17:29 +0000
   * doc/upgrade.html: typo.
   * runsv.c: support custom control commands through control/ directory,
-    optionally switch off sending signal.
+    optionally switch off sending signal; don't update timestamp in status
+    when running ./finish; only sleep for a second if ./run has been
+    restarted within a second, and after updating status to down, normally
+    up, want up.
   * man/runsv.8: document custom control commands.
   * runsv.check, runsv.dist: check custom control commands.
 

@@ -215,19 +215,19 @@ unsigned int custom(struct svdir *s, char c) {
   if (stat(a, &st) == 0) {
     if (st.st_mode & S_IXUSR) {
       if ((pid =fork()) == -1) {
-	warn("unable to fork for ctrl/?");
-	return(0);
+        warn("unable to fork for ctrl/?");
+        return(0);
       }
       if (! pid) {
-	if (haslog && fd_copy(1, logpipe[1]) == -1)
-	  warn("unable to setup stdout for ctrl/?");
-	prog[0] =a;
-	prog[1] =0;
-	execve(a, prog, environ);
+        if (haslog && fd_copy(1, logpipe[1]) == -1)
+          warn("unable to setup stdout for ctrl/?");
+        prog[0] =a;
+        prog[1] =0;
+        execve(a, prog, environ);
       }
       if (wait_pid(&w, pid) == -1) {
-	warn("unable to wait for child ctrl/?");
-	return(0);
+        warn("unable to wait for child ctrl/?");
+        return(0);
       }
       return(! wait_exitcode(w));
     }
@@ -294,7 +294,6 @@ void startservice(struct svdir *s) {
   pidchanged =1;
   s->ctrl =C_NOOP;
   update_status(s);
-  sleep(1);
 }
 int ctrl(struct svdir *s, char c) {
   switch(c) {
@@ -527,7 +526,6 @@ int main(int argc, char **argv) {
         svd[0].pid =0;
         pidchanged =1;
         svd[0].ctrl &=~C_TERM;
-        taia_now(&svd[0].start);
         if (svd[0].state != S_FINISH)
           if ((fd =open_read("finish")) != -1) {
             close(fd);
@@ -536,7 +534,11 @@ int main(int argc, char **argv) {
             break;
           }
         svd[0].state =S_DOWN;
+        taia_uint(&deadline, 1);
+        taia_add(&deadline, &svd[0].start, &deadline);
+        taia_now(&svd[0].start);
         update_status(&svd[0]);
+        if (taia_less(&svd[0].start, &deadline)) sleep(1);
       }
       if (haslog) {
         if (child == svd[1].pid) {

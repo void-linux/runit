@@ -16,6 +16,12 @@ controlling the service through commands normally sent by
 arbitrary actions through external programs can optionally be specified, and
 signalling of the service disabled if desired.
 See the <a href="runsv.8.html">man page</a> for details.
+<p>
+<a href="runsv.8.html">runsv</a> now reports the seconds since <tt>./run</tt>
+has been started when running the <tt>./finish</tt> script, instead of the
+seconds since <tt>./finish</tt> has been started.
+It no longer reports immediately failing <tt>./run</tt> scripts as ``running''
+for up to one second, but as ``down, normally up, want up''.
 <h3>1.0.x to 1.1.0</h3>
 The <a href="svlogd.8.html">svlogd</a> program now interprets the ``e'' and
 ``E'' configuration options so that they can be combined to select or
