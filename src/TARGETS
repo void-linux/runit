@@ -98,5 +98,7 @@ taia_uint.o
 time.a
 uint64.h
 unix.a
+utmpset
+utmpset.o
 wait_nohang.o
 wait_pid.o
