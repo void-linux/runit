@@ -8,6 +8,8 @@ Mon, 20 Sep 2004 19:53:33 +0000
     session/process group (thx Dan Melomedman).
   * man/svlogd.8: minor fixes.
   * man/svwaitdown.8: remove hint about -x option.
+  * package/check, package/compile, package/install, package/install-man,
+    package/upgrade: use set -e instead of #!/bin/sh -e.
 
 runit 1.0.4
 Sun, 01 Aug 2004 18:29:36 +0000
