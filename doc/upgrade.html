@@ -9,6 +9,13 @@
 <hr>
 <h1>runit - upgrading from previous versions</h1>
 <hr>
+<h3>1.1.0 to 1.2.0</h3>
+With this version the <a href="runsv.8.html">runsv</a> program makes
+controlling the service through commands normally sent by
+<a href="runsvctrl.8.html">runsvctrl</a> configurable;
+arbitrary actions through external programs can optionally be specified, and
+signalling of the service disabled if desired.
+See the <a href="runsv.8.html">man page</a> for details.
 <h3>1.0.x to 1.1.0</h3>
 The <a href="svlogd.8.html">svlogd</a> program now interprets the ``e'' and
 ``E'' configuration options so that they can be combined to select or
@@ -19,7 +26,7 @@ It also provides the new ``t'' and ``N'' configuration options, see the
 The <a href="chpst.8.html">chpst</a> program supports adjusting the nice
 level through the new -n command line option.
 <p>
-Staring with this version, <tt>/etc/runit/2</tt> by default runs the
+Starting with this version, <tt>/etc/runit/2</tt> by default runs the
 <a href="runsvdir.8.html">runsvdir</a> program with the -P option.
 To adapt edit <tt>/etc/runit/2</tt> and change the invocation of
 <a href="runsvdir.8.html">runsvdir</a> accordingly, see

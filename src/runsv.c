@@ -18,6 +18,7 @@
 #include "fd.h"
 #include "buffer.h"
 #include "fmt.h"
+#include "byte.h"
 
 #define USAGE " dir"
 
@@ -200,7 +201,39 @@ void update_status(struct svdir *s) {
       warn("unable to rename supervise/status.new to supervise/status");
   }
 }
+unsigned int custom(char c) {
+  int pid;
+  int w;
+  char a[7];
+  struct stat st;
+  char *prog[2];
 
+  byte_copy(a, 7, "ctrl/?");
+  a[5] =c;
+  if (stat(a, &st) == 0) {
+    if (st.st_mode & S_IXUSR) {
+      if ((pid =fork()) == -1) {
+	warn("unable to fork for ctrl/?");
+	return(0);
+      }
+      if (! pid) {
+	if (haslog && fd_copy(1, logpipe[1]) == -1)
+	  warn("unable to setup stdout for ctrl/?");
+	prog[0] =a;
+	prog[1] =0;
+	execve(a, prog, environ);
+      }
+      if (wait_pid(&w, pid) == -1) {
+	warn("unable to wait for child ctrl/?");
+	return(0);
+      }
+      return(! wait_exitcode(w));
+    }
+  }
+  else
+    if (errno != error_noent) warn("unable to stat ctrl/?");
+  return(0);
+}
 void stopservice(struct svdir *s) {
   if (s->pid) kill(s->pid, SIGTERM);
   s->ctrl |=C_TERM;
@@ -214,8 +247,10 @@ void startservice(struct svdir *s) {
 
   if (s->state == S_FINISH)
     run[0] ="./finish";
-  else
+  else {
     run[0] ="./run";
+    if (! s->islog) custom('u');
+  }
   run[1] =0;
 
   if (s->pid != 0) stopservice(s); /* should never happen */
@@ -259,64 +294,64 @@ void startservice(struct svdir *s) {
   update_status(s);
   sleep(1);
 }
-
 int ctrl(struct svdir *s, char c) {
   switch(c) {
   case 'd': /* down */
     s->want =W_DOWN;
-    if (s->pid && s->state != S_FINISH) stopservice(s);
-    else update_status(s);
+    update_status(s);
+    if (s->pid && s->state != S_FINISH && ! custom(c)) stopservice(s);
     break;
   case 'u': /* up */
     s->want =W_UP;
+    update_status(s);
     if (s->pid == 0) startservice(s);
-    else update_status(s);
     break;
   case 'e':
   case 'x': /* exit */
     if (s->islog) break;
     s->want =W_EXIT;
-    if (s->pid && s->state != S_FINISH) stopservice(s);
+    update_status(s);
+    if (s->pid && s->state != S_FINISH && ! custom(c)) stopservice(s);
     break;
   case 't': /* sig term */
-    if (s->pid && s->state != S_FINISH) stopservice(s);
+    if (s->pid && s->state != S_FINISH && ! custom(c)) stopservice(s);
     break;
   case 'k': /* sig kill */
     if (s->pid) kill(s->pid, SIGKILL);
     s->state =S_DOWN;
     break;
   case 'p': /* sig pause */
-    kill(s->pid, SIGSTOP);
+    if (s->pid && ! custom(c)) kill(s->pid, SIGSTOP);
     s->ctrl |=C_PAUSE;
     update_status(s);
     break;
   case 'c': /* sig cont */
-    kill(s->pid, SIGCONT);
+    if (s->pid && ! custom(c)) kill(s->pid, SIGCONT);
     if (s->ctrl & C_PAUSE) s->ctrl &=~C_PAUSE;
     update_status(s);
     break;
   case 'o': /* once */
     s->want =W_DOWN;
+    update_status(s);
     if (! s->pid) startservice(s);
-    else update_status(s);
     break;
   case 'a': /* sig alarm */
-    if (s->pid) kill(s->pid, SIGALRM);
+    if (s->pid && ! custom(c)) kill(s->pid, SIGALRM);
     break;
   case 'h': /* sig hup */
-    if (s->pid) kill(s->pid, SIGHUP);
+    if (s->pid && ! custom(c)) kill(s->pid, SIGHUP);
     break;
   case 'i': /* sig int */
-    if (s->pid) kill(s->pid, SIGINT);
+    if (s->pid && ! custom(c)) kill(s->pid, SIGINT);
     break;
   case 'q': /* sig quit */
-    if (s->pid) kill(s->pid, SIGQUIT);
+    if (s->pid && ! custom(c)) kill(s->pid, SIGQUIT);
     break;
   case '1': /* sig usr1 */
-    if (s->pid) kill(s->pid, SIGUSR1);
+    if (s->pid && ! custom(c)) kill(s->pid, SIGUSR1);
     break;
   case '2': /* sig usr2 */
-    if (s->pid) kill(s->pid, SIGUSR2);
+    if (s->pid && ! custom(c)) kill(s->pid, SIGUSR2);
     break;
   }
   return(1);

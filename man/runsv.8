@@ -157,6 +157,30 @@ ignores unknown characters written to the control pipe.
 usually blocks if no
 .B runsv
 process is running in the service directory.
+.SH CUSTOMIZE CONTROL
+For each control character
+.I c
+sent to the control pipe,
+.B runsv
+first checks if
+.I service\fR/control/\fIc
+exists and is executable.
+If so, it starts
+.I service\fR/control/\fIc
+and waits for it to terminate, before interpreting the command.
+If the program exits with return code 0,
+.B runsv
+refrains from sending the service the corresponding signal.
+The command
+.I o
+is always considered as command
+.IR u .
+The
+.IR u ,
+.IR e ,
+and
+.I x
+commands of an optional log service cannot be customized.
 .SH SIGNALS
 If
 .B runsv

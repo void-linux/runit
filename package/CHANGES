@@ -1,3 +1,10 @@
+runit 1.2.0
+
+  * doc/upgrade.html: typo.
+  * runsv.c: support custom control commands through control/ directory,
+    optionally switch off sending signal.
+  * man/runsv.8: document custom control commands.
+
 runit 1.1.0
 Sat, 06 Nov 2004 17:21:11 +0000
   * svlogd.c: new config option t timeout (thx Enrico Scholz); config
