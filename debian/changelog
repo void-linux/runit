@@ -2,8 +2,9 @@ runit (0.3.2-2) woody; urgency=low
 
   * getty service directory /etc/runit/getty-tty5 moved to
     /etc/runit/getty-5 according to updated doc/replaceinit.html.
+  * compiled with dietlibc 0.16.
 
- -- Gerrit Pape <pape@smarden.org>  Sat, 30 Mar 2002 12:35:02 +0100
+ -- Gerrit Pape <pape@smarden.org>  Sat, 30 Mar 2002 13:05:28 +0100
 
 runit (0.3.2-1) woody; urgency=low
 
