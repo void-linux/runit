@@ -11,7 +11,7 @@
 
 #define USAGE " [ -l ] service ..."
 
-#define VERSION "$Id: runsvstat.c,v 1.6 2003/02/25 12:51:39 pape Exp $"
+#define VERSION "$Id: runsvstat.c,v 1.7 2003/05/04 09:41:10 pape Exp $"
 
 #define FATAL "runsvstat: fatal: "
 #define WARNING "runsvstat: warning: "
@@ -163,5 +163,5 @@ int main(int argc, char **argv) {
     }
   }
   if (rc > 100) rc =100;
-  exit(rc);
+  _exit(rc);
 }

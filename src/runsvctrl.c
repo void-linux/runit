@@ -5,7 +5,7 @@
 
 #define USAGE " u|d|o|p|c|h|a|i|1|2|t|k|x|e service ..."
 
-#define VERSION "$Id: runsvctrl.c,v 1.5 2003/02/25 12:51:39 pape Exp $"
+#define VERSION "$Id: runsvctrl.c,v 1.6 2003/05/04 09:41:10 pape Exp $"
 
 #define FATAL "runsvctrl: fatal: "
 #define WARNING "runsvctrl: warning: "
@@ -77,5 +77,5 @@ int main(int argc, char **argv) {
     }
   }
   if (rc > 100) rc =100;
-  exit(rc);
+  _exit(rc);
 }
