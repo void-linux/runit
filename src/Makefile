@@ -1,5 +1,4 @@
-IT=sysdeps runit runit-init runsv runsvdir rsv-status rsv-control svwaitup \
-svwaitdown utmpset
+IT=sysdeps runit runit-init runsv runsvdir svwaitup svwaitdown utmpset
 
 default: $(IT)
 

@@ -221,11 +221,12 @@ void startservice(struct svdir *s) {
     else
       fatal2("unable to start ", *run);
   }
-  if (s->state != S_FINISH)
+  if (s->state != S_FINISH) {
     taia_now(&s->start);
+    s->state =S_RUN;
+  }
   s->pid =p;
   s->ctrl =C_NOOP;
-  if (s->state != S_FINISH) s->state =S_RUN;
   update_status(s);
   sleep(1);
 }
@@ -242,6 +243,7 @@ int ctrl(struct svdir *s, char c) {
     if (s->pid == 0) startservice(s);
     else update_status(s);
     break;
+  case 'e':
   case 'x': /* exit */
     if (s->islog) break;
     s->want =W_EXIT;

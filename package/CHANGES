@@ -1,3 +1,8 @@
+runit 0.5.3
+Tue, 24 Sep 2002 12:14:02 +0200
+  * package/commands: remove rsv-status, rsv-control.
+  * runsvdir.c, runsv.c: code cleanup.
+
 runit 0.5.2
 Mon, 23 Sep 2002 16:25:07 +0200
   * runsv, runsvdir: new; svscan/supervise replacement.

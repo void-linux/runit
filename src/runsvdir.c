@@ -30,8 +30,8 @@ struct {
 } sv[MAXSERVICES];
 int svnum =0;
 int check =1;
-char *svlog =0;
-int svloglen;
+char *log =0;
+int loglen;
 int logpipe[2];
 iopause_fd io[1];
 struct taia stamplog;
@@ -49,15 +49,8 @@ void warn3x(char *m1, char *m2, char *m3) {
   strerr_warn6("runsvdir ", svdir, ": warning: ", m1, m2, m3, 0);
 } 
 void runsv(int no, char *name) {
-  struct stat s;
   int pid;
 
-  if (stat(name, &s) == -1) {
-    warn("unable to stat ", name);
-    return;
-  }
-  if (! S_ISDIR(s.st_mode))
-    return;
   if ((pid =fork()) == -1) {
     warn("unable to fork for ", name);
     return;
@@ -69,7 +62,7 @@ void runsv(int no, char *name) {
     prog[0] ="runsv";
     prog[1] =name;
     prog[2] =0;
-    if (svlog)
+    if (log)
       if (fd_move(2, logpipe[1]) == -1)
 	warn("unable to set filedescriptor for log service", 0);
     pathexec_run(*prog, prog, (const char* const*)environ);
@@ -97,6 +90,8 @@ void runsvdir() {
       warn("unable to stat ", d->d_name);
       return;
     }
+    if (! S_ISDIR(s.st_mode))
+      continue;
     for (i =0; i < svnum; i++) {
       if ((sv[i].ino == s.st_ino) && (sv[i].dev == s.st_dev)) {
 	sv[i].isgone =0;
@@ -137,8 +132,8 @@ void runsvdir() {
   }
 }
 
-int setup_svlog() {
-  if ((svloglen =str_len(svlog)) < 7) {
+int setup_log() {
+  if ((loglen =str_len(log)) < 7) {
     warn3x("log must have at least seven characters.", 0, 0);
     return(0);
   }
@@ -175,9 +170,9 @@ int main(int argc, char **argv) {
 
   svdir =*argv++;
   if (argv && *argv) {
-    svlog =*argv;
-    if (setup_svlog() != 1) {
-      svlog =0;
+    log =*argv;
+    if (setup_log() != 1) {
+      log =0;
       warn3x("log service disabled.", 0, 0);
     }
   }
@@ -210,7 +205,7 @@ int main(int argc, char **argv) {
       warn("unable to stat ", svdir);
 
     taia_now(&now);
-    if (svlog)
+    if (log)
       if (taia_less(&now, &stamplog) == 0) {
 	write(logpipe[1], ".", 1);
 	taia_uint(&deadline, 900);
@@ -220,19 +215,19 @@ int main(int argc, char **argv) {
     taia_add(&deadline, &now, &deadline);
 
     sig_block(sig_child);
-    if (svlog)
+    if (log)
       iopause(io, 1, &deadline, &now);
     else
       iopause(0, 0, &deadline, &now);
     sig_unblock(sig_child);
 
-    if (svlog)
+    if (log)
       if (io[0].revents | IOPAUSE_READ) {
 	while (read(logpipe[0], &ch, 1) > 0) {
 	  if (ch) {
-	    for (i =6; i < svloglen; i++)
-	      svlog[i -1] =svlog[i];
-	    svlog[svloglen -1] =ch;
+	    for (i =6; i < loglen; i++)
+	      log[i -1] =log[i];
+	    log[loglen -1] =ch;
 	  }
 	}
       }
