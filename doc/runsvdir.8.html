@@ -6,14 +6,14 @@
 <title>runsvdir(8) manual page</title>
 </head>
 <body bgcolor='white'>
-<a href='#toc'>Table of Contents</a><p>
+<a href='http://smarden.org/pape/'>G. Pape</a><br><a href='index.html'>runit</A><hr><p>
 
-<h2><a name='sect0' href='#toc0'>Name</a></h2>
+<h2><a name='sect0'>Name</a></h2>
 runsvdir - starts and monitors a collection of <i>runsv(8)</i> processes 
-<h2><a name='sect1' href='#toc1'>Synopsis</a></h2>
+<h2><a name='sect1'>Synopsis</a></h2>
 <b>runsvdir</b>
 <i>dir</i> [ <i>log</i> ] 
-<h2><a name='sect2' href='#toc2'>Description</a></h2>
+<h2><a name='sect2'>Description</a></h2>
 <i>dir</i> must be a directory. <i>log</i> is a space holder for
 a readproctitle log and must be at least seven characters long. <p>
 <b>runsvdir</b>
@@ -34,20 +34,20 @@ a process-listing tool such as <i><b>ps</b>(1)</i>. <b>runsvdir</b> writes a dot
 log every 15 minutes so that old error messages expire. <p>
 Normally <b>runsvdir</b>
 is started by <i><b>runit</b>(8)</i> in stage 2. 
-<h2><a name='sect3' href='#toc3'>Signals</a></h2>
+<h2><a name='sect3'>Signals</a></h2>
 If <b>runsvdir</b> receives a TERM signal,
 it exits with 0 immediately. <p>
 If <b>runsvdir</b> receives a HUP signal, it sends
 a TERM signal to each <i><b>runsv</b>(8)</i> process it is monitoring and then exits
 with 111. 
-<h2><a name='sect4' href='#toc4'>See Also</a></h2>
+<h2><a name='sect4'>See Also</a></h2>
 <i>runsvchdir(8)</i>, <i>runsv(8)</i>, <i>runsvctrl(8)</i>, <i>runsvstat(8)</i>, <i>runit(8)</i>,
 <i>runit-init(8)</i>, <i>svlogd(8)</i>, <i>svwaitdown(8)</i>, <i>svwaitup(8)</i>, <i>readproctitle(8)</i>,
 <i>svscan(8)</i> <p>
  <i>http://smarden.org/runit/</i><br>
   <i>http://cr.yp.to/daemontools.html</i><br>
  
-<h2><a name='sect5' href='#toc5'>Author</a></h2>
+<h2><a name='sect5'>Author</a></h2>
 Gerrit Pape &lt;pape@smarden.org&gt; <p>
 
 <hr><p>

@@ -6,14 +6,14 @@
 <title>svlogd(8) manual page</title>
 </head>
 <body bgcolor='white'>
-<a href='#toc'>Table of Contents</a><p>
+<a href='http://smarden.org/pape/'>G. Pape</a><br><a href='index.html'>runit</A><hr><p>
 
-<h2><a name='sect0' href='#toc0'>Name</a></h2>
+<h2><a name='sect0'>Name</a></h2>
 svlogd - runit&rsquo;s service logging daemon 
-<h2><a name='sect1' href='#toc1'>Synopsis</a></h2>
+<h2><a name='sect1'>Synopsis</a></h2>
 <b>svlogd</b> [-tv] [-r <i>c]</i> [-R
 <i>xyz]</i> [-l <i>n]</i> [-b <i>n]</i> <i>logs</i> 
-<h2><a name='sect2' href='#toc2'>Description</a></h2>
+<h2><a name='sect2'>Description</a></h2>
 <i>logs</i> consists of one or more arguments,
 each specifying a directory. <p>
 <b>svlogd</b> continuously reads log data from its
@@ -25,7 +25,7 @@ be processed by an arbitrary processor program when they are rotated, and
 <b>svlogd</b>
 runs until it sees end-of-file on standard input or is sent a TERM signal,
 see below. 
-<h3><a name='sect3' href='#toc3'>Log Directory</a></h3>
+<h3><a name='sect3'>Log Directory</a></h3>
 A log directory <i>log</i> contains some number of old
 log files, and the current log file <i>current</i>. Old log files have a file name
 starting with <i>@</i> followed by a precise timestamp (see <i><b>tai64n</b>(8)</i>), indicating
@@ -38,7 +38,7 @@ has trouble opening a log directory, it prints a warning, and ignores this
 log directory. If <b>svlogd</b> is unable to open all log directories given at
 the command line, it exits with an error. This can happen on start-up or
 after receiving a HUP signal. 
-<h3><a name='sect4' href='#toc4'>Log File Rotation</a></h3>
+<h3><a name='sect4'>Log File Rotation</a></h3>
 <b>svlogd</b> appends selected log
 messages to the <i>current</i> log file. If <i>current</i> has <i>size</i> bytes or more size
 (or there is a new-line within the last <i>len</i> of <i>size</i> bytes) <i>current</i> is rotated:
@@ -46,7 +46,7 @@ messages to the <i>current</i> log file. If <i>current</i> has <i>size</i> bytes
 <b>svlogd</b> closes <i>current</i>, changes permission of <i>current</i> to 0755, renames <i>current</i>
 to @<i>timestamp.s,</i> and starts with a new empty <i>current</i>. If <b>svlogd</b> sees <i>num</i>
 or more old log files in <i>dir</i>, it removes the oldest. 
-<h3><a name='sect5' href='#toc5'>Processor</a></h3>
+<h3><a name='sect5'>Processor</a></h3>
 If <b>svlogd</b>
 is told to process recent log files, it saves <i>current</i> to @<i>timestamp.u,</i> feeds
 @<i>timestamp.u</i> through &lsquo;&lsquo;sh -c "<i>processor</i>"&rsquo;&rsquo; and writes the output to @<i>timestamp.t.</i>
@@ -62,7 +62,7 @@ running <i>processor</i> has finished successfully. Only the HUP signal works in
 that situation. Note that this may block any program feeding its log data
 to <b>svlogd.</b> 
 <p> 
-<h3><a name='sect6' href='#toc6'>Config</a></h3>
+<h3><a name='sect6'>Config</a></h3>
 On startup, and after receiving a HUP signal, <b>svlogd</b> checks
 for each <i>log</i> if the configuration file <i>log/config</i> exists, and if so, reads
 the file line by line and adjusts configuration for <i>log</i> as follows: <p>
@@ -111,7 +111,7 @@ not matching <i>pattern</i> are printed to standard error. </dd>
 <p>
 Initially each line
 is selected. Deselected log messages are discarded from <i>log</i>. 
-<h2><a name='sect7' href='#toc7'>Pattern Matching</a></h2>
+<h2><a name='sect7'>Pattern Matching</a></h2>
 <b>svlogd</b>
 matches a log message against the string <i>pattern</i> as follows: <p>
 <i>pattern</i> is
@@ -121,7 +121,7 @@ the next character in <i>pattern</i> in the log message one or more times. A sta
 before the end of <i>pattern</i> matches any string in the log message that does
 not include the next character in <i>pattern</i>. A star at the end of <i>pattern</i>
 matches any string. 
-<h2><a name='sect8' href='#toc8'>Options</a></h2>
+<h2><a name='sect8'>Options</a></h2>
 
 <dl>
 
@@ -154,7 +154,7 @@ is 1024. <i>buflen</i> must be greater than <i>len</i>. </dd>
 to standard error. </dd>
 </dl>
 
-<h2><a name='sect9' href='#toc9'>Signals</a></h2>
+<h2><a name='sect9'>Signals</a></h2>
 If <b>svlogd</b> is sent a HUP signal, it closes and
 reopens all <i>logs</i>, and updates their configuration according to <i>log/config</i>.
 If <b>svlogd</b> has trouble opening a log directory, it prints a warning, and
@@ -167,12 +167,12 @@ to finish if any, and exits 0 as soon as possible. <p>
 If <b>svlogd</b> is sent an
 ALRM signal, it forces log file rotation for all <i>logs</i> with a non empty
 <i>current</i> log file. 
-<h2><a name='sect10' href='#toc10'>See Also</a></h2>
+<h2><a name='sect10'>See Also</a></h2>
 <i>runsv(8)</i>, <i>runsvstat(8)</i>, <i>runsvctrl(8)</i>, <i>runsvdir(8)</i>,
 <i>runsvchdir(8)</i>, <i>runit(8)</i>, <i>runit-init(8)</i>, <i>multilog(8)</i> <p>
 <i>http://smarden.org/runit/</i>
 
-<h2><a name='sect11' href='#toc11'>Author</a></h2>
+<h2><a name='sect11'>Author</a></h2>
 Gerrit Pape &lt;pape@smarden.org&gt; <p>
 
 <hr><p>

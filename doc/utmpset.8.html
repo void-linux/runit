@@ -6,14 +6,14 @@
 <title>utmpset(8) manual page</title>
 </head>
 <body bgcolor='white'>
-<a href='#toc'>Table of Contents</a><p>
+<a href='http://smarden.org/pape/'>G. Pape</a><br><a href='index.html'>runit</A><hr><p>
 
-<h2><a name='sect0' href='#toc0'>Name</a></h2>
+<h2><a name='sect0'>Name</a></h2>
 utmpset - logout a line from utmp and wtmp file 
-<h2><a name='sect1' href='#toc1'>Synopsis</a></h2>
+<h2><a name='sect1'>Synopsis</a></h2>
 <b>utmpset</b> [ <b>-w</b>
 ] <i>line</i> 
-<h2><a name='sect2' href='#toc2'>Description</a></h2>
+<h2><a name='sect2'>Description</a></h2>
 The <b>utmpset</b> program modifies the user accounting database
 <i><b>utmp</b>(5)</i> and optionally <i><b>wtmp</b>(5)</i> to indicate that the user on the terminal
 <i>line</i> has logged out. <p>
@@ -27,7 +27,7 @@ run scripts, e.g.: <p>
   /command/utmpset -w tty5<br>
   exec /sbin/getty 38400 tty5 linux<br>
  
-<h2><a name='sect3' href='#toc3'>Options</a></h2>
+<h2><a name='sect3'>Options</a></h2>
 
 <dl>
 
@@ -36,15 +36,15 @@ run scripts, e.g.: <p>
 <i>line</i> to the wtmp file. </dd>
 </dl>
 
-<h2><a name='sect4' href='#toc4'>Exit Codes</a></h2>
+<h2><a name='sect4'>Exit Codes</a></h2>
 <b>utmpset</b> returns 111 on error, 1 on wrong
 usage, 0 in all other cases. 
-<h2><a name='sect5' href='#toc5'>See Also</a></h2>
+<h2><a name='sect5'>See Also</a></h2>
 <i>runsv(8)</i>, <i>runsvctrl(8)</i>, <i>runsvstat(8)</i>,
 <i>runsvdir(8)</i>, <i>runsvchdir(8)</i>, <i>runit(8)</i>, <i>runit-init(8)</i>, <i>getty(8)</i> <p>
 <i>http://smarden.org/runit/</i>
 
-<h2><a name='sect6' href='#toc6'>Author</a></h2>
+<h2><a name='sect6'>Author</a></h2>
 Gerrit Pape &lt;pape@smarden.org&gt; <p>
 
 <hr><p>
