@@ -1,4 +1,5 @@
-  * doc/runscripts.html: use html named entities (thx Taj Khattra).
+  * doc/runscripts.html: use html named entities (thx Taj Khattra); add more
+    contributed run scripts (thx Thomas Schwinge).
 
 runit 0.12.1
 Tue, 18 Nov 2003 15:42:44 +0000
