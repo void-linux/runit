@@ -1,3 +1,5 @@
+runit 0.12.0
+Wed, 29 Oct 2003 12:39:28 +0000
   * runsv.c: don't use EOVERFLOW as it is not standard (thx Christoph
     Scheurer).
   * reboot_system.h1, reboot_system.h2, tryreboot.c: new; test if reboot()
