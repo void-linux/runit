@@ -1,4 +1,6 @@
   * doc/runscripts: add pppd run script (with chpst) next to the ppp one.
+  * man/chpst.8: typo.
+  * etc/debian/3: test -r -> test -x (thx Alejandro Mery).
 
 runit 0.12.0
 Wed, 29 Oct 2003 18:27:48 +0000
