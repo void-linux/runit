@@ -1,8 +1,13 @@
-runit (1.0.1-0.1) unstable; urgency=low
+runit (1.0.1-1) unstable; urgency=low
 
   * new upstream release.
+   * chpst -e dir doesn't barf on subdirectories of dir (closes: #234172).
+  * debian/runsvdir-start.8: new; tnx Bastian Kleineidam (closes: #234114).
+  * debian/rules: run make check; no longer provide /usr/sbin/setuidgid;
+    install runsvdir-start man page; create .diet/gcc on i386 to suppress
+    gcc warnings in build logs; minor.
 
- -- Gerrit Pape <pape@smarden.org>  Sun, 22 Feb 2004 08:26:24 +0000
+ -- Gerrit Pape <pape@smarden.org>  Mon,  8 Mar 2004 15:49:54 +0000
 
 runit (1.0.0-1) unstable; urgency=low
 
