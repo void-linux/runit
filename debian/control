@@ -2,8 +2,8 @@ Source: runit
 Section: admin
 Priority: optional
 Maintainer: Gerrit Pape <pape@smarden.org>
-Build-Depends: dietlibc-dev (>> 0.24-0) [alpha arm hppa i386 ia64 mips mipsel powerpc sparc], debhelper (>> 3.0.0)
-Standards-Version: 3.6.0
+Build-Depends: dietlibc-dev (>> 0.24-0) [alpha arm hppa i386 ia64 mips mipsel powerpc sparc]
+Standards-Version: 3.6.1.0
 
 Package: runit
 Architecture: any

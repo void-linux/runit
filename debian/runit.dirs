@@ -1,6 +1,0 @@
-sbin
-usr/sbin
-usr/bin
-var/service
-etc/runit/getty-5
-var/run/getty-5

@@ -1,3 +1,17 @@
+runit (0.12.1-2) unstable; urgency=low
+
+  * debian/control: no longer Build-Depends: debhelper; Standards-Version:
+    3.6.1.0.
+  * debian/rules: stop using debhelper, use implicit rules.
+  * debian/implicit: new; implicit Makefile rules.
+  * debian/README.Debian: rename to debian/runit.README.Debian.
+  * debian/runit.dirs, debian/runit.links: remove; obsolete.
+  * debian/runit.conffiles, debian/runit.docs: new.
+  * debian/runit.postinst, debian/runit.postrm, debian/runit.preinst: minor
+    cleanup.
+
+ -- Gerrit Pape <pape@smarden.org>  Mon, 29 Dec 2003 14:51:48 +0000
+
 runit (0.12.1-1) unstable; urgency=low
 
   * new upstream version.
