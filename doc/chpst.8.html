@@ -1,0 +1,126 @@
+
+
+
+<HTML>
+<HEAD>
+<TITLE>chpst(8) manual page</TITLE>
+</HEAD>
+<BODY bgcolor=white>
+<a href="http://smarden.org/pape/">G. Pape</a><br><A HREF="index.html">runit</A><hr><P>
+
+<H2><A NAME="sect0">Name</A></H2>
+chpst - runs a program with a changed process state 
+<H2><A NAME="sect1">Synopsis</A></H2>
+<B>chpst</B> [-vP012]
+[-u <I>user</I>] [-U <I>user</I>] [-e <I>dir</I>] [-l|-L <I>lock</I>] [-m <I>bytes</I>] [-o <I>n</I>] [-p <I>n</I>] [-f <I>bytes</I>] [-c
+<I>bytes</I>] <I>prog</I> 
+<H2><A NAME="sect2">Description</A></H2>
+<I>prog</I> consists of one or more arguments. <P>
+<B>chpst</B> changes
+the process state according to the given options, and runs <I>prog</I>. 
+<H2><A NAME="sect3">Options</A></H2>
+
+<DL>
+
+<DT><B>-u
+<I>user[:group]</B> </I></DT>
+<DD>setuidgid. Set uid and gid to the <I>user</I>'s uid and gid. If <I>user</I>
+is followed by a colon and a <I>group</I>, set the gid to <I>group</I>'s gid instead of
+<I>user</I>'s gid. All supplementary groups are removed. </DD>
+
+<DT><B>-U <I>user[:group]</B> </I></DT>
+<DD>envuidgid.
+Set the environment variables $UID and $GID to the <I>user</I>'s uid and gid. If
+<I>user</I> is followed by a colon and a <I>group</I>, set $GID to the <I>group</I>'s gid instead
+of <I>user</I>'s gid. </DD>
+
+<DT><B>-e <I>dir</B> </I></DT>
+<DD>envdir. Set various environment variables as specified
+by files in the directory <I>dir</I>: If <I>dir</I> contains a file named <I>k</I> whose first
+line is <I>v</I>, <B>chpst</B> removes the environment variable <I>k</I> if it exists, and then
+adds the environment variable <I>k</I> with the value <I>v</I>. The name <I>k</I> must not contain
+=. Spaces and tabs at the end of <I>v</I> are removed, and nulls in <I>v</I> are changed
+to newlines. If the file <I>k</I> is empty (0 bytes long), <B>chpst</B> removes the environment
+variable <I>k</I> if it exists, without adding a new variable. </DD>
+
+<DT><B>-l <I>lock</B> </I></DT>
+<DD>lock. Open
+the file <I>lock</I> for writing, and obtain an exclusive lock on it. <I>lock</I> will
+be created if it does not exist. If <I>lock</I> is locked by another process, wait
+until a new lock can be obtained. </DD>
+
+<DT><B>-L <I>lock</B> </I></DT>
+<DD>The same as -l, but fail immediately
+if <I>lock</I> is locked by another process. </DD>
+
+<DT><B>-m <I>bytes</B> </I></DT>
+<DD>limit memory. Limit the data
+segment, stack segment, locked physical pages, and total of all segment
+per process to <I>bytes</I> bytes each. </DD>
+
+<DT><B>-o <I>n</B> </I></DT>
+<DD>limit open files. Limit the number of
+open file descriptors per process to <I>n</I>. </DD>
+
+<DT><B>-p <I>n</B> </I></DT>
+<DD>limit processes. Limit the number
+of processes per uid to <I>n</I>. </DD>
+
+<DT><B>-f <I>bytes</B> </I></DT>
+<DD>limit output size. Limit the output file
+size to <I>bytes</I> bytes. </DD>
+
+<DT><B>-c <I>bytes</B> </I></DT>
+<DD>limit core size. Limit the core file size to
+<I>bytes</I> bytes. </DD>
+
+<DT><B>-v</B> </DT>
+<DD>verbose. Print warnings about limits unsupported by the system
+to standard error. </DD>
+
+<DT><B>-P</B> </DT>
+<DD>pgrphack. Run <I>prog</I> in a new process group. </DD>
+
+<DT><B>-0</B> </DT>
+<DD>Close standard
+input before running <I>prog</I>. </DD>
+
+<DT><B>-1</B> </DT>
+<DD>Close standard output before running <I>prog</I>. </DD>
+
+<DT><B>-2</B>
+</DT>
+<DD>Close standard error before running <I>prog</I>. </DD>
+</DL>
+
+<H2><A NAME="sect4">Exit Codes</A></H2>
+<B>chpst</B> exits 100 when
+called with wrong options. It prints an error message and exits 111 if it
+has trouble changing the process state. Otherwise its exit code is the same
+as that of <I>prog</I>. 
+<H2><A NAME="sect5">Emulation</A></H2>
+If <B>chpst</B> is called as <B><I>envdir</B>(8)</I>, <B><I>envuidgid</B>(8)</I>,
+<B><I>pgrphack</B>(8)</I>, <B><I>setlock</B>(8)</I>, <B><I>setuidgid</B>(8)</I>, or <B><I>softlimit</B>(8)</I>, it emulates the
+functionality of these programs from the daemontools package respectively.
+
+<H2><A NAME="sect6">See Also</A></H2>
+<I>runsv(8)</I>, <I>runsvctrl(8)</I>, <I>runsvstat(8)</I>, <I>runsvdir(8)</I>, <I>setsid(2)</I> <P>
+ <I>http://smarden.org/runit/</I><BR>
+  <I>http://cr.yp.to/daemontools.html</I><BR>
+ 
+<H2><A NAME="sect7">Author</A></H2>
+Gerrit Pape &lt;pape@smarden.org&gt; <P>
+
+<HR><P>
+<A NAME="toc"><B>Table of Contents</B></A><P>
+<UL>
+<LI><A NAME="toc0" HREF="#sect0">Name</A></LI>
+<LI><A NAME="toc1" HREF="#sect1">Synopsis</A></LI>
+<LI><A NAME="toc2" HREF="#sect2">Description</A></LI>
+<LI><A NAME="toc3" HREF="#sect3">Options</A></LI>
+<LI><A NAME="toc4" HREF="#sect4">Exit Codes</A></LI>
+<LI><A NAME="toc5" HREF="#sect5">Emulation</A></LI>
+<LI><A NAME="toc6" HREF="#sect6">See Also</A></LI>
+<LI><A NAME="toc7" HREF="#sect7">Author</A></LI>
+</UL>
+</BODY></HTML>
