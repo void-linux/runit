@@ -101,11 +101,11 @@ is down, <b>runsv</b> exits. This command is ignored if it is given to <i>servic
 </dd>
 </dl>
 <p>
-Example: to send a TERM signal to the socklog-unix service, either do  
-# runsvctrl term /var/service/socklog-unix<br>
-  or<br>
-   # echo -n t &gt;/var/service/socklog-unix/supervise/control<br>
- <p>
+Example: to send a TERM signal to the socklog-unix service, either do<br>
+  # runsvctrl term /var/service/socklog-unix<br>
+ or<br>
+  # echo -n t &gt;/var/service/socklog-unix/supervise/control<br>
+<p>
 If <i><b>echo</b>(1)</i> on your systems does not provide the -n option, leave it out,
 <b>runsv</b> ignores unknown characters written to the control pipe. <i><b>echo</b>(1)</i> usually
 blocks if no <b>runsv</b> process is running in the service directory. 

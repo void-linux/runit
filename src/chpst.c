@@ -97,7 +97,7 @@ void edir(const char *dirname) {
   int i;
 
   if (! (wdir =open_read(".")))
-    fatal("unable to open current working direcotry");
+    fatal("unable to open current working directory");
   if (chdir(dirname)) fatal2("unable to switch to directory", dirname);
   if (! (dir =opendir("."))) fatal2("unable to open directory", dirname);
   for (;;) {
@@ -308,7 +308,7 @@ int main(int argc, const char *const *argv) {
     case '0': nostdin =1; break;
     case '1': nostdout =1; break;
     case '2': nostderr =1; break;
-    case 'V': strerr_warn1("$Id: chpst.c,v 1.5 2004/11/06 15:38:34 pape Exp $", 0);
+    case 'V': strerr_warn1("$Id: chpst.c,v 1.6 2005/01/10 19:35:51 pape Exp $", 0);
     case '?': usage();
     }
   argv +=optind;

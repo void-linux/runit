@@ -1,6 +1,6 @@
 .TH svwaitup 8
 .SH NAME
-svwaitup \- waits for services controlled by runsv(8) or supervise(8) to be up
+svwaitup \- waits for services controlled by runsv(8) to be up
 .SH SYNOPSIS
 .B svwaitup
 [
@@ -13,22 +13,18 @@ svwaitup \- waits for services controlled by runsv(8) or supervise(8) to be up
 .I services
 .SH DESCRIPTION
 .I services
-consist of one or more arguments.
-Each
-.I service
-directory must start with a slash.
+consists of one or more arguments, each argument naming a service directory.
 .P
 .B svwaitup
 checks each
 .I service
 given at the command line for being at least the specified number of seconds
 .I sec
-up. The
+up.
+The
 .I services
 given at the command line must be controlled by
-.BR runsv (8),
-or
-.BR supervise (8).
+.BR runsv (8).
 .P
 .B svwaitup
 blocks until all
@@ -41,7 +37,8 @@ was checking or reports errors.
 .SH OPTIONS
 .TP
 .B \-v
-verbose. Print verbose messages to stderr.
+verbose.
+Print verbose messages to stderr.
 .TP
 .B \-s \fIsec
 Set the minimum number of seconds each
@@ -50,7 +47,7 @@ has to be up to
 .I sec
 seconds.
 .I sec
-must be between 2 and 600.
+must be between 1 and 600.
 Default is 2.
 .SH EXIT CODES
 .B svwaitup
@@ -65,7 +62,8 @@ If
 .B svwaitup
 exits 0, it does not guarantee that all
 .I services
-are actually running. A
+are actually running.
+A
 .I service
 could have crashed immediatly after
 .B svwaitup
@@ -102,7 +100,6 @@ runsvdir(8),
 runsvchdir(8),
 utmpset(8)
 .P
- http://smarden.org/runit/
- http://cr.yp.to/daemontools.html
+http://smarden.org/runit/
 .SH AUTHOR
 Gerrit Pape <pape@smarden.org>

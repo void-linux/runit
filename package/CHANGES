@@ -1,3 +1,19 @@
+runit 1.2.1
+Sat, 15 Jan 2005 11:57:46 +0000
+  * chpst.c: typo.
+  * svwaitdown.c: minimum timeout is 1 second; service directories no longer
+    must start with /.
+  * svwaitup.c: minimum uptime of services is 1 second; service directories
+    no longer must start with /; print number of seconds a service is up if
+    verbose.
+  * man/svwaitdown.8, man/svwaitup.8: adapt.
+  * doc/runscripts.html: add contributed run scripts (thx Stefan Karrmann,
+    Kevin Berry, Karl Chen).
+  * runsv.c: typos; bugfix: run optional control/x when receiving SIGTERM
+    (thx Vladimir Smelhaus); minor.
+  * man/runsvctrl.8: minor.
+  * package/COPYING: adapt, 2005.
+
 runit 1.2.0
 Fri, 17 Dec 2004 21:08:50 +0000
   * doc/upgrade.html: typo.
