@@ -84,6 +84,8 @@ install: build
 	  $(CURDIR)/debian/runit/usr/bin/runsv
 	install -m0755 admin/runit-0.8.4/src/runsvchdir \
 	  $(CURDIR)/debian/runit/usr/sbin/runsvchdir
+	install -m0755 admin/runit-0.8.4/src/svlogd \
+	  $(CURDIR)/debian/runit/usr/bin/svlogd
 	install -m0755 admin/runit-0.8.4/src/svwaitdown \
 	  $(CURDIR)/debian/runit/usr/bin/svwaitdown
 	install -m0755 admin/runit-0.8.4/src/svwaitup \
