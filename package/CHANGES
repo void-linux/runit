@@ -1,5 +1,5 @@
 runit 1.0.5
-Mon, 20 Sep 2004 19:53:33 +0000
+Mon, 20 Sep 2004 20:03:10 +0000
   * svlogd.c: fix line buffer handling for pattern matching (thx Enrico
     Scholz); minor bug fixes.
   * doc/index.html: wording; add link to useinit.html; remove link to runit
