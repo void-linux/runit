@@ -1,5 +1,5 @@
 runit 1.2.0
-
+Sun, 12 Dec 2004 20:17:29 +0000
   * doc/upgrade.html: typo.
   * runsv.c: support custom control commands through control/ directory,
     optionally switch off sending signal.
