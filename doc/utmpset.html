@@ -37,12 +37,13 @@ For each <tt>getty</tt> service, add a line to the corresponding <tt>run</tt>
 script like this:
 <pre>
   #!/bin/sh
-  /package/admin/runit/command/utmpset tty5
+  /package/admin/runit/command/utmpset -w tty5
   exec /sbin/getty 38400 tty5 linux
 </pre>
 This will cause the <tt>utmp</tt> record for line <tt>tty5</tt> to be cleared
-before the <tt>getty</tt> is started; login accounting works as expected for
-this line.
+before the <tt>getty</tt> is started; <i>utmpset</i> additionally writes a
+<tt>wtmp</tt> record if the <tt>-w</tt> option is given. Login accounting
+then works as expected for this line.
 <hr>
 <address><a href="mailto:pape@smarden.org">
 Gerrit Pape &lt;pape@smarden.org&gt;

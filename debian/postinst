@@ -25,7 +25,7 @@ set -e
 case "$1" in
     configure)
 	( \
-	cd /package/admin/runit-0.4.0
+	cd /package/admin/runit-0.4.1
 	package/upgrade
 	)
     ;;
