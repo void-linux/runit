@@ -39,21 +39,22 @@ is told to shutdown the system, or the Stage 2 returns without errors, it
 terminates Stage 2 if it is running, and runs
 .IR /etc/runit/3 .
 The systems tasks to shutdown and halt or reboot are done here.
-Normally in Stage 3
-.I /etc/runit/3
-checks for the file
-.IR /etc/runit/reboot .
-If it exists, the system is rebooted, it is halted otherwise.
+If Stage 3 returns,
+.B runit
+checks if the file
+.I /etc/runit/reboot
+exists and has the execute by owner permission set.
+If so, the system is rebooted, it's halted otherwise.
 .SH CTRL-ALT-DEL
 If
 .B runit
 receives the ctrl-alt-del keyboard request and the file
 .I /etc/runit/ctrlaltdel
-exists,
+exists and has the execute by owner permission set,
 .B runit
 runs
 .IR /etc/runit/ctrlaltdel ,
-waits for it to terminate and then sends itself a CONT signal.
+waits for it to terminate, and then sends itself a CONT signal.
 .SH SIGNALS
 .B runit
 only accepts signals in Stage 2.
@@ -62,7 +63,7 @@ If
 .B runit
 receives a CONT signal and the file
 .I /etc/runit/stopit
-exists,
+exists and has the execute by owner permission set,
 .B runit
 is told to shutdown the system.
 .P

@@ -23,14 +23,16 @@ while the system is up, it must be either called as <B>init 0</B> or <B>init 6:<
 <DT><B>init
 0</B> </DT>
 <DD>tells the Unix process no 1 to shutdown and halt the system. To signal
-<B><I>runit</B>(8)</I> the system halt request, the <I>/etc/runit/reboot</I> file is removed
-and <I>/etc/runit/stopit</I> is touched. Then a CONT signal is sent to <B><I>runit</B>(8)</I>.
-</DD>
+<B><I>runit</B>(8)</I> the system halt request, <B>runit-init</B> removes all permissions of
+the file <I>/etc/runit/reboot</I> (chmod 0), and sets the execute by owner permission
+of the file <I>/etc/runit/stopit</I> (chmod 100). Then a CONT signal is sent to
+<B><I>runit</B>(8)</I>. </DD>
 
 <DT><B>init 6</B> </DT>
-<DD>tells the Unix process no 1 to shutdown and reboot the system. To
-signal <B><I>runit</B>(8)</I> the system reboot request, the <I>/etc/runit/reboot</I> and <I>/etc/runit/stopit</I>
-files are touched. Then a CONT signal is sent to <B><I>runit</B>(8)</I>. </DD>
+<DD>tells the Unix process no 1 to shutdown and reboot the
+system. To signal <B><I>runit</B>(8)</I> the system reboot request, <B>runit-init</B> sets the
+execute by owner permission of the files <I>/etc/runit/reboot</I> and <I>/etc/runit/stopit</I>
+(chmod 100). Then a CONT signal is sent to <B><I>runit</B>(8)</I>. </DD>
 </DL>
 
 <H2><A NAME="sect3">Exit Codes</A></H2>
