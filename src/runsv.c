@@ -318,6 +318,7 @@ int ctrl(struct svdir *s, char c) {
 int main(int argc, char **argv) {
   struct stat s;
   int fd;
+  char buf[256];
 
   progname =argv[0];
   if (! argv[1] || argv[2]) usage();
@@ -367,7 +368,21 @@ int main(int argc, char **argv) {
     }
   }
 
-  mkdir("supervise", 0700);
+  if (mkdir("supervise", 0700) == -1) {
+    if ((fd =readlink("supervise", buf, 256)) != -1) {
+      if (fd == 256) {
+	errno =EOVERFLOW;
+	fatal("unable to readlink ./supervise");
+      }
+      buf[fd] =0;
+      mkdir(buf, 0700);
+    }
+    else {
+      if ((errno != ENOENT) && (errno != EINVAL))
+	fatal("unable to readlink ./supervise");
+    }
+  }
+  
   if ((svd[0].fdlock =open_append("supervise/lock")) == -1)
     fatal("unable to open lock");
   if (lock_exnb(svd[0].fdlock) == -1) fatal("unable to lock");
