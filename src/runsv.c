@@ -432,8 +432,10 @@ int main(int argc, char **argv) {
     char ch;
 
     if (haslog)
-      if (! svd[1].pid && svd[1].want == W_UP) startservice(&svd[1]);
-    if (! svd[0].pid && svd[0].want == W_UP) startservice(&svd[0]);
+      if (! svd[1].pid && (svd[1].want == W_UP)) startservice(&svd[1]);
+    if (! svd[0].pid)
+      if ((svd[0].want == W_UP) || (svd[0].state == S_FINISH))
+	startservice(&svd[0]);
 
     x[0].fd =selfpipe[0];
     x[0].events =IOPAUSE_READ;
@@ -465,30 +467,17 @@ int main(int argc, char **argv) {
       if (child == svd[0].pid) {
 	svd[0].pid =0;
 	pidchanged =1;
-	svd[0].state =S_DOWN;
 	svd[0].ctrl &=~C_TERM;
 	taia_now(&svd[0].start);
 	if (svd[0].state != S_FINISH)
 	  if ((fd =open_read("finish")) != -1) {
 	    close(fd);
 	    svd[0].state =S_FINISH;
-	    //	    startservice(&svd[0]);
-	    //	    svd[0].want =W_UP;
 	    update_status(&svd[0]);
 	    break;
 	  }
-	/*
 	svd[0].state =S_DOWN;
-	svd[0].ctrl &=~C_TERM;
-	taia_now(&svd[0].start);
-	*/
 	update_status(&svd[0]);
-	/*
-	if (svd[0].want == W_UP) {
-	  startservice(&svd[0]);
-	  break;
-	}
-	*/
       }
       if (haslog) {
 	if (child == svd[1].pid) {
@@ -498,12 +487,6 @@ int main(int argc, char **argv) {
 	  svd[1].ctrl &=~C_TERM;
 	  taia_now(&svd[1].start);
 	  update_status(&svd[1]);
-	  /*
-	  if (svd[1].want == W_UP) {
-	    startservice(&svd[1]);
-	    break;
-	  }
-	  */
 	}
       }
     }
