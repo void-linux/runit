@@ -3,6 +3,8 @@ Sat, 26 Jun 2004 14:23:30 +0000
   * chpst.c, man/chpst.8: new option -/ chroot.
   * runit.c, man/runit.8: if stage 1 crashes or exits 100, stage 2 will be
     skipped; if stage 2 crashes or exits 111, it will be restarted.
+  * package/check, package/compile, package/install-man, package/upgrade:
+    minor cleanup.
   * doc/runscripts.html: add, adapt various run scripts (thx).
 
 runit 1.0.2
