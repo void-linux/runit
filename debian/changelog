@@ -1,3 +1,15 @@
+runit (1.0.4-1) unstable; urgency=low
+
+  * new upstream release.
+  * debian/control: Build-Depends: dietlibc-dev (>> 0.27-0).
+  * debian/rules: minor cleanup.
+  * debian/implicit: update to revision 1.10.
+  * debian/runit.README.Debian: minor.
+  * debian/runit.postinst, debian/runit.postrm, debian/runit.preinst:
+    simplify; cleanup.
+
+ -- Gerrit Pape <pape@smarden.org>  Sun,  1 Aug 2004 18:38:36 +0000
+
 runit (1.0.3-1) unstable; urgency=low
 
   * new upstream release.

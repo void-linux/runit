@@ -7,9 +7,9 @@ service supervision on systems running sysvinit as init scheme.
 
 The package does not replace the /sbin/init program, and so does not
 enable runit to run as process no 1.  To do so, you need to follow the
-documentation[0] or install the package runit-run.
+documentation[0] or install the runit-run package.
 
-runit's default directory for services is /var/service.
+runit's default directory for services is /var/service/.
 
 [0] http://smarden.org/runit/replaceinit.html
 

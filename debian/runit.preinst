@@ -1,19 +1,6 @@
-#! /bin/sh
+#!/bin/sh
 set -e
 
-case "$1" in
-  install)
-  ;;
-  upgrade)
-    test ! -x /sbin/runit || test -e /sbin/runit.old || \
-      ln /sbin/runit /sbin/runit.old
-  ;;
-  abort-upgrade)
-    ;;
-  *)
-    echo "preinst called with unknown argument \`$1'" >&2
-    exit 1
-  ;;
-esac
-
-exit 0
+test "$1" = 'upgrade' || exit 0
+test ! -x /sbin/runit || test -e /sbin/runit.old || \
+  ln /sbin/runit /sbin/runit.old

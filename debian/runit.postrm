@@ -1,26 +1,14 @@
-#! /bin/sh
+#!/bin/sh
 set -e
 
-case "$1" in
-  remove)
-    if grep -q "#-- runit begin" /etc/inittab; then
-      echo 'Removing SV inittab entry...'
-      rm -f /etc/inittab'{new}'
-      sed -e '/#-- runit begin/,/#-- runit end/d' \
-        /etc/inittab > /etc/inittab'{new}'
-      mv -f /etc/inittab'{new}' /etc/inittab
-      kill -HUP 1
-    fi
-  ;;
-  purge)
-    rm -rf /var/run/getty-5
-  ;;
-  upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
-  ;;
-  *)
-    echo "postrm called with unknown argument \`$1'" >&2
-    exit 1
-  ;;
-esac
+test "$1" = 'remove' || test "$1" = 'purge' || exit 0
 
-exit 0
+if grep '#-- runit begin' /etc/inittab >/dev/null; then
+  echo 'Removing SV inittab entry...'
+  rm -f /etc/inittab'{new}'
+  sed -e '/#-- runit begin/,/#-- runit end/d' \
+    </etc/inittab >/etc/inittab'{new}'
+  mv -f /etc/inittab'{new}' /etc/inittab
+  kill -HUP 1
+fi
+test "$1" != 'purge' || rm -rf /var/run/getty-5

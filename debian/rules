@@ -19,14 +19,14 @@ ifneq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
   STRIP =: nostrip
 endif
 
-DIR =`pwd`/debian/runit
+DIR =$(shell pwd)/debian/runit
 
 unpack: deb-checkdir unpack-stamp
 unpack-stamp:
-	tar xzf runit-1.0.3.tar.gz
-	ln -s runit-1.0.3 admin/runit
-	echo "$(CC) $(CFLAGS)" >admin/runit/src/conf-cc
-	echo "$(CC) $(LDFLAGS)" >admin/runit/src/conf-ld
+	tar xzf runit-1.0.4.tar.gz
+	ln -s runit-1.0.4 admin/runit
+	echo '$(CC) $(CFLAGS)' >admin/runit/src/conf-cc
+	echo '$(CC) $(LDFLAGS)' >admin/runit/src/conf-ld
 	touch unpack-stamp
 
 build: deb-checkdir build-stamp
@@ -38,53 +38,53 @@ build-stamp: unpack-stamp
 clean: deb-checkdir deb-checkuid
 	rm -rf admin
 	rm -f unpack-stamp build-stamp
-	rm -rf "$(DIR)"
+	rm -rf '$(DIR)'
 	rm -f debian/files debian/substvars changelog
 
 install: deb-checkdir deb-checkuid build-stamp
-	rm -rf "$(DIR)"
-	install -d -m0755 "$(DIR)"/var/service
-	install -d -m0755 "$(DIR)"/sbin
-	install -d -m0755 "$(DIR)"/usr/bin
-	install -d -m0755 "$(DIR)"/usr/sbin
+	rm -rf '$(DIR)'
+	install -d -m0755 '$(DIR)'/var/service
+	install -d -m0755 '$(DIR)'/sbin
+	install -d -m0755 '$(DIR)'/usr/bin
+	install -d -m0755 '$(DIR)'/usr/sbin
 	for i in runit runit-init; do \
-	  install -m0755 admin/runit/src/$$i "$(DIR)"/sbin/ || exit 1; \
+	  install -m0755 admin/runit/src/$$i '$(DIR)'/sbin/ || exit 1; \
 	done
 	for i in runsvdir runsv svlogd svwaitdown svwaitup runsvstat \
 	  runsvctrl chpst; do \
-	  install -m0755 admin/runit/src/$$i "$(DIR)"/usr/bin/ || exit 1; \
+	  install -m0755 admin/runit/src/$$i '$(DIR)'/usr/bin/ || exit 1; \
 	done
 	for i in runsvchdir utmpset; do \
-	  install -m0755 admin/runit/src/$$i "$(DIR)"/usr/sbin/ || exit 1; \
+	  install -m0755 admin/runit/src/$$i '$(DIR)'/usr/sbin/ || exit 1; \
 	done
-	install -m0755 admin/runit/src/utmpset "$(DIR)"/usr/sbin/
-	$(STRIP) -R .comment -R .note "$(DIR)"/sbin/* "$(DIR)"/usr/sbin/* \
-	  "$(DIR)"/usr/bin/*
+	install -m0755 admin/runit/src/utmpset '$(DIR)'/usr/sbin/
+	$(STRIP) -R .comment -R .note '$(DIR)'/sbin/* '$(DIR)'/usr/sbin/* \
+	  '$(DIR)'/usr/bin/*
 	# runsvdir-start to be used from /etc/inittab
-	install -m0755 debian/2 "$(DIR)"/usr/sbin/runsvdir-start
+	install -m0755 debian/2 '$(DIR)'/usr/sbin/runsvdir-start
 	# getty-5 service
-	install -d -m0755 "$(DIR)"/etc/runit/getty-5
+	install -d -m0755 '$(DIR)'/etc/runit/getty-5
 	install -m0755 admin/runit/etc/debian/getty-tty5/run \
-	  "$(DIR)"/etc/runit/getty-5/run
+	  '$(DIR)'/etc/runit/getty-5/run
 	install -m0755 admin/runit/etc/debian/getty-tty5/finish \
-	  "$(DIR)"/etc/runit/getty-5/finish
+	  '$(DIR)'/etc/runit/getty-5/finish
 	# lintian overrides
-	install -m0755 -d "$(DIR)"/usr/share/lintian/overrides
+	install -m0755 -d '$(DIR)'/usr/share/lintian/overrides
 	install -m0644 debian/runit.lintian \
-	  "$(DIR)"/usr/share/lintian/overrides/runit
+	  '$(DIR)'/usr/share/lintian/overrides/runit
 	# man pages
-	install -d -m0755 "$(DIR)"/usr/share/man/man8
-	install -m0644 admin/runit/man/*.8 "$(DIR)"/usr/share/man/man8/
-	install -m0644 debian/runsvdir-start.8 "$(DIR)"/usr/share/man/man8/
-	gzip -9 "$(DIR)"/usr/share/man/man8/*.8
+	install -d -m0755 '$(DIR)'/usr/share/man/man8
+	install -m0644 admin/runit/man/*.8 '$(DIR)'/usr/share/man/man8/
+	install -m0644 debian/runsvdir-start.8 '$(DIR)'/usr/share/man/man8/
+	gzip -9 '$(DIR)'/usr/share/man/man8/*.8
 	# links
-	install -d -m0755 "$(DIR)"/var/run/getty-5
-	ln -s /var/run/getty-5 "$(DIR)"/etc/runit/getty-5/supervise
+	install -d -m0755 '$(DIR)'/var/run/getty-5
+	ln -s /var/run/getty-5 '$(DIR)'/etc/runit/getty-5/supervise
 	# additional docs
-	install -d -m0755 "$(DIR)"/usr/share/doc/runit/debian
+	install -d -m0755 '$(DIR)'/usr/share/doc/runit/debian
 	for i in 1 2 3 ctrlaltdel; do \
 	  install -m0644 admin/runit/etc/debian/$$i \
-	    "$(DIR)"/usr/share/doc/runit/debian/; \
+	    '$(DIR)'/usr/share/doc/runit/debian/; \
 	done
 	# changelog
 	rm -f changelog && ln -s admin/runit/package/CHANGES changelog
@@ -92,10 +92,10 @@ install: deb-checkdir deb-checkuid build-stamp
 binary-indep:
 
 binary-arch: install runit.deb
-	test "$(CC)" != 'gcc' || \
-	  dpkg-shlibdeps "$(DIR)"/usr/sbin/* "$(DIR)"/usr/bin/*
-	dpkg-gencontrol -isp -prunit -P"$(DIR)"
-	dpkg -b "$(DIR)" ..
+	test '$(CC)' != 'gcc' || \
+	  dpkg-shlibdeps '$(DIR)'/usr/sbin/* '$(DIR)'/usr/bin/*
+	dpkg-gencontrol -isp -prunit -P'$(DIR)'
+	dpkg -b '$(DIR)' ..
 
 binary: binary-indep binary-arch
 
