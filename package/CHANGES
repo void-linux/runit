@@ -1,3 +1,5 @@
+  * fmt_ptime.c: create timestamps in UTC, not localtime.
+
 runit 1.0.0
 Tue, 10 Feb 2004 13:37:28 +0000
   * doc/benefits.html, doc/dependencies.html, doc/index.html,
