@@ -63,9 +63,12 @@ install: build
 	chmod 1755 debian/runit/package
 	cp -a admin debian/runit/package/
 	rm -rf debian/runit/package/admin/runit-0.1.0/compile
-	mv debian/runit/package/admin/runit-0.1.0/man .
-	mv debian/runit/package/admin/runit-0.1.0/doc .
-	mv debian/runit/package/admin/runit-0.1.0/etc .
+	cp -a debian/runit/package/admin/runit-0.1.0/man .
+	rm -rf debian/runit/package/admin/runit-0.1.0/man
+	cp -a debian/runit/package/admin/runit-0.1.0/doc .
+	rm -rf debian/runit/package/admin/runit-0.1.0/doc
+	cp -a debian/runit/package/admin/runit-0.1.0/etc .
+	rm -rf debian/runit/package/admin/runit-0.1.0/etc
 	cp -a debian/runit/package/admin/runit-0.1.0/package .
 
 	# /etc/runit
@@ -73,6 +76,9 @@ install: build
 		debian/runit/etc/runit/
 	cp -p admin/runit-0.1.0/etc/debian/ctrlaltdel \
 		debian/runit/etc/runit/
+	cp -p admin/runit-0.1.0/etc/debian/getty-tty5/run \
+		debian/runit/etc/runit/getty-tty5
+
 	# runit programs
 	cp -p debian/runit/package/admin/runit-0.1.0/command/runit* \
 		debian/runit/sbin/
@@ -111,7 +117,7 @@ binary-arch: build install
 	dh_link
 	dh_strip
 	dh_compress
-#	dh_fixperms
+	dh_fixperms -X/package
 #	dh_makeshlibs
 	dh_installdeb
 #	dh_perl
