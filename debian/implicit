@@ -44,6 +44,10 @@ deb-checkuid:
 	test ! -r debian/$*.README.Debian || \
 	  install -m0644 debian/$*.README.Debian \
 	    debian/$*/usr/share/doc/$*/README.Debian
+	test ! -r debian/$*.NEWS.Debian || \
+	  install -m0644 debian/$*.NEWS.Debian \
+	    debian/$*/usr/share/doc/$*/NEWS.Debian
+	gzip -9 debian/$*/usr/share/doc/$*/NEWS.Debian || :
 	: debian/$*/usr/share/doc/$*/ created
 
 %.deb-DEBIAN-base:

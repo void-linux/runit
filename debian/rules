@@ -42,13 +42,11 @@ build: deb-checkdir build-stamp
 build-stamp:
 	tar xfzp runit-1.0.0.tar.gz
 	-gcc -v
-	( \
-	cd admin/runit-1.0.0/src && \
+	( cd admin/runit-1.0.0/src && \
 	ln -s runit-1.0.0 runit && mv runit ../.. && \
 	echo "$(CC) $(CFLAGS)" >conf-cc && \
 	echo "$(CC) $(LDFLAGS)" >conf-ld && \
-	$(MAKE); \
-	)
+	$(MAKE) )
 	touch build-stamp
 
 clean: deb-checkdir deb-checkuid
@@ -108,13 +106,14 @@ install: deb-checkdir deb-checkuid build-stamp
 
 binary-indep:
 
-binary-arch: deb-checkdir deb-checkuid install runit.deb
+binary-arch: install runit.deb
 	test "$(CC)" != 'gcc' || \
 	  dpkg-shlibdeps "$(DIR)"/usr/sbin/* "$(DIR)"/usr/bin/*
 	dpkg-gencontrol -isp -prunit -P"$(DIR)"
 	dpkg -b "$(DIR)" ..
 
 binary: binary-indep binary-arch
+
 .PHONY: build clean install binary-indep binary-arch binary
 
 include debian/implicit
