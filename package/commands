@@ -1,12 +1,12 @@
+chpst
 runit
 runit-init
 runsv
-runsvdir
 runsvchdir
-svwaitdown
 runsvctrl
+runsvdir
 runsvstat
-svwaitup
 svlogd
-chpst
+svwaitdown
+svwaitup
 utmpset

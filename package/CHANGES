@@ -1,7 +1,10 @@
+runit 1.0.0
+Tue, 10 Feb 2004 12:55:07 +0000
   * doc/benefits.html, doc/dependencies.html, doc/index.html,
     doc/replaceinit.html, doc/runlevels.html, doc/upgrade.html,
     doc/useinit.html: cleanup; minor.
   * man/utmpset.8: run utmpset in finish script, not run script.
+  * man/runsvdir.8: minor.
 
 runit 0.13.1
 Mon, 19 Jan 2004 18:32:58 +0000
