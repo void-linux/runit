@@ -10,6 +10,15 @@
 <h1>runit - upgrading from previous versions</h1>
 <hr>
 
+<h3>0.7.x to 0.8.0</h3>
+With this version <i>runit</i>'s handling of its magic files has changed
+slightly for better support of read-only root filesystems.
+You should adapt stages 1 and 3 and <tt>ctrlaltdel</tt> to set file
+permissions on the magic files instead of creating and removing them; please
+take a look at the examples in <tt>/package/admin/runit/etc/</tt>.
+<p>
+The <a href="runit.8.html">runit</a> program now calls the <tt>reboot()</tt>
+function if possible, and if stage 3 didn't take care of this.
 <h3>0.6.0 to 0.7.0 or 0.7.1 or 0.7.2</h3>
 This version introduces runlevel support with the new
 <a href="runsvchdir.8.html">runsvchdir</a> program. See the

@@ -1,50 +1,47 @@
 #include <sys/types.h>
+#include <sys/stat.h>
 #include <signal.h>
 #include <unistd.h>
+#include "runit.h"
 #include "strerr.h"
-#include "pathexec.h"
 #include "sig.h"
 #include "open.h"
 #include "error.h"
 
 #define USAGE " 0|6"
-#define WARNING "init: warning: "
 #define FATAL "init: fatal: "
-
-#define RUNIT "/sbin/runit"
-#define STOPIT "/etc/runit/stopit"
-#define REBOOT "/etc/runit/reboot"
+/* #define WARNING "init: warning: " */
 
 const char *progname;
 
-void usage(void) {
-  strerr_die4x(1, "usage: ", progname, USAGE, "\n");
-}
+void usage(void) { strerr_die4x(1, "usage: ", progname, USAGE, "\n"); }
 
 void runit_halt () {
-  if (open_trunc(STOPIT) == -1) {
+  if (open_trunc(STOPIT) == -1)
     strerr_die4sys(111, FATAL, "unable to create ", STOPIT, ": ");
-  }
-  if (unlink(REBOOT) == -1) {
-    if (errno != error_noent) {
-      strerr_die4sys(111, FATAL, "unable to remove ", REBOOT, ": ");
-    }
-  }
+  if (chmod(STOPIT, 0100) == -1)
+    strerr_die4sys(111, FATAL, "unable to chmod ", STOPIT, ": ");
+  if (chmod(REBOOT, 0) == -1)
+    if (errno != error_noent)
+      strerr_die4sys(111, FATAL, "unable to chmod ", REBOOT, ": ");
   kill(1, sig_cont);
-  exit(0);
-}
-void runit_reboot () {
-  if (open_trunc(STOPIT) == -1) {
-    strerr_die4sys(111, FATAL, "unable to create ", STOPIT, ": ");
-  }
-  if (open_trunc(REBOOT) == -1) {
-    strerr_die4sys(111, FATAL, "unable to create ", REBOOT, ": ");
-  }
-  kill(1, sig_cont);
-  exit(0);
+  _exit(0);
 }
 
-int main (int argc, const char * const *argv, const char * const *envp) {
+void runit_reboot () {
+  if (open_trunc(STOPIT) == -1)
+    strerr_die4sys(111, FATAL, "unable to create ", STOPIT, ": ");
+  if (chmod(STOPIT, 0100) == -1)
+    strerr_die4sys(111, FATAL, "unable to chmod ", STOPIT, ": ");
+  if (open_trunc(REBOOT) == -1)
+    strerr_die4sys(111, FATAL, "unable to create ", REBOOT, ": ");
+  if (chmod(REBOOT, 0100) == -1)
+    strerr_die4sys(111, FATAL, "unable to chmod ", REBOOT, ": ");
+  kill(1, sig_cont);
+  _exit(0);
+}
+
+int main (int argc, const char * const *argv, char * const *envp) {
   const char *prog[2];
 
   progname =*argv++;
@@ -54,14 +51,13 @@ int main (int argc, const char * const *argv, const char * const *envp) {
     prog[0] ="runit";
 
     /* kernel is starting init, runit does the job. */
-    pathexec_run(RUNIT, (const char * const *) prog, envp);
+    execve(RUNIT, (char *const *)prog, envp);
 
     /* serious error */
     strerr_die4sys(111, FATAL, "unable to start ", prog[0], ": ");
   }
 
   if (! *argv || ! **argv) usage();
-
   switch (**argv) {
   case '0':
     runit_halt();
@@ -70,13 +66,11 @@ int main (int argc, const char * const *argv, const char * const *envp) {
     runit_reboot();
     break;
   case '-':
-    if ((*argv)[1] == 'V') {
+    if ((*argv)[1] == 'V')
       strerr_warn1("$Id$\n", 0);
-    }
   default:
     usage();
   }
-  
   /* not reached */
-  exit(0);
+  _exit(0);
 }

@@ -1,7 +1,7 @@
 #!/bin/sh
 exec 2>&1
 
-PATH=/bin:/sbin:/command
+PATH=/command:/sbin:/bin:/usr/sbin:/usr/bin
 
 echo 'Waiting for getties to stop...'
 svwaitdown -xk -t14 /service/getty-*

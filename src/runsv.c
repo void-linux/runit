@@ -57,9 +57,8 @@ int pidchanged =1;
 int logpipe[2];
 char *dir;
 
-void usage () {
-  strerr_die4x(1, "usage: ", progname, USAGE, "\n");
-}
+void usage () { strerr_die4x(1, "usage: ", progname, USAGE, "\n"); }
+
 void fatal(char *m) {
   strerr_die5sys(111, "runsv ", dir, ": fatal: ", m, ": ");
 }
@@ -69,15 +68,11 @@ void fatal2(char *m1, char *m2) {
 void warn(char *m) {
   strerr_warn5("runsv ", dir, ": warning: ", m, ": ", &strerr_sys);
 }
-void warnx(char *m) {
-  strerr_warn4("runsv ", dir, ": warning: ", m, 0);
-}
+void warnx(char *m) { strerr_warn4("runsv ", dir, ": warning: ", m, 0); }
 
 void stopservice(struct svdir *);
 
-void s_child() {
-  write(selfpipe[1], "", 1);
-}
+void s_child() { write(selfpipe[1], "", 1); }
 void s_term() {
   svd[0].want =W_EXIT;
   stopservice(&svd[0]);
@@ -137,10 +132,8 @@ void update_status(struct svdir *s) {
     buffer_puts(&b, "finish");
     break;
   }
-  if (s->ctrl & C_PAUSE)
-    buffer_puts(&b, ", paused");
-  if (s->ctrl & C_TERM)
-    buffer_puts(&b, ", got TERM");
+  if (s->ctrl & C_PAUSE) buffer_puts(&b, ", paused");
+  if (s->ctrl & C_TERM) buffer_puts(&b, ", got TERM");
   switch(s->want) {
   case W_DOWN:
     if (s->state != S_DOWN) buffer_puts(&b, ", want down");
@@ -279,8 +272,7 @@ int ctrl(struct svdir *s, char c) {
   case 'x': /* exit */
     if (s->islog) break;
     s->want =W_EXIT;
-    if (s->pid && s->state != S_FINISH)
-      stopservice(s);
+    if (s->pid && s->state != S_FINISH) stopservice(s);
     break;
   case 't': /* sig term */
     if (s->pid && s->state != S_FINISH) stopservice(s);
@@ -296,8 +288,7 @@ int ctrl(struct svdir *s, char c) {
     break;
   case 'c': /* sig cont */
     kill(s->pid, SIGCONT);
-    if (s->ctrl & C_PAUSE)
-      s->ctrl &=~C_PAUSE;
+    if (s->ctrl & C_PAUSE) s->ctrl &=~C_PAUSE;
     update_status(s);
     break;
   case 'o': /* once */
@@ -332,8 +323,7 @@ int main(int argc, char **argv) {
   if (! argv[1] || argv[2]) usage();
   dir =argv[1];
 
-  if (pipe(selfpipe) == -1)
-    fatal("unable to create selfpipe");
+  if (pipe(selfpipe) == -1) fatal("unable to create selfpipe");
   coe(selfpipe[0]);
   coe(selfpipe[1]);
   ndelay_on(selfpipe[0]);
@@ -344,8 +334,7 @@ int main(int argc, char **argv) {
   sig_block(sig_term);
   sig_catch(sig_term, s_term);
 
-  if (chdir(dir) == -1)
-    fatal("unable to change to directory");
+  if (chdir(dir) == -1) fatal("unable to change to directory");
   svd[0].pid =0;
   svd[0].state =S_DOWN;
   svd[0].ctrl =C_NOOP;
@@ -353,8 +342,7 @@ int main(int argc, char **argv) {
   svd[0].islog =0;
   svd[1].pid =0;
   taia_now(&svd[0].start);
-  if (stat("down", &s) != -1)
-    svd[0].want =W_DOWN;
+  if (stat("down", &s) != -1) svd[0].want =W_DOWN;
 
   if (stat("log", &s) == -1) {
     if (errno != error_noent)
@@ -382,8 +370,7 @@ int main(int argc, char **argv) {
   mkdir("supervise", 0700);
   if ((svd[0].fdlock =open_append("supervise/lock")) == -1)
     fatal("unable to open lock");
-  if (lock_exnb(svd[0].fdlock) == -1)
-    fatal("unable to lock");
+  if (lock_exnb(svd[0].fdlock) == -1) fatal("unable to lock");
   if (haslog) {
     mkdir("log/supervise", 0700);
     if ((svd[1].fdlock =open_append("log/supervise/lock")) == -1)
@@ -454,7 +441,7 @@ int main(int argc, char **argv) {
       int child;
       int wstat;
       
-      child = wait_nohang(&wstat);
+      child =wait_nohang(&wstat);
       if (!child) break;
       if ((child == -1) && (errno != error_intr)) break;
       if (child == svd[0].pid) {
@@ -491,26 +478,20 @@ int main(int argc, char **argv) {
 	}
       }
     }
-    if (read(svd[0].fdcontrol, &ch, 1) == 1)
-      ctrl(&svd[0], ch);
-    if (haslog) {
-      if (read(svd[1].fdcontrol, &ch, 1) == 1)
-	ctrl(&svd[1], ch);
-    }
+    if (read(svd[0].fdcontrol, &ch, 1) == 1) ctrl(&svd[0], ch);
+    if (haslog)
+      if (read(svd[1].fdcontrol, &ch, 1) == 1) ctrl(&svd[1], ch);
 
     if (svd[0].want == W_EXIT && svd[0].pid == 0) {
-      if (svd[1].pid == 0)
-	exit(0);
+      if (svd[1].pid == 0) _exit(0);
       if (svd[1].want != W_EXIT) {
 	svd[1].want =W_EXIT;
-	/*
-	stopservice(&svd[1]);
-	*/
+	/* stopservice(&svd[1]); */
 	update_status(&svd[1]);
 	if (close(logpipe[1]) == -1) warn("unable to close logpipe[1]");
 	if (close(logpipe[0]) == -1) warn("unable to close logpipe[0]");
       }
     }
   }
-  exit(0);
+  _exit(0);
 }

@@ -40,9 +40,7 @@ iopause_fd io[1];
 struct taia stamplog;
 int exitsoon =0;
 
-void usage () {
-  strerr_die4x(1, "usage: ", progname, USAGE, "\n");
-}
+void usage () { strerr_die4x(1, "usage: ", progname, USAGE, "\n"); }
 void fatal(char *m1, char *m2) {
   strerr_die6sys(100, "runsvdir ", svdir, ": fatal: ", m1, m2, ": ");
 }
@@ -52,9 +50,8 @@ void warn(char *m1, char *m2) {
 void warn3x(char *m1, char *m2, char *m3) {
   strerr_warn6("runsvdir ", svdir, ": warning: ", m1, m2, m3, 0);
 } 
-void s_term() {
-  exitsoon =1;
-}
+void s_term() { exitsoon =1; }
+
 void runsv(int no, char *name) {
   int pid;
 
@@ -88,8 +85,7 @@ void runsvdir() {
     warn("unable to open directory ", svdir);
     return;
   }
-  for (i =0; i < svnum; i++)
-    sv[i].isgone =1;
+  for (i =0; i < svnum; i++) sv[i].isgone =1;
   errno =0;
   while ((d =readdir(dir))) {
     if (d->d_name[0] == '.') continue;
@@ -98,13 +94,11 @@ void runsvdir() {
       errno =0;
       continue;
     }
-    if (! S_ISDIR(s.st_mode))
-      continue;
+    if (! S_ISDIR(s.st_mode)) continue;
     for (i =0; i < svnum; i++) {
       if ((sv[i].ino == s.st_ino) && (sv[i].dev == s.st_dev)) {
 	sv[i].isgone =0;
-	if (! sv[i].pid)
-	  runsv(i, d->d_name);
+	if (! sv[i].pid) runsv(i, d->d_name);
 	break;
       }
     }
@@ -131,10 +125,8 @@ void runsvdir() {
 
   /* SIGTERM removed runsv's */
   for (i =0; i < svnum; i++) {
-    if (! sv[i].isgone)
-      continue;
-    if (sv[i].pid)
-      kill(sv[i].pid, SIGTERM);
+    if (! sv[i].isgone) continue;
+    if (sv[i].pid) kill(sv[i].pid, SIGTERM);
     sv[i] =sv[--svnum];
     check =1;
   }
@@ -187,7 +179,7 @@ int main(int argc, char **argv) {
       warn3x("log service disabled.", 0, 0);
     }
   }
-  if ((curdir =open_read(".")) == -1)
+  if ((curdir =open_read(".")) == -1) 
     fatal("unable to open current directory", 0);
 
   taia_now(&stampcheck);
@@ -207,6 +199,13 @@ int main(int argc, char **argv) {
     }
 
     taia_now(&now);
+    if (now.sec.x < (stampcheck.sec.x -3)) {
+      /* time warp */
+      warn3x("time warp: resetting time stamp.", 0, 0);
+      taia_now(&stampcheck);
+      taia_now(&now);
+      if (log) taia_now(&stamplog);
+    }
     if (taia_less(&now, &stampcheck) == 0) {
       /* wait at least a second */
       taia_uint(&deadline, 1);
@@ -237,7 +236,7 @@ int main(int argc, char **argv) {
       if (taia_less(&now, &stamplog) == 0) {
 	write(logpipe[1], ".", 1);
 	taia_uint(&deadline, 900);
-	taia_add(&stamplog, &stamplog, &deadline);
+	taia_add(&stamplog, &now, &deadline);
       }
     taia_uint(&deadline, 5);
     taia_add(&deadline, &now, &deadline);
@@ -249,23 +248,19 @@ int main(int argc, char **argv) {
       iopause(0, 0, &deadline, &now);
     sig_unblock(sig_child);
 
-    if (log)
-      if (io[0].revents | IOPAUSE_READ) {
-	while (read(logpipe[0], &ch, 1) > 0) {
-	  if (ch) {
-	    for (i =6; i < loglen; i++)
-	      log[i -1] =log[i];
-	    log[loglen -1] =ch;
-	  }
+    if (log && (io[0].revents | IOPAUSE_READ))
+      while (read(logpipe[0], &ch, 1) > 0) {
+	if (ch) {
+	  for (i =6; i < loglen; i++)
+	    log[i -1] =log[i];
+	  log[loglen -1] =ch;
 	}
       }
     if (exitsoon) {
-      for (i =0; i < svnum; i++) {
-	if (sv[i].pid) kill(sv[i].pid, SIGTERM);
-      }
-      exit(0);
+      for (i =0; i < svnum; i++) if (sv[i].pid) kill(sv[i].pid, SIGTERM);
+      _exit(0);
     }
   }
   /* not reached */
-  exit(0);
+  _exit(0);
 }

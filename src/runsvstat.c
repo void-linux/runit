@@ -21,12 +21,9 @@ unsigned int rc =0;
 struct stat s;
 int showlog =0;
 
-void usage() {
-  strerr_die4x(1, "usage: ", progname, USAGE, "\n");
-}
-void fatal(char *m1) {
-  strerr_die3sys(111, FATAL, m1, ": ");
-}
+void usage() { strerr_die4x(1, "usage: ", progname, USAGE, "\n"); }
+
+void fatal(char *m1) { strerr_die3sys(111, FATAL, m1, ": "); }
 void warn(char *m1, char *m2) {
   rc++;
   strerr_warn5(WARNING, m1, ": ", m2, ": ", &strerr_sys);
@@ -65,8 +62,7 @@ int show_status(char *name) {
     return(-1);
   }
   switch(read(fd, status, 20)) {
-  case 20:
-    break;
+  case 20: break;
   case -1:
     warn(name, "unable to read supervise/status");
     return(-1);
@@ -74,14 +70,14 @@ int show_status(char *name) {
     warnx(name, "unable to read supervise/status: bad format.");
     return(-1);
   }
-  pid = (unsigned char) status[15];
-  pid <<= 8; pid += (unsigned char) status[14];
-  pid <<= 8; pid += (unsigned char) status[13];
-  pid <<= 8; pid += (unsigned char) status[12];
+  pid =(unsigned char) status[15];
+  pid <<=8; pid +=(unsigned char)status[14];
+  pid <<=8; pid +=(unsigned char)status[13];
+  pid <<=8; pid +=(unsigned char)status[12];
 
   tai_unpack(status,&when);
   tai_now(&now);
-  if (tai_less(&now,&when)) when = now;
+  if (tai_less(&now,&when)) when =now;
   tai_sub(&when,&now,&when);
 
   buffer_puts(buffer_1, name);
@@ -99,19 +95,13 @@ int show_status(char *name) {
     buffer_puts(buffer_1, "down ");
   buffer_put(buffer_1, sulong, fmt_ulong(sulong, tai_approx(&when)));
   buffer_puts(buffer_1, " seconds");
-  if (pid && !normallyup)
-    buffer_puts(buffer_1,", normally down");
-  if (!pid && normallyup)
-    buffer_puts(buffer_1,", normally up");
-  if (pid && status[16])
-    buffer_puts(buffer_1,", paused");
-  if (!pid && (status[17] == 'u'))
-    buffer_puts(buffer_1,", want up");
-  if (pid && (status[17] == 'd'))
-    buffer_puts(buffer_1,", want down");
-  if (pid && status[18])
-    buffer_puts(buffer_1, ", got TERM");
-  //  buffer_putsflush(buffer_1, "\n");
+  if (pid && !normallyup) buffer_puts(buffer_1,", normally down");
+  if (!pid && normallyup) buffer_puts(buffer_1,", normally up");
+  if (pid && status[16]) buffer_puts(buffer_1,", paused");
+  if (!pid && (status[17] == 'u')) buffer_puts(buffer_1,", want up");
+  if (pid && (status[17] == 'd')) buffer_puts(buffer_1,", want down");
+  if (pid && status[18]) buffer_puts(buffer_1, ", got TERM");
+  /* buffer_putsflush(buffer_1, "\n"); */
   return(1);
 }
 
@@ -151,7 +141,7 @@ int main(int argc, char **argv) {
       if (showlog) {
 	if (stat("log", &s) == -1) {
 	  if (errno != error_noent)
-	    warn("unable to stat()",  "./log");
+	    warn("unable to stat()", "./log");
 	}
 	else {
 	  if (! S_ISDIR(s.st_mode))

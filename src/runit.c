@@ -1,17 +1,16 @@
-/* this requires: */
 #include <poll.h>
 
 #include <sys/types.h>
 #include <sys/reboot.h>
 #include <sys/ioctl.h>
+#include <sys/stat.h>
 #include <signal.h>
 #include <unistd.h>
 #include <fcntl.h>
-
+#include "runit.h"
 #include "sig.h"
 #include "strerr.h"
 #include "error.h"
-#include "pathexec.h"
 #include "iopause.h"
 #include "coe.h"
 #include "ndelay.h"
@@ -23,9 +22,6 @@
 #define INFO "- runit: "
 #define WARNING "- runit: warning: "
 #define FATAL "- runit: fatal: "
-
-#define STOPIT "/etc/runit/stopit"
-#define CTRLALTDEL "/etc/runit/ctrlaltdel"
 
 const char * const stage[3] ={
   "/etc/runit/1",
@@ -44,24 +40,19 @@ void sig_int_handler (void) {
   sigi++;
   write(selfpipe[1], "", 1);
 }
-void sig_child_handler (void) {
-  write(selfpipe[1], "", 1);
-}
+void sig_child_handler (void) { write(selfpipe[1], "", 1); }
 
-int main (int argc, const char * const *argv, const char * const *envp) {
+int main (int argc, const char * const *argv, char * const *envp) {
   const char * prog[2];
   int pid, pid2;
   int wstat;
-  int fd;
   int st;
   iopause_fd x;
   char ch;
   int ttyfd;
+  struct stat s;
 
-  if (getpid() != 1) {
-    strerr_die2x(111, FATAL, "must be run as process no 1.");
-  }
-  
+  if (getpid() != 1) strerr_die2x(111, FATAL, "must be run as process no 1.");
   setsid();
 
   sig_block(sig_alarm);
@@ -77,12 +68,10 @@ int main (int argc, const char * const *argv, const char * const *envp) {
 
   /* console */
   if ((ttyfd =open_write("/dev/console")) != -1) {
-    if (ioctl(ttyfd, TIOCSCTTY, (char *)NULL) != -1) {
+    if (ioctl(ttyfd, TIOCSCTTY, (char *)NULL) != -1)
       strerr_warn2(WARNING, "ioctl: ", &strerr_sys);
-    }
     dup2(ttyfd, 0); dup2(ttyfd, 1); dup2(ttyfd, 2);
-    if (ttyfd > 2)
-      close(ttyfd);
+    if (ttyfd > 2) close(ttyfd);
   }
 
   /* create selfpipe */
@@ -97,13 +86,7 @@ int main (int argc, const char * const *argv, const char * const *envp) {
 
 #ifdef RB_DISABLE_CAD
   /* activate ctrlaltdel handling, glibc */
-  if (RB_DISABLE_CAD == 0)
-    reboot(0);
-#endif
-#ifdef LINUX_REBOOT_CMD_CAD_OFF
-  /* activate ctrlaltdel handling, dietlibc */
-  if (LINUX_REBOOT_CMD_CAD_OFF == 0)
-    reboot(0);
+  if (RB_DISABLE_CAD == 0) reboot(0);
 #endif
 
   strerr_warn3(INFO, "$Id$",
@@ -111,9 +94,7 @@ int main (int argc, const char * const *argv, const char * const *envp) {
 
   /* runit */
   for (st =0; st < 3; st++) {
-    /*
-      if (st == 2) logwtmp("~", "reboot", "");
-    */
+    /* if (st == 2) logwtmp("~", "reboot", ""); */
     while ((pid =fork()) == -1) {
       strerr_warn4(FATAL, "unable to fork for \"", stage[st], "\" pausing: ",
 		   &strerr_sys);
@@ -121,7 +102,6 @@ int main (int argc, const char * const *argv, const char * const *envp) {
     }
     if (!pid) {
       /* child */
-
       prog[0] =stage[st];
       prog[1] =0;
 
@@ -129,15 +109,13 @@ int main (int argc, const char * const *argv, const char * const *envp) {
       if (st == 0) {
 	if ((ttyfd =open("/dev/console", O_RDWR)) != -1) {
 	  dup2(ttyfd, 0);
-	  if (ttyfd > 2)
-	    close(ttyfd);
+	  if (ttyfd > 2) close(ttyfd);
 	}
 	else
 	  strerr_warn2(WARNING, "unable to open /dev/console: ", &strerr_sys);
       }
-      else {
+      else
 	setsid();
-      }
 
       sig_unblock(sig_alarm);
       sig_unblock(sig_child);
@@ -151,7 +129,7 @@ int main (int argc, const char * const *argv, const char * const *envp) {
       sig_unblock(sig_term);
             
       strerr_warn3(INFO, "enter stage: ", stage[st], 0);
-      pathexec_run(*prog, (const char* const *) prog, envp);
+      execve(*prog, (char *const *)prog, envp);
       strerr_die3sys(0, FATAL, "could not start child: ", stage[st]);
     }
 
@@ -170,14 +148,12 @@ int main (int argc, const char * const *argv, const char * const *envp) {
       sig_block(sig_int);
       
       read(selfpipe[0], &ch, 1);
-
       child =wait_nohang(&wstat);
 
       /* reget stderr */
       if ((ttyfd =open_write("/dev/console")) != -1) {
 	dup2(ttyfd, 2);
-	if (ttyfd > 2)
-	  close(ttyfd);
+	if (ttyfd > 2) close(ttyfd);
       }
 
       if (child == pid) {
@@ -221,39 +197,32 @@ int main (int argc, const char * const *argv, const char * const *envp) {
 	sigc =sigi =0;
 	continue;
       }
-      if (sigi && ((fd =open_read(CTRLALTDEL)) != -1)) {
-	close(fd);
+      if (sigi && (stat(CTRLALTDEL, &s) != -1) && (s.st_mode & S_IXUSR)) {
 	strerr_warn2(INFO, "ctrl-alt-del request...", 0);
-
-	prog[0] =CTRLALTDEL;
-	prog[1] =0;
-
+	prog[0] =CTRLALTDEL; prog[1] =0;
 	while ((pid2 =fork()) == -1) {
-	  strerr_warn4(FATAL,
-		       "unable to fork for \"", CTRLALTDEL, "\" pausing: ",
-		       &strerr_sys);
+	  strerr_warn4(FATAL, "unable to fork for \"", CTRLALTDEL,
+		       "\" pausing: ", &strerr_sys);
 	  sleep(5);
 	}
 	if (!pid2) {
 	  /* child */
 	  strerr_warn3(INFO, "enter stage: ", prog[0], 0);
-	  pathexec_run(*prog, (const char * const *) prog, envp);
+	  execve(*prog, (char *const *) prog, envp);
 	  strerr_die3sys(0, FATAL, "could not start child: ", prog[0]);
 	}
-	if (wait_pid(&wstat, pid2) == -1) {
+	if (wait_pid(&wstat, pid2) == -1)
 	  strerr_warn2(FATAL, "wait_pid: ", &strerr_sys);
-	}
-	if (wait_crashed(wstat)) {
+	if (wait_crashed(wstat))
 	  strerr_warn3(WARNING, "child crashed: ", CTRLALTDEL, 0);
-	}
 	strerr_warn3(INFO, "leave stage: ", prog[0], 0);
 	sigi =0;
 	sigc++;
       }
-      if (sigc && ((fd =open_write(STOPIT)) != -1)) {
+      if (sigc && (stat(STOPIT, &s) != -1) && (s.st_mode & S_IXUSR)) {
 	int i;
-	close(fd);
-	unlink(STOPIT);
+	/* unlink(STOPIT); */
+	chmod(STOPIT, 0);
 
 	/* kill stage 2 */
 #ifdef DEBUG
@@ -270,9 +239,8 @@ int main (int argc, const char * const *argv, const char * const *envp) {
 	    break;
 	  }
 	  if (child) continue;
-	  if (child == -1) {
+	  if (child == -1) 
 	    strerr_warn2(WARNING, "wait_nohang: ", &strerr_sys);
-	  }
 #ifdef DEBUG
 	  strerr_warn2(WARNING, "waiting...", 0);
 #endif
@@ -284,9 +252,8 @@ int main (int argc, const char * const *argv, const char * const *envp) {
 	  strerr_warn2(WARNING,
 		       "stage 2 not terminated, sending sigkill...", 0);
 	  kill(pid, 9);
-	  if (wait_pid(&wstat, pid) == -1) {
+	  if (wait_pid(&wstat, pid) == -1)
 	    strerr_warn2(WARNING, "wait_pid: ", &strerr_sys);
-	  }
 	}
 	sigc =0;
 	strerr_warn3(INFO, "leave stage: ", stage[st], 0);
@@ -295,16 +262,38 @@ int main (int argc, const char * const *argv, const char * const *envp) {
 	break;
       }
       sigc =sigi =0;
-
 #ifdef DEBUG
       strerr_warn2(WARNING, "no request.", 0);
 #endif
     }
   }
 
-  for (;;) {
-    sig_pause();
+#ifdef RB_AUTOBOOT
+  /* fallthrough stage 3 */
+  strerr_warn2(INFO, "sending KILL signal to all processes...", 0);
+  kill(-1, SIGKILL);
+
+  if ((stat(REBOOT, &s) != -1) && (s.st_mode & S_IXUSR)) {
+    strerr_warn2(INFO, "system reboot.", 0);
+    reboot(RB_AUTOBOOT);
   }
+  else {
+#ifdef RB_HALT_SYSTEM
+#ifdef RB_POWER_OFF
+    strerr_warn2(INFO, "power off...", 0);
+    reboot(RB_POWER_OFF);
+    sleep(2);
+#endif
+    strerr_warn2(INFO, "system halt.", 0);
+    reboot(RB_HALT_SYSTEM);
+#else
+    strerr_warn2(INFO, "system reboot.", 0);
+    reboot(RB_AUTOBOOT);
+#endif
+  }
+#endif
+
+  for (;;) sig_pause();
   /* not reached */
   strerr_die2x(0, INFO, "exit.");
   return(0);

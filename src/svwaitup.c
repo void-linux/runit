@@ -17,9 +17,7 @@ unsigned long sec =2;
 unsigned int rc =0;
 const char * const *dir;
 
-void usage () {
-  strerr_die4x(1, "usage: ", progname, USAGE, "\n");
-}
+void usage () { strerr_die4x(1, "usage: ", progname, USAGE, "\n"); }
 
 void warn (const char *s1, const char *s2, struct strerr *e) {
   dir++;
@@ -44,9 +42,7 @@ int main (int argc, const char * const *argv) {
     switch(opt) {
     case 's': 
       scan_ulong(optarg, &sec);
-      if ((sec < 2) || (sec > 600)) {
-	usage();
-      }
+      if ((sec < 2) || (sec > 600)) usage();
       break;
     case 'v':
       verbose =1;
@@ -58,12 +54,9 @@ int main (int argc, const char * const *argv) {
     }
   }
   argv +=optind;
-  if (! argv || ! *argv) {
-    usage();
-  }
-  
-  dir =argv;
+  if (! argv || ! *argv) usage();
 
+  dir =argv;
   while (*dir) {
     if (*dir[0] != '/') {
       warn(*dir, ": service directory must start with a slash.", 0);
@@ -74,8 +67,7 @@ int main (int argc, const char * const *argv) {
       continue;
     }
     
-    fd = open_write("supervise/ok");
-    if (fd == -1) {
+    if ((fd =open_write("supervise/ok")) == -1) {
       if (errno == error_nodevice)
 	warn(*dir, ": supervise not running.", 0);
       else
@@ -84,12 +76,11 @@ int main (int argc, const char * const *argv) {
     }
     close(fd);
     
-    fd = open_read("supervise/status");
-    if (fd == -1) {
+    if ((fd =open_read("supervise/status")) == -1) {
       warn(*dir, "unable to open supervise/status: ", &strerr_sys);
       continue;
     }
-    r = buffer_unixread(fd, status, sizeof status);
+    r =buffer_unixread(fd, status, sizeof status);
     close(fd);
     if (r < sizeof status) {
       if (r == -1)
@@ -99,10 +90,10 @@ int main (int argc, const char * const *argv) {
       continue;
     }
     
-    pid = (unsigned char) status[15];
-    pid <<= 8; pid += (unsigned char) status[14];
-    pid <<= 8; pid += (unsigned char) status[13];
-    pid <<= 8; pid += (unsigned char) status[12];
+    pid =(unsigned char)status[15];
+    pid <<=8; pid +=(unsigned char)status[14];
+    pid <<=8; pid +=(unsigned char)status[13];
+    pid <<=8; pid +=(unsigned char)status[12];
     if (! pid) {
       warn(*dir, ": is down.", 0);
       continue;
@@ -123,5 +114,5 @@ int main (int argc, const char * const *argv) {
     sleep(sec -is);
   }
   if (rc > 100) rc =100;
-  exit(rc);
+  _exit(rc);
 }

@@ -18,9 +18,7 @@ const char *progname;
 const char * const *dir;
 unsigned int rc =0;
 
-void usage () {
-  strerr_die4x(1, "usage: ", progname, USAGE, "\n");
-}
+void usage () { strerr_die4x(1, "usage: ", progname, USAGE, "\n"); }
 
 void warn (const char *s1, const char *s2, struct strerr *e) {
   dir++;
@@ -47,9 +45,7 @@ int main (int argc, const char * const *argv) {
     switch(opt) {
     case 't':
       scan_ulong(optarg, &sec);
-      if ((sec < 2) || (sec > 6000)) {
-	usage();
-      }
+      if ((sec < 2) || (sec > 6000)) usage();
       break;
     case 'x':
       doexit =1;
@@ -67,9 +63,7 @@ int main (int argc, const char * const *argv) {
     }
   }
   argv +=optind;
-  if (! argv || ! *argv) {
-    usage();
-  }
+  if (! argv || ! *argv) usage();
 
   dir =argv;
   tai_now(&start);
@@ -83,8 +77,7 @@ int main (int argc, const char * const *argv) {
       continue;
     }
     
-    fd = open_write("supervise/ok");
-    if (fd == -1) {
+    if ((fd =open_write("supervise/ok")) == -1) {
       if (errno == error_nodevice) {
 	if (verbose) strerr_warn3(INFO, *dir, ": supervise not running.", 0);
 	dir++;
@@ -96,12 +89,11 @@ int main (int argc, const char * const *argv) {
     close(fd);
 
     if (! doexit) {
-      fd = open_read("supervise/status");
-      if (fd == -1) {
+      if ((fd =open_read("supervise/status")) == -1) {
 	warn(*dir, "unable to open supervise/status: ", &strerr_sys);
 	continue;
       }
-      r = buffer_unixread(fd, status, sizeof status);
+      r =buffer_unixread(fd, status, sizeof status);
       close(fd);
       if (r < sizeof status) {
 	if (r == -1)
@@ -110,10 +102,10 @@ int main (int argc, const char * const *argv) {
 	  warn(*dir, ": unable to read supervise/status: bad format.", 0);
 	continue;
       }
-      pid = (unsigned char) status[15];
-      pid <<= 8; pid += (unsigned char) status[14];
-      pid <<= 8; pid += (unsigned char) status[13];
-      pid <<= 8; pid += (unsigned char) status[12];
+      pid =(unsigned char)status[15];
+      pid <<=8; pid +=(unsigned char)status[14];
+      pid <<=8; pid +=(unsigned char)status[13];
+      pid <<=8; pid +=(unsigned char)status[12];
       if (! pid) {
 	/* ok, service is down */
 	if (verbose) strerr_warn3(INFO, *dir, ": down.", 0);
@@ -147,13 +139,13 @@ int main (int argc, const char * const *argv) {
 	  strerr_warn3(INFO, *dir, ": killed.", 0);
 	close(fd);
 	dir++;
-	if (! *dir) exit(111);
+	if (! *dir) _exit(111);
 	continue;
       }
-      exit(111);
+      _exit(111);
     }
     sleep(1);
   }
   if (rc > 100) rc =100;
-  exit(rc);
+  _exit(rc);
 }

@@ -4,6 +4,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <utmp.h>
+#include <string.h>
 #include "strerr.h"
 #include "sgetopt.h"
 #include "seek.h"
@@ -18,9 +19,7 @@
 
 const char *progname;
 
-void usage(void) {
-  strerr_die4x(1, "usage: ", progname, USAGE, "\n");
-}
+void usage(void) { strerr_die4x(1, "usage: ", progname, USAGE, "\n"); }
 
 int utmp_logout(const char *line) {
   int fd;
@@ -33,8 +32,7 @@ int utmp_logout(const char *line) {
     strerr_die4sys(111, FATAL, "unable to lock: ", _PATH_UTMP, ": ");
 
   while (read(fd, &ut, sizeof(struct utmp)) == sizeof(struct utmp)) {
-    if (!ut.ut_name[0] || (str_diff(ut.ut_line, line) != 0))
-      continue;
+    if (!ut.ut_name[0] || (str_diff(ut.ut_line, line) != 0)) continue;
     memset(ut.ut_name, 0, UT_NAMESIZE);
     memset(ut.ut_host, 0, UT_HOSTSIZE);
     if (time(&ut.ut_time) == -1) break;
@@ -62,8 +60,7 @@ int wtmp_logout(const char *line) {
     return(-1);
   }
   memset(&ut, 0, sizeof(struct utmp));
-  if ((len =str_len(line)) > UT_LINESIZE)
-    len =UT_LINESIZE -1;
+  if ((len =str_len(line)) > UT_LINESIZE) len =UT_LINESIZE -1;
   byte_copy(ut.ut_line, len, line);
   if (time(&ut.ut_time) == -1) {
     close(fd);
@@ -101,10 +98,9 @@ int main (int argc, const char * const *argv, const char * const *envp) {
   if (utmp_logout(*argv) == -1)
     strerr_die4x(111, WARNING, "unable to logout line ", *argv,
 		 " in utmp: no such entry");
-  if (wtmp) {
+  if (wtmp)
     if (wtmp_logout(*argv) == -1)
-      strerr_die4sys(111, WARNING, "unable to logout line ", *argv,
-		     " in wtmp: ");
-  }
-  exit(0);
+      strerr_die4sys(111, WARNING,
+		     "unable to logout line ", *argv, " in wtmp: ");
+  _exit(0);
 }
