@@ -9,6 +9,8 @@ Wed, 12 Jan 2005 22:56:40 +0000
   * man/svwaitdown.8, man/svwaitup.8: adapt.
   * doc/runscripts.html: add contributed run scripts (thx Stefan Karrmann,
     Kevin Berry, Karl Chen).
+  * runsv.c: typos; bugfix: run optional control/x when receiving SIGTERM
+    (thx Vladimir Smelhaus); minor.
 
 runit 1.2.0
 Fri, 17 Dec 2004 21:08:50 +0000

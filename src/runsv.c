@@ -53,6 +53,7 @@ struct svdir {
 };
 struct svdir svd[2];
 
+int sigterm =0;
 int haslog =0;
 int pidchanged =1;
 int logpipe[2];
@@ -78,9 +79,8 @@ void stopservice(struct svdir *);
 
 void s_child() { write(selfpipe[1], "", 1); }
 void s_term() {
-  svd[0].want =W_EXIT;
-  stopservice(&svd[0]);
-  write(selfpipe[1], "", 1);
+  sigterm =1;
+  write(selfpipe[1], "", 1); /* XXX */
 }
 
 void update_status(struct svdir *s) {
@@ -215,25 +215,26 @@ unsigned int custom(struct svdir *s, char c) {
   if (stat(a, &st) == 0) {
     if (st.st_mode & S_IXUSR) {
       if ((pid =fork()) == -1) {
-        warn("unable to fork for ctrl/?");
+        warn("unable to fork for control/?");
         return(0);
       }
       if (! pid) {
         if (haslog && fd_copy(1, logpipe[1]) == -1)
-          warn("unable to setup stdout for ctrl/?");
+          warn("unable to setup stdout for control/?");
         prog[0] =a;
         prog[1] =0;
         execve(a, prog, environ);
+	fatal("unable to run control/?");
       }
       if (wait_pid(&w, pid) == -1) {
-        warn("unable to wait for child ctrl/?");
+        warn("unable to wait for child control/?");
         return(0);
       }
       return(! wait_exitcode(w));
     }
   }
   else
-    if (errno != error_noent) warn("unable to stat ctrl/?");
+    if (errno != error_noent) warn("unable to stat control/?");
   return(0);
 }
 void stopservice(struct svdir *s) {
@@ -531,7 +532,7 @@ int main(int argc, char **argv) {
             close(fd);
             svd[0].state =S_FINISH;
             update_status(&svd[0]);
-            break;
+            continue;
           }
         svd[0].state =S_DOWN;
         taia_uint(&deadline, 1);
@@ -554,6 +555,8 @@ int main(int argc, char **argv) {
     if (read(svd[0].fdcontrol, &ch, 1) == 1) ctrl(&svd[0], ch);
     if (haslog)
       if (read(svd[1].fdcontrol, &ch, 1) == 1) ctrl(&svd[1], ch);
+
+    if (sigterm) { ctrl(&svd[0], 'x'); sigterm =0; }
 
     if (svd[0].want == W_EXIT && svd[0].state == S_DOWN) {
       if (svd[1].pid == 0) _exit(0);
