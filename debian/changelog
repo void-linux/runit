@@ -1,10 +1,10 @@
-runit (0.6.3-1) sarge; urgency=low
+runit (0.6.4-1) sarge; urgency=low
 
   * See /package/admin/runit/package/CHANGES.
   * preinst: new; create hardlink /sbin/runit.old -> /sbin/runit on
     upgrade.
 
- -- Gerrit Pape <pape@smarden.org>  Fri,  4 Oct 2002 11:59:42 +0200
+ -- Gerrit Pape <pape@smarden.org>  Sun,  6 Oct 2002 11:41:41 +0200
 
 runit (0.6.0-1) sarge; urgency=low
 

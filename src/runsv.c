@@ -61,14 +61,10 @@ void usage () {
   strerr_die4x(1, "usage: ", progname, USAGE, "\n");
 }
 void fatal(char *m) {
-  strerr_warn5("runsv ", dir, ": fatal: ", m, ": ", &strerr_sys);
-  sleep(1);
-  exit(111);
+  strerr_die5sys(111, "runsv ", dir, ": fatal: ", m, ": ");
 }
 void fatal2(char *m1, char *m2) {
-  strerr_warn6("runsv ", dir, ": fatal: ", m1, m2, ": ", &strerr_sys);
-  sleep(1);
-  exit(111);
+  strerr_die6sys(111, "runsv ", dir, ": fatal: ", m1, m2, ": ");
 }
 void warn(char *m) {
   strerr_warn5("runsv ", dir, ": warning: ", m, ": ", &strerr_sys);
@@ -91,7 +87,7 @@ void s_term() {
 void update_status(struct svdir *s) {
   unsigned long l;
   int fd;
-  char status[19];
+  char status[20];
   char bspace[64];
   buffer b;
   char spid[FMT_ULONG];
@@ -183,6 +179,7 @@ void update_status(struct svdir *s) {
     status[18] =1;
   else
     status[18] =0;
+  status[19] =s->state;
   if ((fd =open_trunc("supervise/status.new")) == -1) {
     warn("unable to open supervise/status.new");
     return;

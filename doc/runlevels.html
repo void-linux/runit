@@ -54,10 +54,10 @@ services a SIGTERM and wait for them to terminate. You can check the status
 of the <tt>previous</tt> runlevel in <tt>/etc/runit/runsvdir/previous/</tt>.
 <hr>
 <a name="create"><h3>Creating new runlevels</h3></a>
-To create a new runlevel, simply create a new service directory in
-<tt>/etc/runit/runsvdir</tt>. The name of the runlevel must not start with
-a dot and must not be <tt>current</tt>, <tt>current.new</tt> or
-<tt>previous</tt>. E.g.:
+To create a new runlevel, simply create a new directory in
+<tt>/etc/runit/runsvdir</tt>. The name of the directory is the name of
+the new runlevel. The name must not start with a dot and must not be
+<tt>current</tt>, <tt>current.new</tt> or <tt>previous</tt>. E.g.:
 <pre>
  # mkdir /etc/runit/runsvdir/maintenance
 </pre>
@@ -68,7 +68,7 @@ newly created directory, e.g.:
  # ln -s /etc/runit/runsv/ssh /etc/runit/runsvdir/maintenance/
  # ln -s /etc/runit/runsv/dnscache /etc/runit/runsvdir/maintenance/
 </pre>
-If you want to switch to the runlevel <tt>mainenance</tt>, do:
+If you want to switch to the runlevel <tt>maintenance</tt>, do:
 <pre>
  # runsvchdir maintenance
 </pre>

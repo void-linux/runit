@@ -37,7 +37,7 @@ void warnx(char *m1, char *m2) {
 }
 
 int show_status(char *name) {
-  char status[19];
+  char status[20];
   int pid;
   int fd;
   int normallyup =0;
@@ -64,8 +64,8 @@ int show_status(char *name) {
     warn(name, "unable to open supervise/status");
     return(-1);
   }
-  switch(read(fd, status, 19)) {
-  case 19:
+  switch(read(fd, status, 20)) {
+  case 20:
     break;
   case -1:
     warn(name, "unable to read supervise/status");
@@ -87,7 +87,11 @@ int show_status(char *name) {
   buffer_puts(buffer_1, name);
   buffer_puts(buffer_1, ": ");
   if (pid) {
-    buffer_puts(buffer_1, "up (pid ");
+    switch (status[19]) {
+    case 1: buffer_puts(buffer_1, "run "); break;
+    case 2: buffer_puts(buffer_1, "finish "); break;
+    }
+    buffer_puts(buffer_1, "(pid ");
     buffer_put(buffer_1, sulong, fmt_ulong(sulong, pid));
     buffer_puts(buffer_1, ") ");
   }
