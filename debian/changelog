@@ -2,8 +2,10 @@ runit (0.12.0-1) unstable; urgency=low
 
   * new upstream version.
   * debian/control: minor adaption of the long description.
+  * debian/rules: don't use diet libc on ia64 for now (problem with fork()
+    and pipe()).
 
- -- Gerrit Pape <pape@smarden.org>  Thu, 30 Oct 2003 12:20:44 +0000
+ -- Gerrit Pape <pape@smarden.org>  Thu, 30 Oct 2003 14:46:10 +0000
 
 runit (0.11.2-1) unstable; urgency=low
 
