@@ -82,7 +82,7 @@ uidgid.o: compile uidgid.c uidgid.h
 pmatch.o: compile pmatch.c
 	./compile pmatch.c
 
-fmt_ptime.o: compile fmt_ptime.c
+fmt_ptime.o: compile sysdeps fmt_ptime.c
 	./compile fmt_ptime.c
 
 
