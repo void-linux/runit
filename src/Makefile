@@ -1,31 +1,25 @@
 DESTDIR=
 
+CC=./support/compile
+LOAD=./support/load
+
 CC=gcc
 
-CFLAGS=-Wall -O3 -Isupport
-LDFLAGS=-Wall -O3 -s
+CFLAGS=-Isupport
 
 all: runit runit-init svwaitup svwaitdown
 
-set-tcp-env: djb-publicdomain set-tcp-env.o
-	$(CC) $(LDFLAGS) -o set-tcp-env \
-		set-tcp-env.o support/unix.a support/byte.a
-
 runit: djb-publicdomain runit.o
-	$(CC) $(LDFLAGS) -o runit \
-		runit.o support/unix.a support/byte.a
+	$(LOAD) runit support/unix.a support/byte.a
 
-runit-init:	djb-publicdomain init.o
-	$(CC) $(LDFLAGS) -o runit-init \
-		init.o support/unix.a support/byte.a
+runit-init: djb-publicdomain runit-init.o
+	$(LOAD) runit-init support/unix.a support/byte.a
 
-svwaitup:	djb-publicdomain svwaitup.o
-	$(CC) $(LDFLAGS) -o svwaitup \
-		svwaitup.o support/unix.a support/byte.a support/time.a
+svwaitup: djb-publicdomain svwaitup.o
+	$(LOAD) svwaitup support/unix.a support/byte.a support/time.a
 
-svwaitdown:	djb-publicdomain svwaitdown.o
-	$(CC) $(LDFLAGS) -o svwaitdown \
-		svwaitdown.o support/unix.a support/byte.a support/time.a
+svwaitdown: djb-publicdomain svwaitdown.o
+	$(LOAD) svwaitdown support/unix.a support/byte.a support/time.a
 
 djb-publicdomain:
 	( cd support ; make )
