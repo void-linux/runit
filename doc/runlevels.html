@@ -27,12 +27,25 @@ Create the following direcotories and symlinks:
 Copy the content of <tt>/service/</tt> to <tt>/etc/runit/runsvdir/current</tt>
 and replace <tt>/service</tt> with a symlink:
 <pre>
- # cp -pr /service/* /etc/runit/runsvdir/current/
+ # cp -pR /service/* /etc/runit/runsvdir/current/
  # mv -f /service /service.old && ln -s /etc/runit/runsvdir/current /service
 </pre>
 You have now created two runlevels: <tt>default</tt> and <tt>single</tt>.
 The <tt>current</tt> runlevel is <tt>default</tt>. It is save to remove
 <tt>/service.old</tt> if you don't need it anymore.
+<p>
+Finally edit <tt>/etc/runit/2</tt> to set the <tt>default</tt> runlevel when
+stage 2 starts:
+<pre>
+ $ cat /etc/runit/2 
+ #!/bin/sh
+ PATH=/command:/usr/local/bin:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R6/bin
+ 
+ <b>runsvchdir default &gt;/dev/null</b>
+ 
+ exec env - PATH=$PATH \
+ runsvdir /service 'log: ...........................................................................................................................................................................................................................................................................................................................................................................................................'
+</pre>
 <hr>
 <a name="switch"><h3>Switching runlevels</h3></a>
 Switching runlevels with <i>runit</i> is done by

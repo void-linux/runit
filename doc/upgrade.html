@@ -10,6 +10,39 @@
 <h1>runit - upgrading from previous versions</h1>
 <hr>
 
+<h3>0.6.0 to 0.7.0</h3>
+This version introduces runlevel support with the new
+<a href="runsvchdir.8.html">runsvchdir</a> program. See the
+<a href="runlevels.html">runlevels documentation</a> for more information.
+<p>
+The <a href="runsvdir.8.html">runsvdir</a> and
+<a href="runsv.8.html">runsv</a> programs have changed and should be
+restarted. If you want to switch runlevels, <tt>runsvdir</tt> must be
+restarted. This is done on the next reboot or by following these steps:
+<p>
+<ul>
+  <li>
+Login on console 5. Bring all services other than the <tt>getty-5</tt>
+service down:
+<pre>
+ # cd /service
+ # for i in *; do if test "$i" != getty-5; then svc -d $i; fi; done
+</pre>
+  <li>
+Check for the services being down:
+<pre>
+ # svstat /service/*
+</pre>
+  <li>
+If all services other than the <tt>getty-5</tt> service are down, kill
+<tt>runsvdir</tt> by sending it a HUP signal:
+<pre>
+ # kill -HUP &lt;pid_of_runsvdir&gt;
+</pre>
+Replace <tt>&lt;pid_of_runsvdir&gt;</tt> with the pid of <tt>runsvdir</tt>.
+The <tt>runit</tt> program starts the new <tt>runsvdir</tt> program now,
+which starts the new <tt>runsv</tt> processes.
+</ul>
 <h3>0.5.0 to 0.6.0</h3>
 There are two new programs, <a href="runsvdir.8.html">runsvdir</a> and
 <a href="runsv.8.html">runsv</a>, which replace the

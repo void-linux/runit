@@ -1,5 +1,5 @@
-runit 0.6.4
-Sun, 06 Oct 2002 12:23:56 +0200
+runit 0.7.0
+Mon, 07 Oct 2002 11:26:27 +0200
   * runsvdir.c: check service directory's inode and device in addition
     to mtime; sleep at least 1 second before restarting run svprocesses.
   * runsv.c: use status[19] for state information; control pipe supports e.
