@@ -102,10 +102,10 @@ install: build
 	install -m0755 admin/runit-0.11.0/src/runsvctrl \
 	  $(CURDIR)/debian/runit/usr/bin/runsvctrl
 	install -m0755 admin/runit-0.11.0/src/chpst \
-	  $(CURDIR)/debian/runit/usr/sbin/chpst
+	  $(CURDIR)/debian/runit/usr/bin/chpst
 
 	# temporary?
-	( cd $(CURDIR)/debian/runit/usr/sbin/ && ln -s chpst setuidgid )
+	( cd $(CURDIR)/debian/runit/usr/sbin/ && ln -s ../bin/chpst setuidgid )
 
 	install -m0755 admin/runit-0.11.0/etc/debian/getty-tty5/run \
 	  $(CURDIR)/debian/runit/etc/runit/getty-5/run
