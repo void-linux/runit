@@ -7,6 +7,7 @@ Wed, 25 Sep 2002 12:13:46 +0200
   * svwaitdown: new option -x: wait for runsv to exit instead for the
     service to be down; new option -k: SIGKILL still running services if
     timeout is reached.
+  * stage 3: use new svwaitdown options.
 
 runit 0.5.3
 Tue, 24 Sep 2002 12:14:02 +0200
