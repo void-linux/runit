@@ -1,3 +1,2 @@
 #!/bin/sh
-utmpset -w tty4
 exec getty 38400 tty4 linux

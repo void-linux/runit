@@ -1,0 +1,21 @@
+runit for Debian
+----------------
+
+This package provides the runit programs and configuration files. It does
+not replace /sbin/init and so does not enable runit to run as process no 1.
+To do so, you need to follow the documentation[0] or install the package
+runit-run.
+
+runit's default directory for services is /var/service.
+
+It is possible to use runit's service supervision with sysvinit's init
+running as process no 1. I you want this, add a line to the end of
+/etc/inittab like this:
+
+# echo 'SV:123456:respawn:/etc/runit/2' >>/etc/inittab
+
+and tell sysvinit about the change:
+
+# init q
+
+ -- Gerrit Pape <pape@smarden.org>, Wed, 16 Oct 2002 13:24:32 +0200

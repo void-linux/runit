@@ -1,3 +1,2 @@
 #!/bin/sh
-utmpset -w tty3
 exec getty 38400 tty3 linux

@@ -105,10 +105,14 @@ install: build
 	chmod 0700 $(CURDIR)/debian/runit/etc/runit/3
 	install -m0700 admin/runit/etc/debian/ctrlaltdel \
 	  $(CURDIR)/debian/runit/etc/runit/ctrlaltdel
-	sed -e 's}^/command/utmpset}utmpset}g' \
-	  <admin/runit/etc/debian/getty-tty5/run \
-	    >$(CURDIR)/debian/runit/etc/runit/getty-5/run
-	chmod 0755 $(CURDIR)/debian/runit/etc/runit/getty-5/run
+#	sed -e 's}^/command/utmpset}utmpset}g' \
+#	  <admin/runit/etc/debian/getty-tty5/run \
+#	    >$(CURDIR)/debian/runit/etc/runit/getty-5/run
+#	chmod 0755 $(CURDIR)/debian/runit/etc/runit/getty-5/run
+	install -m0755 debian/getty-tty5.run \
+	  $(CURDIR)/debian/runit/etc/runit/getty-5/run
+	install -m0755 debian/getty-tty5.finish \
+	  $(CURDIR)/debian/runit/etc/runit/getty-5/finish
 
 	# lintian overrides
 	install -m0755 -d $(CURDIR)/debian/runit/usr/share/lintian/overrides

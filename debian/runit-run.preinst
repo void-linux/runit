@@ -33,9 +33,13 @@ This package diverts sysvinit's /sbin/init binary. Use
 to reboot the system with runit as process no 1 after installing this
 package.
 
+Please read the runit documentation before proceeding:
+
+  http://smarden.org/runit/
+
 EOT
-      echo -n "Will proceed in 10 seconds, press Ctrl-C to abort... "
-      sleep 10s
+      echo -n "Press ENTER to continue, press Ctrl-C to abort... "
+      read input
       echo; echo
       add_diversion
     fi
