@@ -7,7 +7,7 @@ STRIP =strip
 
 DIET_ARCHS =alpha amd64 arm hppa i386 ia64 mips mipsel powerpc s390 sparc
 ARCH ?=$(shell dpkg-architecture -qDEB_HOST_ARCH)
-ifneq (,$(findstring $(ARCH),$(DIET_ARCHS)))
+ifeq (,$(findstring $(ARCH),$(DIET_ARCHS)))
   CC =gcc
   CFLAGS =-Wall
 endif
