@@ -22,7 +22,7 @@
 
 const char *progname;
 const char * const *dir;
-unsigned int rc;
+unsigned int rc =0;
 
 void usage () {
   strerr_die4x(1, "usage: ", progname, USAGE, "\n");
@@ -51,7 +51,7 @@ int main (int argc, const char * const *argv) {
     switch(opt) {
     case 't':
       scan_ulong(optarg, &sec);
-      if ((sec < 2) || (sec > 600)) {
+      if ((sec < 2) || (sec > 6000)) {
 	usage();
       }
       break;

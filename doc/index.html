@@ -25,12 +25,11 @@ Dependencies and runlevels</a>
 <a href="http://cr.yp.to/daemontools.html">daemontools</a> package to create
 a replacement for
 <a href="ftp://ftp.cistron.nl/pub/people/miquels/sysvinit/">sysvinit</a>.
-<i>runit</i> currently runs on
-<a href="http://www.debian.org/">Debian GNU/Linux sid/woody</a>,
-<a href="http://www.openbsd.org/">OpenBSD 2.9</a>,
-<a href="http://www.freebsd.org/">FreeBSD 4.4</a> and can easily be
-adapted to other unix operating systems. If <i>runit</i> runs for
-you on any other operating system or linux distribution, please let me know.
+<i>runit</i> runs on <b>Debian GNU/Linux sid/woody</b>,
+<b>OpenBSD 2.9</b>, <b>FreeBSD 4.4</b>. <i>runit</i> reportedly runs on
+<b>FreeBSD 4.3</b>, and can easily be adapted to other unix operating
+systems. If <i>runit</i> runs for you on any other operating system or
+linux distribution, please let me know.
 <p>
 <b>Warning:</b> Replacing <i>sysvinit</i> or <i>init</i> can cause the
 system's boot to fail. Make sure you are able to recover and repair your
@@ -48,13 +47,16 @@ if this is started by the kernel.
   <li><b>Stage 1:</b><br>
   <i>runit</i> starts <tt>/etc/runit/1</tt> and waits for it to
   terminate. The system's one time initialization tasks are done here.
+  <tt>/etc/runit/1</tt> has full control of <tt>/dev/console</tt> to be
+  able to start an emergency shell if the one time initialization tasks
+  fail.
   <li><b>Stage 2:</b><br>
   <i>runit</i> starts <tt>/etc/runit/2</tt> which should not return
   until the system is going to halt or reboot, if it crashes, it will be
   restarted. Normally, <tt>/etc/runit/2</tt> runs
   <a href="http://cr.yp.to/daemontools/svscanboot.html">svscanboot</a>.
   In Stage 2 <i>runit</i> optionally handles an INT signal
-  (ctrl-alt-del keyboard request on i386).
+  (ctrl-alt-del keyboard request on Linux/i386).
   <li><b>Stage 3:</b><br>
   If <i>runit</i> is told to halt or reboot the system, or the Stage 2
   returns without errors, it terminates Stage 2 if it is running and runs

@@ -6,6 +6,7 @@
 #include <sys/ioctl.h>
 #include <signal.h>
 #include <unistd.h>
+#include <fcntl.h>
 
 #include "sig.h"
 #include "strerr.h"
@@ -77,10 +78,11 @@ int main (int argc, const char * const *argv, const char * const *envp) {
   /* console */
   if ((ttyfd =open_write("/dev/console")) != -1) {
     if (ioctl(ttyfd, TIOCSCTTY, (char *)NULL) != -1) {
-      dup2(ttyfd, 0); dup2(ttyfd, 1); dup2(ttyfd, 2);
-      if (ttyfd > 2)
-	close(ttyfd);
+      strerr_warn2(WARNING, "ioctl: ", &strerr_sys);
     }
+    dup2(ttyfd, 0); dup2(ttyfd, 1); dup2(ttyfd, 2);
+    if (ttyfd > 2)
+      close(ttyfd);
   }
 
   /* create selfpipe */
@@ -118,7 +120,19 @@ int main (int argc, const char * const *argv, const char * const *envp) {
       prog[0] =stage[st];
       prog[1] =0;
 
-      setsid();
+      /* stage 1 gets full control of console */
+      if (st == 0) {
+	if ((ttyfd =open("/dev/console", O_RDWR)) != -1) {
+	  dup2(ttyfd, 0);
+	  if (ttyfd > 2)
+	    close(ttyfd);
+	}
+	else
+	  strerr_warn2(WARNING, "unable to open /dev/console: ", &strerr_sys);
+      }
+      else {
+	setsid();
+      }
 
       sig_unblock(sig_alarm);
       sig_unblock(sig_child);
@@ -151,10 +165,26 @@ int main (int argc, const char * const *argv, const char * const *envp) {
       sig_block(sig_int);
       
       read(selfpipe[0], &ch, 1);
-      
-      if ((child =wait_nohang(&wstat)) == pid) {
+
+      child =wait_nohang(&wstat);
+
+      /* reget stderr */
+      if ((ttyfd =open_write("/dev/console")) != -1) {
+	dup2(ttyfd, 2);
+	if (ttyfd > 2)
+	  close(ttyfd);
+      }
+
+      if (child == pid) {
 	if (wait_crashed(wstat)) {
 	  strerr_warn3(WARNING, "child crashed: ", stage[st], 0);
+          if (st == 0) {
+            /* this is stage 1 */
+            strerr_warn3(INFO, "leave stage: ", stage[st], 0);
+            strerr_warn2(WARNING, "skipping stage 2...", 0);
+            st++;
+            break;
+          }
 	  if (st == 1) {
 	    /* this is stage 2 */
 	    strerr_warn2(WARNING, "killing all processes in stage 2...", 0);
@@ -180,14 +210,6 @@ int main (int argc, const char * const *argv, const char * const *envp) {
 	strerr_warn2(WARNING, "poll: ", &strerr_sys);
 #endif
 	continue;
-      }
-      /* console */
-      if ((ttyfd =open_write("/dev/console")) != -1) {
-	if (ioctl(ttyfd, TIOCSCTTY, (char *)NULL) != -1) {
-	  dup2(ttyfd, 0); dup2(ttyfd, 1); dup2(ttyfd, 2);
-	  if (ttyfd > 2)
-	    close(ttyfd);
-	}
       }
       if (st != 1) {
 	strerr_warn2(WARNING, "signals only work in stage 2.", 0);

@@ -1,7 +1,10 @@
 #!/bin/sh
 # system one time tasks
-rm -f /etc/runit/stopit
 
-/bin/sh /etc/rc autoboot
+/bin/sh /etc/rc autoboot && exit 0
 
-exit 0
+# /etc/rc crashed, start emergency shell.
+echo '/etc/rc failed. Press <enter> for emergency shell...'
+read input
+/bin/sh -p
+exec /sbin/reboot

@@ -12,6 +12,15 @@ booting, running, and shutdown in three Stages:
 runs
 .I /etc/runit/1
 and waits for it to terminate. The system's one time tasks are done here.
+.I /etc/runit/1
+has full control of
+.I /dev/console
+to be able to start an emergency shell if the one time initialization tasks
+fail. If
+.I /etc/runit/1
+itself crashes,
+.B runit
+will skip stage 2 and enter stage 3.
 .SH STAGE 2
 .B runit
 runs
