@@ -31,10 +31,6 @@ build-stamp:
 		ln -s daemontools-pd-0.76 support )
 	( \
 	cd admin/runit-0.2.2 ; \
-	sed -e 's/CC=gcc/CC=diet gcc/g; \
-                s/LDFLAGS=-Wall -O3 -s/LDFLAGS=-Wall -O3 -s -Os -pipe/g' \
-                < src/Makefile > src/Makefile'{new}' && \
-		mv -f src/Makefile'{new}' src/Makefile ; \
 	echo 'diet gcc -O2 -Wall' > support/conf-cc ; \
 	echo 'diet gcc -s -Os -pipe' > support/conf-ld ; \
 	package/compile ; \
