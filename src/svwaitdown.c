@@ -64,15 +64,12 @@ int main(int argc, const char * const *argv) {
   argv +=optind;
   if (! argv || ! *argv) usage();
 
-  dir =argv;
-  while (*dir) {
-    if ((fd =open_write("supervise/control")) == -1) {
-      dir++; /* bummer */
-      continue;
-    }
+  for (dir =argv; *dir; ++dir) {
+    if (*dir[0] != '/') continue; /* bummer */
+    if (chdir(*dir) == -1) continue; /* bummer */
+    if ((fd =open_write("supervise/control")) == -1) continue; /* bummer */
     if (write(fd, "dx", 1 +doexit) != (1 +doexit)) {
-      close(fd); dir++; /* bummer */
-      continue;
+      close(fd); continue; /* bummer */
     }
     close(fd);
   }
