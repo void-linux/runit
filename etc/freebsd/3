@@ -1,19 +1,21 @@
 #!/bin/sh
+PATH=/bin:/sbin:/command
 
 echo 'Stopping services...'
-/command/svc -d /service/*
-/command/svwaitdown -t350 /service/* || \
-  ( echo 'Killing services...' ; /command/svc -k /service/* )
+svc -d /service/*
+svwaitdown -t350 /service/* || ( echo 'Killing services...' ; \
+  svc -k /service/* ; svwaitdown /service/* )
 
 echo 'Stopping log services...'
-/command/svc -d /service/*/log
-/command/svwaitdown -t35 /service/*/log
+svc -d /service/*/log
+svwaitdown -t35 /service/*/log || ( echo 'Killing log services...' ; \
+  svc -k /service/*/log ; svwaitdown /service/*/log )
 
 echo 'Shutdown...'
 if test -r /etc/runit/reboot; then
-  /sbin/reboot
+  exec reboot
 else
-  /sbin/halt
+  exec halt
 fi
 
 exit 0

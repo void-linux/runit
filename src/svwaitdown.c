@@ -22,7 +22,7 @@
 
 const char *progname;
 const char * const *dir;
-unsigned int rc;
+unsigned int rc =0;
 
 void usage () {
   strerr_die4x(1, "usage: ", progname, USAGE, "\n");
@@ -51,7 +51,7 @@ int main (int argc, const char * const *argv) {
     switch(opt) {
     case 't':
       scan_ulong(optarg, &sec);
-      if ((sec < 2) || (sec > 600)) {
+      if ((sec < 2) || (sec > 6000)) {
 	usage();
       }
       break;
@@ -59,7 +59,7 @@ int main (int argc, const char * const *argv) {
       verbose =1;
       break;
     case 'V':
-      strerr_warn1("$Id: svwaitdown.c,v 1.3 2001/12/27 09:13:50 pape Exp $", 0);
+      strerr_warn1("$Id: svwaitdown.c,v 1.4 2002/01/29 18:56:36 pape Exp $", 0);
     case '?':
       usage();
     }

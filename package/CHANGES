@@ -1,3 +1,18 @@
+runit 0.3.0
+Tue, 29 Jan 2002 19:38:33 +0100
+  * doc: adapted.
+  * runit.8: changes documented.
+  * runscripts.html: more examples.
+
+runit 0.2.9
+Thu, 17 Jan 2002 19:00:44 +0100
+  * reportedly runs on FreeBSD 4.3 (thx clemensF)
+  * svwaitdown: max timeout is 6000, really. (thx ska)
+  * runit.c: stage 1 gets no new session and full control of console; an
+    emergency shell or login program (if present) can be executed.
+  * openbsd, freebsd: support for 'single user' emergency shell in stage 1
+  * runit.c: skip stage 2 if stage 1 crashes.
+
 runit 0.2.7
 Tue,  1 Jan 2002 16:20:14 +0100
   * tested on fresh freebsd 4.4 installation in vmware
