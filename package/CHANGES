@@ -1,3 +1,10 @@
+runit 0.11.0
+
+  * uidgid.c, uidgid.h: new; get uid/gid by name.
+  * chpst: new; run program with a changed process state (includes envdir,
+    envuidgid, pgrphack, setlock, setuidgid, softlimit functionality).
+  XXX * setuidgid.c: remove; obsolete (replaced by chpst).
+
 runit 0.10.0
 Sun, 22 Jun 2003 20:44:58 +0200
   * doc/index.html, doc/install.html, doc/replaceinit.html, doc/useinit.html:

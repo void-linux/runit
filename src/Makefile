@@ -1,5 +1,5 @@
 IT=sysdeps runit runit-init runsv runsvctrl runsvstat runsvdir runsvchdir \
-svwaitup svwaitdown utmpset svlogd setuidgid
+svwaitup svwaitdown utmpset svlogd chpst
 
 default: $(IT)
 
@@ -36,8 +36,8 @@ runsvchdir: load runsvchdir.o unix.a byte.a
 svlogd: load svlogd.o pmatch.o fmt_ptime.o unix.a byte.a time.a
 	./load svlogd pmatch.o fmt_ptime.o unix.a byte.a time.a
 
-setuidgid: load setuidgid.o unix.a byte.a
-	./load setuidgid unix.a byte.a
+chpst: load chpst.o uidgid.o unix.a byte.a
+	./load chpst uidgid.o unix.a byte.a
 
 runit.o: compile sysdeps runit.c
 	./compile runit.c
@@ -72,9 +72,12 @@ runsvchdir.o: compile runsvchdir.c
 svlogd.o: compile sysdeps svlogd.c
 	./compile svlogd.c
 
-setuidgid.o: compile setuidgid.c
-	./compile setuidgid.c
+chpst.o: compile sysdeps chpst.c
+	./compile chpst.c
 
+
+uidgid.o: compile uidgid.c uidgid.h
+	./compile uidgid.c
 
 pmatch.o: compile pmatch.c
 	./compile pmatch.c
