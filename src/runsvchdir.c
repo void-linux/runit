@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include "strerr.h"
 #include "error.h"
+#include "buffer.h"
 
 #define USAGE " dir"
 #define SVDIR "/etc/runit/runsvdir"
