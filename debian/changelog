@@ -1,3 +1,10 @@
+runit (1.0.2-1) unstable; urgency=low
+
+  * new upstream release.
+  * debian/implicit: update to revision 1.8.
+
+ -- Gerrit Pape <pape@smarden.org>  Sun, 28 Mar 2004 18:33:31 +0000
+
 runit (1.0.1-1) unstable; urgency=low
 
   * new upstream release.
