@@ -12,6 +12,8 @@
 #define INFO "svwaitdown: "
 #define USAGE " [ -v ] [ -t 2..6000 ] service ..."
 
+#define VERSION "$Id$"
+
 const char *progname;
 const char * const *dir;
 unsigned int rc =0;
@@ -59,7 +61,7 @@ int main (int argc, const char * const *argv) {
       verbose =1;
       break;
     case 'V':
-      strerr_warn1("$Id$", 0);
+      strerr_warn1(VERSION, 0);
     case '?':
       usage();
     }
@@ -125,35 +127,31 @@ int main (int argc, const char * const *argv) {
       /* timeout */
       if (verbose) strerr_warn2(INFO, "timeout.", 0);
       if (dokill) {
-	dir =argv;
-	while (*dir) {
-	  if (chdir(*dir) == -1) {
-	    warn(*dir, ": unable to change directory: ", &strerr_sys);
-	    continue;
-	  }
-	  if ((fd =open_write("supervise/control")) == -1) {
-	    if (errno == error_nodevice) {
-	      if (verbose)
-		strerr_warn3(INFO, *dir,
-			     ": supervise not running.", 0);
-	      dir++;
-	    }
-	    else
-	      warn(*argv, ": unable to open supervise/control: ", &strerr_sys);
-	    continue;
-	  }
-	  if (write(fd, "k", 1) != 1)
-	    warn(*argv,
-		 ": unable to write to supervise/control: ", &strerr_sys);
-	  else
-	    strerr_warn3(INFO, *dir, ": killed.", 0);
-	  close(fd);
-	  dir++;
+	if (chdir(*dir) == -1) {
+	  warn(*dir, ": unable to change directory: ", &strerr_sys);
+	  continue;
 	}
+	if ((fd =open_write("supervise/control")) == -1) {
+	  if (errno == error_nodevice) {
+	    if (verbose)
+	      strerr_warn3(INFO, *dir, ": supervise not running.", 0);
+	    dir++;
+	  }
+	  else
+	    warn(*argv, ": unable to open supervise/control: ", &strerr_sys);
+	  continue;
+	}
+	if (write(fd, "k", 1) != 1)
+	  warn(*argv, ": unable to write to supervise/control: ", &strerr_sys);
+	else
+	  strerr_warn3(INFO, *dir, ": killed.", 0);
+	close(fd);
+	dir++;
+	if (! *dir) exit(111);
+	continue;
       }
       exit(111);
     }
-
     sleep(1);
   }
   if (rc > 100) rc =100;

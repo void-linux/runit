@@ -1,5 +1,5 @@
 runit 0.6.4
-Sun, 06 Oct 2002 11:41:29 +0200
+Sun, 06 Oct 2002 12:23:56 +0200
   * runsvdir.c: check service directory's inode and device in addition
     to mtime; sleep at least 1 second before restarting run svprocesses.
   * runsv.c: use status[19] for state information; control pipe supports e.
@@ -8,6 +8,7 @@ Sun, 06 Oct 2002 11:41:29 +0200
   * runsvchdir: new; change directory runsvdir is running in (switch
     runlevels).
   * man/runsvchdir.8, doc/runsvchdir.8.html: new.
+  * svwaitdown.c: -k option: only kill service that still are up on timeout.
 
 runit 0.6.0
 Fri, 27 Sep 2002 16:34:57 +0200
