@@ -1,0 +1,259 @@
+Index: src/chpst.c
+===================================================================
+RCS file: /var/lib/cvs/runit/src/chpst.c,v
+retrieving revision 1.2
+retrieving revision 1.3
+diff -u -r1.2 -r1.3
+--- src/chpst.c	2 Mar 2004 20:19:46 -0000	1.2
++++ src/chpst.c	27 Apr 2004 17:32:26 -0000	1.3
+@@ -20,7 +20,7 @@
+ #include "openreadclose.h"
+ #include "direntry.h"
+ 
+-#define USAGE_MAIN " [-vP012] [-u user[:group]] [-U user[:group]] [-e dir] [-l|-L lock] [-m n] [-o n] [-p n] [-f n] [-c n] prog"
++#define USAGE_MAIN " [-vP012] [-u user[:group]] [-U user[:group]] [-e dir] [-/ root] [-l|-L lock] [-m n] [-o n] [-p n] [-f n] [-c n] prog"
+ #define FATAL "chpst: fatal: "
+ #define WARNING "chpst: warning: "
+ 
+@@ -57,6 +57,7 @@
+ long limitr =-2;
+ long limitt =-2;
+ const char *lock =0;
++const char *root =0;
+ unsigned int lockdelay;
+ 
+ void suidgid(char *user, unsigned int dogrp) {
+@@ -270,7 +271,8 @@
+   if (str_equal(progname, "setlock")) setlock(argc, argv);
+   if (str_equal(progname, "softlimit")) softlimit(argc, argv);
+ 
+-  while ((opt =getopt(argc, argv, "u:U:e:m:o:p:f:c:r:t:l:L:vP012V")) != opteof)
++  while ((opt =getopt(argc, argv, "u:U:e:m:o:p:f:c:r:t:/:l:L:vP012V"))
++	 != opteof)
+     switch(opt) {
+     case 'u': set_user =(char*)optarg; break;
+     case 'U': env_user =(char*)optarg; break;
+@@ -285,6 +287,7 @@
+     case 'c': if (optarg[scan_ulong(optarg, &limitc)]) usage(); break;
+     case 'r': if (optarg[scan_ulong(optarg, &limitr)]) usage(); break;
+     case 't': if (optarg[scan_ulong(optarg, &limitt)]) usage(); break;
++    case '/': root =optarg; break;
+     case 'l': if (lock) usage(); lock =optarg; lockdelay =1; break;
+     case 'L': if (lock) usage(); lock =optarg; lockdelay =0; break;
+     case 'v': verbose =1; break;
+@@ -292,7 +295,7 @@
+     case '0': nostdin =1; break;
+     case '1': nostdout =1; break;
+     case '2': nostderr =1; break;
+-    case 'V': strerr_warn1("$Id$", 0);
++    case 'V': strerr_warn1("$Id$", 0);
+     case '?': usage();
+     }
+   argv +=optind;
+@@ -300,6 +303,7 @@
+   
+   if (pgrp) setsid();
+   if (env_dir) edir(env_dir);
++  if (root) if (chroot(root) == -1) fatal("unable to change root directory");
+   if (env_user) euidgid(env_user, 1);
+   if (set_user) suidgid(set_user, 1);
+   slimit();
+Index: man/chpst.8
+===================================================================
+RCS file: /var/lib/cvs/runit/man/chpst.8,v
+retrieving revision 1.4
+retrieving revision 1.5
+diff -u -r1.4 -r1.5
+--- man/chpst.8	8 Mar 2004 12:36:49 -0000	1.4
++++ man/chpst.8	27 Apr 2004 17:32:26 -0000	1.5
+@@ -10,6 +10,8 @@
+ .IR user ]
+ [-e
+ .IR dir ]
++[\-/
++.IR root ]
+ [-l|-L
+ .IR lock ]
+ [-m
+@@ -96,6 +98,13 @@
+ .I k
+ if it exists, without adding a new variable.
+ .TP
++.B \-/ \fIroot
++chroot.
++Change the root directory to
++.I root
++before starting
++.IR prog .
++.TP
+ .B \-l \fIlock
+ lock.
+ Open the file
+@@ -153,15 +162,15 @@
+ in a new process group.
+ .TP
+ .B \-0
+-Close standard input before running
++Close standard input before starting
+ .IR prog .
+ .TP
+ .B \-1
+-Close standard output before running
++Close standard output before starting
+ .IR prog .
+ .TP
+ .B \-2
+-Close standard error before running
++Close standard error before starting
+ .IR prog .
+ .SH EXIT CODES
+ .B chpst
+Index: doc/chpst.8.html
+===================================================================
+RCS file: /var/lib/cvs/runit/doc/chpst.8.html,v
+retrieving revision 1.4
+retrieving revision 1.5
+diff -u -r1.4 -r1.5
+--- doc/chpst.8.html	8 Mar 2004 12:36:49 -0000	1.4
++++ doc/chpst.8.html	27 Apr 2004 17:32:26 -0000	1.5
+@@ -12,21 +12,21 @@
+ chpst - runs a program with a changed process state 
+ <h2><a name='sect1'>Synopsis</a></h2>
+ <b>chpst</b> [-vP012]
+-[-u <i>user</i>] [-U <i>user</i>] [-e <i>dir</i>] [-l|-L <i>lock</i>] [-m <i>bytes</i>] [-o <i>n</i>] [-p <i>n</i>] [-f <i>bytes</i>] [-c
+-<i>bytes</i>] <i>prog</i> 
++[-u <i>user</i>] [-U <i>user</i>] [-e <i>dir</i>] [-/ <i>root</i>] [-l|-L <i>lock</i>] [-m <i>bytes</i>] [-o <i>n</i>] [-p <i>n</i>] [-f <i>bytes</i>]
++[-c <i>bytes</i>] <i>prog</i> 
+ <h2><a name='sect2'>Description</a></h2>
+ <i>prog</i> consists of one or more arguments. <p>
+-<b>chpst</b> changes
+-the process state according to the given options, and runs <i>prog</i>. 
++<b>chpst</b>
++changes the process state according to the given options, and runs <i>prog</i>.
++
+ <h2><a name='sect3'>Options</a></h2>
+ 
+ <dl>
+ 
+-<dt><b>-u
+-<i>user[:group]</b> </i></dt>
+-<dd>setuidgid. Set uid and gid to the <i>user</i>&rsquo;s uid and gid. If <i>user</i>
+-is followed by a colon and a <i>group</i>, set the gid to <i>group</i>&rsquo;s gid instead of
+-<i>user</i>&rsquo;s gid. All supplementary groups are removed. </dd>
++<dt><b>-u <i>user[:group]</b> </i></dt>
++<dd>setuidgid. Set uid and gid to the <i>user</i>&rsquo;s uid and gid.
++If <i>user</i> is followed by a colon and a <i>group</i>, set the gid to <i>group</i>&rsquo;s gid instead
++of <i>user</i>&rsquo;s gid. All supplementary groups are removed. </dd>
+ 
+ <dt><b>-U <i>user[:group]</b> </i></dt>
+ <dd>envuidgid.
+@@ -43,69 +43,73 @@
+ to newlines. If the file <i>k</i> is empty (0 bytes long), <b>chpst</b> removes the environment
+ variable <i>k</i> if it exists, without adding a new variable. </dd>
+ 
++<dt><b>-/ <i>root</b> </i></dt>
++<dd>chroot. Change
++the root directory to <i>root</i> before starting <i>prog</i>. </dd>
++
+ <dt><b>-l <i>lock</b> </i></dt>
+-<dd>lock. Open
+-the file <i>lock</i> for writing, and obtain an exclusive lock on it. <i>lock</i> will
+-be created if it does not exist. If <i>lock</i> is locked by another process, wait
+-until a new lock can be obtained. </dd>
++<dd>lock. Open the file
++<i>lock</i> for writing, and obtain an exclusive lock on it. <i>lock</i> will be created
++if it does not exist. If <i>lock</i> is locked by another process, wait until a
++new lock can be obtained. </dd>
+ 
+ <dt><b>-L <i>lock</b> </i></dt>
+-<dd>The same as -l, but fail immediately
+-if <i>lock</i> is locked by another process. </dd>
++<dd>The same as -l, but fail immediately if
++<i>lock</i> is locked by another process. </dd>
+ 
+ <dt><b>-m <i>bytes</b> </i></dt>
+-<dd>limit memory. Limit the data
+-segment, stack segment, locked physical pages, and total of all segment
+-per process to <i>bytes</i> bytes each. </dd>
++<dd>limit memory. Limit the data segment,
++stack segment, locked physical pages, and total of all segment per process
++to <i>bytes</i> bytes each. </dd>
+ 
+ <dt><b>-o <i>n</b> </i></dt>
+-<dd>limit open files. Limit the number of
+-open file descriptors per process to <i>n</i>. </dd>
++<dd>limit open files. Limit the number of open file
++descriptors per process to <i>n</i>. </dd>
+ 
+ <dt><b>-p <i>n</b> </i></dt>
+-<dd>limit processes. Limit the number
+-of processes per uid to <i>n</i>. </dd>
++<dd>limit processes. Limit the number of processes
++per uid to <i>n</i>. </dd>
+ 
+ <dt><b>-f <i>bytes</b> </i></dt>
+-<dd>limit output size. Limit the output file
+-size to <i>bytes</i> bytes. </dd>
++<dd>limit output size. Limit the output file size to <i>bytes</i>
++bytes. </dd>
+ 
+ <dt><b>-c <i>bytes</b> </i></dt>
+-<dd>limit core size. Limit the core file size to
+-<i>bytes</i> bytes. </dd>
++<dd>limit core size. Limit the core file size to <i>bytes</i> bytes. </dd>
+ 
+-<dt><b>-v</b> </dt>
+-<dd>verbose. Print verbose messages to standard error. This includes
+-warnings about limits unsupported by the system. </dd>
++<dt><b>-v</b>
++</dt>
++<dd>verbose. Print verbose messages to standard error. This includes warnings
++about limits unsupported by the system. </dd>
+ 
+ <dt><b>-P</b> </dt>
+-<dd>pgrphack. Run <i>prog</i> in
+-a new process group. </dd>
++<dd>pgrphack. Run <i>prog</i> in a new process
++group. </dd>
+ 
+ <dt><b>-0</b> </dt>
+-<dd>Close standard input before running <i>prog</i>. </dd>
++<dd>Close standard input before starting <i>prog</i>. </dd>
+ 
+ <dt><b>-1</b> </dt>
+-<dd>Close
+-standard output before running <i>prog</i>. </dd>
++<dd>Close standard output
++before starting <i>prog</i>. </dd>
+ 
+ <dt><b>-2</b> </dt>
+-<dd>Close standard error before running
+-<i>prog</i>. </dd>
++<dd>Close standard error before starting <i>prog</i>. </dd>
+ </dl>
+ 
+ <h2><a name='sect4'>Exit Codes</a></h2>
+-<b>chpst</b> exits 100 when called with wrong options. It prints
+-an error message and exits 111 if it has trouble changing the process state.
+-Otherwise its exit code is the same as that of <i>prog</i>. 
++<b>chpst</b>
++exits 100 when called with wrong options. It prints an error message and
++exits 111 if it has trouble changing the process state. Otherwise its exit
++code is the same as that of <i>prog</i>. 
+ <h2><a name='sect5'>Emulation</a></h2>
+-If <b>chpst</b> is
+-called as <i><b>envdir</b>(8)</i>, <i><b>envuidgid</b>(8)</i>, <i><b>pgrphack</b>(8)</i>, <i><b>setlock</b>(8)</i>, <i><b>setuidgid</b>(8)</i>,
+-or <i><b>softlimit</b>(8)</i>, it emulates the functionality of these programs from the
+-daemontools package respectively. 
++If <b>chpst</b> is called as <i><b>envdir</b>(8)</i>,
++<i><b>envuidgid</b>(8)</i>, <i><b>pgrphack</b>(8)</i>, <i><b>setlock</b>(8)</i>, <i><b>setuidgid</b>(8)</i>, or <i><b>softlimit</b>(8)</i>, it
++emulates the functionality of these programs from the daemontools package
++respectively. 
+ <h2><a name='sect6'>See Also</a></h2>
+-<i>runsv(8)</i>, <i>runsvctrl(8)</i>, <i>runsvstat(8)</i>,
+-<i>runsvdir(8)</i>, <i>setsid(2)</i> <p>
++<i>runsv(8)</i>, <i>runsvctrl(8)</i>, <i>runsvstat(8)</i>, <i>runsvdir(8)</i>,
++<i>setsid(2)</i> <p>
+  <i>http://smarden.org/runit/</i><br>
+   <i>http://cr.yp.to/daemontools.html</i><br>
+  

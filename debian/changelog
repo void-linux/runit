@@ -1,3 +1,11 @@
+runit (1.0.2-2) unstable; urgency=low
+
+  * debian/diff/chpst-chroot.diff: new; chpst supports chroot though -/
+    option.
+  * debian/rules: new target unpack; apply chpst-chroot.diff.
+
+ -- Gerrit Pape <pape@smarden.org>  Tue, 27 Apr 2004 17:35:59 +0000
+
 runit (1.0.2-1) unstable; urgency=low
 
   * new upstream release.
