@@ -1,3 +1,8 @@
+runit 0.9.3
+Sun, 04 May 2003 11:30:58 +0200
+  * Makefile: actually build runsvstat, runsvctrl before installing them,
+    fixes build failure (thx Lukas Beeler).
+
 runit 0.9.2
 Sat, 03 May 2003 17:40:23 +0200
   * doc/runscripts.html: changes from Jesse Cablek.
