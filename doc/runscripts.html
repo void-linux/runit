@@ -23,17 +23,20 @@ Alessandro Bono, Robin S. Socha, Claus Alboege, Paul Jarc, clemens fischer,
 Jesse Cablek, Lukas Beeler, Thomas Baden, Ralf Hildebrandt, Antonio Dias,
 Erich Schubert, Lang Martin, Tomasz Nidecki, Marek Bartnikowski,
 Thomas Schwinge, Gael Canal, Woon Wai Keen, Richard A Downing, Phil Genera,
-Stefan Karrmann, Kevin Berry.
+Stefan Karrmann, Kevin Berry, Karl Chen.
 <hr>
 <a href="#atftpd">atftpd</a><br>
 <a href="#apache">apache</a><br>
 <a href="#apache2">apache2</a><br>
+<a href="#atd">atd</a><br>
 <a href="#bind9">bind9</a><br>
 <a href="#boa">boa</a><br>
 <a href="#cfengine">cfengine</a><br>
+<a href="#cfsd">cfsd</a><br>
 <a href="#chrony">chrony</a><br>
 <a href="#clamav">clamav</a><br>
 <a href="#courier-imap">courier-imap</a><br>
+<a href="#cron">cron</a><br>
 <a href="#cups">cups</a><br>
 <a href="#dhclient">dhclient</a><br>
 <a href="#dhcpcd">dhcpcd</a><br>
@@ -52,6 +55,7 @@ Stefan Karrmann, Kevin Berry.
 <a href="#inn">inn</a><br>
 <a href="#jabberd">jabberd</a><br>
 <a href="#junkbuster">junkbuster</a><br>
+<a href="#kdm">kdm</a><br>
 <a href="#keepalived">keepalived</a><br>
 <a href="#klogd">klogd</a><br>
 <a href="#leafnode">leafnode</a><br>
@@ -68,6 +72,7 @@ logging console messages</a><br>
 <a href="#portmap">portmap</a><br>
 <a href="#postgresql">postgresql</a><br>
 <a href="#ppp">ppp</a><br>
+<a href="#privoxy">privoxy</a><br>
 <a href="#proftpd">proftpd</a><br>
 <a href="#pure-ftpd">pure-ftpd</a><br>
 <a href="#radiusd">radiusd</a><br>
@@ -81,12 +86,15 @@ logging console messages</a><br>
 <a href="#statd">statd</a>, <a href="#mountd">mountd</a><br>
 <a href="#stunnel">stunnel</a><br>
 <a href="#swat">swat</a><br>
+<a href="#syslogd">syslogd</a><br>
 <a href="#taiclockd">taiclockd</a><br>
 <a href="#tmda-ofmipd">tmda-ofmipd</a><br>
 <a href="#tomcat">tomcat</a><br>
+<a href="#tor">tor</a><br>
 <a href="#vsftpd">vsftpd</a><br>
 <a href="#wvdial">wvdial</a><br>
 <a href="#xdm">xdm</a><br>
+<a href="#xfs">xfs</a><br>
 <hr>
 
 <h3><a name="atftpd">An <tt>atftpd</tt> run script</a></h3>
@@ -129,6 +137,14 @@ logging console messages</a><br>
  exec /usr/local/apache2/bin/httpd -DNO_DETACH
 </pre>
 <hr>
+<h3><a name="atd">An <tt>atd</aa> run script</a></h3>
+(<i>Debian sarge</i>)
+<pre>
+ #!/bin/sh
+ exec 2&gt;&amp;1
+ exec atd -d
+</pre>
+<hr>
 <h3><a name="bind9">A <tt>bind9</tt> run script</a></h3>
 (<i>Linux</i>)
 <pre>
@@ -159,6 +175,32 @@ logging console messages</a><br>
  #!/bin/sh
  /pack/cfengine/sbin/cfagent --file /pack/cfengine/etc/cfagent.conf \
    -L -v -q exec sleep 3600
+</pre>
+<hr>
+<h3><a name="cfsd">A <tt>cfsd</tt> run script</a></h3>
+(<i>Debian sarge</i>)
+<pre>
+ #!/bin/sh
+ exec 2&gt;&amp;1
+ 
+ set -e
+ 
+ PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/bin
+ DAEMON=cfsd
+ CONFIG_FILE=/etc/cfs.conf
+ 
+ # source config file
+ test ! -r "$CONFIG_FILE" || . "$CONFIG_FILE"
+ 
+ test -n "$CRYPT_ROOT" || exit 0
+ test -n "$NULL_EXPORT" || exit 0
+ test -n "$CFS_MOUNT" || exit 0
+ test -n "$CFS_UMOUNT" || exit 0
+ 
+ svwaitup -s 2 /var/service/portmap
+ 
+ exec env \
+    NODAEMON=1 CFS_MOUNT="$CFS_MOUNT" CFS_UMOUNT="$CFS_UMOUNT" $DAEMON
 </pre>
 <hr>
 <h3><a name="chrony">A <tt>chrony</tt> run script</a></h3>
@@ -199,6 +241,14 @@ to be set up.
 </pre>
 See also <a href="http://jonaspasche.de/courier-imap-daemontools.txt">
 this page</a>.
+<hr>
+<h3><a name="cron">A <tt>cron</tt> run script</a></h3>
+(<i>Debian sarge</i>)
+<pre>
+ #!/bin/sh
+ exec 2&gt;&amp;1
+ exec cron -f -l
+</pre>
 <hr>
 <h3><a name="cups">A <tt>cups</tt> run script</a></h3>
 (<i>Debian woody</i>)
@@ -310,6 +360,14 @@ to be set up.
 This service needs a
 <a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
 to be set up.
+<p>
+(<i>Debian sarge</i>)
+<pre>
+ #!/bin/sh
+ exec 2&gt;&amp;1
+ svwaitup -s 2 /var/service/portmap
+ exec famd -T 0 -f
+</pre>
 <hr>
 <h3><a name="fcron">A <tt>fcron</tt> run script</a></h3>
 (<i>LFS</i>)
@@ -439,6 +497,14 @@ to be set up.
  exec "$DAEMON" /etc/junkbuster/config
 </pre>
 <hr>
+<h3><a name="kdm">A <tt>kdm</tt> run script</a></h3>
+(<i>Debian sid</i>, <i>FreeBSD 5.3-REL</i>)
+<pre>
+ #!/bin/sh
+ svwaitup -s 2 /service/getty-*
+ exec kdm -nodaemon
+</pre>
+<hr>
 <h3><a name="keepalived">A <tt>keepalived</tt> run script</a></h3>
 (<i>Linux</i>)
 <pre>
@@ -536,9 +602,9 @@ to be set up.
 (<i>Linux</i>)
 <pre>
  #!/bin/sh
- MEM="`head -1 ./env/MEM`"
- exec softlimit -m ${MEM} \
-   ntpd -n -p /var/run/ntpd.pid
+ MEM=`head -1 ./env/MEM`
+ exec softlimit -m "${MEM}" \
+   ntpd -n
 </pre>
 <hr>
 <h3><a name="polipo">A <tt>polipo</tt> run script</a></h3>
@@ -578,11 +644,11 @@ This service needs a
 to be set up.
 <hr>
 <h3><a name="portmap">A <tt>portmap</tt> run script</a></h3>
-(<i>LFS</i>)
+(<i>LFS</i>, <i>Debian sarge</i>)
 <pre>
  #!/bin/sh
  exec 2&gt;&amp;1
- exec /sbin/portmap -d
+ exec portmap -d
 </pre>
 <hr>
 <h3><a name="postgresql">A <tt>postgresql</tt> run script</a></h3>
@@ -611,6 +677,17 @@ to be set up.
  exec 2&gt;&amp;1
  exec chpst -P pppd call isp nodetach
 </pre>
+<hr>
+<h3><a name="privoxy">A <tt>privoxy</tt> run script</a></h3>
+(<i>Debian sarge</i>)
+<pre>
+ #!/bin/sh
+ exec 2&gt;&amp;1
+ exec chpst -u privoxy:nogroup privoxy --no-daemon /etc/privoxy/config
+</pre>
+This service needs a
+<a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
+to be set up.
 <hr>
 <h3><a name="proftpd">A <tt>proftpd</tt> run script</a></h3>
 (<i>Linux</i>, ProFTPD Version 1.2.8rc1,
@@ -789,6 +866,13 @@ trap 'exit 2' 1 2 3 15
  exec tcpsvd -l0 127.0.0.1 901 /usr/sbin/swat
 </pre>
 <hr>
+<h3><a name="syslogd">A <tt>syslogd</tt> run script</a></h3>
+(<i>Debian sarge</i>)
+<pre>
+ #!/bin/sh
+ exec syslogd -n
+</pre>
+<hr>
 <h3><a name="taiclockd">A <tt>taiclockd</tt> run script</a></h3>
 <pre>
  #!/bin/sh
@@ -814,6 +898,14 @@ to be set up.
  exec \
  setuidgid apache \
  /pack/tomcat/current/bin/catalina.sh run
+</pre>
+<hr>
+<h3><a name="tor">A <tt>tor</tt> run script</a></h3>
+(<i>Debian sarge</i>)
+<pre>
+ #!/bin/sh
+ exec 2&gt;&amp;1
+ exec chpst -P -u debian-tor:debian-tor tor
 </pre>
 <hr>
 <h3><a name="vsftpd">A <tt>vsftpd</tt> run script</a></h3>
@@ -847,6 +939,17 @@ to be set up.
  #!/bin/sh
  svwaitup -s 2 /service/vc-*
  exec xdm -nodaemon
+</pre>
+<hr>
+<h3><a name="xfs">A <tt>xfs</tt> run script</a></h3>
+(<i>Debian sarge</i>)
+<pre>
+ #!/bin/sh
+ SOCKET_DIR=/tmp/.font-unix
+ mkdir -p $SOCKET_DIR
+ chown 0:0 $SOCKET_DIR
+ chmod 1777 $SOCKET_DIR
+ exec /usr/bin/X11/xfs -nodaemon
 </pre>
 <hr>
 <address><a href="mailto:pape-runscripts@smarden.org">
