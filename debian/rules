@@ -95,7 +95,9 @@ install: build
 	install -m0755 admin/runit-0.7.1/src/runsvctrl \
 	  $(CURDIR)/debian/runit/usr/bin/runsvctrl
 
-	install -m0700 admin/runit/etc/debian/1 \
+#	install -m0700 admin/runit/etc/debian/1 \
+#	  $(CURDIR)/debian/runit/etc/runit/1
+	install -m0700 debian/1 \
 	  $(CURDIR)/debian/runit/etc/runit/1
 	install -m0700 debian/2 \
 	  $(CURDIR)/debian/runit/etc/runit/2

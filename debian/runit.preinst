@@ -19,8 +19,7 @@ case "$1" in
     install|upgrade)
       if [ -n "$2" ]; then
         # upgrading
-        if [ -x /sbin/runit ]; then
-          rm -f /sbin/runit.old
+        if [ -x /sbin/runit -a ! -e /sbin/runit.old ]; then
           ln /sbin/runit /sbin/runit.old
         fi
       fi
