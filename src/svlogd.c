@@ -49,7 +49,6 @@ char repl =0;
 const char **fndir;
 int fdwdir;
 struct stat st;
-int i;
 stralloc sa;
 int wstat;
 struct taia now;
@@ -283,6 +282,8 @@ void logdir_close(struct logdir *ld) {
 }
 
 unsigned int logdir_open(struct logdir *ld, const char *fn) {
+  int i;
+
   if ((ld->fddir =open_read(fn)) == -1) {
     warn2("unable to open log directory", (char*)fn);
     return(0);
@@ -404,6 +405,8 @@ void logdirs_reopen(void) {
 }
 
 unsigned int linestart(struct logdir *ld, char *s, int len) {
+  int i;
+
   /* check inst, set match */
   ld->match ='+';
   if (ld->inst.len) {
@@ -512,6 +515,7 @@ void sig_hangup_handler(void) {
 }
 
 int main(int argc, const char **argv) {
+  int i;
   int opt;
   unsigned int eol;
 

@@ -9,9 +9,13 @@
 <hr>
 <h1>runit - installation</h1>
 <hr>
-Check that you have the recent version of
-<a href="http://cr.yp.to/daemontools.html">daemontools</a> installed.
-<p>
+<i>runit</i> installs into
+<a href="http://cr.yp.to/slashpackage.html">/package</a>.
+If you don't have a <tt>/package</tt> directory, create it now:
+<pre>
+  # mkdir -p /package
+  # chmod 1755 /package
+</pre>
 Download
 <a href="runit-0.9.1.tar.gz">runit-0.9.1.tar.gz</a> into <tt>/package</tt>
 and unpack the archive
@@ -32,7 +36,10 @@ hierarchy, do:
   # package/install-man
 </pre>
 Refer to <a href="replaceinit.html">replacing init</a> for
-replacing <i>init</i> with <i>runit</i>.
+replacing <i>init</i> with <i>runit</i>, or to
+<a href="useinit.html">use with traditional init</a> for running
+<i>runit</i>'s service supervision with your system's current <i>init</i>
+scheme.
 <hr>
 <address><a href="mailto:pape@smarden.org">
 Gerrit Pape &lt;pape@smarden.org&gt;

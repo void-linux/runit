@@ -1,3 +1,14 @@
+runit 0.9.2
+Sat, 03 May 2003 17:40:23 +0200
+  * doc/dependencies.html, doc/useinit.html: new.
+  * doc/index.html: adapt; reorder programs; runsvstat, runsvctrl installed
+    by default.
+  * doc/install.html: remove dependency on daemontools; create /package.
+  * doc/replaceinit.html, man/runsv.8: typo.
+  * man/svwaitdown.8, man/svwaitup.8: refer to runit and supervise.
+  * svlogd.c: fix counter var namespace.
+  * package/commands: add runsvctrl, runsvstat.
+
 runit 0.9.1
 Wed, 30 Apr 2003 22:10:57 +0200
   * svlogd.c: reset match flag on deselection, fixes pattern matching.
