@@ -3,7 +3,10 @@ Sun, 01 Aug 2004 18:29:36 +0000
   * doc/runlevels.html, doc/upgrade.html, doc/useinit.html, man/runsvdir.8,
     man/runsvchdir.8: minor changes in wording, notations.
   * runsvdir.c: check services dir again after one second until it's
-    unchanged (thx Eric Lammerts); loop while chdir to starting dir fails.
+    unchanged (thx Eric Lammerts); sleep one second before scanning if
+    services dir mtime is now; loop while chdir to starting dir fails;
+    rename log, loglen to rplog, rploglen.
+  * etc/macosx/StartupItems/runit: use -x option to svwaitdown; timeout 14.
 
 runit 1.0.3
 Sat, 26 Jun 2004 14:50:41 +0000
