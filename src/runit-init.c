@@ -71,7 +71,7 @@ int main (int argc, const char * const *argv, const char * const *envp) {
     break;
   case '-':
     if ((*argv)[1] == 'V') {
-      strerr_warn1("$Id: init.c,v 1.2 2001/11/26 11:31:54 pape Exp $\n", 0);
+      strerr_warn1("$Id: runit-init.c,v 1.1 2001/12/23 02:23:20 pape Exp $\n", 0);
     }
   default:
     usage();

@@ -12,20 +12,12 @@
 Check that you have the recent version of
 <a href="http://www.fefe.de/dietlibc/">dietlibc</a> installed.
 <p>
-Change to the source directory of <i>runit</i> and modify the Makefile to
-use <tt>diet</tt>:
+Change to the source directory of <i>runit</i>:
 <pre>
   # cd /package/admin/runit/src
-  # vi Makefile
-</pre>
-Modify the <tt>CC</tt> and <tt>LDFLAGS</tt> variables in the
-<tt>Makefile</tt> to these settings:
-<pre>
-  CC=diet gcc
-  LDFLAGS=-Wall -O3 -s -Os -pipe
 </pre>
 Download
-<a href="ftp://ftp.innominate.org/pub/pape/djb/daemontools-pd-0.76.tar.gz">
+<a href="http://smarden.org/pape/djb/manpages/daemontools-pd-0.76.tar.gz">
 daemontools-pd-0.76.tar.gz</a>
 into <tt>/package/admin/runit/src</tt> and unpack the archive (this
 contains code from the daemontools-0.76 package which are in the Public
@@ -57,6 +49,6 @@ Finally rebuild and install the <i>runit</i> programs:
 <address><a href="mailto:pape@smarden.org">
 Gerrit Pape &lt;pape@smarden.org&gt;
 </a></address>
-<small>$Id: usedietlibc.html,v 1.1 2001/11/26 11:32:40 pape Exp $</small>
+<small>$Id: usedietlibc.html,v 1.3 2001/12/23 17:14:08 pape Exp $</small>
 </body>
 </html>

@@ -2,3 +2,7 @@ runit
 runit.o
 runit-init
 init.o
+svwaitdown
+svwaitdown.o
+svwaitup
+svwaitup.o

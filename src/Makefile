@@ -1,23 +1,23 @@
 DESTDIR=
 
-CC=gcc
+CC=./support/compile
+LD=./support/load
 
-CFLAGS=-Wall -O3 -Isupport
-LDFLAGS=-Wall -O3 -s
+CFLAGS=-Isupport
 
-all: runit runit-init
-
-set-tcp-env: djb-publicdomain set-tcp-env.o
-	$(CC) $(LDFLAGS) -o set-tcp-env \
-		set-tcp-env.o support/unix.a support/byte.a
+all: runit runit-init svwaitup svwaitdown
 
 runit: djb-publicdomain runit.o
-	$(CC) $(LDFLAGS) -o runit \
-		runit.o support/unix.a support/byte.a
+	$(LD) runit support/unix.a support/byte.a
 
-runit-init:	djb-publicdomain init.o
-	$(CC) $(LDFLAGS) -o runit-init \
-		init.o support/unix.a support/byte.a
+runit-init: djb-publicdomain runit-init.o
+	$(LD) runit-init support/unix.a support/byte.a
+
+svwaitup: djb-publicdomain svwaitup.o
+	$(LD) svwaitup support/unix.a support/byte.a support/time.a
+
+svwaitdown: djb-publicdomain svwaitdown.o
+	$(LD) svwaitdown support/unix.a support/byte.a support/time.a
 
 djb-publicdomain:
 	( cd support ; make )

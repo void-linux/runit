@@ -55,6 +55,10 @@ int main (int argc, const char * const *argv, const char * const *envp) {
   iopause_fd x;
   char ch;
 
+  if (getpid() != 1) {
+    strerr_die2x(111, FATAL, "must be run as process no 1.");
+  }
+  
   setsid();
 
   sig_block(sig_alarm);
@@ -81,7 +85,7 @@ int main (int argc, const char * const *argv, const char * const *envp) {
   /* activate ctrlaltdel handling */
   reboot(0);
 
-  strerr_warn3(INFO, "$Id: runit.c,v 1.3 2001/11/26 11:31:54 pape Exp $",
+  strerr_warn3(INFO, "$Id: runit.c,v 1.4 2001/12/22 19:40:20 pape Exp $",
 	       ": booting.", 0);
 
   /* runit */

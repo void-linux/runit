@@ -1,0 +1,68 @@
+
+
+
+<HTML>
+<HEAD>
+<TITLE>svwaitdown(8) manual page</TITLE>
+</HEAD>
+<BODY bgcolor=white>
+<a href="http://smarden.org/pape/">G. Pape</a><br><A HREF="index.html">runit</A><hr><P>
+
+<H2><A NAME="sect0">Name</A></H2>
+svwaitdown - waits for services controlled by <I>supervise(8)</I> to be down
+
+<H2><A NAME="sect1">Synopsis</A></H2>
+<B>svwaitdown</B> [ <B>-v</B> ] [ <B>-t</B> <I>sec</I> ] <I>services</I> 
+<H2><A NAME="sect2">Description</A></H2>
+<I>services</I> consist
+of one or more arguments. <P>
+<B>svwaitdown</B> checks each <I>service</I> given at the command
+line for being down. The <I>services</I> given at the command line must be controlled
+by <B><I>supervise</B>(8)</I>. <P>
+<B>svwaitdown</B> blocks, limited by a <I>timeout</I>, until all <I>services</I>
+are down or reports errors. 
+<H2><A NAME="sect3">Options</A></H2>
+
+<DL>
+
+<DT><B>-v</B> </DT>
+<DD>verbose. Print verbose messages to stderr.
+</DD>
+
+<DT><B>-t <I>sec</B> </I></DT>
+<DD>Set the timeout for waiting for <I>services</I> to become down to <I>sec</I> seconds.
+<I>sec</I> must be between 2 and 6000. Default is 600 (10 minutes). </DD>
+</DL>
+
+<H2><A NAME="sect4">Exit Codes</A></H2>
+<B>svwaitdown</B>
+returns 0 as soon as all <I>services</I> are down. <P>
+If a <I>service</I> is usually controlled
+by <B><I>supervise</B>(8)</I>, but no <B><I>supervise</B>(8)</I> process is currently running, <B>svwaitdown</B>
+treats this <I>service</I> as if it would be down. <P>
+For each <I>service</I> that causes
+an error while checking, <B>svwaitdown</B> increases the exit code by one and
+exits non zero. The maximum is 100. <P>
+<B>svwaitdown</B> returns 111 if the timeout
+<I>sec</I> was reached. 
+<H2><A NAME="sect5">See Also</A></H2>
+<I>svwaitup(8)</I>, <I>supervise(8)</I>, <I>svscan(8)</I>, <I>runit(8)</I>,
+<I>runit-init(8)</I> <P>
+ <I>http://smarden.org/runit/</I><BR>
+  <I>http://cr.yp.to/daemontools.html</I><BR>
+ 
+<H2><A NAME="sect6">Author</A></H2>
+Gerrit Pape &lt;pape@smarden.org&gt; <P>
+
+<HR><P>
+<A NAME="toc"><B>Table of Contents</B></A><P>
+<UL>
+<LI><A NAME="toc0" HREF="#sect0">Name</A></LI>
+<LI><A NAME="toc1" HREF="#sect1">Synopsis</A></LI>
+<LI><A NAME="toc2" HREF="#sect2">Description</A></LI>
+<LI><A NAME="toc3" HREF="#sect3">Options</A></LI>
+<LI><A NAME="toc4" HREF="#sect4">Exit Codes</A></LI>
+<LI><A NAME="toc5" HREF="#sect5">See Also</A></LI>
+<LI><A NAME="toc6" HREF="#sect6">Author</A></LI>
+</UL>
+</BODY></HTML>
