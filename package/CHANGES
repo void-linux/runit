@@ -1,3 +1,8 @@
+runit 0.3.3
+Sat, 18 May 2002 19:20:46 +0200
+  * src/: include public domain sources to build byte.a, unix.a, time.a:
+    runit builds without having daemontools' sources installed.
+
 runit 0.3.2
 Wed, 13 Feb 2002 10:56:17 +0100
   * runit.c: support ctrl-alt-del also on Linux/i386, dietlibc.

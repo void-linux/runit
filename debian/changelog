@@ -1,3 +1,9 @@
+runit (0.3.3-1) woody; urgency=low
+
+  * See /package/admin/runit/package/CHANGES.
+
+ -- Gerrit Pape <pape@smarden.org>  Sat, 18 May 2002 19:26:51 +0200
+
 runit (0.3.2-2) woody; urgency=low
 
   * getty service directory /etc/runit/getty-tty5 moved to
