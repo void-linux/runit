@@ -2,8 +2,10 @@ runit (1.0.2-1) unstable; urgency=low
 
   * new upstream release.
   * debian/implicit: update to revision 1.8.
+  * debian/control: Build-Depends: dietlibc-dev (>> 0.25-0) (fixes
+    build/testing failure on arm).
 
- -- Gerrit Pape <pape@smarden.org>  Sun, 28 Mar 2004 18:33:31 +0000
+ -- Gerrit Pape <pape@smarden.org>  Sun, 28 Mar 2004 18:46:32 +0000
 
 runit (1.0.1-1) unstable; urgency=low
 
