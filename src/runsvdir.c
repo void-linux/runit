@@ -36,6 +36,7 @@ int loglen;
 int logpipe[2];
 iopause_fd io[1];
 struct taia stamplog;
+int exitsoon =0;
 
 void usage () {
   strerr_die4x(1, "usage: ", progname, USAGE, "\n");
@@ -49,6 +50,9 @@ void warn(char *m1, char *m2) {
 void warn3x(char *m1, char *m2, char *m3) {
   strerr_warn6("runsvdir ", svdir, ": warning: ", m1, m2, m3, 0);
 } 
+void s_term() {
+  exitsoon =1;
+}
 void runsv(int no, char *name) {
   int pid;
 
@@ -173,6 +177,7 @@ int main(int argc, char **argv) {
   progname =*argv++;
   if (! argv || ! *argv) usage();
 
+  sig_catch(sig_term, s_term);
   svdir =*argv++;
   if (argv && *argv) {
     log =*argv;
@@ -241,6 +246,12 @@ int main(int argc, char **argv) {
 	  }
 	}
       }
+    if (exitsoon) {
+      for (i =0; i < svnum; i++) {
+	if (sv[i].pid) kill(sv[i].pid, SIGTERM);
+      }
+      exit(0);
+    }
   }
   /* not reached */
   exit(0);

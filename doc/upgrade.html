@@ -10,12 +10,26 @@
 <h1>runit - upgrading from previous versions</h1>
 <hr>
 
-<h3>0.4.1 to 0.5.0</h3>
+<h3>0.5.0 to 0.6.0</h3>
+There are two new programs, <a href="runsvdir.8.html">runsvdir</a> and
+<a href="runsv.8.html">runsv</a>, which replace the
+<tt>svscanboot</tt>/<tt>svscan</tt>/<tt>readproctitle</tt>/<tt>supervise</tt>
+combination of daemontools. Please adapt <tt>runit</tt>'s stage 2
+(<tt>/etc/runit/2</tt>) to use <tt>runsvdir</tt> instead of
+<tt>svscanboot</tt>; see the examples in <tt>/package/admin/runit/etc/</tt>.
+The change takes effect on the next reboot or if you stop all services and
+kill <tt>svscan</tt> and <tt>readproctitle</tt>. <tt>runit</tt> then
+automatically restarts stage 2.
 <p>
-There is a new program: <tt>utmpset</tt>. This program is used in the
-getty run scripts to enable local login accounting. You might want to adapt
-your getty run scripts <tt>/service/getty-*/run</tt>, see the examples in
-<tt>/package/admin/runit/etc/</tt>. 
+The <a href="svwaitdown.8.html">svwaitdown</a> program has new options: -k
+and -x. They are used in <tt>runit</tt>'s stage 3 (<tt>/etc/runit/3</tt>).
+Please adapt your <tt>/etc/runit/3</tt> script, see the examples in
+<tt>/package/admin/runit/etc/</tt>.
+<h3>0.4.1 to 0.5.0</h3>
+There is a new program: <a href="utmpset.8.html">utmpset</a>. This program
+is used in the getty run scripts to enable local login accounting. You might
+want to adapt your getty run scripts <tt>/service/getty-*/run</tt>, see the
+examples in <tt>/package/admin/runit/etc/</tt>. 
 <hr>
 <address><a href="mailto:pape@smarden.org">
 Gerrit Pape &lt;pape@smarden.org&gt;

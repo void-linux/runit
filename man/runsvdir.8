@@ -70,6 +70,12 @@ Normally
 is started by
 .BR runit (8)
 in stage 2.
+.SH SIGNALS
+If
+.B runsvdir
+receives a TERM signal, it sends a TERM signal to each
+.BR runsv (8)
+process it is monitoring and then exits.
 .SH SEE ALSO
 runit(8),
 runit-init(8),

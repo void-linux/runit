@@ -50,18 +50,19 @@ maintains status information in a binary format compatible to
 .BR supervise (8)
 in
 .IR service /supervise/status
-( and
-.IR service /log/supervise/status),
-and in a human readable format in
-.IR service /supervise/stat
-( and
-.IR service /log/supervise/stat).
+and
+.IR service /log/supervise/status,
+and in a human-readable format in
+.IR service /supervise/stat,
+.IR service /log/supervise/stat,
+.IR service /supervise/pid,
+.IR service /log/supervise/pid.
 .SH CONTROL
-The named pipe
-.IR service /supervise/control
-(and
-.IR service /log/supervise/control)
-is provided to give commands to
+The named pipes
+.IR service /supervise/control,
+and (optionally)
+.IR service /log/supervise/control
+are provided to give commands to
 .BR runsv .
 You can use
 .BR svc (8)
@@ -128,6 +129,10 @@ If
 on your systems does not provide the -n option, leave it out,
 .B runsv
 ignores unknown characters written to the control pipe.
+.BR echo (1)
+usally blocks if no
+.B runsv
+process is running in the service directory.
 .SH SIGNALS
 If
 .B runsv

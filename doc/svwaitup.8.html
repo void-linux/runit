@@ -15,43 +15,43 @@ svwaitup - waits for services controlled by <I>supervise(8)</I> to be up
 [ <B>-v</B> ] [ <B>-s</B> <I>sec</I> ] <I>services</I> 
 <H2><A NAME="sect2">Description</A></H2>
 <I>services</I> consist of one or more arguments.
+Each <I>service</I> directory must start with a slash. <P>
+<B>svwaitup</B> checks each <I>service</I>
+given at the command line for being at least the specified number of seconds
+<I>sec</I> up. The <I>services</I> given at the command line must be controlled by <B><I>supervise</B>(8)</I>.
 <P>
-<B>svwaitup</B> checks each <I>service</I> given at the command line for being at least
-the specified number of seconds <I>sec</I> up. The <I>services</I> given at the command
-line must be controlled by <B><I>supervise</B>(8)</I>. <P>
-<B>svwaitup</B> blocks until all <I>services</I>
-were up and running at least <I>sec</I> seconds when <B>svwaitup</B> was checking or
-reports errors. 
+<B>svwaitup</B> blocks until all <I>services</I> were up and running at least <I>sec</I> seconds
+when <B>svwaitup</B> was checking or reports errors. 
 <H2><A NAME="sect3">Options</A></H2>
 
 <DL>
 
 <DT><B>-v</B> </DT>
-<DD>verbose. Print verbose messages to stderr. </DD>
+<DD>verbose. Print verbose
+messages to stderr. </DD>
 
-<DT><B>-s <I>sec</B>
-</I></DT>
-<DD>Set the minimum number of seconds each <I>service</I> has to be up to <I>sec</I> seconds.
-<I>sec</I> must be between 2 and 600. Default is 2. </DD>
+<DT><B>-s <I>sec</B> </I></DT>
+<DD>Set the minimum number of seconds each <I>service</I>
+has to be up to <I>sec</I> seconds. <I>sec</I> must be between 2 and 600. Default is 2.
+</DD>
 </DL>
 
 <H2><A NAME="sect4">Exit Codes</A></H2>
-<B>svwaitup</B> returns 0
-as soon as all <I>services</I> were at least <I>sec</I> seconds up. <P>
-<B>Note</B>: If <B>svwaitup</B>
-exits 0, it does not guarantee that all <I>services</I> are actually running. A
-<I>service</I> could have crashed immediatly after <B>svwaitup</B> was successfully checking
-it to be up <I>sec</I> seconds. <I>services</I> should be designed not to rely on <B>svwaitup</B>
-to resolve dependencies. <P>
-For each <I>service</I> that is down and not requested
-to become up, or that causes an error while checking (e.g. <B><I>supervise</B>(8)</I> is
-not running), <B>svwaitup</B> increases the exit code by one and exits non zero.
-The maximum is 100. <P>
+<B>svwaitup</B> returns 0 as soon as all <I>services</I> were at least <I>sec</I>
+seconds up. <P>
+<B>Note</B>: If <B>svwaitup</B> exits 0, it does not guarantee that all <I>services</I>
+are actually running. A <I>service</I> could have crashed immediatly after <B>svwaitup</B>
+was successfully checking it to be up <I>sec</I> seconds. <I>services</I> should be designed
+not to rely on <B>svwaitup</B> to resolve dependencies. <P>
+For each <I>service</I> that is
+down and not requested to become up, or that causes an error while checking
+(e.g. <B><I>supervise</B>(8)</I> is not running), <B>svwaitup</B> increases the exit code by one
+and exits non zero. The maximum is 100. <P>
 <B>svwaitup</B> returns 111 on error. 
-<H2><A NAME="sect5">See Also</A></H2>
-<I>svwaitdown(8)</I>,
-<I>runit(8)</I>, <I>runit-init(8)</I>, <I>runsvdir(8)</I>, <I>runsv(8)</I>, <I>supervise(8)</I>, <I>svscan(8)</I>
-<P>
+<H2><A NAME="sect5">See
+Also</A></H2>
+<I>svwaitdown(8)</I>, <I>runit(8)</I>, <I>runit-init(8)</I>, <I>runsvdir(8)</I>, <I>runsv(8)</I>, <I>supervise(8)</I>,
+<I>svscan(8)</I> <P>
  <I>http://smarden.org/runit/</I><BR>
   <I>http://cr.yp.to/daemontools.html</I><BR>
  

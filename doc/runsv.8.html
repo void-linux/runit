@@ -31,12 +31,13 @@ and <I>service</I>/finish's standard output to the pipe, switches to the directo
 the <I>service</I> directory. The standard input of the log service a redirected
 to read from the pipe. <P>
 <B>runsv</B> maintains status information in a binary format
-compatible to <B><I>supervise</B>(8)</I> in <I>service</I>/supervise/status ( and <I>service</I>/log/supervise/status),
-and in a human readable format in <I>service</I>/supervise/stat ( and <I>service</I>/log/supervise/stat).
-
+compatible to <B><I>supervise</B>(8)</I> in <I>service</I>/supervise/status and <I>service</I>/log/supervise/status,
+and in a human-readable format in <I>service</I>/supervise/stat, <I>service</I>/log/supervise/stat,
+<I>service</I>/supervise/pid, <I>service</I>/log/supervise/pid. 
 <H2><A NAME="sect3">Control</A></H2>
-The named pipe <I>service</I>/supervise/control (and <I>service</I>/log/supervise/control)
-is provided to give commands to <B>runsv</B>. You can use <B><I>svc</B>(8)</I> to control the
+The named pipes
+<I>service</I>/supervise/control, and (optionally) <I>service</I>/log/supervise/control
+are provided to give commands to <B>runsv</B>. You can use <B><I>svc</B>(8)</I> to control the
 service or just write one of the following characters to the named pipe:
 
 <DL>
@@ -97,7 +98,8 @@ example, to send a TERM signal to /service/socklog-unix, either do   # svc
    # echo -n t &gt;/service/socklog-unix/supervise/control<BR>
  <P>
 If <B><I>echo</B>(1)</I> on your systems does not provide the -n option, leave it out,
-<B>runsv</B> ignores unknown characters written to the control pipe. 
+<B>runsv</B> ignores unknown characters written to the control pipe. <B><I>echo</B>(1)</I> usally
+blocks if no <B>runsv</B> process is running in the service directory. 
 <H2><A NAME="sect4">Signals</A></H2>
 If
 <B>runsv</B> receives a TERM signal, it acts as if the character x was written

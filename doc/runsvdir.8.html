@@ -34,13 +34,17 @@ a process-listing tool such as <B><I>ps</B>(1)</I>. <B>runsvdir</B> writes a dot
 log every 15 minutes so that old error messages expire. <P>
 Normally <B>runsvdir</B>
 is started by <B><I>runit</B>(8)</I> in stage 2. 
-<H2><A NAME="sect3">See Also</A></H2>
-<I>runit(8)</I>, <I>runit-init(8)</I>, <I>runsv(8)</I>,
-<I>readproctitle(8)</I>, <I>svscan(8)</I> <P>
+<H2><A NAME="sect3">Signals</A></H2>
+If <B>runsvdir</B> receives a TERM signal,
+it sends a TERM signal to each <B><I>runsv</B>(8)</I> process it is monitoring and then
+exits. 
+<H2><A NAME="sect4">See Also</A></H2>
+<I>runit(8)</I>, <I>runit-init(8)</I>, <I>runsv(8)</I>, <I>readproctitle(8)</I>, <I>svscan(8)</I>
+<P>
  <I>http://smarden.org/runit/</I><BR>
   <I>http://cr.yp.to/daemontools.html</I><BR>
  
-<H2><A NAME="sect4">Author</A></H2>
+<H2><A NAME="sect5">Author</A></H2>
 Gerrit Pape &lt;pape@smarden.org&gt; <P>
 
 <HR><P>
@@ -49,7 +53,8 @@ Gerrit Pape &lt;pape@smarden.org&gt; <P>
 <LI><A NAME="toc0" HREF="#sect0">Name</A></LI>
 <LI><A NAME="toc1" HREF="#sect1">Synopsis</A></LI>
 <LI><A NAME="toc2" HREF="#sect2">Description</A></LI>
-<LI><A NAME="toc3" HREF="#sect3">See Also</A></LI>
-<LI><A NAME="toc4" HREF="#sect4">Author</A></LI>
+<LI><A NAME="toc3" HREF="#sect3">Signals</A></LI>
+<LI><A NAME="toc4" HREF="#sect4">See Also</A></LI>
+<LI><A NAME="toc5" HREF="#sect5">Author</A></LI>
 </UL>
 </BODY></HTML>

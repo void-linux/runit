@@ -65,6 +65,10 @@ int main (int argc, const char * const *argv) {
   dir =argv;
 
   while (*dir) {
+    if (*dir[0] != '/') {
+      warn(*dir, ": service directory must start with a slash.", 0);
+      continue;
+    }
     if (chdir(*dir) == -1) {
       warn(*dir, ": unable to change directory: ", &strerr_sys);
       continue;

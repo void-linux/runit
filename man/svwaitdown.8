@@ -5,15 +5,18 @@ svwaitdown \- waits for services controlled by supervise(8) to be down
 .B svwaitdown
 [
 .B \-v
-]
-[
+] [
+.B \-k
+] [
 .B \-t
 .I sec
 ]
 .I services
 .SH DESCRIPTION
 .I services
-consist of one or more arguments.
+consist of one or more arguments. Each
+.I service
+directory must start with a slash.
 .P
 .B svwaitdown
 checks each
@@ -43,6 +46,28 @@ to become down to
 seconds.
 .I sec
 must be between 2 and 6000. Default is 600 (10 minutes).
+.TP
+.B \-k
+Kill. If the timeout is reached before all
+.I services
+are down, tell the
+.BR supervise (8)
+processes to send the
+.I services
+a KILL signal.
+.TP
+.B \-x
+Exit. Wait for the corresponding
+.BR runsv (8)
+processes to exit instead for the
+.I services
+to be down.
+This option should only be used by
+.BR runit (8)
+in stage 3 when
+.BR runsvdir (8)
+is already stopped.
+
 .SH EXIT CODES
 .B svwaitdown
 returns 0 as soon as all

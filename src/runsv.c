@@ -53,6 +53,7 @@ struct svdir {
 struct svdir svd[2];
 
 int haslog =0;
+int pidchanged =1;
 int logpipe[2];
 char *dir;
 
@@ -90,17 +91,41 @@ void update_status(struct svdir *s) {
   char bspace[64];
   buffer b;
   char spid[FMT_ULONG];
-  
-  if (s->islog) {
-    if ((fd =open_trunc("log/supervise/stat")) == -1)
-      fatal("unable to open log/supervise/stat");
+
+  /* pid */
+  if (pidchanged) {
+    if ((fd =open_trunc("supervise/pid.new")) == -1) {
+      warn("unable to open supervise/pid.new");
+      return;
+    }
+    buffer_init(&b, buffer_unixwrite, fd, bspace, sizeof bspace);
+    spid[fmt_ulong(spid, (unsigned long)s->pid)] =0;
+    if (s->pid) {
+      buffer_puts(&b, spid);
+      buffer_putsflush(&b, "\n");
+    }
+    close(fd);
+    if (s->islog) {
+      if (rename("supervise/pid.new", "log/supervise/pid") == -1) {
+	warn("unable to rename supervise/pid.new to log/supervise/pid");
+	return;
+      }
+    }
+    else {
+      if (rename("supervise/pid.new", "supervise/pid") == -1) {
+	warn("unable to rename supervise/pid.new to supervise/pid");
+	return;
+      }
+    }
+    pidchanged =0;
   }
-  else {
-    if ((fd =open_trunc("supervise/stat")) == -1)
-      fatal("unable to open supervise/stat");
+
+  /* stat */
+  if ((fd =open_trunc("supervise/stat.new")) == -1) {
+    warn("unable to open supervise/stat.new");
+    return;
   }
   buffer_init(&b, buffer_unixwrite, fd, bspace, sizeof bspace);
-  spid[fmt_ulong(spid, (unsigned long)s->pid)] =0;
   switch (s->state) {
   case S_DOWN:
     buffer_puts(&b, "down");
@@ -111,11 +136,6 @@ void update_status(struct svdir *s) {
   case S_FINISH:
     buffer_puts(&b, "finish");
     break;
-  }
-  if (s->pid) {
-    buffer_puts(&b, " (pid ");
-    buffer_puts(&b, spid);
-    buffer_puts(&b, ")");
   }
   if (s->ctrl & C_PAUSE)
     buffer_puts(&b, ", paused");
@@ -131,6 +151,14 @@ void update_status(struct svdir *s) {
   }
   buffer_putsflush(&b, "\n");
   close(fd);
+  if (s->islog) {
+    if (rename("supervise/stat.new", "log/supervise/stat") == -1)
+      warn("unable to rename supervise/stat.new to log/supervise/stat");
+  }
+  else {
+    if (rename("supervise/stat.new", "supervise/stat") == -1)
+      warn("unable to rename supervise/stat.new to supervise/stat");
+  }
 
   /* supervise compatibility */
   taia_pack(status, &s->start);
@@ -226,6 +254,7 @@ void startservice(struct svdir *s) {
     s->state =S_RUN;
   }
   s->pid =p;
+  pidchanged =1;
   s->ctrl =C_NOOP;
   update_status(s);
   sleep(1);
@@ -340,27 +369,24 @@ int main(int argc, char **argv) {
       taia_now(&svd[1].start);
       if (stat("log/down", &s) != -1)
 	svd[1].want =W_DOWN;
+      if (pipe(logpipe) == -1)
+	fatal("unable to create log pipe");
+      coe(logpipe[0]);
+      coe(logpipe[1]);
     }
-  }
-
-  if (haslog) {
-    if (pipe(logpipe) == -1)
-      fatal("unable to create log pipe");
-    coe(logpipe[0]);
-    coe(logpipe[1]);
   }
 
   mkdir("supervise", 0700);
   if ((svd[0].fdlock =open_append("supervise/lock")) == -1)
-    fatal("unable to open lock.");
+    fatal("unable to open lock");
   if (lock_exnb(svd[0].fdlock) == -1)
-    fatal("unable to lock.");
+    fatal("unable to lock");
   if (haslog) {
     mkdir("log/supervise", 0700);
     if ((svd[1].fdlock =open_append("log/supervise/lock")) == -1)
-      fatal("unable to open log/lock.");
+      fatal("unable to open log/lock");
     if (lock_ex(svd[1].fdlock) == -1)
-      fatal("unable to log/lock.");
+      fatal("unable to log/lock");
   }
 
   fifo_make("supervise/control", 0600);
@@ -430,6 +456,7 @@ int main(int argc, char **argv) {
       if ((child == -1) && (errno != error_intr)) break;
       if (child == svd[0].pid) {
 	svd[0].pid =0;
+	pidchanged =1;
 	if (open_read("finish") != -1) {
 	  svd[0].state =S_FINISH;
 	  startservice(&svd[0]);
@@ -448,6 +475,7 @@ int main(int argc, char **argv) {
       if (haslog) {
 	if (child == svd[1].pid) {
 	  svd[1].pid =0;
+	  pidchanged =1;
 	  svd[1].state =S_DOWN;
 	  taia_now(&svd[1].start);
 	  update_status(&svd[1]);
