@@ -13,7 +13,7 @@
 #define USAGE " [ -v ] [ -s 2..600 ] service ..."
 
 const char *progname;
-unsigned long sec;
+unsigned long sec =2;
 unsigned int rc =0;
 const char * const *dir;
 
@@ -29,7 +29,6 @@ void warn (const char *s1, const char *s2, struct strerr *e) {
 
 int main (int argc, const char * const *argv) {
   int opt;
-  unsigned long sec =2;
   int verbose =0;
   char status[18];
   int fd;
@@ -53,7 +52,7 @@ int main (int argc, const char * const *argv) {
       verbose =1;
       break;
     case 'V':
-      strerr_warn1("$Id: svwaitup.c,v 1.3 2001/12/27 09:13:50 pape Exp $", 0);
+      strerr_warn1("$Id: svwaitup.c,v 1.4 2002/01/01 10:25:50 pape Exp $", 0);
     case '?':
       usage();
     }
