@@ -1,62 +1,63 @@
 
 
 
-<HTML>
-<HEAD>
-<TITLE>runsvstat(8) manual page</TITLE>
-</HEAD>
-<BODY bgcolor=white>
-<a href="http://smarden.org/pape/">G. Pape</a><br><A HREF="index.html">runit</A><hr><P>
+<html>
+<head>
+<title>runsvstat(8) manual page</title>
+</head>
+<body bgcolor='white'>
+<a href='#toc'>Table of Contents</a><p>
 
-<H2><A NAME="sect0">Name</A></H2>
-runsvstat - prints the status of services monitored by <B><I>runsv</B>(8)</I>. 
-<H2><A NAME="sect1">Synopsis</A></H2>
-<B>runsvstat</B>
-[ <B>-l</B> ] <I>services</I> 
-<H2><A NAME="sect2">Description</A></H2>
-<I>services</I> consists of one or more arguments, each
-argument naming a directory. <P>
-<B>runsvstat</B> checks for each directory if <B><I>runsv</B>(8)</I>
-is successfully running this <I>service</I>, and if so, prints one human-readable
-line reporting the status of this <I>service</I>. Optionally <B><I>runsvstat</B>(8)</I> prints
+<h2><a name='sect0' href='#toc0'>Name</a></h2>
+runsvstat - prints the status of services monitored by <i><b>runsv</b>(8)</i>. 
+<h2><a name='sect1' href='#toc1'>Synopsis</a></h2>
+<b>runsvstat</b>
+[ <b>-l</b> ] <i>services</i> 
+<h2><a name='sect2' href='#toc2'>Description</a></h2>
+<i>services</i> consists of one or more arguments, each
+argument naming a directory. <p>
+<b>runsvstat</b> checks for each directory if <i><b>runsv</b>(8)</i>
+is successfully running this <i>service</i>, and if so, prints one human-readable
+line reporting the status of this <i>service</i>. Optionally <i><b>runsvstat</b>(8)</i> prints
 a second line, also in human-readable format, reporting the status of the
-corresponding <I>log</I> <I>service</I>. 
-<H2><A NAME="sect3">Options</A></H2>
+corresponding <i>log</i> <i>service</i>. 
+<h2><a name='sect3' href='#toc3'>Options</a></h2>
 
-<DL>
+<dl>
 
-<DT><B>-l</B> </DT>
-<DD>log service. Check for each <I>service</I> if
-there exists a corresponding <I>log</I> <I>service</I>. If so, print an additional, indented,
-line reporting the status of the <I>log</I> <I>service</I>. </DD>
-</DL>
+<dt><b>-l</b> </dt>
+<dd>log service. Check for each <i>service</i> if
+there exists a corresponding <i>log</i> <i>service</i>. If so, print an additional, indented,
+line reporting the status of the <i>log</i> <i>service</i>. </dd>
+</dl>
 
-<H2><A NAME="sect4">Exit Codes</A></H2>
-<B>runsvstat</B> exits
-0, if the states of all <I>services</I> were reported successfully. <P>
-For each <I>service</I>
-that caused an error (e.g. the directory is not controlled by a <B><I>runsv</B>(8)</I>
-process), <B>runsvstat</B> increases the exit code by one and exits non zero. The
-maximum is 100. <P>
-<B>runsvstat</B> exits 111 on error. 
-<H2><A NAME="sect5">See Also</A></H2>
-<I>runsvctrl(8)</I>, <I>runsv(8)</I>,
-<I>runsvdir(8)</I>, <I>runsvchdir(8)</I>, <I>runit(8)</I>, <I>runit-init(8)</I>, <I>svlogd(8)</I>, <I>svwaitdown(8)</I>,
-<I>svwaitup(8)</I> <P>
- <I>http://smarden.org/runit/</I><BR>
+<h2><a name='sect4' href='#toc4'>Exit Codes</a></h2>
+<b>runsvstat</b> exits
+0, if the states of all <i>services</i> were reported successfully. <p>
+For each <i>service</i>
+that caused an error (e.g. the directory is not controlled by a <i><b>runsv</b>(8)</i>
+process), <b>runsvstat</b> increases the exit code by one and exits non zero. The
+maximum is 100. <p>
+<b>runsvstat</b> exits 111 on error. 
+<h2><a name='sect5' href='#toc5'>See Also</a></h2>
+<i>runsvctrl(8)</i>, <i>runsv(8)</i>,
+<i>runsvdir(8)</i>, <i>runsvchdir(8)</i>, <i>runit(8)</i>, <i>runit-init(8)</i>, <i>svlogd(8)</i>, <i>svwaitdown(8)</i>,
+<i>svwaitup(8)</i> <p>
+ <i>http://smarden.org/runit/</i><br>
  
-<H2><A NAME="sect6">Author</A></H2>
-Gerrit Pape &lt;pape@smarden.org&gt; <P>
+<h2><a name='sect6' href='#toc6'>Author</a></h2>
+Gerrit Pape &lt;pape@smarden.org&gt; <p>
 
-<HR><P>
-<A NAME="toc"><B>Table of Contents</B></A><P>
-<UL>
-<LI><A NAME="toc0" HREF="#sect0">Name</A></LI>
-<LI><A NAME="toc1" HREF="#sect1">Synopsis</A></LI>
-<LI><A NAME="toc2" HREF="#sect2">Description</A></LI>
-<LI><A NAME="toc3" HREF="#sect3">Options</A></LI>
-<LI><A NAME="toc4" HREF="#sect4">Exit Codes</A></LI>
-<LI><A NAME="toc5" HREF="#sect5">See Also</A></LI>
-<LI><A NAME="toc6" HREF="#sect6">Author</A></LI>
-</UL>
-</BODY></HTML>
+<hr><p>
+<a name='toc'><b>Table of Contents</b></a><p>
+<ul>
+<li><a name='toc0' href='#sect0'>Name</a></li>
+<li><a name='toc1' href='#sect1'>Synopsis</a></li>
+<li><a name='toc2' href='#sect2'>Description</a></li>
+<li><a name='toc3' href='#sect3'>Options</a></li>
+<li><a name='toc4' href='#sect4'>Exit Codes</a></li>
+<li><a name='toc5' href='#sect5'>See Also</a></li>
+<li><a name='toc6' href='#sect6'>Author</a></li>
+</ul>
+</body>
+</html>

@@ -1,73 +1,74 @@
 
 
 
-<HTML>
-<HEAD>
-<TITLE>runit(8) manual page</TITLE>
-</HEAD>
-<BODY bgcolor=white>
-<a href="http://smarden.org/pape/">G. Pape</a><br><A HREF="index.html">runit</A><hr><P>
+<html>
+<head>
+<title>runit(8) manual page</title>
+</head>
+<body bgcolor='white'>
+<a href='#toc'>Table of Contents</a><p>
 
-<H2><A NAME="sect0">Name</A></H2>
+<h2><a name='sect0' href='#toc0'>Name</a></h2>
 runit - a UNIX process no 1 
-<H2><A NAME="sect1">Synopsis</A></H2>
-<B>runit</B> 
-<H2><A NAME="sect2">Description</A></H2>
-<B>runit</B> must be run
-as Unix process no 1. It performs the system's booting, running, and shutdown
+<h2><a name='sect1' href='#toc1'>Synopsis</a></h2>
+<b>runit</b> 
+<h2><a name='sect2' href='#toc2'>Description</a></h2>
+<b>runit</b> must be run
+as Unix process no 1. It performs the system&rsquo;s booting, running, and shutdown
 in three Stages: 
-<H2><A NAME="sect3">Stage 1</A></H2>
-<B>runit</B> runs <I>/etc/runit/1</I> and waits for it to terminate.
-The system's one time tasks are done here. <I>/etc/runit/1</I> has full control
-of <I>/dev/console</I> to be able to start an emergency shell if the one time
-initialization tasks fail. If <I>/etc/runit/1</I> itself crashes, <B>runit</B> will skip
+<h2><a name='sect3' href='#toc3'>Stage 1</a></h2>
+<b>runit</b> runs <i>/etc/runit/1</i> and waits for it to terminate.
+The system&rsquo;s one time tasks are done here. <i>/etc/runit/1</i> has full control
+of <i>/dev/console</i> to be able to start an emergency shell if the one time
+initialization tasks fail. If <i>/etc/runit/1</i> itself crashes, <b>runit</b> will skip
 stage 2 and enter stage 3. 
-<H2><A NAME="sect4">Stage 2</A></H2>
-<B>runit</B> runs <I>/etc/runit/2</I>, which should
+<h2><a name='sect4' href='#toc4'>Stage 2</a></h2>
+<b>runit</b> runs <i>/etc/runit/2</i>, which should
 not return until system shutdown; if it crashes, it will be restarted. Normally
-<I>/etc/runit/2</I> starts <B><I>runsvdir</B>(8)</I>. <B>runit</B> is able to handle the ctrl-alt-del
+<i>/etc/runit/2</i> starts <i><b>runsvdir</b>(8)</i>. <b>runit</b> is able to handle the ctrl-alt-del
 keyboard request in Stage 2, see below. 
-<H2><A NAME="sect5">Stage 3</A></H2>
-If <B>runit</B> is told to shutdown
+<h2><a name='sect5' href='#toc5'>Stage 3</a></h2>
+If <b>runit</b> is told to shutdown
 the system, or the Stage 2 returns without errors, it terminates Stage
-2 if it is running, and runs <I>/etc/runit/3</I>. The systems tasks to shutdown
-and halt or reboot are done here. If Stage 3 returns, <B>runit</B> checks if the
-file <I>/etc/runit/reboot</I> exists and has the execute by owner permission set.
-If so, the system is rebooted, it's halted otherwise. 
-<H2><A NAME="sect6">Ctrl-alt-del</A></H2>
-If <B>runit</B>
-receives the ctrl-alt-del keyboard request and the file <I>/etc/runit/ctrlaltdel</I>
-exists and has the execute by owner permission set, <B>runit</B> runs <I>/etc/runit/ctrlaltdel</I>,
+2 if it is running, and runs <i>/etc/runit/3</i>. The systems tasks to shutdown
+and halt or reboot are done here. If Stage 3 returns, <b>runit</b> checks if the
+file <i>/etc/runit/reboot</i> exists and has the execute by owner permission set.
+If so, the system is rebooted, it&rsquo;s halted otherwise. 
+<h2><a name='sect6' href='#toc6'>Ctrl-alt-del</a></h2>
+If <b>runit</b>
+receives the ctrl-alt-del keyboard request and the file <i>/etc/runit/ctrlaltdel</i>
+exists and has the execute by owner permission set, <b>runit</b> runs <i>/etc/runit/ctrlaltdel</i>,
 waits for it to terminate, and then sends itself a CONT signal. 
-<H2><A NAME="sect7">Signals</A></H2>
-<B>runit</B>
-only accepts signals in Stage 2. <P>
-If <B>runit</B> receives a CONT signal and the
-file <I>/etc/runit/stopit</I> exists and has the execute by owner permission set,
-<B>runit</B> is told to shutdown the system. <P>
-if <B>runit</B> receives an INT signal, a
+<h2><a name='sect7' href='#toc7'>Signals</a></h2>
+<b>runit</b>
+only accepts signals in Stage 2. <p>
+If <b>runit</b> receives a CONT signal and the
+file <i>/etc/runit/stopit</i> exists and has the execute by owner permission set,
+<b>runit</b> is told to shutdown the system. <p>
+if <b>runit</b> receives an INT signal, a
 ctrl-alt-del keyboard request is triggered. 
-<H2><A NAME="sect8">See Also</A></H2>
-<I>runit-init(8)</I>, <I>runsvdir(8)</I>,
-<I>runsvchdir(8)</I>, <I>runsv(8)</I>, <I>runsvctrl(8)</I>, <I>runsvstat(8)</I>, <I>svwaitdown(8)</I>, <I>svwaitup(8)</I>,
-<I>svlogd(8)</I>, <I>utmpset(8)</I> <P>
-<I>http://smarden.org/runit/</I> 
-<H2><A NAME="sect9">Author</A></H2>
+<h2><a name='sect8' href='#toc8'>See Also</a></h2>
+<i>runit-init(8)</i>, <i>runsvdir(8)</i>,
+<i>runsvchdir(8)</i>, <i>runsv(8)</i>, <i>runsvctrl(8)</i>, <i>runsvstat(8)</i>, <i>svwaitdown(8)</i>, <i>svwaitup(8)</i>,
+<i>svlogd(8)</i>, <i>utmpset(8)</i> <p>
+<i>http://smarden.org/runit/</i> 
+<h2><a name='sect9' href='#toc9'>Author</a></h2>
 Gerrit Pape &lt;pape@smarden.org&gt;
-<P>
+<p>
 
-<HR><P>
-<A NAME="toc"><B>Table of Contents</B></A><P>
-<UL>
-<LI><A NAME="toc0" HREF="#sect0">Name</A></LI>
-<LI><A NAME="toc1" HREF="#sect1">Synopsis</A></LI>
-<LI><A NAME="toc2" HREF="#sect2">Description</A></LI>
-<LI><A NAME="toc3" HREF="#sect3">Stage 1</A></LI>
-<LI><A NAME="toc4" HREF="#sect4">Stage 2</A></LI>
-<LI><A NAME="toc5" HREF="#sect5">Stage 3</A></LI>
-<LI><A NAME="toc6" HREF="#sect6">Ctrl-alt-del</A></LI>
-<LI><A NAME="toc7" HREF="#sect7">Signals</A></LI>
-<LI><A NAME="toc8" HREF="#sect8">See Also</A></LI>
-<LI><A NAME="toc9" HREF="#sect9">Author</A></LI>
-</UL>
-</BODY></HTML>
+<hr><p>
+<a name='toc'><b>Table of Contents</b></a><p>
+<ul>
+<li><a name='toc0' href='#sect0'>Name</a></li>
+<li><a name='toc1' href='#sect1'>Synopsis</a></li>
+<li><a name='toc2' href='#sect2'>Description</a></li>
+<li><a name='toc3' href='#sect3'>Stage 1</a></li>
+<li><a name='toc4' href='#sect4'>Stage 2</a></li>
+<li><a name='toc5' href='#sect5'>Stage 3</a></li>
+<li><a name='toc6' href='#sect6'>Ctrl-alt-del</a></li>
+<li><a name='toc7' href='#sect7'>Signals</a></li>
+<li><a name='toc8' href='#sect8'>See Also</a></li>
+<li><a name='toc9' href='#sect9'>Author</a></li>
+</ul>
+</body>
+</html>

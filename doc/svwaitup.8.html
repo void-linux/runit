@@ -1,73 +1,74 @@
 
 
 
-<HTML>
-<HEAD>
-<TITLE>svwaitup(8) manual page</TITLE>
-</HEAD>
-<BODY bgcolor=white>
-<a href="http://smarden.org/pape/">G. Pape</a><br><A HREF="index.html">runit</A><hr><P>
+<html>
+<head>
+<title>svwaitup(8) manual page</title>
+</head>
+<body bgcolor='white'>
+<a href='#toc'>Table of Contents</a><p>
 
-<H2><A NAME="sect0">Name</A></H2>
-svwaitup - waits for services controlled by <I>runsv(8)</I> or <I>supervise(8)</I>
+<h2><a name='sect0' href='#toc0'>Name</a></h2>
+svwaitup - waits for services controlled by <i>runsv(8)</i> or <i>supervise(8)</i>
 to be up 
-<H2><A NAME="sect1">Synopsis</A></H2>
-<B>svwaitup</B> [ <B>-v</B> ] [ <B>-s</B> <I>sec</I> ] <I>services</I> 
-<H2><A NAME="sect2">Description</A></H2>
-<I>services</I>
-consist of one or more arguments. Each <I>service</I> directory must start with
-a slash. <P>
-<B>svwaitup</B> checks each <I>service</I> given at the command line for being
-at least the specified number of seconds <I>sec</I> up. The <I>services</I> given at the
-command line must be controlled by <B><I>runsv</B>(8)</I>, or <B><I>supervise</B>(8)</I>. <P>
-<B>svwaitup</B> blocks
-until all <I>services</I> were up and running at least <I>sec</I> seconds when <B>svwaitup</B>
+<h2><a name='sect1' href='#toc1'>Synopsis</a></h2>
+<b>svwaitup</b> [ <b>-v</b> ] [ <b>-s</b> <i>sec</i> ] <i>services</i> 
+<h2><a name='sect2' href='#toc2'>Description</a></h2>
+<i>services</i>
+consist of one or more arguments. Each <i>service</i> directory must start with
+a slash. <p>
+<b>svwaitup</b> checks each <i>service</i> given at the command line for being
+at least the specified number of seconds <i>sec</i> up. The <i>services</i> given at the
+command line must be controlled by <i><b>runsv</b>(8)</i>, or <i><b>supervise</b>(8)</i>. <p>
+<b>svwaitup</b> blocks
+until all <i>services</i> were up and running at least <i>sec</i> seconds when <b>svwaitup</b>
 was checking or reports errors. 
-<H2><A NAME="sect3">Options</A></H2>
+<h2><a name='sect3' href='#toc3'>Options</a></h2>
 
-<DL>
+<dl>
 
-<DT><B>-v</B> </DT>
-<DD>verbose. Print verbose messages
-to stderr. </DD>
+<dt><b>-v</b> </dt>
+<dd>verbose. Print verbose messages
+to stderr. </dd>
 
-<DT><B>-s <I>sec</B> </I></DT>
-<DD>Set the minimum number of seconds each <I>service</I> has to be
-up to <I>sec</I> seconds. <I>sec</I> must be between 2 and 600. Default is 2. </DD>
-</DL>
+<dt><b>-s <i>sec</b> </i></dt>
+<dd>Set the minimum number of seconds each <i>service</i> has to be
+up to <i>sec</i> seconds. <i>sec</i> must be between 2 and 600. Default is 2. </dd>
+</dl>
 
-<H2><A NAME="sect4">Exit Codes</A></H2>
-<B>svwaitup</B>
-returns 0 as soon as all <I>services</I> were at least <I>sec</I> seconds up. <P>
-<B>Note</B>: If
-<B>svwaitup</B> exits 0, it does not guarantee that all <I>services</I> are actually
-running. A <I>service</I> could have crashed immediatly after <B>svwaitup</B> was successfully
-checking it to be up <I>sec</I> seconds. <I>services</I> should be designed not to rely
-on <B>svwaitup</B> to resolve dependencies. <P>
-For each <I>service</I> that is down and not
-requested to become up, or that causes an error while checking (e.g. <B><I>runsv</B>(8)</I>
-is not running), <B>svwaitup</B> increases the exit code by one and exits non
-zero. The maximum is 100. <P>
-<B>svwaitup</B> returns 111 on error. 
-<H2><A NAME="sect5">See Also</A></H2>
-<I>svwaitdown(8)</I>,
-<I>runsv(8)</I>, <I>runsvctrl(8)</I>, <I>runsvstat(8)</I>, <I>runsvdir(8)</I>, <I>runsvchdir(8)</I>, <I>runit(8)</I>,
-<I>runit-init(8)</I>, <I>supervise(8)</I>, <I>svscan(8)</I> <P>
- <I>http://smarden.org/runit/</I><BR>
-  <I>http://cr.yp.to/daemontools.html</I><BR>
+<h2><a name='sect4' href='#toc4'>Exit Codes</a></h2>
+<b>svwaitup</b>
+returns 0 as soon as all <i>services</i> were at least <i>sec</i> seconds up. <p>
+<b>Note</b>: If
+<b>svwaitup</b> exits 0, it does not guarantee that all <i>services</i> are actually
+running. A <i>service</i> could have crashed immediatly after <b>svwaitup</b> was successfully
+checking it to be up <i>sec</i> seconds. <i>services</i> should be designed not to rely
+on <b>svwaitup</b> to resolve dependencies. <p>
+For each <i>service</i> that is down and not
+requested to become up, or that causes an error while checking (e.g. <i><b>runsv</b>(8)</i>
+is not running), <b>svwaitup</b> increases the exit code by one and exits non
+zero. The maximum is 100. <p>
+<b>svwaitup</b> returns 111 on error. 
+<h2><a name='sect5' href='#toc5'>See Also</a></h2>
+<i>svwaitdown(8)</i>,
+<i>runsv(8)</i>, <i>runsvctrl(8)</i>, <i>runsvstat(8)</i>, <i>runsvdir(8)</i>, <i>runsvchdir(8)</i>, <i>runit(8)</i>,
+<i>runit-init(8)</i>, <i>supervise(8)</i>, <i>svscan(8)</i> <p>
+ <i>http://smarden.org/runit/</i><br>
+  <i>http://cr.yp.to/daemontools.html</i><br>
  
-<H2><A NAME="sect6">Author</A></H2>
-Gerrit Pape &lt;pape@smarden.org&gt; <P>
+<h2><a name='sect6' href='#toc6'>Author</a></h2>
+Gerrit Pape &lt;pape@smarden.org&gt; <p>
 
-<HR><P>
-<A NAME="toc"><B>Table of Contents</B></A><P>
-<UL>
-<LI><A NAME="toc0" HREF="#sect0">Name</A></LI>
-<LI><A NAME="toc1" HREF="#sect1">Synopsis</A></LI>
-<LI><A NAME="toc2" HREF="#sect2">Description</A></LI>
-<LI><A NAME="toc3" HREF="#sect3">Options</A></LI>
-<LI><A NAME="toc4" HREF="#sect4">Exit Codes</A></LI>
-<LI><A NAME="toc5" HREF="#sect5">See Also</A></LI>
-<LI><A NAME="toc6" HREF="#sect6">Author</A></LI>
-</UL>
-</BODY></HTML>
+<hr><p>
+<a name='toc'><b>Table of Contents</b></a><p>
+<ul>
+<li><a name='toc0' href='#sect0'>Name</a></li>
+<li><a name='toc1' href='#sect1'>Synopsis</a></li>
+<li><a name='toc2' href='#sect2'>Description</a></li>
+<li><a name='toc3' href='#sect3'>Options</a></li>
+<li><a name='toc4' href='#sect4'>Exit Codes</a></li>
+<li><a name='toc5' href='#sect5'>See Also</a></li>
+<li><a name='toc6' href='#sect6'>Author</a></li>
+</ul>
+</body>
+</html>
