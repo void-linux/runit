@@ -2,6 +2,7 @@ runit (1.0.2-3) unstable; urgency=low
 
   * debian/diff/chpst-chroot.diff: chdir before chroot; update
     runscripts.html.
+  * debian/control: Build-Depends: dietlibc-dev (>> 0.26-0).
 
  -- Gerrit Pape <pape@smarden.org>  Fri, 30 Apr 2004 18:55:09 +0000
 
