@@ -3,21 +3,23 @@
 #include <unistd.h>
 #include "strerr.h"
 #include "error.h"
+#include "sgetopt.h"
 #include "open.h"
 #include "buffer.h"
 #include "tai.h"
 #include "fmt.h"
 
-#define USAGE " service ..."
+#define USAGE " [ -l ] service ..."
 
 #define VERSION "$Id$"
 
 #define FATAL "runsvstat: fatal: "
 #define WARNING "runsvstat: warning: "
 
-char *progname;
+const char *progname;
 unsigned int rc =0;
 struct stat s;
+int showlog =0;
 
 void usage() {
   strerr_die4x(1, "usage: ", progname, USAGE, "\n");
@@ -110,10 +112,24 @@ int show_status(char *name) {
 }
 
 int main(int argc, char **argv) {
+  int opt;
   int curdir;
   char **dir;
 
-  progname =*argv++;
+  progname =*argv;
+
+  while ((opt =getopt(argc, (const char * const *)argv, "lV")) != opteof) {
+    switch(opt) {
+    case 'l':
+      showlog =1;
+      break;
+    case 'V':
+      strerr_warn1(VERSION, 0);
+    case '?':
+      usage();
+    }
+  }
+  argv +=optind;
 
   dir =argv;
   if (! dir || ! *dir) usage();
@@ -128,19 +144,21 @@ int main(int argc, char **argv) {
       continue;
     }
     if (show_status(*dir) == 1) {
-      if (stat("log", &s) == -1) {
-	if (errno != error_noent)
-	  warn("unable to stat()",  "./log");
-      }
-      else {
-	if (! S_ISDIR(s.st_mode))
-	  warnx("./log", "not a directory.");
+      if (showlog) {
+	if (stat("log", &s) == -1) {
+	  if (errno != error_noent)
+	    warn("unable to stat()",  "./log");
+	}
 	else {
-	  if (chdir("log") == -1) {
-	    warn(*dir, "unable to change directory");
-	    continue;
+	  if (! S_ISDIR(s.st_mode))
+	    warnx("./log", "not a directory.");
+	  else {
+	    if (chdir("log") == -1) {
+	      warn(*dir, "unable to change directory");
+	      continue;
+	    }
+	    show_status("\n  log");
 	  }
-	  show_status("\n  log");
 	}
       }
       buffer_putsflush(buffer_1, "\n");

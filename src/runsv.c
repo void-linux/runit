@@ -61,10 +61,14 @@ void usage () {
   strerr_die4x(1, "usage: ", progname, USAGE, "\n");
 }
 void fatal(char *m) {
-  strerr_die5sys(111, "runsv ", dir, ": fatal: ", m, ": ");
+  strerr_warn5("runsv ", dir, ": fatal: ", m, ": ", &strerr_sys);
+  sleep(1);
+  exit(111);
 }
 void fatal2(char *m1, char *m2) {
-  strerr_die6sys(111, "runsv ", dir, ": fatal: ", m1, m2, ": ");
+  strerr_warn6("runsv ", dir, ": fatal: ", m1, m2, ": ", &strerr_sys);
+  sleep(1);
+  exit(111);
 }
 void warn(char *m) {
   strerr_warn5("runsv ", dir, ": warning: ", m, ": ", &strerr_sys);

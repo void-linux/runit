@@ -26,6 +26,12 @@ svwaitup: load svwaitup.o unix.a byte.a time.a
 svwaitdown: load svwaitdown.o unix.a byte.a time.a
 	./load svwaitdown unix.a byte.a time.a
 
+utmpset: load utmpset.o unix.a byte.a
+	./load utmpset unix.a byte.a
+
+runsvchdir: load runsvchdir.o unix.a byte.a
+	./load runsvchdir unix.a byte.a
+
 runit.o: compile sysdeps runit.c
 	./compile runit.c
 
@@ -50,11 +56,11 @@ svwaitup.o: compile sysdeps svwaitup.c
 svwaitdown.o: compile sysdeps svwaitdown.c
 	./compile svwaitdown.c
 
-utmpset: load utmpset.o unix.a byte.a
-	./load utmpset unix.a byte.a
-
 utmpset.o: compile utmpset.c
 	./compile utmpset.c
+
+runsvchdir.o: compile runsvchdir.c
+	./compile runsvchdir.c
 
 clean:
 	find . -name \*~ -exec rm -f {} \;

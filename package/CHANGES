@@ -1,3 +1,11 @@
+runit 0.6.3
+Fri, 04 Oct 2002 10:57:02 +0200
+  * runsv.c: sleep 1 second before exiting on fatal error.
+  * runsvdir.c: check service directory's inode and device in addition
+    to mtime; sleep 1 second if stat(service directory) fails.
+  * runsvstat.c: new option -l: only show log service if -l is set.
+  * runsvchdir: new; change service directory runsvdir is running in.
+
 runit 0.6.0
 Fri, 27 Sep 2002 16:34:57 +0200
   * man/runsv.8, man/runsvdir.8: new.
@@ -12,7 +20,7 @@ Fri, 27 Sep 2002 16:34:57 +0200
 runit 0.5.3
 Mon, 23 Sep 2002 16:25:07 +0200
   * runsv, runsvdir: new; svscan/supervise replacement.
-  * etc/runit/2: use runsvlog instead of svscanboot.
+  * etc/runit/2: use runsvdir instead of svscanboot.
   * runsvstat.c: new; svstat for runsv.
   * runsvctrl.c: new; svc for runsv.
   * runsvdir.c, runsv.c: code cleanup.

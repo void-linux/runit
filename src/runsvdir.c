@@ -23,6 +23,8 @@
 
 char *progname;
 char *svdir;
+unsigned long dev =0;
+unsigned long ino =0;
 struct {
   unsigned long dev;
   unsigned long ino;
@@ -203,11 +205,13 @@ int main(int argc, char **argv) {
       }
     }
     if (stat(svdir, &s) != -1) {
-      if (check || s.st_mtime > mtime) {
+      if (check || s.st_mtime > mtime || s.st_ino != ino || s.st_dev != dev) {
 	/* svdir modified */
 	mtime =s.st_mtime;
+	dev =s.st_dev;
+	ino =s.st_ino;
 	check =0;
-        if (chdir(svdir) == -1)
+	if (chdir(svdir) == -1)
 	  warn("unable to change directory to", svdir);
 	else {
 	  runsvdir();
@@ -216,8 +220,10 @@ int main(int argc, char **argv) {
         }
       }
     }
-    else
+    else {
       warn("unable to stat ", svdir);
+      sleep(1);
+    }
 
     taia_now(&now);
     if (log)

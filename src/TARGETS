@@ -16,6 +16,8 @@ svwaitup
 svwaitup.o
 utmpset
 utmpset.o
+runsvchdir
+runsvchdir.o
 alloc.o
 alloc_re.o
 buffer.o

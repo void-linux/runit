@@ -1,26 +1,30 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <html>
 <head>
-<title>runit - minimal replacement for sysvinit</title>
+<title>runit - a UNIX init scheme</title>
 </head>
 <body>
 <a href="http://smarden.org/pape/">G. Pape</a>
 <hr>
-<h1>runit - minimal replacement for <i>sysvinit</i></h1>
+<h1>runit - a UNIX init scheme</h1>
 <hr>
 <a href="install.html">How to install runit</a><br>
 <a href="upgrade.html">Upgrading from previous versions of runit</a><br>
 <a href="replaceinit.html">How to replace init</a><br>
 <a href="usedietlibc.html">How to use dietlibc</a>
 <p>
-<a href="runscripts.html">A collection of run scripts</a><br>
+<a href="runlevels.html">Runlevels</a><br>
 <a href="http://smarden.org/pape/djb/daemontools/noinit.html">
-Dependencies and runlevels</a>
+Dependencies</a><br>
+<a href="runscripts.html">A collection of run scripts</a><br>
 <p>
 <a href="runit.8.html">The <tt>runit</tt> program</a><br>
 <a href="runit-init.8.html">The <tt>runit-init</tt> program</a><br>
+<br>
 <a href="runsvdir.8.html">The <tt>runsvdir</tt> program</a><br>
 <a href="runsv.8.html">The <tt>runsv</tt> program</a><br>
+<a href="runsvchdir.8.html">The <tt>runsvchdir</tt> program</a><br>
+<br>
 <a href="utmpset.8.html">The <tt>utmpset</tt> program</a><br>
 <a href="svwaitdown.8.html">The <tt>svwaitdown</tt> program</a><br>
 <a href="svwaitup.8.html">The <tt>svwaitup</tt> program</a>
@@ -28,12 +32,12 @@ Dependencies and runlevels</a>
 <i>runit</i> is a
 <a href="http://cr.yp.to/daemontools.html">daemontools</a> alike
 replacement for
-<a href="ftp://ftp.cistron.nl/pub/people/miquels/sysvinit/">sysvinit</a>.
-<i>runit</i> runs on <b>Debian GNU/Linux</b>, <b>OpenBSD 2.9</b>,
-<b>FreeBSD 4.4</b>. <i>runit</i> reportedly runs on <b>FreeBSD 4.3</b>,
-and can easily be adapted to other unix operating systems. If <i>runit</i>
-runs for you on any other operating system or linux distribution, please
-let me know.
+<a href="ftp://ftp.cistron.nl/pub/people/miquels/sysvinit/">sysvinit</a>
+and other init schemes. <i>runit</i> runs on <b>Debian GNU/Linux</b>,
+<b>OpenBSD 2.9</b>, <b>FreeBSD 4.4</b>. <i>runit</i> reportedly runs on
+<b>FreeBSD 4.3</b>, and can easily be adapted to other unix operating
+systems. If <i>runit</i> runs for you on any other operating system or
+linux distribution, please let me know.
 <p>
 <b>Warning:</b> Replacing <i>sysvinit</i> or <i>init</i> can cause the
 system's boot to fail. Make sure you are able to recover and repair your
