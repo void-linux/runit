@@ -96,14 +96,14 @@ install: build
 	install -m0755 admin/runit-0.7.2/src/runsvctrl \
 	  $(CURDIR)/debian/runit/usr/bin/runsvctrl
 
-	install -m0700 debian/1 \
-	  $(CURDIR)/debian/runit/etc/runit/1
-	install -m0700 debian/2 \
-	  $(CURDIR)/debian/runit/etc/runit/2
-	install -m0700 debian/3 \
-	  $(CURDIR)/debian/runit/etc/runit/3
-	install -m0700 admin/runit/etc/debian/ctrlaltdel \
-	  $(CURDIR)/debian/runit/etc/runit/ctrlaltdel
+#	install -m0700 debian/1 \
+#	  $(CURDIR)/debian/runit/etc/runit/1
+#	install -m0700 debian/2 \
+#	  $(CURDIR)/debian/runit/etc/runit/2
+#	install -m0700 debian/3 \
+#	  $(CURDIR)/debian/runit/etc/runit/3
+#	install -m0700 admin/runit/etc/debian/ctrlaltdel \
+#	  $(CURDIR)/debian/runit/etc/runit/ctrlaltdel
 	install -m0755 debian/getty-tty5.run \
 	  $(CURDIR)/debian/runit/etc/runit/getty-5/run
 	install -m0755 debian/getty-tty5.finish \
@@ -114,6 +114,24 @@ install: build
 	install -m0644 debian/runit.lintian \
 	  $(CURDIR)/debian/runit/usr/share/lintian/overrides/runit
 
+	# docs
+	install -m0755 -d $(CURDIR)/debian/runit/usr/share/doc/runit
+	for i in README THANKS; do \
+	  install -m0644 admin/runit/package/$$i \
+	    $(CURDIR)/debian/runit/usr/share/doc/runit/; \
+	done
+	install -m0644 debian/README.Debian \
+	  $(CURDIR)/debian/runit/usr/share/doc/runit/
+	install -m0755 -d $(CURDIR)/debian/runit/usr/share/doc/runit/doc
+	for i in admin/runit/doc/*.html; do \
+	  install -m0644 $$i $(CURDIR)/debian/runit/usr/share/doc/runit/doc/; \
+	done
+	install -m0755 -d $(CURDIR)/debian/runit/usr/share/doc/runit/doc/debian
+	for i in 1 2 3 ctrlaltdel; do \
+	  install -m0644 admin/runit/etc/debian/$$i \
+	    $(CURDIR)/debian/runit/usr/share/doc/runit/doc/debian/; \
+	done
+
 # Build architecture-independent files here.
 binary-indep: build install
 
@@ -122,7 +140,7 @@ binary-arch: build install
 	dh_testdir -a
 	dh_testroot -a
 #	dh_installdebconf -a
-	dh_installdocs -an
+#	dh_installdocs -an
 #	dh_installexamples -a
 	dh_installman -a admin/runit/man/*.8
 #	dh_undocumented -a

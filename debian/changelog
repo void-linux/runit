@@ -1,8 +1,13 @@
 runit (0.7.2-1) unstable; urgency=low
 
   * new upstream version.
+  * debian/rules: do not install /etc/runit/{1,2,3,ctrlaltdel} (now
+    included in the runit-run package); install docs without
+    dh_installdocs.
+  * debian/control: Standards-Version: 3.5.8.
+  * debian/runit.docs: remove.
 
- -- Gerrit Pape <pape@smarden.org>  Thu, 16 Jan 2003 10:50:14 +0100
+ -- Gerrit Pape <pape@smarden.org>  Wed, 29 Jan 2003 14:30:33 +0100
 
 runit (0.7.1-5) unstable; urgency=low
 
