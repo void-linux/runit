@@ -1,5 +1,7 @@
 #!/bin/sh
 # system one time tasks
+trap : 2
+trap : 3
 
 /bin/sh /etc/rc autoboot && exit 0
 
