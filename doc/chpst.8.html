@@ -12,40 +12,45 @@
 chpst - runs a program with a changed process state 
 <h2><a name='sect1'>Synopsis</a></h2>
 <b>chpst</b> [-vP012]
-[-u <i>user</i>] [-U <i>user</i>] [-e <i>dir</i>] [-/ <i>root</i>] [-l|-L <i>lock</i>] [-m <i>bytes</i>] [-o <i>n</i>] [-p <i>n</i>] [-f <i>bytes</i>]
-[-c <i>bytes</i>] <i>prog</i> 
+[-u <i>user</i>] [-U <i>user</i>] [-e <i>dir</i>] [-/ <i>root</i>] [-n <i>inc</i>] [-l|-L <i>lock</i>] [-m <i>bytes</i>] [-o <i>n</i>] [-p
+<i>n</i>] [-f <i>bytes</i>] [-c <i>bytes</i>] <i>prog</i> 
 <h2><a name='sect2'>Description</a></h2>
-<i>prog</i> consists of one or more arguments. <p>
-<b>chpst</b>
-changes the process state according to the given options, and runs <i>prog</i>.
-
+<i>prog</i> consists of one or more arguments.
+<p>
+<b>chpst</b> changes the process state according to the given options, and runs
+<i>prog</i>. 
 <h2><a name='sect3'>Options</a></h2>
 
 <dl>
 
 <dt><b>-u <i>user[:group]</b> </i></dt>
-<dd>setuidgid. Set uid and gid to the <i>user</i>&rsquo;s uid and gid.
-If <i>user</i> is followed by a colon and a <i>group</i>, set the gid to <i>group</i>&rsquo;s gid instead
-of <i>user</i>&rsquo;s gid. All supplementary groups are removed. </dd>
+<dd>setuidgid. Set uid and gid to the <i>user</i>&rsquo;s uid and
+gid. If <i>user</i> is followed by a colon and a <i>group</i>, set the gid to <i>group</i>&rsquo;s gid
+instead of <i>user</i>&rsquo;s gid. All supplementary groups are removed. </dd>
 
-<dt><b>-U <i>user[:group]</b> </i></dt>
-<dd>envuidgid.
-Set the environment variables $UID and $GID to the <i>user</i>&rsquo;s uid and gid. If
-<i>user</i> is followed by a colon and a <i>group</i>, set $GID to the <i>group</i>&rsquo;s gid instead
-of <i>user</i>&rsquo;s gid. </dd>
+<dt><b>-U <i>user[:group]</b>
+</i></dt>
+<dd>envuidgid. Set the environment variables $UID and $GID to the <i>user</i>&rsquo;s uid
+and gid. If <i>user</i> is followed by a colon and a <i>group</i>, set $GID to the <i>group</i>&rsquo;s
+gid instead of <i>user</i>&rsquo;s gid. </dd>
 
 <dt><b>-e <i>dir</b> </i></dt>
-<dd>envdir. Set various environment variables as specified
-by files in the directory <i>dir</i>: If <i>dir</i> contains a file named <i>k</i> whose first
-line is <i>v</i>, <b>chpst</b> removes the environment variable <i>k</i> if it exists, and then
-adds the environment variable <i>k</i> with the value <i>v</i>. The name <i>k</i> must not contain
-=. Spaces and tabs at the end of <i>v</i> are removed, and nulls in <i>v</i> are changed
-to newlines. If the file <i>k</i> is empty (0 bytes long), <b>chpst</b> removes the environment
-variable <i>k</i> if it exists, without adding a new variable. </dd>
+<dd>envdir. Set various environment variables
+as specified by files in the directory <i>dir</i>: If <i>dir</i> contains a file named
+<i>k</i> whose first line is <i>v</i>, <b>chpst</b> removes the environment variable <i>k</i> if it
+exists, and then adds the environment variable <i>k</i> with the value <i>v</i>. The name
+<i>k</i> must not contain =. Spaces and tabs at the end of <i>v</i> are removed, and nulls
+in <i>v</i> are changed to newlines. If the file <i>k</i> is empty (0 bytes long), <b>chpst</b>
+removes the environment variable <i>k</i> if it exists, without adding a new variable.
+</dd>
 
 <dt><b>-/ <i>root</b> </i></dt>
-<dd>chroot. Change
-the root directory to <i>root</i> before starting <i>prog</i>. </dd>
+<dd>chroot. Change the root directory to <i>root</i> before starting <i>prog</i>. </dd>
+
+<dt><b>-n
+<i>inc</b> </i></dt>
+<dd>nice. Add <i>inc</i> to the <i><b>nice</b>(2)</i> value before starting <i>prog</i>. <i>inc</i> must be
+an integer, and may start with a minus or plus. </dd>
 
 <dt><b>-l <i>lock</b> </i></dt>
 <dd>lock. Open the file
