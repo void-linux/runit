@@ -17,7 +17,7 @@ characters long or absent.
 .B runsvdir
 starts a
 .BR runsv (8)
-process for each subdirectory in
+process for each subdirectory in the services directory
 .IR dir ,
 up to a limit of 1000 subdirectories.
 .B runsvdir
@@ -32,7 +32,7 @@ At least every five seconds,
 checks if
 .I dir
 has changed.
-If it sees a new subdirectory in
+If it sees a new subdirectory in services directory
 .IR dir ,
 it starts a new
 .BR runsv (8)

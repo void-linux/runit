@@ -1,12 +1,12 @@
 .TH runsvchdir 8
 .SH NAME
-runsvchdir \- change service directory of runsvdir(8)
+runsvchdir \- change services directory of runsvdir(8)
 .SH SYNOPSIS
 .B runsvchdir
 .I dir
 .SH DESCRIPTION
 .I dir
-is a directory for the use with
+is a services directory for the use with
 .BR runsvdir (8).
 If
 .I dir
@@ -16,7 +16,7 @@ must not start with a dot.
 .P
 .B runsvchdir
 switches to the directory
-.IR /etc/runit/runsvdir ,
+.IR /etc/runit/runsvdir/ ,
 copies
 .I current
 to
@@ -33,7 +33,7 @@ is a symlink to
 and
 .BR runsvdir (8)
 is running
-.IR /var/service .
+.IR /var/service/ .
 .SH EXIT CODES
 .B runsvchdir
 prints an error message and exits 111 on error.
