@@ -58,6 +58,26 @@ diff -u -r1.2 -r1.3
    if (env_user) euidgid(env_user, 1);
    if (set_user) suidgid(set_user, 1);
    slimit();
+Index: src/chpst.dist
+===================================================================
+RCS file: /var/lib/cvs/runit/src/chpst.dist,v
+retrieving revision 1.1
+retrieving revision 1.2
+diff -u -r1.1 -r1.2
+--- src/chpst.dist	8 Mar 2004 12:36:49 -0000	1.1
++++ src/chpst.dist	27 Apr 2004 17:48:29 -0000	1.2
+@@ -1,8 +1,8 @@
+-usage: chpst [-vP012] [-u user[:group]] [-U user[:group]] [-e dir] [-l|-L lock] [-m n] [-o n] [-p n] [-f n] [-c n] prog
++usage: chpst [-vP012] [-u user[:group]] [-U user[:group]] [-e dir] [-/ root] [-l|-L lock] [-m n] [-o n] [-p n] [-f n] [-c n] prog
+ 
+ 100
+-$Id$
+-usage: chpst [-vP012] [-u user[:group]] [-U user[:group]] [-e dir] [-l|-L lock] [-m n] [-o n] [-p n] [-f n] [-c n] prog
++$Id$
++usage: chpst [-vP012] [-u user[:group]] [-U user[:group]] [-e dir] [-/ root] [-l|-L lock] [-m n] [-o n] [-p n] [-f n] [-c n] prog
+ 
+ 100
+ test=1
 Index: man/chpst.8
 ===================================================================
 RCS file: /var/lib/cvs/runit/man/chpst.8,v
