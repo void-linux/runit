@@ -1,14 +1,16 @@
 #!/bin/sh
 exec 2>&1
 
+PATH=/sbin:/bin:/command
+
 LAST=0
 test -r /etc/runit/reboot && LAST=6
 
 echo 'Waiting for getties to stop...'
-/command/svwaitdown -xk -t14 /service/getty-*
+svwaitdown -xk -t14 /service/getty-*
 
 echo 'Waiting for services to stop...'
-/command/svwaitdown -xk -t350 /service/*
+svwaitdown -xk -t350 /service/*
 
 echo 'Shutdown...'
 /etc/init.d/rc $LAST
