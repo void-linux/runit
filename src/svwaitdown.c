@@ -124,7 +124,7 @@ int main(int argc, const char * const *argv) {
       continue;
     }
 
-    if (status[17] != 'd') {
+    if (status[17] != 'd') { /* catch previous failures */
       if ((fd =open_write("supervise/control")) == -1) {
 	warn(*dir, ": unable to open supervise/control: ", &strerr_sys);
 	continue;
