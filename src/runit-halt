@@ -1,7 +1,0 @@
-#!/bin/sh
-( cd /etc/runit
-rm -f reboot
-touch stopit
-kill -CONT 1
-)
-exit 0
