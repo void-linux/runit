@@ -1,5 +1,9 @@
+runit 0.13.0
   * doc/runscripts.html: use html named entities (thx Taj Khattra); add more
     contributed run scripts (thx Thomas Schwinge).
+  * svlogd.c: support sending log entries to remote host through udp,
+    configurable through u and U lines in log dir config file; minor.
+  * man/svlogd.8: adapt.
 
 runit 0.12.1
 Tue, 18 Nov 2003 15:42:44 +0000

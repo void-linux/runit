@@ -1,5 +1,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/param.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
 #include <time.h>
 #include <sys/time.h>
 #include <dirent.h>
@@ -28,6 +31,7 @@
 #include "direntry.h"
 #include "taia.h"
 #include "fmt.h"
+#include "ndelay.h"
 
 #define USAGE " [-tv] [-r c] [-R abc] [-l n ] [-b n] dir ..."
 #define VERSION "$Id$"
@@ -58,6 +62,7 @@ buffer data;
 char *line;
 char stamp[FMT_PTIME];
 unsigned int exitasap =0;
+int fdudp =-1;
 
 struct logdir {
   int fddir;
@@ -74,6 +79,8 @@ struct logdir {
   int fdcur;
   int fdlock;
   unsigned int match;
+  struct sockaddr_in udpaddr;
+  unsigned int udponly;
 } *dir;
 unsigned int dirn =0;
 
@@ -88,6 +95,7 @@ void warn(char *m0) { strerr_warn3(WARNING, m0, ": ", &strerr_sys); }
 void warn2(char *m0, char *m1) {
   strerr_warn5(WARNING, m0, ": ", m1, ": ", &strerr_sys);
 }
+void warnx(char *m0, char *m1) { strerr_warn4(WARNING, m0, ": ", m1, 0); }
 void pause_nomem() { strerr_warn2(PAUSE, "out of memory.", 0); sleep(3); }
 void pause1(char *m0) { strerr_warn3(PAUSE, m0, ": ", &strerr_sys); sleep(3); }
 void pause2(char *m0, char *m1) {
@@ -100,7 +108,7 @@ unsigned int processorstart(struct logdir *ld) {
 
   if (! ld->processor.len) return(0);
   if (ld->ppid) {
-    warn2("processor already running", ld->name);
+    warnx("processor already running", ld->name);
     return(0);
   }
   while ((pid =fork()) == -1)
@@ -167,7 +175,7 @@ unsigned int processorstop(struct logdir *ld) {
   while (fchdir(ld->fddir) == -1)
     pause2("unable to change directory, want processor", ld->name);
   if (wait_exitcode(wstat) != 0) {
-    warn2("processor crashed, restart", ld->name);
+    warnx("processor crashed, restart", ld->name);
     ld->fnsave[26] ='t';
     unlink(ld->fnsave);
     ld->fnsave[26] ='u';
@@ -282,6 +290,24 @@ void logdir_close(struct logdir *ld) {
   ld->fdlock =-1;
 }
 
+/* taken from libdjbdns */
+unsigned int ip4_scan(const char *s,char ip[4])
+{
+  unsigned int i;
+  unsigned int len;
+  unsigned long u;
+ 
+  len = 0;
+  i = scan_ulong(s,&u); if (!i) return 0; ip[0] = u; s += i; len += i;
+  if (*s != '.') return 0; ++s; ++len;
+  i = scan_ulong(s,&u); if (!i) return 0; ip[1] = u; s += i; len += i;
+  if (*s != '.') return 0; ++s; ++len;
+  i = scan_ulong(s,&u); if (!i) return 0; ip[2] = u; s += i; len += i;
+  if (*s != '.') return 0; ++s; ++len;
+  i = scan_ulong(s,&u); if (!i) return 0; ip[3] = u; s += i; len += i;
+  return len;
+}
+
 unsigned int logdir_open(struct logdir *ld, const char *fn) {
   int i;
 
@@ -310,6 +336,8 @@ unsigned int logdir_open(struct logdir *ld, const char *fn) {
   ld->nmax =10;
   ld->name =(char*)fn;
   ld->match =0;
+  ld->udpaddr.sin_port =0;
+  ld->udponly =0;
   while (! stralloc_copys(&ld->inst, "")) pause_nomem();
   while (! stralloc_copys(&ld->processor, "")) pause_nomem();
 
@@ -317,8 +345,9 @@ unsigned int logdir_open(struct logdir *ld, const char *fn) {
   if ((i =openreadclose("config", &sa, 128)) == -1)
     warn2("unable to read config", ld->name);
   if (i != 0) {
-    int len;
-    
+    int len, c;
+    unsigned long port;
+
     if (verbose) strerr_warn4(INFO, "read: ", ld->name, "/config", 0);
     for (i =0; i < sa.len -1; ++i) {
       if ((len =byte_chr(&sa.s[i], sa.len -i, '\n')) == 1) {
@@ -349,6 +378,32 @@ unsigned int logdir_open(struct logdir *ld, const char *fn) {
       case '!':
 	while (! stralloc_copys(&ld->processor, &sa.s[i +1])) pause_nomem();
 	while (! stralloc_0(&ld->processor)) pause_nomem();
+	break;
+      case 'U':
+	ld->udponly =1;
+      case 'u':
+	if (! (c =ip4_scan(sa.s +i +1, (char *)&ld->udpaddr.sin_addr))) {
+	  warnx("unable to scan ip address", sa.s +i +1);
+	  break;
+	}
+	if (sa.s[i +1 +c] == ':') {
+	  scan_ulong(sa.s +i +c +2, &port);
+	  if (port == 0) {
+	    warnx("unable to scan port number", sa.s +i +c +2);
+	    break;
+	  }
+	}
+	else
+	  port =514;
+	ld->udpaddr.sin_port =htons(port);
+	if (fdudp == -1) {
+       	  fdudp =socket(AF_INET, SOCK_DGRAM, 0);
+	  if (fdudp)
+	    if (ndelay_on(fdudp) == -1) {
+	      close(fdudp);
+	      fdudp =-1;
+	    }
+	}
 	break;
       }
       i +=len;
@@ -440,20 +495,42 @@ unsigned int linestart(struct logdir *ld, char *s, int len) {
     }
   }
   if (ld->match == '-') return(0);
-  if (timestamp) {
-    buffer_puts(&ld->b, stamp);
-    if (timestamp != 3) ld->size +=26;
-    else ld->size +=20;
+  if (! ld->udponly) {
+    if (timestamp) {
+      buffer_puts(&ld->b, stamp);
+      if (timestamp != 3) ld->size +=26;
+      else ld->size +=20;
+    }
+    buffer_put(&ld->b, s, len);
+    ld->size +=len;
   }
-  buffer_put(&ld->b, s, len);
-  ld->size +=len;
+  if (ld->udpaddr.sin_port != 0) {
+    if (fdudp == -1) {
+      buffer_puts(&ld->b, "warning: no udp socket available: ");
+      buffer_put(&ld->b, s, len);
+      buffer_putflush(&ld->b, "\n", 1);
+    }
+    else {
+      if (len >= linelen -1) {
+	s[linelen -4] =s[linelen -3] =s[linelen -2] ='.';
+	len =linelen -1;
+      }
+      if (s[len -1] != '\n') s[len++] ='\n';
+      if (sendto(fdudp, s, len, 0, (struct sockaddr *)&ld->udpaddr,
+		 sizeof(ld->udpaddr)) != len) {
+	buffer_puts(&ld->b, "warning: failure sending through udp: ");
+	buffer_put(&ld->b, s, len);
+	buffer_putflush(&ld->b, "\n", 1);
+      }
+    }
+  }
   return(1);
 }
 unsigned int lineadd(struct logdir *ld, char *s, int len) {
-  if (ld->match != '+') return(0);
+  if ((ld->match != '+') || ld->udponly) return(0);
   buffer_put(&ld->b, s, len);
   ld->size +=len;
-  if (ld->sizemax && (ld->size >= ld->sizemax)) rotate(ld);
+  /*  if (ld->sizemax && (ld->size >= ld->sizemax)) rotate(ld); */
   return(1);
 }
 unsigned int lineflush(struct logdir *ld, char *s, int len) {
@@ -465,14 +542,11 @@ unsigned int lineflush(struct logdir *ld, char *s, int len) {
     linestart(ld, s, len);
     break;
   case '+':
-    buffer_put(&ld->b, s, len);
-    ld->size +=len;
-    break;
-  }
-  if (ld->match == '+') {
-    buffer_putflush(&ld->b, "\n", 1);
-    ld->size +=1;
     ld->match =0;
+    if (ld->udponly) return(0);
+    buffer_put(&ld->b, s, len);
+    buffer_putflush(&ld->b, "\n", 1);
+    ld->size +=len +1;
     if (ld->sizemax)
       if ((linelen > ld->sizemax) || (ld->size >= (ld->sizemax -linelen)))
 	rotate(ld);

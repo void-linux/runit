@@ -198,6 +198,37 @@ to feed each recent log file through
 .I processor
 (see above) on log file rotation.
 By default log files are not processed.
+.TP
+.RI u a.b.c.d[:port]
+tells
+.B svlogd
+to transmit the first
+.I len
+characters of selected log messages to the IP address
+.IR a.b.c.d ,
+port number
+.IR port .
+If
+.I port
+isn't set, the default port for syslog is used (514).
+.I len
+can be set through the \-l option, see below.
+If
+.B svlogd
+has trouble sending udp packets, it writes error messages to the log
+directory.
+Attention:
+logging through udp is unreliable, and should be used in private networks
+only.
+.TP
+.RI U a.b.c.d[:port]
+is the same as the
+.I u
+line above, but the log messages are no longer written to the log directory,
+but transmitted through udp only.
+Error messages from
+.B svlogd
+concerning sending udp packages still go to the log directory.
 .P
 If a line starts with a
 .IR \- ,
