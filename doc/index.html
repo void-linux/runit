@@ -12,27 +12,30 @@
 <a href="replaceinit.html">How to replace init</a><br>
 <a href="usedietlibc.html">How to use dietlibc</a>
 <p>
-<a href="runscripts.html">A collection of run scripts</a>
+<a href="runscripts.html">A collection of run scripts</a><br>
+<a href="http://smarden.org/pape/djb/daemontools/noinit.html">
+Dependencies and runlevels</a>
 <p>
 <a href="runit.8.html">The <tt>runit</tt> program</a><br>
 <a href="runit-init.8.html">The <tt>runit-init</tt> program</a><br>
 <a href="svwaitdown.8.html">The <tt>svwaitdown</tt> program</a><br>
 <a href="svwaitup.8.html">The <tt>svwaitup</tt> program</a>
 <hr>
-<i>runit</i> cooperates with djb's
+<i>runit</i> cooperates with the
 <a href="http://cr.yp.to/daemontools.html">daemontools</a> package to create
 a replacement for
 <a href="ftp://ftp.cistron.nl/pub/people/miquels/sysvinit/">sysvinit</a>.
 <i>runit</i> currently runs on
-<a href="http://www.debian.org">Debian GNU/Linux</a> and
-<a href="http://www.openbsd.org/">OpenBSD 2.9<a> but may be easily
+<a href="http://www.debian.org/">Debian GNU/Linux sid/woody</a>,
+<a href="http://www.openbsd.org/">OpenBSD 2.9</a>,
+<a href="http://www.freebsd.org/">FreeBSD 4.4</a> and can easily be
 adapted to other unix operating systems. If <i>runit</i> runs for
 you on any other operating system or linux distribution, please let me know.
 <p>
-<b>Warning:</b> Replacing <i>sysvinit</i> can cause the system's boot to fail.
-Make sure you are able to recover and repair your system, for example if you
-run a boot loader, it should be able to pass <tt>init=/bin/sh</tt> to the
-kernel.
+<b>Warning:</b> Replacing <i>sysvinit</i> or <i>init</i> can cause the
+system's boot to fail. Make sure you are able to recover and repair your
+system, for example if you run a boot loader, it should be able to pass
+<tt>init=/bin/sh</tt> to the kernel.
 <hr>
 The command <a href="runit.8.html">runit</a> is intended to run as Unix
 process no 1, it is automatically started by the
@@ -50,8 +53,8 @@ if this is started by the kernel.
   until the system is going to halt or reboot, if it crashes, it will be
   restarted. Normally, <tt>/etc/runit/2</tt> runs
   <a href="http://cr.yp.to/daemontools/svscanboot.html">svscanboot</a>.
-  In Stage 2, <i>runit</i> is able to handle the ctrl-alt-del keyboard
-  request.
+  In Stage 2 <i>runit</i> optionally handles an INT signal
+  (ctrl-alt-del keyboard request on i386).
   <li><b>Stage 3:</b><br>
   If <i>runit</i> is told to halt or reboot the system, or the Stage 2
   returns without errors, it terminates Stage 2 if it is running and runs
@@ -63,10 +66,11 @@ These are working examples for debian woody:
 <a href="debian/2">/etc/runit/2</a>,
 <a href="debian/3">/etc/runit/3</a>.
 <p>
-The command <a href="runit-init.8.html">runit-init</a> is intended to replace
-<tt>/sbin/init</tt>. sysvinit's command <tt>shutdown</tt> will keep working.
-Runlevels are not implemented in this Unix process no 1, such can easily be
-done in other programs, see
+The command <a href="runit-init.8.html">runit-init</a> is intended to
+replace <tt>/sbin/init</tt>. sysvinit's command <tt>shutdown</tt> will
+keep working. On *BSD systems use <b><tt>init 0</tt></b> for system halt
+and <b><tt>init 6</tt></b> for reboot. Runlevels are not implemented in
+this Unix process no 1, such can easily be done in other programs, see
 <a href="http://smarden.org/pape/djb/daemontools/noinit.html">
 Dependencies and runlevels</a>
 for an example, the amount of code in process no 1 should be minimal.
@@ -88,6 +92,20 @@ I recommend doing this; for instructions, see
 <hr>
 See <a href="http://smarden.org/runit/">http://smarden.org/runit/</a>
 for recent informations.
+<hr>
+Related links:
+<ul>
+  <li><a href="http://www.fefe.de/minit/">minit</a>
+  <li><a href="http://multivac.cwru.edu/svscan-1/">svscan as process 1</a>
+  <li><a href="ftp://ftp.cistron.nl/pub/people/miquels/sysvinit/">
+  sysvinit</a>
+  <li><a href="http://www.openbsd.org/cgi-bin/cvsweb/src/sbin/init/">
+  OpenBSD's init</a>
+  <li><a href="http://www.freebsd.org/cgi/cvsweb.cgi/src/sbin/init/">
+  FreeBSD's init</a>
+  <li><a href="http://www.atnf.csiro.au/~rgooch/linux/boot-scripts/">
+  Richard Gooch's Linux Boot Scripts</a>
+</ul>
 <hr>
 <address><a href="mailto:pape@smarden.org">
 Gerrit Pape &lt;pape@smarden.org&gt;

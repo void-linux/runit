@@ -13,27 +13,23 @@ Check that you have the recent version of
 <a href="http://cr.yp.to/daemontools.html">daemontools</a> installed.
 <p>
 Download
-<a href="runit-0.2.6.tar.gz">runit-0.2.6.tar.gz</a> into <tt>/package</tt>
+<a href="runit-0.2.7.tar.gz">runit-0.2.7.tar.gz</a> into <tt>/package</tt>
 and unpack the archive
 <pre>
   # cd /package
-  # gunzip runit-0.2.6.tar
-  # tar -xpf runit-0.2.6.tar
-  # rm runit-0.2.6.tar
-  # cd admin/runit-0.2.6
+  # gunzip runit-0.2.7.tar
+  # tar -xpf runit-0.2.7.tar
+  # rm runit-0.2.7.tar
+  # cd admin/runit-0.2.7
 </pre>
 Compile and install the <i>runit</i> programs
 <pre>
   # package/install
 </pre>
-gzip the man pages and copy them into a reasonable directory in your
-<tt>$MANPATH</tt>, e.g.
+If you want to make the man pages available in the <tt>/usr/local/man/</tt>
+hierarchy, do:
 <pre>
-  # mkdir -p /usr/local/man/man8/
-  # gzip man/runit.8 && cp -f man/runit.8.gz /usr/local/man/man8/
-  # gzip man/runit-init.8 && cp -f man/runit-init.8.gz /usr/local/man/man8/
-  # gzip man/svwaitdown.8 && cp -f man/svwaitdown.8.gz /usr/local/man/man8/
-  # gzip man/svwaitup.8 && cp -f man/svwaitup.8.gz /usr/local/man/man8/
+  # package/install-man
 </pre>
 Refer to <a href="replaceinit.html">replacing init</a> for
 replacing <i>init</i> with <i>runit</i>.

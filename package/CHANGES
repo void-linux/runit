@@ -1,3 +1,13 @@
+runit 0.2.7
+Tue,  1 Jan 2002 16:20:14 +0100
+  * tested on fresh freebsd 4.4 installation in vmware
+  * new etc/freebsd: stages and getty service
+  * doc: replaceinit: how to replace bsd init (freebsd)
+  * svwaitup: minor code cleanup
+  * doc: /service/getty-5/ as default getty service.
+  * doc: index: related links added.
+  * package: install-man added for installing manpages in /usr/local/man/
+
 runit 0.2.6
 Sun, 30 Dec 2001 17:29:29 +0100
   * runs on openbsd 2.9
