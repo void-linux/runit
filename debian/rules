@@ -29,7 +29,6 @@ build-arch-stamp:
 	echo 'diet -v -Os gcc -O2 -Wall' >conf-cc; \
 	echo 'diet -v -Os gcc -s -Os -pipe' >conf-ld; \
 	$(MAKE); \
-	$(MAKE) runsvstat runsvctrl; \
 	)
 
 	touch build-arch-stamp
