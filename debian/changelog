@@ -2,7 +2,7 @@ runit (0.7.0-3) unstable; urgency=low
 
   * initial official debian package (closes: #164301).
 
- -- Gerrit Pape <pape@smarden.org>  Wed, 16 Oct 2002 14:00:28 +0200
+ -- Gerrit Pape <pape@smarden.org>  Fri, 18 Oct 2002 11:12:20 +0200
 
 runit (0.7.0-2) unstable; urgency=low
 

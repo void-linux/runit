@@ -6,7 +6,7 @@ Build-Depends: dietlibc-dev, debhelper (>> 3.0.0)
 Standards-Version: 3.5.2
 
 Package: runit
-Architecture: i386 alpha arm powerpc sparc mips mipsel s390 hppa
+Architecture: alpha arm hppa i386 mips mipsel powerpc sparc
 Suggests: runit-run
 Description: a UNIX init scheme with service supervision
  runit is a daemontools alike replacement for SysV-init and other init
