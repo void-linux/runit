@@ -1,6 +1,7 @@
 runit (0.12.1-1) unstable; urgency=low
 
   * new upstream version.
+  * debian/control: Build-Depends: dietlibc-dev (>> 0.24-0).
 
  -- Gerrit Pape <pape@smarden.org>  Tue, 18 Nov 2003 15:45:02 +0000
 
