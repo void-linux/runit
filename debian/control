@@ -3,7 +3,7 @@ Section: admin
 Priority: optional
 Maintainer: Gerrit Pape <pape@smarden.org>
 Build-Depends: dietlibc-dev (>> 0.22-0), debhelper (>> 3.0.0)
-Standards-Version: 3.5.8
+Standards-Version: 3.5.9
 
 Package: runit
 Architecture: any

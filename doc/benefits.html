@@ -104,8 +104,10 @@ supervises an additional log service, redirects the log daemon's standard
 input to read from the pipe, and redirects the service daemon's standard
 output to write to the pipe.
 Restarting the service does not require restarting the log service.
-A good choice for a log daemon is
-<a href="http://cr.yp.to/daemontools/multilog.html">multilog</a>.
+A good choice for a log daemon is <i>runit</i>'s service logging daemon
+<a href="svlogd.8.html">svlogd</a>, or
+<a href="http://cr.yp.to/daemontools/multilog.html">multilog</a> from the
+<i>daemontools</i> package.
 <p>
 The service daemon and the log daemon can run with different process states,
 and under different user ids.

@@ -1,5 +1,5 @@
 runit 0.9.0
-Thu, 24 Apr 2003 15:08:26 +0200
+Fri, 25 Apr 2003 09:22:03 +0200
   * runsvdir.c: don't propagate sig_term to runsv processes when receiving
     sig_term; send sig_term to all runsv processes and exit 111 when
     receiving sig_hangup.
@@ -10,6 +10,8 @@ Thu, 24 Apr 2003 15:08:26 +0200
     it's not in state 'want down'.
   * svwaitup.c: minor code cleanup.
   * man/runsvdir.8, man/svwaitdown.8: adapt.
+  * doc/runscripts.html: add contributed run scripts (thx!).
+  * doc/upgrade.html, doc/index.html: adapt.
 
 runit 0.8.4
 Sun, 20 Apr 2003 19:31:24 +0200
