@@ -16,7 +16,7 @@ service
 <h2><a name='sect2'>Description</a></h2>
 <i>service</i> must be a directory. <p>
 <b>runsv</b>
-switches to the directory <i>service</i> and starts ./run. if ./run exits and ./finish
+switches to the directory <i>service</i> and starts ./run. If ./run exits and ./finish
 exists, <b>runsv</b> starts ./finish. If ./finish doesn&rsquo;t exist or ./finish exits,
 <b>runsv</b> restarts ./run. <p>
 If ./run or ./finish exit immediately, <b>runsv</b> waits a
@@ -28,7 +28,7 @@ below) can be used to start the service and to give other commands to <b>runsv</
 If the directory <i>service</i>/log exists, <b>runsv</b> creates a pipe, redirects <i>service</i>/run&rsquo;s
 and <i>service</i>/finish&rsquo;s standard output to the pipe, switches to the directory
 <i>service</i>/log and starts ./run (and ./finish) exactly as described above for
-the <i>service</i> directory. The standard input of the log service a redirected
+the <i>service</i> directory. The standard input of the log service is redirected
 to read from the pipe. <p>
 <b>runsv</b> maintains status information in a binary format
 compatible to <i><b>supervise</b>(8)</i> in <i>service</i>/supervise/status and <i>service</i>/log/supervise/status,

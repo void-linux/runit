@@ -1,3 +1,14 @@
+runit 0.13.0
+Mon, 12 Jan 2004 14:39:38 +0000
+  * doc/runscripts.html: use html named entities (thx Taj Khattra); add
+    more contributed run scripts (thx Marek Bartnikowski, Thomas Schwinge).
+  * svlogd.c: support sending log entries to remote host through udp,
+    configurable through u and U lines in log dir config file; minor.
+  * man/svlogd.8: adapt; document -tt option.
+  * package/compile, package/install-man, package/upgrade: exit 1 on
+    sub-shell failures.
+  * man/runsv.8: fix typos (thx Christian Hammers).
+
 runit 0.12.1
 Tue, 18 Nov 2003 15:42:44 +0000
   * doc/runscripts: add pppd run script (with chpst) next to the ppp one.
@@ -79,7 +90,6 @@ Wed, 04 Jun 2003 13:56:33 +0200
   * doc/replaceinit.html: adapt.
   * setuidgid.c: new: daemontools' setuidgid drop in replacement (not
     installed by default).
-  A
   * Makefile: build setuidgid.
   * doc/index.html: update.
 
@@ -113,7 +123,7 @@ Fri, 25 Apr 2003 09:22:03 +0200
   * runit.c: print warning for each state that exits non-zero; restart
     stage 2 if it exits non-zero.
   * svlogd.c: code cleanup.
-  * svwaitdown.c: send command "d" (and "x" if -x is set) to each service if
+  * svwaitdown.c: send command 'd' (and 'x' if -x is set) to each service if
     it's not in state 'want down'.
   * svwaitup.c: minor code cleanup.
   * man/runsvdir.8, man/svwaitdown.8: adapt.
@@ -173,7 +183,7 @@ Wed, 23 Oct 2002 11:40:24 +0200
 runit 0.7.0
 Mon, 07 Oct 2002 11:26:27 +0200
   * runsvdir.c: check service directory's inode and device in addition
-    to mtime; sleep at least 1 second before restarting run svprocesses.
+    to mtime; sleep at least 1 second before restarting runsv processes.
   * runsv.c: use status[19] for state information; control pipe supports e.
   * runsvstat.c: new option -l: only show log service if -l is given; use
     status[19] for state.
@@ -204,7 +214,7 @@ Mon, 23 Sep 2002 16:25:07 +0200
 
 runit 0.5.0
 Wed, 28 Aug 2002 11:18:28 +0200
-  * utmpset: avoids libutil; compiles with deitlibc; built by default.
+  * utmpset: avoids libutil; compiles with dietlibc; built by default.
   * doc/usedietlibc.html: fix description.
   * getty-*/run: add utmpset.
 

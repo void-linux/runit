@@ -12,9 +12,11 @@ must be a directory.
 .B runsv
 switches to the directory
 .I service
-and starts ./run. if ./run exits and ./finish exists,
+and starts ./run.
+If ./run exits and ./finish exists,
 .B runsv
-starts ./finish. If ./finish doesn't exist or ./finish exits,
+starts ./finish.
+If ./finish doesn't exist or ./finish exits,
 .B runsv
 restarts ./run.
 .P
@@ -26,8 +28,9 @@ If the file
 .IR service /down
 exists,
 .B runsv
-does not start ./run immediately. The control interface (see below) can be
-used to start the service and to give other commands to
+does not start ./run immediately.
+The control interface (see below) can be used to start the service and to
+give other commands to
 .BR runsv .
 .P
 If the directory
@@ -42,8 +45,8 @@ standard output to the pipe, switches to the directory
 .IR service /log
 and starts ./run (and ./finish) exactly as described above for the
 .I service
-directory. The standard input of the log service a redirected to read from
-the pipe.
+directory.
+The standard input of the log service is redirected to read from the pipe.
 .P
 .B runsv
 maintains status information in a binary format compatible to
@@ -70,43 +73,57 @@ to control the service or just write one of the following characters to
 the named pipe:
 .TP
 .B u
-Up. If the service is not running, start it. If the service stops, restart
-it.
+Up.
+If the service is not running, start it.
+If the service stops, restart it.
 .TP
 .B d
-Down. If the service is running, send it a TERM signal. If ./run exits,
-start ./finish if it exists. After it stops, do not restart service.
+Down.
+If the service is running, send it a TERM signal.
+If ./run exits, start ./finish if it exists.
+After it stops, do not restart service.
 .TP
 .B o
-Once. If the service is not running, start it. Do not restart it if it
+Once.
+If the service is not running, start it.
+Do not restart it if it
 stops.
 .TP
 .B p
-Pause. If the service is running, send it a STOP signal.
+Pause.
+If the service is running, send it a STOP signal.
 .TP
 .B c
-Continue. If the service is running, send it a CONT signal.
+Continue.
+If the service is running, send it a CONT signal.
 .TP
 .B h
-Hangup. If the service is running, send it a HUP signal.
+Hangup.
+If the service is running, send it a HUP signal.
 .TP
 .B a
-Alarm. If the service is running, send it a ALRM signal.
+Alarm.
+If the service is running, send it a ALRM signal.
 .TP
 .B i
-Interrupt. If the service is running, send it a INT signal.
+Interrupt.
+If the service is running, send it a INT signal.
 .TP
 .B 1
-User-defined 1. If the service is running, send it a USR1 signal.
+User-defined 1.
+If the service is running, send it a USR1 signal.
 .TP
 .B 2
-User-defined 2. If the service is running, send it a USR2 signal.
+User-defined 2.
+If the service is running, send it a USR2 signal.
 .TP
 .B t
-Terminate. If the service is running, send it a TERM signal.
+Terminate.
+If the service is running, send it a TERM signal.
 .TP
 .B k
-Kill. If the service is running, send it a KILL signal.
+Kill.
+If the service is running, send it a KILL signal.
 .TP
 .B x \fRor \fBe
 Exit.
