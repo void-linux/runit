@@ -168,27 +168,28 @@ int main (int argc, const char * const *argv, char * const *envp) {
 
       if (child == pid) {
 	if (wait_exitcode(wstat) != 0) {
-	  if (wait_crashed(wstat)) {
+	  if (wait_crashed(wstat))
 	    strerr_warn3(WARNING, "child crashed: ", stage[st], 0);
-	    if (st == 0) {
-	      /* this is stage 1 */
+	  else
+	    strerr_warn3(WARNING, "child failed: ", stage[st], 0);
+	  if (st == 0)
+	    /* this is stage 1 */
+	    if (wait_crashed(wstat) || (wait_exitcode(wstat) == 100)) {
 	      strerr_warn3(INFO, "leave stage: ", stage[st], 0);
 	      strerr_warn2(WARNING, "skipping stage 2...", 0);
 	      st++;
 	      break;
 	    }
-	  }
-	  else
-	    strerr_warn3(WARNING, "child failed: ", stage[st], 0);
-	  if (st == 1) {
+	  if (st == 1)
 	    /* this is stage 2 */
-	    strerr_warn2(WARNING, "killing all processes in stage 2...", 0);
-	    kill(-pid, 9);
-	    sleep(5);
-	    strerr_warn2(WARNING, "restarting.", 0);
-	    st--;
-	    break;
-	  }
+	    if (wait_crashed(wstat) || (wait_exitcode(wstat) == 111)) {
+	      strerr_warn2(WARNING, "killing all processes in stage 2...", 0);
+	      kill(-pid, 9);
+	      sleep(5);
+	      strerr_warn2(WARNING, "restarting.", 0);
+	      st--;
+	      break;
+	    }
 	}
 	strerr_warn3(INFO, "leave stage: ", stage[st], 0);
 	break;

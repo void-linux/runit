@@ -22,7 +22,7 @@ Thanks go to the following people for contributing run scripts:
 Alessandro Bono, Robin S. Socha, Claus Alboege, Paul Jarc, clemens fischer,
 Jesse Cablek, Lukas Beeler, Thomas Baden, Ralf Hildebrandt, Antonio Dias,
 Erich Schubert, Lang Martin, Tomasz Nidecki, Marek Bartnikowski,
-Thomas Schwinge, Gael Canal, Woon Wai Keen, Richard A Downing.
+Thomas Schwinge, Gael Canal, Woon Wai Keen, Richard A Downing, Phil Genera.
 <hr>
 <a href="#atftpd">atftpd</a><br>
 <a href="#apache">apache</a><br>
@@ -325,12 +325,19 @@ to be set up.
 </pre>
 The <a href="index.html">runit</a> package does not care about utmp records
 for getties. You should choose a getty that handles its own utmp and wtmp
-records. Debian's <tt>mingetty</tt> does create his own utmp record.
+records.
+Debian's <tt>mingetty</tt> creates its own utmp record.
 <h3>An <tt>agetty</tt> run script</h3>
 (<i>Slackware Linux 9.0</i>)
 <pre>
  #!/bin/sh
  exec /sbin/agetty 38400 tty1 linux
+</pre>
+<h3>A <tt>fgetty</tt> run script</h3>
+(<i>Linux</i>)
+<pre>
+ #!/bin/sh
+ exec chpst -P fgetty tty4
 </pre>
 <hr>
 <h3><a name="gpm">A <tt>gpm</tt> run script</a></h3>
@@ -542,12 +549,15 @@ to be set up.
 </pre>
 <hr>
 <h3><a name="postgresql">A <tt>postgresql</tt> run script</a></h3>
-(<i>SunOS</i>)
+(<i>Debian</i>, <i>SunOS</i>)
 <pre>
  #!/bin/sh
- exec setuidgid postgres /pack/postgresql/current/bin/postmaster \
-   -D /pack/postgresql/data 2&gt;&amp;1
+ exec setuidgid postgres /usr/lib/postgresql/bin/postmaster \
+   -D /var/lib/postgres/data 2&gt;&amp;1
 </pre>
+This service needs a
+<a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
+to be set up.
 <hr>
 <h3><a name="ppp">A <tt>ppp</tt> run script</a></h3>
 (<i>FreeBSD</i>)
