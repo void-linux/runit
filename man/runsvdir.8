@@ -73,13 +73,23 @@ in stage 2.
 .SH SIGNALS
 If
 .B runsvdir
-receives a TERM signal, it sends a TERM signal to each
+receives a TERM signal, it exits with 0 immediately.
+.P
+If
+.B runsvdir
+receives a HUP signal, it sends a TERM signal to each
 .BR runsv (8)
-process it is monitoring and then exits with 0.
+process it is monitoring and then exits with 111.
 .SH SEE ALSO
+runsvchdir(8),
+runsv(8),
+runsvctrl(8),
+runsvstat(8),
 runit(8),
 runit-init(8),
-runsv(8),
+svlogd(8),
+svwaitdown(8),
+svwaitup(8),
 readproctitle(8),
 svscan(8)
 .P

@@ -1,3 +1,25 @@
+runit 0.9.0
+Fri, 25 Apr 2003 09:22:03 +0200
+  * runsvdir.c: don't propagate sig_term to runsv processes when receiving
+    sig_term; send sig_term to all runsv processes and exit 111 when
+    receiving sig_hangup.
+  * runit.c: print warning for each state that exits non-zero; restart
+    stage 2 if it exits non-zero.
+  * svlogd.c: code cleanup.
+  * svwaitdown.c: send command "d" (and "x" if -x is set) to each service if
+    it's not in state 'want down'.
+  * svwaitup.c: minor code cleanup.
+  * man/runsvdir.8, man/svwaitdown.8: adapt.
+  * doc/runscripts.html: add contributed run scripts (thx!).
+  * doc/upgrade.html, doc/index.html: adapt.
+
+runit 0.8.4
+Sun, 20 Apr 2003 19:31:24 +0200
+  * svlogd.c: new; runit's service logging daemon.
+  * fmt_ptime.h, fmt_ptime.c, pmatch.h, pmatch.c: new.
+  * man/svlogd.8, doc/svlogd.8.html: new.
+  * man/runsv.8, man/runsvstat.8, man/utmpset.8: minor cleanup.
+
 runit 0.8.1
 Wed, 12 Mar 2003 15:10:04 +0100
   * runsvdir.c, runsv.c: close-on-exec file descriptors of current dir and

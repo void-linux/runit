@@ -89,7 +89,7 @@ int main (int argc, const char * const *argv, char * const *envp) {
   if (RB_DISABLE_CAD == 0) reboot(0);
 #endif
 
-  strerr_warn3(INFO, "$Id: runit.c,v 1.8 2003/02/25 12:51:39 pape Exp $",
+  strerr_warn3(INFO, "$Id: runit.c,v 1.9 2003/04/24 13:10:27 pape Exp $",
 	       ": booting.", 0);
 
   /* runit */
@@ -157,15 +157,19 @@ int main (int argc, const char * const *argv, char * const *envp) {
       }
 
       if (child == pid) {
-	if (wait_crashed(wstat)) {
-	  strerr_warn3(WARNING, "child crashed: ", stage[st], 0);
-          if (st == 0) {
-            /* this is stage 1 */
-            strerr_warn3(INFO, "leave stage: ", stage[st], 0);
-            strerr_warn2(WARNING, "skipping stage 2...", 0);
-            st++;
-            break;
-          }
+	if (wait_exitcode(wstat) != 0) {
+	  if (wait_crashed(wstat)) {
+	    strerr_warn3(WARNING, "child crashed: ", stage[st], 0);
+	    if (st == 0) {
+	      /* this is stage 1 */
+	      strerr_warn3(INFO, "leave stage: ", stage[st], 0);
+	      strerr_warn2(WARNING, "skipping stage 2...", 0);
+	      st++;
+	      break;
+	    }
+	  }
+	  else
+	    strerr_warn3(WARNING, "child failed: ", stage[st], 0);
 	  if (st == 1) {
 	    /* this is stage 2 */
 	    strerr_warn2(WARNING, "killing all processes in stage 2...", 0);

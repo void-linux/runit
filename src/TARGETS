@@ -18,6 +18,10 @@ utmpset
 utmpset.o
 runsvchdir
 runsvchdir.o
+svlogd
+svlogd.o
+pmatch.o
+fmt_ptime.o
 alloc.o
 alloc_re.o
 buffer.o

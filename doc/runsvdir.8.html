@@ -36,10 +36,13 @@ Normally <B>runsvdir</B>
 is started by <B><I>runit</B>(8)</I> in stage 2. 
 <H2><A NAME="sect3">Signals</A></H2>
 If <B>runsvdir</B> receives a TERM signal,
-it sends a TERM signal to each <B><I>runsv</B>(8)</I> process it is monitoring and then
-exits with 0. 
+it exits with 0 immediately. <P>
+If <B>runsvdir</B> receives a HUP signal, it sends
+a TERM signal to each <B><I>runsv</B>(8)</I> process it is monitoring and then exits
+with 111. 
 <H2><A NAME="sect4">See Also</A></H2>
-<I>runit(8)</I>, <I>runit-init(8)</I>, <I>runsv(8)</I>, <I>readproctitle(8)</I>,
+<I>runsvchdir(8)</I>, <I>runsv(8)</I>, <I>runsvctrl(8)</I>, <I>runsvstat(8)</I>, <I>runit(8)</I>,
+<I>runit-init(8)</I>, <I>svlogd(8)</I>, <I>svwaitdown(8)</I>, <I>svwaitup(8)</I>, <I>readproctitle(8)</I>,
 <I>svscan(8)</I> <P>
  <I>http://smarden.org/runit/</I><BR>
   <I>http://cr.yp.to/daemontools.html</I><BR>
