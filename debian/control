@@ -2,7 +2,7 @@ Source: runit
 Section: admin
 Priority: optional
 Maintainer: Gerrit Pape <pape@smarden.org>
-Build-Depends: debhelper (>> 3.0.0), dietlibc | dietlibc-dev
+Build-Depends: debhelper (>> 3.0.0), dietlibc-dev
 Standards-Version: 3.5.2
 
 Package: runit
