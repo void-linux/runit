@@ -1,0 +1,123 @@
+#!/usr/bin/make -f
+# Sample debian/rules that uses debhelper.
+# GNU copyright 1997 to 1999 by Joey Hess.
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+# This is the debhelper compatability version to use.
+export DH_COMPAT=3
+
+configure: configure-stamp
+configure-stamp:
+	dh_testdir
+	# Add here commands to configure the package.
+
+
+	touch configure-stamp
+
+build: configure-stamp build-stamp
+build-stamp:
+	dh_testdir
+
+	# Add here commands to compile the package.
+	#	$(MAKE)
+	#/usr/bin/docbook-to-man debian/runit.sgml > runit.1
+
+	tar xfzvp runit-0.1.0.tar.gz
+	mkdir -p admin/runit-0.1.0/compile
+	tar xfzvp daemontools-pd-0.76.tar.gz \
+		-C admin/runit-0.1.0/compile
+	( cd admin/runit-0.1.0/compile ; \
+		ln -s daemontools-pd-0.76 support )
+	( \
+	cd admin/runit-0.1.0 ; \
+	package/compile ; \
+	echo "/package/admin/runit-0.1.0" > compile/home ; \
+	rm -f compile/src ; \
+	ln -s /package/admin/runit-0.1.0/src compile/src ; \
+	)
+	touch build-stamp
+
+clean:
+	dh_testdir
+	dh_testroot
+	rm -f build-stamp configure-stamp
+
+	# Add here commands to clean up after the build process.
+	#	-$(MAKE) clean
+
+	rm -rf admin
+	rm -f debian/links
+	dh_clean
+
+install: build
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+	dh_installdirs
+
+	# Add here commands to install the package into debian/runit.
+	#	$(MAKE) install DESTDIR=$(CURDIR)/debian/runit
+
+	chmod 1755 debian/runit/package
+	cp -a admin debian/runit/package/
+	rm -rf debian/runit/package/admin/runit-0.1.0/compile
+	rm -rf debian/runit/package/admin/runit-0.1.0/man
+	rm -rf debian/runit/package/admin/runit-0.1.0/doc
+	rm -rf debian/runit/package/admin/runit-0.1.0/etc
+
+	# /etc/runit
+	cp -p admin/runit-0.1.0/etc/debian/[123] \
+		debian/runit/etc/runit/
+	cp -p admin/runit-0.1.0/etc/debian/ctrlaltdel \
+		debian/runit/etc/runit/
+	# runit programs
+	cp -p debian/runit/package/admin/runit-0.1.0/command/runit* \
+		debian/runit/sbin/
+
+	# cleanup
+	rm -rf debian/runit/package/admin/runit-0.1.0/compile
+
+	# create debian/links
+	rm -f debian/links
+	for i in \
+	 `cat debian/runit/package/admin/runit-0.1.0/package/commands` ; \
+	do \
+	  echo "/package/admin/runit/command/$$i /command/$$i" \
+		>> debian/links ; \
+	done
+#	for i in \
+#	 `cat debian/runit/package/admin/runit-0.1.0/package/commands` ; \
+#	do \
+#	  echo "/command/$$i /usr/local/bin/$$i" \
+#		>> debian/links ; \
+#	done
+
+
+# Build architecture-independent files here.
+binary-indep: build install
+# We have nothing to do by default.
+
+# Build architecture-dependent files here.
+binary-arch: build install
+	dh_testdir
+	dh_testroot
+#	dh_installdebconf	
+	dh_installdocs
+	dh_installman man/runit*.8
+	dh_installchangelogs 
+	dh_link
+	dh_strip
+	dh_compress
+#	dh_fixperms
+#	dh_makeshlibs
+	dh_installdeb
+#	dh_perl
+	dh_shlibdeps
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+binary: binary-indep binary-arch
+.PHONY: build clean binary-indep binary-arch binary install configure

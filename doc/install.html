@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+<head>
+<title>runit - installation</title>
+</head>
+<body>
+<a href="http://innominate.org/~pape/">G. Pape</a><br>
+<a href="index.html">runit</a><br>
+<hr>
+<h1>runit - installation</h1>
+<hr>
+Check that you have the recent version of
+<a href="http://cr.yp.to/daemontools.html">daemontools</a> installed.
+<p>
+Download
+<a href="ftp://ftp.innominate.org/pub/pape/runit/runit-0.1.0.tar.gz">
+runit-0.1.0.tar.gz</a> into <tt>/package</tt> and unpack the archive
+<pre>
+  # cd /package
+  # gunzip runit-0.1.0.tar
+  # tar -xpf runit-0.1.0.tar
+  # rm runit-0.1.0.tar
+  # cd admin/runit-0.1.0
+</pre>
+Compile and install the <i>runit</i> programs
+<pre>
+  # package/install
+</pre>
+gzip the man pages and copy them into a reasonable directory in your
+<tt>$MANPATH</tt>, e.g.
+<pre>
+  # mkdir -p /usr/local/man/man8/
+  # gzip man/runit.8 && cp -f man/runit.8.gz /usr/local/man/man8/
+  # gzip man/runit-init.8 && cp -f man/runit-init.8.gz /usr/local/man/man8/
+  # gzip man/runit-halt.8 && cp -f man/runit-halt.8.gz /usr/local/man/man8/
+  # gzip man/runit-reboot.8 && cp -f man/runit-reboot.8.gz /usr/local/man/man8/
+</pre>
+Refer to <a href="replaceinit.html">replacing init</a> for
+replacing <i>sysvinit</i> with <i>runit</i>.
+<hr>
+<address><a href="mailto:pape@smarden.org">
+Gerrit Pape &lt;pape@smarden.org&gt;
+</a></address>
+<small>$Id$</small>
+</body>
+</html>
