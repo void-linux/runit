@@ -1,3 +1,5 @@
+runit 1.2.2
+Sun, 03 Apr 2005 09:21:52 +0000
   * doc/index.html, doc/replaceinit.html: no longer refer to sysvinit's
     shutdown program.
   * man/svlogd.8: svlogd doesn't decrease the number of log files in a log
