@@ -22,10 +22,10 @@ if ! grep '^SV:' /etc/inittab >/dev/null; then
   echo 'Adding SV inittab entry...'
   cp /etc/inittab /etc/inittab'{new}'
   cat >>/etc/inittab'{new}' <<-\EOT
-    #-- runit begin
-    SV:123456:respawn:/usr/sbin/runsvdir-start
-    #-- runit end
-    EOT
+	#-- runit begin
+	SV:123456:respawn:/usr/sbin/runsvdir-start
+	#-- runit end
+	EOT
   mv -f /etc/inittab'{new}' /etc/inittab
   kill -HUP 1
 fi
