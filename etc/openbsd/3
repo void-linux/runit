@@ -1,26 +1,16 @@
 #!/bin/sh
-PATH=/bin:/sbin:/command
+exec 2>&1
 
-echo 'Stopping getties...'
-svc -d /service/getty-*
-svwaitdown -t14 /service/getty-* || ( echo 'Killing getties...' ; \
-  svc -k /service/getty-* ; svwaitdown /service/getty-* )
+LAST=0
+test -r /etc/runit/reboot && LAST=6
 
-echo 'Stopping services...'
-svc -d /service/*
-svwaitdown -t350 /service/* || ( echo 'Killing services...' ; \
-  svc -k /service/* ; svwaitdown /service/* )
+echo 'Waiting for getties to stop...'
+/command/svwaitdown -xk -t14 /service/getty-*
 
-echo 'Stopping log services...'
-svc -d /service/*/log
-svwaitdown -t35 /service/*/log || ( echo 'Killing log services...' ; \
-  svc -k /service/*/log ; svwaitdown /service/*/log )
+echo 'Waiting for services to stop...'
+/command/svwaitdown -xk -t350 /service/*
 
 echo 'Shutdown...'
-if test -r /etc/runit/reboot; then
-  exec reboot
-else
-  exec halt
-fi
+/etc/init.d/rc $LAST
 
 exit 0
