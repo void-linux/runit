@@ -95,16 +95,12 @@ install: build
 	install -m0755 admin/runit-0.7.1/src/runsvctrl \
 	  $(CURDIR)/debian/runit/usr/bin/runsvctrl
 
-#	install -m0700 admin/runit/etc/debian/1 \
-#	  $(CURDIR)/debian/runit/etc/runit/1
 	install -m0700 debian/1 \
 	  $(CURDIR)/debian/runit/etc/runit/1
 	install -m0700 debian/2 \
 	  $(CURDIR)/debian/runit/etc/runit/2
-	chmod 0700 $(CURDIR)/debian/runit/etc/runit/2
-	sed -e 's}^PATH=.*}PATH=/sbin:/bin:/usr/sbin:/usr/bin}g' \
-	  <admin/runit/etc/debian/3 >$(CURDIR)/debian/runit/etc/runit/3
-	chmod 0700 $(CURDIR)/debian/runit/etc/runit/3
+	install -m0700 debian/3 \
+	  $(CURDIR)/debian/runit/etc/runit/3
 	install -m0700 admin/runit/etc/debian/ctrlaltdel \
 	  $(CURDIR)/debian/runit/etc/runit/ctrlaltdel
 	install -m0755 debian/getty-tty5.run \

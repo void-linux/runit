@@ -1,3 +1,11 @@
+runit (0.7.1-4) unstable; urgency=low
+
+  * debian/rules: install debian specific stage 3: fix path to service
+    directory.
+  * debian/3: new.
+
+ -- Gerrit Pape <pape@smarden.org>  Thu,  7 Nov 2002 18:33:52 +0100
+
 runit (0.7.1-3) unstable; urgency=low
 
   * debian/control: build-depends on dietlibc >= 0.21-3 (fixes build
