@@ -22,21 +22,26 @@ while the system is up, it must be either called as <B>init 0</B> or <B>init 6:<
 
 <DT><B>init
 0</B> </DT>
-<DD>run <B><I>runit-halt</B>(8)</I> to halt the system. </DD>
+<DD>tells the Unix process no 1 to shutdown and halt the system. To signal
+<B><I>runit</B>(8)</I> the system halt request, the <I>/etc/runit/reboot</I> file is removed
+and <I>/etc/runit/stopit</I> is touched. Then a CONT signal is sent to <B><I>runit</B>(8)</I>.
+</DD>
 
 <DT><B>init 6</B> </DT>
-<DD>run <B><I>runit-reboot</B>(8)</I> to reboot
-the system. </DD>
+<DD>tells the Unix process no 1 to shutdown and reboot the system. To
+signal <B><I>runit</B>(8)</I> the system reboot request, the <I>/etc/runit/reboot</I> and <I>/etc/runit/stopit</I>
+files are touched. Then a CONT signal is sent to <B><I>runit</B>(8)</I>. </DD>
 </DL>
 
 <H2><A NAME="sect3">Exit Codes</A></H2>
-<B>runit-init</B> returns 111 on error, 0 in all other cases.
-
+<B>runit-init</B>
+returns 111 on error, 0 in all other cases. 
 <H2><A NAME="sect4">See Also</A></H2>
-<I>runit(8)</I>, <I>runit-halt(8)</I>, <I>runit-reboot(8)</I> 
+<I>runit(8)</I> <P>
+ <I>http://smarden.org/pape/runit/</I>
+
 <H2><A NAME="sect5">Author</A></H2>
-Gerrit Pape &lt;pape@smarden.org&gt;
-<P>
+Gerrit Pape &lt;pape@smarden.org&gt; <P>
 
 <HR><P>
 <A NAME="toc"><B>Table of Contents</B></A><P>
