@@ -20,7 +20,7 @@
 #include "openreadclose.h"
 #include "direntry.h"
 
-#define USAGE_MAIN " [-vP012] [-u user[:group]] [-U user[:group]] [-e dir] [-l|-L lock] [-m n] [-o n] [-p n] [-f n] [-c n] prog"
+#define USAGE_MAIN " [-vP012] [-u user[:group]] [-U user[:group]] [-e dir] [-/ root] [-l|-L lock] [-m n] [-o n] [-p n] [-f n] [-c n] prog"
 #define FATAL "chpst: fatal: "
 #define WARNING "chpst: warning: "
 
@@ -57,6 +57,7 @@ long limitc =-2;
 long limitr =-2;
 long limitt =-2;
 const char *lock =0;
+const char *root =0;
 unsigned int lockdelay;
 
 void suidgid(char *user, unsigned int dogrp) {
@@ -270,7 +271,8 @@ int main(int argc, const char *const *argv) {
   if (str_equal(progname, "setlock")) setlock(argc, argv);
   if (str_equal(progname, "softlimit")) softlimit(argc, argv);
 
-  while ((opt =getopt(argc, argv, "u:U:e:m:o:p:f:c:r:t:l:L:vP012V")) != opteof)
+  while ((opt =getopt(argc, argv, "u:U:e:m:o:p:f:c:r:t:/:l:L:vP012V"))
+	 != opteof)
     switch(opt) {
     case 'u': set_user =(char*)optarg; break;
     case 'U': env_user =(char*)optarg; break;
@@ -285,6 +287,7 @@ int main(int argc, const char *const *argv) {
     case 'c': if (optarg[scan_ulong(optarg, &limitc)]) usage(); break;
     case 'r': if (optarg[scan_ulong(optarg, &limitr)]) usage(); break;
     case 't': if (optarg[scan_ulong(optarg, &limitt)]) usage(); break;
+    case '/': root =optarg; break;
     case 'l': if (lock) usage(); lock =optarg; lockdelay =1; break;
     case 'L': if (lock) usage(); lock =optarg; lockdelay =0; break;
     case 'v': verbose =1; break;
@@ -300,6 +303,7 @@ int main(int argc, const char *const *argv) {
   
   if (pgrp) setsid();
   if (env_dir) edir(env_dir);
+  if (root) if (chroot(root) == -1) fatal("unable to change root directory");
   if (env_user) euidgid(env_user, 1);
   if (set_user) suidgid(set_user, 1);
   slimit();

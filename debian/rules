@@ -38,19 +38,24 @@ endif
 
 DIR =`pwd`/debian/runit
 
-build: deb-checkdir build-stamp
-build-stamp:
-	-gcc -v
-	tar xfzp runit-1.0.2.tar.gz
+unpack: deb-checkdir unpack-stamp
+unpack-stamp:
+	tar xzf runit-1.0.2.tar.gz
 	ln -s runit-1.0.2 admin/runit
+	(cd admin/runit && patch -p0) <debian/diff/chpst-chroot.diff
 	echo "$(CC) $(CFLAGS)" >admin/runit/src/conf-cc
 	echo "$(CC) $(LDFLAGS)" >admin/runit/src/conf-ld
+	touch unpack-stamp
+
+build: deb-checkdir build-stamp
+build-stamp: unpack-stamp
+	-gcc -v
 	$(MAKE) -Cadmin/runit/src default check
 	touch build-stamp
 
 clean: deb-checkdir deb-checkuid
 	rm -rf admin
-	rm -f build-stamp
+	rm -f unpack-stamp build-stamp
 	rm -rf "$(DIR)"
 	rm -f debian/files debian/substvars changelog
 
@@ -112,6 +117,6 @@ binary-arch: install runit.deb
 
 binary: binary-indep binary-arch
 
-.PHONY: build clean install binary-indep binary-arch binary
+.PHONY: unpack build clean install binary-indep binary-arch binary
 
 include debian/implicit

@@ -10,6 +10,8 @@ chpst \- runs a program with a changed process state
 .IR user ]
 [-e
 .IR dir ]
+[\-/
+.IR root ]
 [-l|-L
 .IR lock ]
 [-m
@@ -96,6 +98,13 @@ removes the environment variable
 .I k
 if it exists, without adding a new variable.
 .TP
+.B \-/ \fIroot
+chroot.
+Change the root directory to
+.I root
+before starting
+.IR prog .
+.TP
 .B \-l \fIlock
 lock.
 Open the file
@@ -153,15 +162,15 @@ Run
 in a new process group.
 .TP
 .B \-0
-Close standard input before running
+Close standard input before starting
 .IR prog .
 .TP
 .B \-1
-Close standard output before running
+Close standard output before starting
 .IR prog .
 .TP
 .B \-2
-Close standard error before running
+Close standard error before starting
 .IR prog .
 .SH EXIT CODES
 .B chpst
