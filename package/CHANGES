@@ -1,12 +1,13 @@
 runit 1.1.0
-Sat, 06 Nov 2004 15:38:54 +0000
-  * svlogd.c: new config option t timeout; config options e and E select and
-    deselect lines for stderr respectively; new config option N.
+Sat, 06 Nov 2004 17:21:11 +0000
+  * svlogd.c: new config option t timeout (thx Enrico Scholz); config
+    options e and E select and deselect lines for stderr respectively (thx
+    Vladimir Smelhaus); new config option N.
   * man/svlogd.8: adapt.
   * runsv.c: on commands down and exit send CONT after TERM.
   * man/runsv.8: adapt.
   * etc/2: use -P option to runsvdir.
-  * src/svlogd.check: end check for t config option.
+  * src/svlogd.check: add check for t config option.
   * chpst.c: new option -n: adjust nice level.
   * man/chpst.8: adapt.
 
