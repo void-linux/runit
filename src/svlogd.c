@@ -30,7 +30,7 @@
 #include "fmt.h"
 
 #define USAGE " [-tv] [-r c] [-R abc] [-l n ] [-b n] dir ..."
-#define VERSION "$Id: svlogd.c,v 1.6 2003/06/05 11:39:12 pape Exp $"
+#define VERSION "$Id: svlogd.c,v 1.7 2003/06/17 13:48:36 pape Exp $"
 
 #define FATAL "svlogd: fatal: "
 #define WARNING "svlogd: warning: "
@@ -456,6 +456,7 @@ unsigned int lineadd(struct logdir *ld, char *s, int len) {
 unsigned int lineflush(struct logdir *ld, char *s, int len) {
   switch(ld->match) {
   case '-':
+    ld->match =0;
     return(0);
   case 0:
     linestart(ld, s, len);

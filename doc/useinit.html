@@ -17,6 +17,13 @@ current <i>init</i>.
 Normally this is done by either adding <tt>/etc/runit/2</tt> as command to
 </tt>/etc/rc.local</tt>, or by adding an entry for <tt>/etc/runit/2</tt> to
 <tt>/etc/inittab</tt>.
+<p>
+In either case, you first need to copy the <i>stage 2</i> script to
+<tt>/etc/runit/2</tt>:
+<pre>
+  # mkdir -p /etc/runit
+  # cp -p /package/admin/runit/etc/2 /etc/runit/
+</pre>
 <hr>
 If your system uses a sysvinit alike init scheme with a <tt>/etc/inittab</tt>
 file, do:
@@ -42,6 +49,6 @@ and reboot your system.
 <address><a href="mailto:pape@smarden.org">
 Gerrit Pape &lt;pape@smarden.org&gt;
 </a></address>
-<small>$Id: useinit.html,v 1.1 2003/05/03 15:57:56 pape Exp $</small>
+<small>$Id: useinit.html,v 1.2 2003/06/17 13:48:36 pape Exp $</small>
 </body>
 </html>
