@@ -66,7 +66,7 @@ utmpset.o: compile utmpset.c
 runsvchdir.o: compile runsvchdir.c
 	./compile runsvchdir.c
 
-svlogd.o: compile svlogd.c
+svlogd.o: compile sysdeps svlogd.c
 	./compile svlogd.c
 
 

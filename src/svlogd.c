@@ -347,7 +347,7 @@ int logdir_open(struct logdir *ld, const char *fn) {
 
   /* open current */
   if ((i =stat("current", &st)) != -1) {
-    if (st.st_size && ((st.st_mode & S_IRWXU) != S_IXUSR)) {
+    if (st.st_size && ! (st.st_mode & S_IXUSR)) {
       ld->fnsave[25] ='.'; ld->fnsave[26] ='u'; ld->fnsave[27] =0;
       do {
 	taia_now(&now);
