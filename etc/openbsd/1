@@ -9,4 +9,6 @@ trap : 3
 echo '/etc/rc failed. Press <enter> for emergency shell...'
 read input
 /bin/sh -l
-exec /sbin/reboot
+/sbin/reboot
+
+exit
