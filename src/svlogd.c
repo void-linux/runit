@@ -80,6 +80,7 @@ unsigned int dirn =0;
 void usage() { strerr_die4x(111, "usage: ", progname, USAGE, "\n"); }
 void die_nomem() { strerr_die2x(111, FATAL, "out of memory."); }
 void fatal(char *m0) { strerr_die3sys(111, FATAL, m0, ": "); }
+void fatalx(char *m0) { strerr_die2x(111, FATAL, m0); }
 void fatal2(char *m0, char *m1) {
   strerr_die5sys(111, FATAL, m0, ": ", m1, ": ");
 }
@@ -396,11 +397,13 @@ unsigned int logdir_open(struct logdir *ld, const char *fn) {
 
 void logdirs_reopen(void) {
   int l;
+  int ok =0;
 
   for (l =0; l < dirn; ++l) {
     logdir_close(&dir[l]);    
-    logdir_open(&dir[l], fndir[l]);
+    if (logdir_open(&dir[l], fndir[l])) ok =1;
   }
+  if (! ok) fatalx("no functional log directories.");
 }
 
 unsigned int linestart(struct logdir *ld, char *s, int len) {

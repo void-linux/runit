@@ -41,13 +41,13 @@ build-arch: configure-stamp  build-arch-stamp
 build-arch-stamp:
 	dh_testdir
 
-	tar xfzvp runit-0.11.0.tar.gz
+	tar xfzvp runit-0.11.1.tar.gz
 	-gcc -v
 
 	( \
 	set -e; \
-	cd admin/runit-0.11.0/src; \
-	ln -s runit-0.11.0 runit; mv runit ../..; \
+	cd admin/runit-0.11.1/src; \
+	ln -s runit-0.11.1 runit; mv runit ../..; \
 	echo "$(CC) $(CFLAGS)" >conf-cc; \
 	echo "$(CC) $(LDFLAGS)" >conf-ld; \
 	$(MAKE); \
@@ -79,37 +79,37 @@ install: build
 	dh_installdirs
 
 	# runit
-	install -m0500 admin/runit-0.11.0/src/runit \
+	install -m0500 admin/runit-0.11.1/src/runit \
 	  $(CURDIR)/debian/runit/sbin/runit
-	install -m0500 admin/runit-0.11.0/src/runit-init \
+	install -m0500 admin/runit-0.11.1/src/runit-init \
 	  $(CURDIR)/debian/runit/sbin/runit-init
-	install -m0755 admin/runit-0.11.0/src/runsvdir \
+	install -m0755 admin/runit-0.11.1/src/runsvdir \
 	  $(CURDIR)/debian/runit/usr/bin/runsvdir
-	install -m0755 admin/runit-0.11.0/src/runsv \
+	install -m0755 admin/runit-0.11.1/src/runsv \
 	  $(CURDIR)/debian/runit/usr/bin/runsv
-	install -m0755 admin/runit-0.11.0/src/runsvchdir \
+	install -m0755 admin/runit-0.11.1/src/runsvchdir \
 	  $(CURDIR)/debian/runit/usr/sbin/runsvchdir
-	install -m0755 admin/runit-0.11.0/src/svlogd \
+	install -m0755 admin/runit-0.11.1/src/svlogd \
 	  $(CURDIR)/debian/runit/usr/bin/svlogd
-	install -m0755 admin/runit-0.11.0/src/svwaitdown \
+	install -m0755 admin/runit-0.11.1/src/svwaitdown \
 	  $(CURDIR)/debian/runit/usr/bin/svwaitdown
-	install -m0755 admin/runit-0.11.0/src/svwaitup \
+	install -m0755 admin/runit-0.11.1/src/svwaitup \
 	  $(CURDIR)/debian/runit/usr/bin/svwaitup
-	install -m0755 admin/runit-0.11.0/src/utmpset \
+	install -m0755 admin/runit-0.11.1/src/utmpset \
 	  $(CURDIR)/debian/runit/usr/sbin/utmpset
-	install -m0755 admin/runit-0.11.0/src/runsvstat \
+	install -m0755 admin/runit-0.11.1/src/runsvstat \
 	  $(CURDIR)/debian/runit/usr/bin/runsvstat
-	install -m0755 admin/runit-0.11.0/src/runsvctrl \
+	install -m0755 admin/runit-0.11.1/src/runsvctrl \
 	  $(CURDIR)/debian/runit/usr/bin/runsvctrl
-	install -m0755 admin/runit-0.11.0/src/chpst \
+	install -m0755 admin/runit-0.11.1/src/chpst \
 	  $(CURDIR)/debian/runit/usr/bin/chpst
 
 	# temporary?
 	( cd $(CURDIR)/debian/runit/usr/sbin/ && ln -s ../bin/chpst setuidgid )
 
-	install -m0755 admin/runit-0.11.0/etc/debian/getty-tty5/run \
+	install -m0755 admin/runit-0.11.1/etc/debian/getty-tty5/run \
 	  $(CURDIR)/debian/runit/etc/runit/getty-5/run
-	install -m0755 admin/runit-0.11.0/etc/debian/getty-tty5/finish \
+	install -m0755 admin/runit-0.11.1/etc/debian/getty-tty5/finish \
 	  $(CURDIR)/debian/runit/etc/runit/getty-5/finish
 
 	# lintian overrides
@@ -148,7 +148,7 @@ binary-arch: build install
 #	dh_installdocs -an
 #	dh_installexamples -a
 	dh_installman -a admin/runit/man/*.8
-	dh_installchangelogs -a admin/runit-0.11.0/package/CHANGES
+	dh_installchangelogs -a admin/runit-0.11.1/package/CHANGES
 	dh_strip -a
 #	dh_link -a
 	dh_compress -a

@@ -1,5 +1,9 @@
+runit 0.11.1
+Mon, 01 Sep 2003 13:02:57 +0200
   * src/Makefile: add dependency to sysdeps to target fmt_ptime.o (thx Thomas
     Schwinge).
+  * svlogd.c: barf if all log directories given at the command line fail.
+  * man/svlogd.8: adapt.
 
 runit 0.11.0
 Fri, 08 Aug 2003 12:37:14 +0200
