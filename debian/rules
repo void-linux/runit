@@ -51,7 +51,6 @@ build-arch-stamp:
 	echo "$(CC) $(CFLAGS)" >conf-cc; \
 	echo "$(CC) $(LDFLAGS)" >conf-ld; \
 	$(MAKE); \
-	$(MAKE) setuidgid; \
 	)
 
 	touch build-arch-stamp
