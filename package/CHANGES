@@ -1,3 +1,5 @@
+  * runsvdir.c: continue reading directory when stat() on entry fails.
+
 runit 0.7.0
 Mon, 07 Oct 2002 11:26:27 +0200
   * runsvdir.c: check service directory's inode and device in addition

@@ -95,7 +95,7 @@ void runsvdir() {
     if (d->d_name[0] == '.') continue;
     if (stat(d->d_name, &s) == -1) {
       warn("unable to stat ", d->d_name);
-      return;
+      continue;
     }
     if (! S_ISDIR(s.st_mode))
       continue;
