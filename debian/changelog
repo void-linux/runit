@@ -1,3 +1,9 @@
+runit (0.7.2-2) unstable; urgency=low
+
+  * debian/rules: resurrect copyright file.
+
+ -- Gerrit Pape <pape@smarden.org>  Wed, 29 Jan 2003 19:29:33 +0100
+
 runit (0.7.2-1) unstable; urgency=low
 
   * new upstream version.
