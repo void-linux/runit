@@ -1,4 +1,5 @@
-IT=sysdeps runit runit-init runsv runsvdir svwaitup svwaitdown utmpset
+IT=sysdeps runit runit-init runsv runsvdir runsvchdir svwaitup svwaitdown \
+utmpset
 
 default: $(IT)
 
