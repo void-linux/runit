@@ -1,5 +1,5 @@
 runit 1.0.2
-Sun, 28 Mar 2004 18:16:54 +0000
+Mon, 29 Mar 2004 14:30:18 +0000
   * man/svlogd.8: timestamps are not considered when matching patterns (thx
     Andras KORN).
   * runsv.c: on exit run the finish scripts when taking the service down
