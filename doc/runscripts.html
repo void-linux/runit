@@ -395,6 +395,13 @@ to be set up.
  echo "ppp -ddial dsl "
  exec /usr/sbin/ppp -unit0 -foreground dsl
 </pre>
+<h3>A <tt>pppd</tt> run script</h3>
+(<i>Linux</i>)
+<pre>
+ #!/bin/sh
+ exec 2>&1
+ exec chpst -P pppd call isp nodetach
+</pre>
 <hr>
 <h3><a name="proftpd">A <tt>proftpd</tt> run script</a></h3>
 (<i>Linux</i>, ProFTPD Version 1.2.8rc1,

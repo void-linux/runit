@@ -1,3 +1,5 @@
+  * doc/runscripts: add pppd run script (with chpst) next to the ppp one.
+
 runit 0.12.0
 Wed, 29 Oct 2003 18:27:48 +0000
   * runsv.c: don't use EOVERFLOW as it is not standard (thx Christoph
@@ -16,6 +18,8 @@ Wed, 29 Oct 2003 18:27:48 +0000
   * etc/2, etc/debian/3, etc/freebsd/3, etc/macosx/StartupItems/runit,
     etc/openbsd/3, man/runsv.8, man/runsvchdir.8, man/runsvdir.8: default
     service directory is /var/service.
+  * doc/runscripts.html: add more contributed run scripts (thx Tomasz
+    Nidecki).
 
 runit 0.11.2
 Tue, 23 Sep 2003 10:15:32 +0200
