@@ -1,3 +1,10 @@
+runit (0.2.6-1) woody; urgency=low
+
+  * See /package/admin/runit/package/CHANGES.
+  * manpages svwait*.8 installed.
+
+ -- Gerrit Pape <pape@smarden.org>  Sun, 30 Dec 2001 17:29:29 +0100
+
 runit (0.2.3-1) woody; urgency=low
 
   * See /package/admin/runit/package/CHANGES.
