@@ -30,8 +30,8 @@ build-arch-stamp:
 	( \
 	cd admin/runit-0.7.1/src; \
 	ln -s runit-0.7.1 runit; mv runit ../..; \
-	echo 'diet gcc -O2 -Wall' >conf-cc; \
-	echo 'diet gcc -s -Os -pipe' >conf-ld; \
+	echo 'diet -v -Os gcc -O2 -Wall' >conf-cc; \
+	echo 'diet -v -Os gcc -s -Os -pipe' >conf-ld; \
 	$(MAKE); \
 	$(MAKE) runsvstat runsvctrl; \
 	)

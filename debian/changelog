@@ -1,3 +1,10 @@
+runit (0.7.1-2) unstable; urgency=low
+
+  * debian/rules: let diet be verbose and mangle gcc options for platform
+    specific optimization (fixes build failure on sparc).
+
+ -- Gerrit Pape <pape@smarden.org>  Thu, 24 Oct 2002 22:54:08 +0200
+
 runit (0.7.1-1) unstable; urgency=low
 
   * new upstream version.
