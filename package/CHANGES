@@ -2,8 +2,8 @@ runit 0.10.0
 Sun, 22 Jun 2003 20:44:58 +0200
   * doc/index.html, doc/install.html, doc/replaceinit.html, doc/useinit.html:
     how to install and configure runit on MacOSX.
-  * svlogd.c: fix incorrect handling of processor's state file; minor code
-    cleanup.
+  * svlogd.c: typo; fix incorrect handling of processor's state file; minor
+    code cleanup; correctly calculate size for all types of timestamps.
   * runit-init.c: exit 0 on wrong usage.
   * package/versions: new.
 
