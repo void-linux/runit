@@ -4,6 +4,7 @@ Mon, 01 Sep 2003 13:02:57 +0200
     Schwinge).
   * svlogd.c: barf if all log directories given at the command line fail.
   * man/svlogd.8: adapt.
+  * doc/runscripts.html: adaptions (thx Erich Schubert, Lang Martin).
 
 runit 0.11.0
 Fri, 08 Aug 2003 12:37:14 +0200
@@ -36,6 +37,7 @@ Wed, 04 Jun 2003 13:56:33 +0200
   * man/svlogd.8: document -v option; minor.
   * etc/freebsd/3, etc/openbsd/3: check if magic files in /etc/runit/ are
     executable, not readable.
+  A
   * etc/*/getty-tty*/run: remove utmpset from script.
   * etc/*/getty-tty*/finish: new: run utmpset.
   * doc/replaceinit.html: adapt.
