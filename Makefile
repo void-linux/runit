@@ -1,19 +1,19 @@
 DESTDIR=
 
-PACKAGE=runit-0.5.3
+PACKAGE=runit-0.5.4
 DIRS=doc man etc package src
-MANPAGES=man/runit.8 man/runit-init.8 man/svwaitdown.8 man/svwaitup.8 \
-man/utmpset.8
+MANPAGES=runit.8 runit-init.8 runsvdir.8 runsv.8 svwaitdown.8 svwaitup.8 \
+utmpset.8
 
 all: clean .manpages $(PACKAGE).tar.gz
 
 .manpages:
 	for i in $(MANPAGES); do \
-	  rman -S -f html -r '' < $$i | \
+	  rman -S -f html -r '' < man/$$i | \
 	  sed -e 's}NAME="sect\([0-9]*\)" HREF="#toc[0-9]*">\(.*\)}NAME="sect\1">\2}g ; \
 	  s}<A HREF="#toc">Table of Contents</A>}<a href="http://smarden.org/pape/">G. Pape</a><br><A HREF="index.html">runit</A><hr>}g ; \
 	  s}<!--.*-->}}g' \
-	  > doc/`basename $$i`.html ; \
+	  > doc/$$i.html ; \
 	done ; \
 	touch .manpages
 

@@ -7,6 +7,7 @@
 #include "error.h"
 #include "wait.h"
 #include "env.h"
+#include "open.h"
 #include "pathexec.h"
 #include "fd.h"
 #include "str.h"

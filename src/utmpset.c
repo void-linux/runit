@@ -10,8 +10,10 @@
 #include "str.h"
 #include "open.h"
 #include "byte.h"
+#include "lock.h"
 
 #define USAGE " [-w] line"
+#define FATAL "utmpset: fatal: "
 #define WARNING "utmpset: warning: "
 
 const char *progname;
@@ -26,7 +28,10 @@ int utmp_logout(const char *line) {
   int ok =-1;
 
   if ((fd =open(_PATH_UTMP, O_RDWR, 0)) < 0)
-    return(-1);
+    strerr_die4sys(111, FATAL, "unable to open ", _PATH_UTMP, ": ");
+  if (lock_ex(fd) == -1)
+    strerr_die4sys(111, FATAL, "unable to lock: ", _PATH_UTMP, ": ");
+
   while (read(fd, &ut, sizeof(struct utmp)) == sizeof(struct utmp)) {
     if (!ut.ut_name[0] || (str_diff(ut.ut_line, line) != 0))
       continue;
@@ -48,7 +53,10 @@ int wtmp_logout(const char *line) {
   struct utmp ut;
 
   if ((fd = open_append(_PATH_WTMP)) == -1)
-    return(-1);
+    strerr_die4sys(111, FATAL, "unable to open ", _PATH_WTMP, ": ");
+  if (lock_ex(fd) == -1)
+    strerr_die4sys(111, FATAL, "unable to lock ", _PATH_WTMP, ": ");
+
   if (fstat(fd, &st) == -1) {
     close(fd);
     return(-1);
@@ -91,10 +99,12 @@ int main (int argc, const char * const *argv, const char * const *envp) {
 
   if (! argv || ! *argv) usage();
   if (utmp_logout(*argv) == -1)
-    strerr_die4sys(111, WARNING, "unable to utmp logout line ", *argv, ": ");
+    strerr_die4x(111, WARNING, "unable to logout line ", *argv,
+		 " in utmp: no such entry");
   if (wtmp) {
     if (wtmp_logout(*argv) == -1)
-      strerr_die4sys(111, WARNING, "unable to wtmp logout line ", *argv, ": ");
+      strerr_die4sys(111, WARNING, "unable to logout line ", *argv,
+		     " in wtmp: ");
   }
   exit(0);
 }

@@ -92,12 +92,12 @@ void update_status(struct svdir *s) {
   char spid[FMT_ULONG];
   
   if (s->islog) {
-    if ((fd =open_trunc("log/supervise/state")) == -1)
-      fatal("unable to open log/supervise/state");
+    if ((fd =open_trunc("log/supervise/stat")) == -1)
+      fatal("unable to open log/supervise/stat");
   }
   else {
-    if ((fd =open_trunc("supervise/state")) == -1)
-      fatal("unable to open supervise/state");
+    if ((fd =open_trunc("supervise/stat")) == -1)
+      fatal("unable to open supervise/stat");
   }
   buffer_init(&b, buffer_unixwrite, fd, bspace, sizeof bspace);
   spid[fmt_ulong(spid, (unsigned long)s->pid)] =0;
@@ -113,7 +113,7 @@ void update_status(struct svdir *s) {
     break;
   }
   if (s->pid) {
-    buffer_puts(&b, " pid (");
+    buffer_puts(&b, " (pid ");
     buffer_puts(&b, spid);
     buffer_puts(&b, ")");
   }
@@ -281,6 +281,12 @@ int ctrl(struct svdir *s, char c) {
     break;
   case 'i': /* sig int */
     if (s->pid) kill(s->pid, SIGINT);
+    break;
+  case '1': /* sig usr1 */
+    if (s->pid) kill(s->pid, SIGUSR1);
+    break;
+  case '2': /* sig usr2 */
+    if (s->pid) kill(s->pid, SIGUSR2);
     break;
   }
   return(1);
