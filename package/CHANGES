@@ -1,3 +1,13 @@
+runit 0.1.2
+Thu, 22 Nov 2001 18:29:05 +0100
+  * collects all terminated children in all stages
+  * sends sigkill to whole process group if stage2 crashes and waits
+    5 seconds before restarting
+  * ctraltdel not automatically shuts down, now respects /etc/runit/stopit
+  * /etc/runit/ctrlaltdel touches /etc/runit/stopit
+  * on shutdown request: send sigterm to stage 2, wait max 5 second, send
+    sigkill if still running, leave stage 2, enter stage 3
+
 runit 0.1.1
 Tue, 20 Nov 2001 11:56:58 +0100
   * package moved to smarden.org
