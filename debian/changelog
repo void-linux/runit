@@ -1,6 +1,6 @@
 runit (0.9.3-2) unstable; urgency=low
 
-  * debian/README.Debian: more detailled instructions on how to use
+  * debian/README.Debian: more detailed instructions on how to use
     service supervision without replacing sysvinit.
 
  -- Gerrit Pape <pape@smarden.org>  Wed, 21 May 2003 21:16:48 +0200
