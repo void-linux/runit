@@ -1,6 +1,6 @@
 runit 0.3.2
 Wed, 13 Feb 2002 10:56:17 +0100
-  * runit.c: support ctrl-alt-del also on Linux/i386, dietlic.
+  * runit.c: support ctrl-alt-del also on Linux/i386, dietlibc.
   * runscripts.html: more samples. (thx Alessandro Bono)
 
 runit 0.3.1

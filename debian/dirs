@@ -2,4 +2,4 @@ command
 package
 sbin
 etc/runit
-etc/runit/getty-tty5
+etc/runit/getty-5

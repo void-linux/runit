@@ -80,7 +80,7 @@ install: build
 	cp -p admin/runit-0.3.2/etc/debian/ctrlaltdel \
 		debian/runit/etc/runit/
 	cp -p admin/runit-0.3.2/etc/debian/getty-tty5/run \
-		debian/runit/etc/runit/getty-tty5
+		debian/runit/etc/runit/getty-5/
 
 	# runit programs
 	cp -p debian/runit/package/admin/runit-0.3.2/command/runit* \
