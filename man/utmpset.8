@@ -20,7 +20,8 @@ has logged out.
 .P
 Ordinary
 .BR init (8)
-processes handle utmp file records for local login accounting. The
+processes handle utmp file records for local login accounting.
+The
 .BR runit (8)
 program doesn't include code to update the utmp file, the
 .BR getty (8)
@@ -47,13 +48,15 @@ to the wtmp file.
 .B utmpset
 returns 111 on error, 1 on wrong usage, 0 in all other cases.
 .SH SEE ALSO
+runit(8),
+runit-init(8)
+runsvdir(8),
+runsvchdir(8),
 runsv(8),
 runsvctrl(8),
 runsvstat(8),
-runsvdir(8),
-runsvchdir(8),
-runit(8),
-runit-init(8),
+chpst(8),
+svlogd(8),
 getty(8)
 .P
 http://smarden.org/runit/

@@ -34,7 +34,7 @@
 #include "ndelay.h"
 
 #define USAGE " [-tv] [-r c] [-R abc] [-l n ] [-b n] dir ..."
-#define VERSION "$Id: svlogd.c,v 1.11 2004/01/19 12:20:03 pape Exp $"
+#define VERSION "$Id: svlogd.c,v 1.12 2004/03/28 18:17:36 pape Exp $"
 
 #define FATAL "svlogd: fatal: "
 #define WARNING "svlogd: warning: "
@@ -349,7 +349,7 @@ unsigned int logdir_open(struct logdir *ld, const char *fn) {
     unsigned long port;
 
     if (verbose) strerr_warn4(INFO, "read: ", ld->name, "/config", 0);
-    for (i =0; i < sa.len -1; ++i) {
+    for (i =0; i +1 < sa.len; ++i) {
       if ((len =byte_chr(&sa.s[i], sa.len -i, '\n')) == 1) {
 	++i; continue;
       }

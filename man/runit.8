@@ -5,13 +5,14 @@ runit \- a UNIX process no 1
 .B runit
 .SH DESCRIPTION
 .B runit
-must be run as Unix process no 1. It performs the system's
-booting, running, and shutdown in three Stages:
+must be run as Unix process no 1.
+It performs the system's booting, running, and shutdown in three Stages:
 .SH STAGE 1
 .B runit
 runs
 .I /etc/runit/1
-and waits for it to terminate. The system's one time tasks are done here.
+and waits for it to terminate.
+The system's one time tasks are done here.
 .I /etc/runit/1
 has full control of
 .I /dev/console
@@ -26,7 +27,8 @@ will skip stage 2 and enter stage 3.
 runs
 .IR /etc/runit/2 ,
 which should not return until system shutdown; if it crashes, it will be
-restarted. Normally
+restarted.
+Normally
 .I /etc/runit/2
 starts
 .BR runsvdir (8).
@@ -74,13 +76,14 @@ receives an INT signal, a ctrl-alt-del keyboard request is triggered.
 runit-init(8),
 runsvdir(8),
 runsvchdir(8),
+utmpset(8),
 runsv(8),
 runsvctrl(8),
 runsvstat(8),
-svwaitdown(8),
-svwaitup(8),
+chpst(8),
 svlogd(8),
-utmpset(8)
+svwaitdown(8),
+svwaitup(8)
 .P
 http://smarden.org/runit/
 .SH AUTHOR

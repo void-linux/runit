@@ -13,7 +13,8 @@ svwaitup \- waits for services controlled by runsv(8) or supervise(8) to be up
 .I services
 .SH DESCRIPTION
 .I services
-consist of one or more arguments. Each
+consist of one or more arguments.
+Each
 .I service
 directory must start with a slash.
 .P
@@ -49,7 +50,8 @@ has to be up to
 .I sec
 seconds.
 .I sec
-must be between 2 and 600. Default is 2.
+must be between 2 and 600.
+Default is 2.
 .SH EXIT CODES
 .B svwaitup
 returns 0 as soon as all
@@ -82,7 +84,8 @@ checking (e.g.
 .BR runsv (8)
 is not running),
 .B svwaitup
-increases the exit code by one and exits non zero. The maximum is 100.
+increases the exit code by one and exits non zero.
+The maximum is 100.
 .P
 .B svwaitup
 returns 111 on error.
@@ -91,12 +94,13 @@ svwaitdown(8),
 runsv(8),
 runsvctrl(8),
 runsvstat(8),
-runsvdir(8),
-runsvchdir(8),
+chpst(8),
+svlogd(8),
 runit(8),
 runit-init(8),
-supervise(8),
-svscan(8)
+runsvdir(8),
+runsvchdir(8),
+utmpset(8)
 .P
  http://smarden.org/runit/
  http://cr.yp.to/daemontools.html

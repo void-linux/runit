@@ -95,23 +95,25 @@ For each
 .I service
 that causes an error while checking,
 .B svwaitdown
-increases the exit code by one and exits non zero. The maximum is 100.
+increases the exit code by one and exits non zero.
+The maximum is 100.
 .P
 .B svwaitdown
 returns 111 if the timeout
 .I sec
 was reached.
 .SH SEE ALSO
-svwaitdown(8),
+svwaitup(8),
 runsv(8),
 runsvctrl(8),
 runsvstat(8),
-runsvdir(8),
-runsvchdir(8),
+chpst(8),
+svlogd(8),
 runit(8),
 runit-init(8),
-supervise(8),
-svscan(8)
+runsvdir(8),
+runsvchdir(8),
+utmpset(8)
 .P
  http://smarden.org/runit/
  http://cr.yp.to/daemontools.html
