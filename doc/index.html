@@ -78,23 +78,23 @@ if this is started by the kernel.
   terminate.
   The system's one time initialization tasks are done here.
   <tt>/etc/runit/1</tt> has full control over <tt>/dev/console</tt> to be
-  able to start an emergency shell if the one time initialization tasks
-  fail.
+  able to start an emergency shell in case the one time initialization
+  tasks fail.
   <li><b>Stage 2:</b><br>
   <i>runit</i> starts <tt>/etc/runit/2</tt> which should not return
   until the system is going to halt or reboot; if it crashes, it will be
   restarted.
   Normally, <tt>/etc/runit/2</tt> runs
   <a href="runsvdir.8.html">runsvdir</a>.
-  In Stage 2 <i>runit</i> optionally handles an INT signal (ctrl-alt-del
+  In Stage 2 <i>runit</i> optionally handles the INT signal (ctrl-alt-del
   keyboard request on Linux/i386).
   <li><b>Stage 3:</b><br>
-  If <i>runit</i> is told to halt or reboot the system, or the Stage 2
-  returns without errors, it terminates Stage 2 if it is running and runs
+  If <i>runit</i> is told to halt or reboot the system, or Stage 2 returns
+  without errors, it terminates Stage 2 if it is running, and runs
   <tt>/etc/runit/3</tt>.
   The systems tasks to shutdown and halt or reboot are done here.
 </ul>
-These are working examples for Debian woody:
+These are working examples for Debian sarge:
 <a href="debian/1">/etc/runit/1</a>,
 <a href="debian/2">/etc/runit/2</a>,
 <a href="debian/3">/etc/runit/3</a>.
@@ -185,6 +185,8 @@ Of course also the <tt>smarden.org</tt> content server is running with
 See <a href="install.html">How to install runit</a> for installing
 <i>runit</i>, and <a href="replaceinit.html">How to replace init</a> for
 configuring <i>runit</i> to run as process no 1.
+See <a href="useinit.html">How to use with current init</a> if you want to
+use <i>runit</i> without replacing the current init scheme.
 <hr>
 If <i>runit</i> on Linux is compiled and linked with the
 <a href="http://www.fefe.de/dietlibc/">dietlibc</a>, it yields in a
@@ -208,8 +210,6 @@ runit Debian package</a>
 runit-run Debian package</a>
 <li><a href="http://www.freshports.org/sysutils/runit/">
 runit FreeBSD port</a>
-<li><a href="http://www.109bean.org.uk/betterboot/index.html">
-runit on LinuxFromScratch</a> - by Richard A Downing FBCS
 <li><a href="http://rpmfind.net/linux/rpm2html/search.php?query=runit">
 runit RPMs</a>
 <li><a href="http://www.fefe.de/minit/">

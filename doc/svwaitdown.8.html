@@ -43,25 +43,23 @@ signal. </dd>
 <dt><b>-x</b> </dt>
 <dd>Exit. Send each <i>service</i> the &lsquo;&lsquo;exit&rsquo;&rsquo; command additionally to the &lsquo;&lsquo;down&rsquo;&rsquo;
 command, and wait for the corresponding <i><b>runsv</b>(8)</i> processes to exit instead
-for the <i>services</i> to be down. This option should only be used by <i><b>runit</b>(8)</i>
-in stage 3 when <i><b>runsvdir</b>(8)</i> is already stopped. </dd>
+for the <i>services</i> to be down. </dd>
 </dl>
 
 <h2><a name='sect4'>Exit Codes</a></h2>
-<b>svwaitdown</b> returns
-0 as soon as all <i>services</i> are down. <p>
-If a <i>service</i> is usually controlled by
-<i><b>runsv (8)</b></i> or <i><b>supervise</b>(8)</i>, but no supervisor process is currently running,
-<b>svwaitdown</b> treats this <i>service</i> as if it would be down. <p>
-For each <i>service</i>
-that causes an error while checking, <b>svwaitdown</b> increases the exit code
-by one and exits non zero. The maximum is 100. <p>
-<b>svwaitdown</b> returns 111 if
-the timeout <i>sec</i> was reached. 
+<b>svwaitdown</b> returns 0 as soon as all
+<i>services</i> are down. <p>
+If a <i>service</i> is usually controlled by <i><b>runsv (8)</b></i> or <i><b>supervise</b>(8)</i>,
+but no supervisor process is currently running, <b>svwaitdown</b> treats this
+<i>service</i> as if it would be down. <p>
+For each <i>service</i> that causes an error while
+checking, <b>svwaitdown</b> increases the exit code by one and exits non zero.
+The maximum is 100. <p>
+<b>svwaitdown</b> returns 111 if the timeout <i>sec</i> was reached.
+
 <h2><a name='sect5'>See Also</a></h2>
-<i>svwaitup(8)</i>, <i>runsv(8)</i>, <i>runsvctrl(8)</i>,
-<i>runsvstat(8)</i>, <i>chpst(8)</i>, <i>svlogd(8)</i>, <i>runit(8)</i>, <i>runit-init(8)</i>, <i>runsvdir(8)</i>,
-<i>runsvchdir(8)</i>, <i>utmpset(8)</i> <p>
+<i>svwaitup(8)</i>, <i>runsv(8)</i>, <i>runsvctrl(8)</i>, <i>runsvstat(8)</i>, <i>chpst(8)</i>, <i>svlogd(8)</i>,
+<i>runit(8)</i>, <i>runit-init(8)</i>, <i>runsvdir(8)</i>, <i>runsvchdir(8)</i>, <i>utmpset(8)</i> <p>
  <i>http://smarden.org/runit/</i><br>
   <i>http://cr.yp.to/daemontools.html</i><br>
  
