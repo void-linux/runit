@@ -1,0 +1,24 @@
+#!/bin/sh
+
+echo 'Stopping getties...'
+/command/svc -d /service/getty-*
+/command/svwaitdown -t14 /service/getty-* || \
+  ( echo 'Killing getties...' ; /command/svc -k /service/getty-* )
+
+echo 'Stopping services...'
+/command/svc -d /service/*
+/command/svwaitdown -t350 /service/* || \
+  ( echo 'Killing services...' ; /command/svc -k /service/* )
+
+echo 'Stopping log services...'
+/command/svc -d /service/*/log
+/command/svwaitdown -t35 /service/*/log
+
+echo 'Shutdown...'
+if test -r /etc/runit/reboot; then
+  /sbin/reboot
+else
+  /sbin/halt
+fi
+
+exit 0

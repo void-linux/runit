@@ -1,3 +1,11 @@
+runit 0.2.6
+Sun, 30 Dec 2001 17:29:29 +0100
+  * runs on openbsd 2.9
+  * runit: console init and reinit
+  * runit: sig_pause() on end.
+  * new: etc/openbsd: stages and getty service
+  * doc: replaceinit: how to replace bsd init
+
 runit 0.2.3
 Thu, 27 Dec 2001 14:41:56 +0100
   * doc: runscripts.html integrated
