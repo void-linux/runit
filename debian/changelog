@@ -4,8 +4,10 @@ runit (1.0.2-1) unstable; urgency=low
   * debian/implicit: update to revision 1.8.
   * debian/control: Build-Depends: dietlibc-dev (>> 0.25-0) (fixes
     build/testing failure on arm).
+  * debian/rules: remove workaround to suppress gcc-3.3 warnings (closes:
+    #239995).
 
- -- Gerrit Pape <pape@smarden.org>  Sun, 28 Mar 2004 18:46:32 +0000
+ -- Gerrit Pape <pape@smarden.org>  Tue, 30 Mar 2004 17:02:58 +0000
 
 runit (1.0.1-1) unstable; urgency=low
 

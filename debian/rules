@@ -41,17 +41,15 @@ DIR =`pwd`/debian/runit
 build: deb-checkdir build-stamp
 build-stamp:
 	-gcc -v
-	test "$(DEB_HOST_ARCH)" != 'i386' || \
-	  ( mkdir -p .diet && echo '-Os -fomit-frame-pointer -falign-functions=0 -falign-jumps=0 -falign-loops=0 -mpreferred-stack-boundary=2' >.diet/gcc )
 	tar xfzp runit-1.0.2.tar.gz
 	ln -s runit-1.0.2 admin/runit
 	echo "$(CC) $(CFLAGS)" >admin/runit/src/conf-cc
 	echo "$(CC) $(LDFLAGS)" >admin/runit/src/conf-ld
-	HOME="`pwd`" $(MAKE) -Cadmin/runit/src default check
+	$(MAKE) -Cadmin/runit/src default check
 	touch build-stamp
 
 clean: deb-checkdir deb-checkuid
-	rm -rf admin .diet
+	rm -rf admin
 	rm -f build-stamp
 	rm -rf "$(DIR)"
 	rm -f debian/files debian/substvars changelog
