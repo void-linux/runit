@@ -11,12 +11,12 @@ Depends: ${shlibs:Depends}
 Suggests: runit-run
 Description: a UNIX init scheme with service supervision
  runit is a daemontools alike replacement for SysV-init and other init
- schemes. runit currently runs on Debian GNU/Linux, OpenBSD, FreeBSD,
- and may be easily adapted to other unix operating systems. runit
- implements a simple three-stage concept. Stage 1 performs the system's
- one-time initialization tasks. Stage 2 starts the system's uptime
- services (via the runsvdir program). Stage 3 handles the tasks necessary
- to shutdown and halt or reboot. 
+ schemes.  runit currently runs on Debian GNU/Linux, OpenBSD, FreeBSD,
+ MacOSX, and Solaris, and may be easily adapted to other unix operating
+ systems.  runit implements a simple three-stage concept.  Stage 1 performs
+ the system's one-time initialization tasks. Stage 2 starts the system's
+ uptime services (via the runsvdir program). Stage 3 handles the tasks
+ necessary to shutdown and halt or reboot. 
  .
  The runit programs are compiled and linked statically with the diet libc
  on architectures the diet libc is available for.
