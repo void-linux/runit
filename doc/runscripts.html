@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+<head>
+<title>runit - collection of run scripts</title>
+</head>
+<body>
+<a href="http://smarden.org/pape/">G. Pape</a><br>
+<a href="index.html">runit</a><br>
+<a href="replaceinit.html">How to replace init</a>
+<hr>
+<h1>runit - collection of run scripts</h1>
+<hr>
+<a href="#getty">getty</a><br>
+<a href="#sshd">sshd</a><br>
+<a href="#klogd">klogd</a><br>
+<a href="#dhcpd">dhcpd</a><br>
+<a href="#dhclient">dhclient</a><br>
+<a href="#gdm">gdm</a>
+<hr>
+This is a collection of <tt>run</tt> scripts for popular services to have
+them monitored by the
+<a href="http://cr.yp.to/daemontools.html">daemontools</a> package. If you
+have additional run scripts or one of these run scripts works for you on
+an operating system not stated here, please
+<a href="mailto:pape@smarden.org">let me know</a>. 
+<hr>
+<h3><a name="getty">A <tt>mingetty</tt> run script</a></h3>
+<i>(Debian)</i>
+<pre>
+#!/bin/sh
+exec mingetty tty5
+</pre>
+The <a href="index.html">runit</a> package does not care about utmp records
+for getties. You should choose a getty that handles its own utmp and wtmp
+records. Debian's <tt>mingetty</tt> does create his own utmp record.
+<hr>
+<h3><a name="sshd">A <tt>sshd</tt> run script</a></h3>
+<i>(Debian woody)</i>
+<pre>
+#!/bin/sh
+exec 2>&1
+exec sshd -D -e
+</pre>
+This service needs a
+<a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
+to be set up.
+<p>
+The <tt>sshd</tt> program is version <tt>OpenSSH_2.9p2</tt>.
+<hr>
+<h3><a name="klogd">A <tt>klogd</tt> run script</a></h3>
+<i>(Debian woody)</i>
+<pre>
+#!/bin/sh
+exec 2>&1
+exec /sbin/klogd -n
+</pre>
+<hr>
+<h3><a name="dhcpd">A <tt>dhcpd</tt> run script</a></h3>
+<i>(Debian woody)</i>
+<pre>
+#!/bin/sh
+exec 2>&1
+exec dhcpd-2.2.x -d -f
+</pre>
+This service needs a
+<a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
+to be set up.
+<hr>
+<h3><a name="dhclient">A <tt>dhclient</tt> run script</a></h3>
+<i>(Debian woody)</i>
+<pre>
+#!/bin/sh
+exec dhclient -d eth0
+</pre>
+<hr>
+<h3><a name="gdm">A <tt>gdm</tt> run script</a></h4>
+<i>(Debian woody)</i>
+<pre>
+#!/bin/sh
+exec gdm -nodaemon
+</pre>
+<hr>
+<address><a href="mailto:pape@smarden.org">
+Gerrit Pape &lt;pape@smarden.org&gt;
+</a></address>
+<small>$Id$</small>
+</body>
+</html>

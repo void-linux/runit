@@ -20,11 +20,11 @@ do
   ln -s $parent/runit/command/$i /command/$i'{new}'
   mv -f /command/$i'{new}' /command/$i
 done
-#echo 'Making compatibility links in /usr/local/bin...'
-#mkdir -p /usr/local/bin
-#for i in `cat package/commands`
-#do
-#  rm -f /usr/local/bin/$i'{new}'
-#  ln -s /command/$i /usr/local/bin/$i'{new}'
-#  mv -f /usr/local/bin/$i'{new}' /usr/local/bin/$i
-#done
+echo 'Making compatibility links in /usr/local/bin...'
+mkdir -p /usr/local/bin
+for i in `cat package/commands`
+do
+  rm -f /usr/local/bin/$i'{new}'
+  ln -s /command/$i /usr/local/bin/$i'{new}'
+  mv -f /usr/local/bin/$i'{new}' /usr/local/bin/$i
+done
