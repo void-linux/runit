@@ -112,7 +112,7 @@ binary-arch: build install
 	dh_testroot
 #	dh_installdebconf	
 	dh_installdocs
-	dh_installman man/runit*.8 man/svwait*.8
+	dh_installman man/runit*.8 man/svwait*.8 man/utmpset.8
 	dh_installchangelogs 
 	dh_link
 	dh_strip
