@@ -21,7 +21,8 @@ an operating system not stated here, please
 Thanks go to the following people for contributing run scripts:
 Alessandro Bono, Robin S. Socha, Claus Alboege, Paul Jarc, clemens fischer,
 Jesse Cablek, Lukas Beeler, Thomas Baden, Ralf Hildebrandt, Antonio Dias,
-Erich Schubert, Lang Martin, Tomasz Nidecki, Marek Bartnikowski.
+Erich Schubert, Lang Martin, Tomasz Nidecki, Marek Bartnikowski,
+Thomas Schwinge.
 <hr>
 <a href="#atftpd">atftpd</a><br>
 <a href="#apache">apache</a><br>
@@ -43,11 +44,14 @@ Erich Schubert, Lang Martin, Tomasz Nidecki, Marek Bartnikowski.
 <a href="#inn">inn</a><br>
 <a href="#jabberd">jabberd</a><br>
 <a href="#klogd">klogd</a><br>
+<a href="#leafnode">leafnode</a><br>
 <a href="#loglinuxkernel">logging Linux kernel messages</a><br>
 <a href="http://multivac.cwru.edu./fdtools/grabconsole/">
 logging console messages</a><br>
+<a href="#minidentd">minidentd</a><br>
 <a href="#mysql">mysql</a><br>
 <a href="#ntpd">ntpd</a><br>
+<a href="#polipo">polipo</a><br>
 <a href="#pop3-ssl">pop3-ssl</a><br>
 <a href="#pop3vscan">pop3vscan</a><br>
 <a href="#postgresql">postgresql</a><br>
@@ -331,6 +335,19 @@ to be set up.
  exec /sbin/klogd -n
 </pre>
 <hr>
+<h3><a name="leafnode">A <tt>leafnode</tt> run script</a></h3>
+(<i>Linux</i>)
+<pre>
+ #!/bin/sh
+ exec 2&gt;&amp;1
+ exec envuidgid news \
+   tcpserver -v -x rules.cdb -c 10 -U 0 119 \
+   leafnode
+</pre>
+This service needs a
+<a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
+to be set up.
+<hr>
 <h3><a name="loglinuxkernel">
 A run script for <tt>logging Linux kernel messages with multilog</tt></a></h3>
 (<i>Linux</i>)
@@ -340,6 +357,20 @@ A run script for <tt>logging Linux kernel messages with multilog</tt></a></h3>
  setuidgid loguser \
  multilog t n64 ./main
 </pre>
+<hr>
+<h3><a name="minidentd">A <tt>minidentd</tt> run script</a></h3>
+(<i>Linux</i>)
+<pre>
+ #!/bin/sh
+ exec 2&gt;&amp;1
+ exec envuidgid nobody \
+   tcpserver -vUR 0 113 \
+   timeoutafter 60 \
+   minidentd -v
+</pre>
+This service needs a
+<a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
+to be set up.
 <hr>
 <h3><a name="mysql">A <tt>mysql</tt> run script</a></h3>
 (<i>SunOS</i>)
@@ -373,6 +404,18 @@ A run script for <tt>logging Linux kernel messages with multilog</tt></a></h3>
  exec softlimit -m ${MEM} \
    ntpd -n -p /var/run/ntpd.pid
 </pre>
+<hr>
+<h3><a name="polipo">A <tt>polipo</tt> run script</a></h3>
+(<i>Linux</i>)
+<pre>
+ #!/bin/sh
+ exec 2&gt;&amp;1
+ exec setuidgid polipo \
+   polipo -c config forbiddenFile="`pwd`"/forbidden diskCacheRoot="`pwd`"/cache
+</pre>
+This service needs a
+<a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
+to be set up.
 <hr>
 <h3><a name="pop3-ssl">A <tt>pop3-ssl</tt> run script</a></h3>
 (<i>BSD</i>)
