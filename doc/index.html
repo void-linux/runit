@@ -27,16 +27,21 @@ Dependencies and runlevels</a>
 <a href="http://cr.yp.to/daemontools.html">daemontools</a> package to create
 a replacement for
 <a href="ftp://ftp.cistron.nl/pub/people/miquels/sysvinit/">sysvinit</a>.
-<i>runit</i> runs on <b>Debian GNU/Linux sid/woody</b>,
-<b>OpenBSD 2.9</b>, <b>FreeBSD 4.4</b>. <i>runit</i> reportedly runs on
-<b>FreeBSD 4.3</b>, and can easily be adapted to other unix operating
-systems. If <i>runit</i> runs for you on any other operating system or
-linux distribution, please let me know.
+<i>runit</i> runs on <b>Debian GNU/Linux</b>, <b>OpenBSD 2.9</b>,
+<b>FreeBSD 4.4</b>. <i>runit</i> reportedly runs on <b>FreeBSD 4.3</b>,
+and can easily be adapted to other unix operating systems. If <i>runit</i>
+runs for you on any other operating system or linux distribution, please
+let me know.
 <p>
 <b>Warning:</b> Replacing <i>sysvinit</i> or <i>init</i> can cause the
 system's boot to fail. Make sure you are able to recover and repair your
 system, for example if you run a boot loader, it should be able to pass
 <tt>init=/bin/sh</tt> to the kernel.
+<hr>
+<i>runit</i> is discussed on the <tt>&lt;supervision@list.skarnet.org&gt;</tt>
+mailing list. To subscribe send an empty email to
+<a href="mailto:supervision-subscribe@list.skarnet.org">
+&lt;supervision-subscribe@list.skarnet.org&gt;</a>.
 <hr>
 The command <a href="runit.8.html">runit</a> is intended to run as Unix
 process no 1, it is automatically started by the
@@ -80,11 +85,11 @@ Dependencies and runlevels</a>
 for an example, the amount of code in process no 1 should be minimal.
 <hr>
 <b><i>runit</i> in use</b>: I replaced <i>sysvinit</i> with <i>runit</i>
-on several server systems and a laptop, all running Debian/GNU Linux woody
-or potato, some months ago and did not encounter any problems. Of course
-also the <tt>smarden.org</tt> content server is running with <i>runit</i>
-as process no 1. This is from the second machine where I replaced
-<i>sysvinit</i> with <i>runit</i>:
+on several server systems and a laptop running Debian/GNU Linux sarge, woody
+and potato, and did not encounter any problems. Of course also the
+<tt>smarden.org</tt> content server is running with <i>runit</i> as process
+no 1. This is from the second machine where I replaced <i>sysvinit</i> with
+<i>runit</i>:
 <pre>
   # strings /proc/1/exe |grep Id
   &#36;Id: runit.c,v 1.5 2001/12/30 16:28:53 pape Exp &#36;
@@ -130,7 +135,7 @@ as process no 1. This is from the second machine where I replaced
                               |-2*[supervise---socklog]
                               `-supervise---uncat
 </pre>
-This is from a more busy system:
+This is a more busy system:
 <pre>
   # strings /proc/1/exe |grep Id
   &#36;Id: runit.c,v 1.6 2002/01/29 18:56:36 pape Exp &#36;
