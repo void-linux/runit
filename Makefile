@@ -16,6 +16,7 @@ all: clean .manpages $(PACKAGE).tar.gz
 	  > doc/$$i.html ; \
 	done ; \
 	echo 'fix up html manually...'
+	echo 'patch -p0 <manpagehtml.diff'
 	sh
 	touch .manpages
 
