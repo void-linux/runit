@@ -109,21 +109,28 @@ Example: to send a TERM signal to the socklog-unix service, either do
 If <i><b>echo</b>(1)</i> on your systems does not provide the -n option, leave it out,
 <b>runsv</b> ignores unknown characters written to the control pipe. <i><b>echo</b>(1)</i> usually
 blocks if no <b>runsv</b> process is running in the service directory. 
-<h2><a name='sect4'>Signals</a></h2>
-If
-<b>runsv</b> receives a TERM signal, it acts as if the character x was written
-to the control pipe. 
-<h2><a name='sect5'>Exit Codes</a></h2>
-<b>runsv</b> exits 111 on an error on startup or
-if another <b>runsv</b> is running in <i>service</i>. <p>
-<b>runsv</b> exits 0 if it was told to
-exit. 
-<h2><a name='sect6'>See Also</a></h2>
-<i>runsvctrl(8)</i>, <i>runsvstat(8)</i>, <i>chpst(8)</i>, <i>svlogd(8)</i>, <i>runit(8)</i>,
-<i>runit-init(8)</i>, <i>runsvdir(8)</i>, <i>runsvchdir(8)</i>, <i>utmpset(8)</i> <p>
-<i>http://smarden.org/runit/</i>
-
-<h2><a name='sect7'>Author</a></h2>
+<h2><a name='sect4'>Customize
+Control</a></h2>
+For each control character <i>c</i> sent to the control pipe, <b>runsv</b> first
+checks if <i>service/control/<i>c</i> exists and is executable. If so, it starts <i>service</i>/control/<i>c</i>
+and waits for it to terminate, before interpreting the command. If the program
+exits with return code 0, <b>runsv</b> refrains from sending the service the corresponding
+signal. The command <i>o</i> is always considered as command <i>u</i>. The control of the
+optional log service cannot be customized. 
+<h2><a name='sect5'></i>Signals</a></h2>
+If <b>runsv</b> receives a TERM
+signal, it acts as if the character x was written to the control pipe. 
+<h2><a name='sect6'>Exit
+Codes</a></h2>
+<b>runsv</b> exits 111 on an error on startup or if another <b>runsv</b> is running
+in <i>service</i>. <p>
+<b>runsv</b> exits 0 if it was told to exit. 
+<h2><a name='sect7'>See Also</a></h2>
+<i>runsvctrl(8)</i>, <i>runsvstat(8)</i>,
+<i>chpst(8)</i>, <i>svlogd(8)</i>, <i>runit(8)</i>, <i>runit-init(8)</i>, <i>runsvdir(8)</i>, <i>runsvchdir(8)</i>,
+<i>utmpset(8)</i> <p>
+<i>http://smarden.org/runit/</i> 
+<h2><a name='sect8'>Author</a></h2>
 Gerrit Pape &lt;pape@smarden.org&gt; <p>
 
 <hr><p>
@@ -133,10 +140,11 @@ Gerrit Pape &lt;pape@smarden.org&gt; <p>
 <li><a name='toc1' href='#sect1'>Synopsis</a></li>
 <li><a name='toc2' href='#sect2'>Description</a></li>
 <li><a name='toc3' href='#sect3'>Control</a></li>
-<li><a name='toc4' href='#sect4'>Signals</a></li>
-<li><a name='toc5' href='#sect5'>Exit Codes</a></li>
-<li><a name='toc6' href='#sect6'>See Also</a></li>
-<li><a name='toc7' href='#sect7'>Author</a></li>
+<li><a name='toc4' href='#sect4'>Customize Control</a></li>
+<li><a name='toc5' href='#sect5'>Signals</a></li>
+<li><a name='toc6' href='#sect6'>Exit Codes</a></li>
+<li><a name='toc7' href='#sect7'>See Also</a></li>
+<li><a name='toc8' href='#sect8'>Author</a></li>
 </ul>
 </body>
 </html>

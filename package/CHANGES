@@ -4,6 +4,7 @@ runit 1.2.0
   * runsv.c: support custom control commands through control/ directory,
     optionally switch off sending signal.
   * man/runsv.8: document custom control commands.
+  * runsv.check, runsv.dist: check custom control commands.
 
 runit 1.1.0
 Sat, 06 Nov 2004 17:21:11 +0000
