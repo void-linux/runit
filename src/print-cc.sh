@@ -1,4 +1,4 @@
-cc="`head -1 conf-cc`"
+cc="`head -n1 conf-cc`"
 systype="`cat systype`"
 
 cat warn-auto.sh

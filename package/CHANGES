@@ -4,6 +4,7 @@
   * trysocketlib.c: new; check for libraries needed for socket() on some
     systems (fixes link failure on solaris, thx Uffe Jakobsen).
   * Makefile: adapt.
+  * print-cc.sh, print-ld.sh: head -1 -> head -n1.
 
 runit 0.13.0
 Mon, 12 Jan 2004 14:39:38 +0000
