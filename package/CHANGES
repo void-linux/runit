@@ -1,3 +1,7 @@
+runit 0.2.3
+Thu, 27 Dec 2001 14:41:56 +0100
+  * doc: runscripts.html integrated
+
 runit 0.2.2
 Sun, 23 Dec 2001 18:12:29 +0100
   * runit: checks for pid == 1

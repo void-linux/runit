@@ -1,4 +1,4 @@
-runit (0.2.2-1) woody; urgency=low
+runit (0.2.3-1) woody; urgency=low
 
   * See /package/admin/runit/package/CHANGES.
   * Build-Depends on dietlibc, uses diet to compile programs.
