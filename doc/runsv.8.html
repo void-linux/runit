@@ -95,15 +95,18 @@ example, to send a TERM signal to /service/socklog-unix, either do   # svc
 -t /service/socklog-unix<BR>
   or<BR>
    # echo -n t &gt;/service/socklog-unix/supervise/control<BR>
- 
+ <P>
+If <B><I>echo</B>(1)</I> on your systems does not provide the -n option, leave it out,
+<B>runsv</B> ignores unknown characters written to the control pipe. 
 <H2><A NAME="sect4">Signals</A></H2>
-If <B>runsv</B> receives a TERM signal, it acts as if the character x
-was written to the control pipe. 
+If
+<B>runsv</B> receives a TERM signal, it acts as if the character x was written
+to the control pipe. 
 <H2><A NAME="sect5">Exit Codes</A></H2>
-<B>runsv</B> exits 111 on an error on
-startup or if another <B>runsv</B> is running in <I>service</I>. <P>
-<B>runsv</B> exits 0 if it was
-told to exit. 
+<B>runsv</B> exits 111 on an error on startup or
+if another <B>runsv</B> is running in <I>service</I>. <P>
+<B>runsv</B> exits 0 if it was told to
+exit. 
 <H2><A NAME="sect6">See Also</A></H2>
 <I>runit(8)</I>, <I>runit-init(8)</I>, <I>runsvdir(8)</I>, <I>svc(8)</I>, <I>supervise(8)</I>
 <P>

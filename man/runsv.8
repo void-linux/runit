@@ -122,6 +122,12 @@ For example, to send a TERM signal to /service/socklog-unix, either do
   # svc -t /service/socklog-unix
  or
   # echo -n t >/service/socklog-unix/supervise/control
+.P
+If
+.BR echo (1)
+on your systems does not provide the -n option, leave it out,
+.B runsv
+ignores unknown characters written to the control pipe.
 .SH SIGNALS
 If
 .B runsv
