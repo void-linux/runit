@@ -471,6 +471,7 @@ unsigned int lineflush(struct logdir *ld, char *s, int len) {
 	rotate(ld);
     return(1);
   }
+  ld->match =0;
   return(0);
 }
 int buffer_pread(int fd, char *s, unsigned int len) {
