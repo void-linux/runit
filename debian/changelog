@@ -2,7 +2,8 @@ runit (0.12.1-2) unstable; urgency=low
 
   * debian/control: no longer Build-Depends: debhelper; Standards-Version:
     3.6.1.0.
-  * debian/rules: stop using debhelper, use implicit rules.
+  * debian/rules: stop using debhelper, use implicit rules; install runit,
+    runit-init mode 0755 (closes: #224800).
   * debian/implicit: new; implicit Makefile rules.
   * debian/README.Debian: rename to debian/runit.README.Debian.
   * debian/runit.dirs, debian/runit.links: remove; obsolete.
