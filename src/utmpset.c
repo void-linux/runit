@@ -31,6 +31,6 @@ int main (int argc, const char * const *argv, const char * const *envp) {
   if (! argv || ! *argv) usage();
   if (logout(*argv) != 1)
     strerr_die4sys(0, WARNING, "unable to logout line ", *argv, ": ");
-  if (wtmp) logwtmp(*argv, 0, 0);
+  if (wtmp) logwtmp(*argv, "", "");
   exit(0);
 }
