@@ -321,6 +321,7 @@ int ctrl(struct svdir *s, char c) {
 int main(int argc, char **argv) {
   struct stat s;
   int fd;
+  int r;
   char buf[256];
 
   progname =argv[0];
@@ -372,10 +373,10 @@ int main(int argc, char **argv) {
   }
 
   if (mkdir("supervise", 0700) == -1) {
-    if ((fd =readlink("supervise", buf, 256)) != -1) {
-      if (fd == 256)
+    if ((r =readlink("supervise", buf, 256)) != -1) {
+      if (r == 256)
 	fatalx("unable to readlink ./supervise: ", "name too long");
-      buf[fd] =0;
+      buf[r] =0;
       mkdir(buf, 0700);
     }
     else {
@@ -383,17 +384,34 @@ int main(int argc, char **argv) {
 	fatal("unable to readlink ./supervise");
     }
   }
-  
   if ((svd[0].fdlock =open_append("supervise/lock")) == -1)
-    fatal("unable to open lock");
-  if (lock_exnb(svd[0].fdlock) == -1) fatal("unable to lock");
+    fatal("unable to open supervise/lock");
+  if (lock_exnb(svd[0].fdlock) == -1) fatal("unable to lock supervise/lock");
   coe(svd[0].fdlock);
   if (haslog) {
-    mkdir("log/supervise", 0700);
+    if (mkdir("log/supervise", 0700) == -1) {
+      if ((r =readlink("log/supervise", buf, 256)) != -1) {
+	if (r == 256)
+	  fatalx("unable to readlink ./log/supervise: ", "name too long");
+	buf[r] =0;
+	if ((fd =open_read(".")) == -1)
+	  fatal("unable to open current directory");
+	if (chdir("./log") == -1)
+	  fatal("unable to change directory to ./log"); 
+	mkdir(buf, 0700);
+	if (fchdir(fd) == -1)
+	  fatal("unable to change back to service directory");
+	close(fd);
+      }
+      else {
+	if ((errno != ENOENT) && (errno != EINVAL))
+	  fatal("unable to readlink ./log/supervise");
+      }
+    }
     if ((svd[1].fdlock =open_append("log/supervise/lock")) == -1)
-      fatal("unable to open log/lock");
+      fatal("unable to open log/supervise/lock");
     if (lock_ex(svd[1].fdlock) == -1)
-      fatal("unable to log/lock");
+      fatal("unable to lock log/supervise/lock");
     coe(svd[1].fdlock);
   }
 

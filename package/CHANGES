@@ -1,5 +1,7 @@
   * fmt_ptime.c: create timestamps in UTC, not localtime.
   * chpst.c: -e dir: silently ignore directories, print warning if verbose.
+  * runsv.c: allow log/supervise also to be a dangling symlink; more
+    meaningful error message if opening lock or locking fails.
 
 runit 1.0.0
 Tue, 10 Feb 2004 13:37:28 +0000
