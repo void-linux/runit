@@ -1,4 +1,4 @@
-IT=runit runit-init svwaitup svwaitdown
+IT=runit runit-init svwaitup svwaitdown sysdeps
 
 default: $(IT)
 
@@ -110,8 +110,8 @@ compile: conf-cc print-cc.sh systype warn-auto.sh
 	sh print-cc.sh > compile
 	chmod 555 compile
 
-#direntry.h: choose compile direntry.h1 direntry.h2 trydrent.c
-#	./choose c trydrent direntry.h1 direntry.h2 > direntry.h
+direntry.h: choose compile direntry.h1 direntry.h2 trydrent.c
+	./choose c trydrent direntry.h1 direntry.h2 > direntry.h
 
 env.o: compile env.c env.h str.h
 	./compile env.c
