@@ -47,32 +47,32 @@ pipe:
 restart it. </dd>
 
 <dt><b>d</b> </dt>
-<dd>Down. If the service is running, send it a TERM signal. If ./run
-exits, start ./finish if it exists. After it stops, do not restart service.
-</dd>
+<dd>Down. If the service is running, send it a TERM signal, and
+then a CONT signal. If ./run exits, start ./finish if it exists. After it stops,
+do not restart service. </dd>
 
 <dt><b>o</b> </dt>
-<dd>Once. If the service is not running, start it. Do not restart it if it
-stops. </dd>
+<dd>Once. If the service is not running, start it. Do
+not restart it if it stops. </dd>
 
 <dt><b>p</b> </dt>
-<dd>Pause. If the service is running, send it a STOP signal. </dd>
+<dd>Pause. If the service is running, send it a
+STOP signal. </dd>
 
 <dt><b>c</b> </dt>
-<dd>Continue.
-If the service is running, send it a CONT signal. </dd>
+<dd>Continue. If the service is running, send it a CONT signal.
+</dd>
 
 <dt><b>h</b> </dt>
-<dd>Hangup. If the service
-is running, send it a HUP signal. </dd>
+<dd>Hangup. If the service is running, send it a HUP signal. </dd>
 
 <dt><b>a</b> </dt>
-<dd>Alarm. If the service is running, send
-it a ALRM signal. </dd>
+<dd>Alarm. If the
+service is running, send it a ALRM signal. </dd>
 
 <dt><b>i</b> </dt>
-<dd>Interrupt. If the service is running, send it a INT signal.
-</dd>
+<dd>Interrupt. If the service is
+running, send it a INT signal. </dd>
 
 <dt><b>q</b> </dt>
 <dd>Quit. If the service is running, send it a QUIT signal. </dd>
@@ -83,25 +83,26 @@ it a ALRM signal. </dd>
 <dt><b>2</b> </dt>
 <dd>User-defined 2. If the service is running, send it a USR2 signal. </dd>
 
-<dt><b>t</b> </dt>
-<dd>Terminate. If the service is running,
-send it a TERM signal. </dd>
+<dt><b>t</b>
+</dt>
+<dd>Terminate. If the service is running, send it a TERM signal. </dd>
 
 <dt><b>k</b> </dt>
-<dd>Kill. If the service is running, send it a KILL
-signal. </dd>
+<dd>Kill. If the
+service is running, send it a KILL signal. </dd>
 
 <dt><b>x or <b>e</b> </b></dt>
-<dd>Exit. If the service is running, send it a TERM signal. Do
-not restart the service. If the service is down, and no log service exists,
-<b>runsv</b> exits. If the service is down and a log service exists, <b>runsv</b> closes
-the standard input of the log service, and waits for it to terminate. If
-the log service is down, <b>runsv</b> exits. This command is ignored if it is given
-to <i>service</i>/log/supervise/control. </dd>
+<dd>Exit. If the service is
+running, send it a TERM signal, and then a CONT signal. Do not restart the
+service. If the service is down, and no log service exists, <b>runsv</b> exits.
+If the service is down and a log service exists, <b>runsv</b> closes the standard
+input of the log service, and waits for it to terminate. If the log service
+is down, <b>runsv</b> exits. This command is ignored if it is given to <i>service</i>/log/supervise/control.
+</dd>
 </dl>
 <p>
-Example: to send a TERM signal to the
-socklog-unix service, either do   # runsvctrl term /var/service/socklog-unix<br>
+Example: to send a TERM signal to the socklog-unix service, either do  
+# runsvctrl term /var/service/socklog-unix<br>
   or<br>
    # echo -n t &gt;/var/service/socklog-unix/supervise/control<br>
  <p>

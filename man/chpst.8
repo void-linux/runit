@@ -12,6 +12,8 @@ chpst \- runs a program with a changed process state
 .IR dir ]
 [\-/
 .IR root ]
+[\-n
+.IR inc ]
 [-l|-L
 .IR lock ]
 [-m
@@ -104,6 +106,17 @@ Change the root directory to
 .I root
 before starting
 .IR prog .
+.TP
+.B \-n \fIinc
+nice.
+Add
+.I inc
+to the
+.BR nice (2)
+value before starting
+.IR prog .
+.I inc
+must be an integer, and may start with a minus or plus.
 .TP
 .B \-l \fIlock
 lock.
