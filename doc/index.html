@@ -77,6 +77,75 @@ this Unix process no 1, such can easily be done in other programs, see
 Dependencies and runlevels</a>
 for an example, the amount of code in process no 1 should be minimal.
 <hr>
+<b><i>runit</i> in use</b>: I replaced <i>sysvinit</i> with <i>runit</i>
+on several server systems and a laptop, all running Debian/GNU Linux woody
+or potato, some months ago and did not encounter any problems.
+This is from the second machine where I replaced <i>sysvinit</i> with
+<i>runit</i>:
+<pre>
+  # strings /proc/1/exe |grep Id
+  $Id$
+  # uptime
+  10:35:18 up 107 days, 15:46,  2 users,  load average: 0.00, 0.00, 0.00
+  # ps axuw |head
+  USER       PID %CPU %MEM   VSZ  RSS TTY      STAT START   TIME COMMAND
+  root         1  0.0  0.0    24   24 ?        S     2001   0:06 runit
+  root         2  0.0  0.0     0    0 ?        SW    2001   0:07 [kflushd]
+  root         3  0.0  0.0     0    0 ?        SW    2001   0:06 [kupdate]
+  root         4  0.0  0.0     0    0 ?        SW    2001   0:28 [kswapd]
+  root         5  0.0  0.0     0    0 ?        SW    2001   0:00 [keventd]
+  root       149  0.0  0.1  1692  120 ?        S     2001   0:00 /usr/sbin/cron
+  root       152  0.0  0.0  2196    0 ?        SW    2001   0:00 [svscanboot]
+  root       154  0.0  0.1  1316  104 ?        S     2001   0:00 svscan /service
+  root       155  0.0  0.0  1268   16 ?        S     2001   0:00 readproctitle service errors: ................
+  # pstree
+  runit-+-cron
+        |-keventd
+        |-kflushd
+        |-kswapd
+        |-kupdate
+        `-svscanboot-+-readproctitle
+                     `-svscan-+-2*[supervise---socklog]
+                              |-18*[supervise---multilog]
+                              |-5*[supervise---tcpserver]
+                              |-supervise---qmail-send-+-qmail-clean
+                              |                        |-qmail-lspawn
+                              |                        `-qmail-rspawn
+                              |-supervise---sshd---sshd---bash---bash---pstree
+                              |-supervise---bash
+                              |-2*[supervise---getty]
+                              |-supervise---uncat
+                              |-supervise---dhcpd-2.2.x
+                              |-supervise---dnscache
+                              |-supervise---tinydns
+                              |-supervise---isdnlog
+                              |-supervise---sleep
+                              |-supervise---klogd
+                              |-2*[supervise]
+                              |-2*[supervise---vboxgetty]
+                              |-supervise---clockspeed
+                              |-supervise---squid---unlinkd
+                              `-supervise---dhclient-2.2.x
+</pre>
+This is from a more busy system:
+<pre>
+  # strings /proc/1/exe |grep Id
+  $Id$
+  # uptime
+  10:44:34 up 68 days, 10:48,  3 users,  load average: 0.24, 0.45, 0.34
+  # ps axuw |head
+  USER       PID %CPU %MEM   VSZ  RSS TTY      STAT START   TIME COMMAND
+  root         1  0.0  0.0    24   24 ?        S    Feb07   0:05 runit
+  root         2  0.0  0.0     0    0 ?        SW   Feb07   0:01 [keventd]
+  root         3  0.0  0.0     0    0 ?        SW   Feb07   1:00 [kapm-idled]
+  root         4  0.0  0.0     0    0 ?        SWN  Feb07   0:44 [ksoftirqd_CPU0]
+  root         5  0.0  0.0     0    0 ?        SW   Feb07   7:02 [kswapd]
+  root         6  0.0  0.0     0    0 ?        SW   Feb07   0:00 [bdflush]
+  root         7  0.0  0.0     0    0 ?        SW   Feb07   8:06 [kupdated]
+  root        53  0.0  0.0     0    0 ?        SW   Feb07   0:00 [msp3410 [auto]]
+  daemon     115  0.0  0.0  1412   20 ?        S    Feb07   0:00 /sbin/portmap
+</pre>
+<hr>
 See <a href="install.html">How to install runit</a> for installing
 <i>runit</i> and <a href="replaceinit.html">How to replace init</a> for
 smoothly escaping from <i>sysvinit</i>.
