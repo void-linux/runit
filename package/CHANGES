@@ -12,6 +12,7 @@ Fri, 14 Jan 2005 22:52:42 +0000
   * runsv.c: typos; bugfix: run optional control/x when receiving SIGTERM
     (thx Vladimir Smelhaus); minor.
   * man/runsvctrl.8: minor.
+  * package/COPYING: adapt, 2005.
 
 runit 1.2.0
 Fri, 17 Dec 2004 21:08:50 +0000
