@@ -73,7 +73,8 @@ bytes or more (or there is a new-line within the last
 .I len
 of
 .I size
-bytes)
+bytes), or is older than a specified amount of
+.IR time ,
 .I current
 is rotated:
 .P
@@ -192,6 +193,40 @@ old log files in
 after log file rotation, it deletes the oldest one.
 Default is 10.
 .TP
+.RI N min
+sets the minimum number of old log files
+.B svlogd
+should maintain to
+.IR min .
+.I min
+must be less than
+.IR num .
+If
+.I min
+is set, and
+.B svlogd
+cannot write to
+.I current
+because the filesystem is full, and it sees more than
+.I min
+old log files, it deletes the oldest one.
+.TP
+.RI t timeout
+sets the maximum age of the
+.I current
+log file when
+.B svlogd
+should rotate the current log file to
+.I timeout
+seconds.
+If
+.I current
+is
+.I timeout
+seconds old, and is not empty,
+.B svlogd
+forces log file rotation.
+.TP
 .RI ! processor
 tells
 .B svlogd
@@ -248,21 +283,20 @@ and acts accordingly:
 the log message is deselected.
 .TP
 .RI + pattern
-the log message is selected
+the log message is selected.
 .TP
 .RI e pattern
-log messages matching
-.I pattern
-are printed to standard error.
+the log message is selected to be printed to standard error.
 .TP
 .RI E pattern
-log messages not matching
-.I pattern
-are printed to standard error.
+the log message is deselected to be printed to standard error.
 .P
-Initially each line is selected.
+Initially each line is selected to be written to
+.IR log/current .
 Deselected log messages are discarded from
 .IR log .
+Initially each line is deselected to be written to standard err.
+Log messages selected for standard error are written to standard error.
 .SH PATTERN MATCHING
 .B svlogd
 matches a log message against the string

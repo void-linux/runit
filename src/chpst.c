@@ -20,7 +20,7 @@
 #include "openreadclose.h"
 #include "direntry.h"
 
-#define USAGE_MAIN " [-vP012] [-u user[:group]] [-U user[:group]] [-e dir] [-/ root] [-l|-L lock] [-m n] [-o n] [-p n] [-f n] [-c n] prog"
+#define USAGE_MAIN " [-vP012] [-u user[:group]] [-U user[:group]] [-e dir] [-/ root] [-n nice] [-l|-L lock] [-m n] [-o n] [-p n] [-f n] [-c n] prog"
 #define FATAL "chpst: fatal: "
 #define WARNING "chpst: warning: "
 
@@ -56,6 +56,7 @@ long limitf =-2;
 long limitc =-2;
 long limitr =-2;
 long limitt =-2;
+long nicelvl =0;
 const char *lock =0;
 const char *root =0;
 unsigned int lockdelay;
@@ -109,19 +110,19 @@ void edir(const char *dirname) {
     if (d->d_name[0] == '.') continue;
     if (openreadclose(d->d_name, &sa, 256) == -1) {
       if ((errno == error_isdir) && env_dir) {
-	if (verbose)
-	  strerr_warn6(WARNING, "unable to read ", dirname, "/",
-	               d->d_name, ": ", &strerr_sys);
-	continue;
+        if (verbose)
+          strerr_warn6(WARNING, "unable to read ", dirname, "/",
+                       d->d_name, ": ", &strerr_sys);
+        continue;
       }
       else
         strerr_die6sys(111, FATAL, "unable to read ", dirname, "/",
-	      	       d->d_name, ": ");
+                             d->d_name, ": ");
     }
     if (sa.len) {
       sa.len =byte_chr(sa.s, sa.len, '\n');
       while (sa.len && (sa.s[sa.len -1] == ' ' || sa.s[sa.len -1] == '\t'))
-	--sa.len;
+        --sa.len;
       for (i =0; i < sa.len; ++i) if (! sa.s[i]) sa.s[i] ='\n';
       if (! stralloc_0(&sa)) die_nomem();
       if (! pathexec_env(d->d_name, sa.s)) die_nomem();
@@ -271,8 +272,8 @@ int main(int argc, const char *const *argv) {
   if (str_equal(progname, "setlock")) setlock(argc, argv);
   if (str_equal(progname, "softlimit")) softlimit(argc, argv);
 
-  while ((opt =getopt(argc, argv, "u:U:e:m:o:p:f:c:r:t:/:l:L:vP012V"))
-	 != opteof)
+  while ((opt =getopt(argc, argv, "u:U:e:m:o:p:f:c:r:t:/:n:l:L:vP012V"))
+         != opteof)
     switch(opt) {
     case 'u': set_user =(char*)optarg; break;
     case 'U': env_user =(char*)optarg; break;
@@ -288,6 +289,18 @@ int main(int argc, const char *const *argv) {
     case 'r': if (optarg[scan_ulong(optarg, &limitr)]) usage(); break;
     case 't': if (optarg[scan_ulong(optarg, &limitt)]) usage(); break;
     case '/': root =optarg; break;
+    case 'n':
+      switch (*optarg) {
+        case '-':
+          if (optarg[scan_ulong(++optarg, &nicelvl)]) usage();
+          nicelvl *=-1;
+          break;
+        case '+': ++optarg;
+        default:
+          if (optarg[scan_ulong(optarg, &nicelvl)]) usage();
+          break;
+      }
+      break;
     case 'l': if (lock) usage(); lock =optarg; lockdelay =1; break;
     case 'L': if (lock) usage(); lock =optarg; lockdelay =0; break;
     case 'v': verbose =1; break;
@@ -314,7 +327,11 @@ int main(int argc, const char *const *argv) {
   if (nostdin) if (close(0) == -1) fatal("unable to close stdin");
   if (nostdout) if (close(1) == -1) fatal("unable to close stdout");
   if (nostderr) if (close(2) == -1) fatal("unable to close stderr");
-
+  if (nicelvl) {
+    errno =0;
+    if (nice(nicelvl) == -1)
+      if (errno) fatal("unable to set nice level");
+  }
   pathexec(argv);
   fatal2("unable to run", *argv);
   return(0);

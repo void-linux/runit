@@ -1,3 +1,15 @@
+runit 1.1.0
+Sat, 06 Nov 2004 15:38:54 +0000
+  * svlogd.c: new config option t timeout; config options e and E select and
+    deselect lines for stderr respectively; new config option N.
+  * man/svlogd.8: adapt.
+  * runsv.c: on commands down and exit send CONT after TERM.
+  * man/runsv.8: adapt.
+  * etc/2: use -P option to runsvdir.
+  * src/svlogd.check: end check for t config option.
+  * chpst.c: new option -n: adjust nice level.
+  * man/chpst.8: adapt.
+
 runit 1.0.5
 Tue, 21 Sep 2004 18:18:14 +0000
   * svlogd.c: fix line buffer handling for pattern matching (thx Enrico

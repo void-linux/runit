@@ -79,7 +79,7 @@ If the service stops, restart it.
 .TP
 .B d
 Down.
-If the service is running, send it a TERM signal.
+If the service is running, send it a TERM signal, and then a CONT signal.
 If ./run exits, start ./finish if it exists.
 After it stops, do not restart service.
 .TP
@@ -129,7 +129,7 @@ If the service is running, send it a KILL signal.
 .TP
 .B x \fRor \fBe
 Exit.
-If the service is running, send it a TERM signal.
+If the service is running, send it a TERM signal, and then a CONT signal.
 Do not restart the service.
 If the service is down, and no log service exists,
 .B runsv

@@ -105,14 +105,14 @@ void update_status(struct svdir *s) {
     close(fd);
     if (s->islog) {
       if (rename("supervise/pid.new", "log/supervise/pid") == -1) {
-	warn("unable to rename supervise/pid.new to log/supervise/pid");
-	return;
+        warn("unable to rename supervise/pid.new to log/supervise/pid");
+        return;
       }
     }
     else {
       if (rename("supervise/pid.new", "supervise/pid") == -1) {
-	warn("unable to rename supervise/pid.new to supervise/pid");
-	return;
+        warn("unable to rename supervise/pid.new to supervise/pid");
+        return;
       }
     }
     pidchanged =0;
@@ -205,6 +205,7 @@ void stopservice(struct svdir *s) {
   if (s->pid) kill(s->pid, SIGTERM);
   s->ctrl |=C_TERM;
   update_status(s);
+  if ((s->want == W_DOWN) || (s->want == W_EXIT)) kill(s->pid, SIGCONT);
 }
 
 void startservice(struct svdir *s) {
@@ -226,16 +227,16 @@ void startservice(struct svdir *s) {
     /* child */
     if (haslog) {
       if (s->islog) {
-	if (fd_copy(0, logpipe[0]) == -1)
-	  fatal("unable to setup filedescriptor for ./log/run");
-	close(logpipe[1]);
-	if (chdir("./log") == -1)
-	  fatal("unable to change directory to ./log");	
+        if (fd_copy(0, logpipe[0]) == -1)
+          fatal("unable to setup filedescriptor for ./log/run");
+        close(logpipe[1]);
+        if (chdir("./log") == -1)
+          fatal("unable to change directory to ./log");        
       }
       else {
-	if (fd_copy(1, logpipe[1]) == -1)
-	  fatal("unable to setup filedescriptor for ./run");
-	close(logpipe[0]);
+        if (fd_copy(1, logpipe[1]) == -1)
+          fatal("unable to setup filedescriptor for ./run");
+        close(logpipe[0]);
       }
     }
     sig_uncatch(sig_child);
@@ -367,9 +368,9 @@ int main(int argc, char **argv) {
       svd[1].islog =1;
       taia_now(&svd[1].start);
       if (stat("log/down", &s) != -1)
-	svd[1].want =W_DOWN;
+        svd[1].want =W_DOWN;
       if (pipe(logpipe) == -1)
-	fatal("unable to create log pipe");
+        fatal("unable to create log pipe");
       coe(logpipe[0]);
       coe(logpipe[1]);
     }
@@ -378,13 +379,13 @@ int main(int argc, char **argv) {
   if (mkdir("supervise", 0700) == -1) {
     if ((r =readlink("supervise", buf, 256)) != -1) {
       if (r == 256)
-	fatalx("unable to readlink ./supervise: ", "name too long");
+        fatalx("unable to readlink ./supervise: ", "name too long");
       buf[r] =0;
       mkdir(buf, 0700);
     }
     else {
       if ((errno != ENOENT) && (errno != EINVAL))
-	fatal("unable to readlink ./supervise");
+        fatal("unable to readlink ./supervise");
     }
   }
   if ((svd[0].fdlock =open_append("supervise/lock")) == -1)
@@ -394,21 +395,21 @@ int main(int argc, char **argv) {
   if (haslog) {
     if (mkdir("log/supervise", 0700) == -1) {
       if ((r =readlink("log/supervise", buf, 256)) != -1) {
-	if (r == 256)
-	  fatalx("unable to readlink ./log/supervise: ", "name too long");
-	buf[r] =0;
-	if ((fd =open_read(".")) == -1)
-	  fatal("unable to open current directory");
-	if (chdir("./log") == -1)
-	  fatal("unable to change directory to ./log"); 
-	mkdir(buf, 0700);
-	if (fchdir(fd) == -1)
-	  fatal("unable to change back to service directory");
-	close(fd);
+        if (r == 256)
+          fatalx("unable to readlink ./log/supervise: ", "name too long");
+        buf[r] =0;
+        if ((fd =open_read(".")) == -1)
+          fatal("unable to open current directory");
+        if (chdir("./log") == -1)
+          fatal("unable to change directory to ./log"); 
+        mkdir(buf, 0700);
+        if (fchdir(fd) == -1)
+          fatal("unable to change back to service directory");
+        close(fd);
       }
       else {
-	if ((errno != ENOENT) && (errno != EINVAL))
-	  fatal("unable to readlink ./log/supervise");
+        if ((errno != ENOENT) && (errno != EINVAL))
+          fatal("unable to readlink ./log/supervise");
       }
     }
     if ((svd[1].fdlock =open_append("log/supervise/lock")) == -1)
@@ -456,7 +457,7 @@ int main(int argc, char **argv) {
       if (! svd[1].pid && (svd[1].want == W_UP)) startservice(&svd[1]);
     if (! svd[0].pid)
       if ((svd[0].want == W_UP) || (svd[0].state == S_FINISH))
-	startservice(&svd[0]);
+        startservice(&svd[0]);
 
     x[0].fd =selfpipe[0];
     x[0].events =IOPAUSE_READ;
@@ -486,29 +487,29 @@ int main(int argc, char **argv) {
       if (!child) break;
       if ((child == -1) && (errno != error_intr)) break;
       if (child == svd[0].pid) {
-	svd[0].pid =0;
-	pidchanged =1;
-	svd[0].ctrl &=~C_TERM;
-	taia_now(&svd[0].start);
-	if (svd[0].state != S_FINISH)
-	  if ((fd =open_read("finish")) != -1) {
-	    close(fd);
-	    svd[0].state =S_FINISH;
-	    update_status(&svd[0]);
-	    break;
-	  }
-	svd[0].state =S_DOWN;
-	update_status(&svd[0]);
+        svd[0].pid =0;
+        pidchanged =1;
+        svd[0].ctrl &=~C_TERM;
+        taia_now(&svd[0].start);
+        if (svd[0].state != S_FINISH)
+          if ((fd =open_read("finish")) != -1) {
+            close(fd);
+            svd[0].state =S_FINISH;
+            update_status(&svd[0]);
+            break;
+          }
+        svd[0].state =S_DOWN;
+        update_status(&svd[0]);
       }
       if (haslog) {
-	if (child == svd[1].pid) {
-	  svd[1].pid =0;
-	  pidchanged =1;
-	  svd[1].state =S_DOWN;
-	  svd[1].ctrl &=~C_TERM;
-	  taia_now(&svd[1].start);
-	  update_status(&svd[1]);
-	}
+        if (child == svd[1].pid) {
+          svd[1].pid =0;
+          pidchanged =1;
+          svd[1].state =S_DOWN;
+          svd[1].ctrl &=~C_TERM;
+          taia_now(&svd[1].start);
+          update_status(&svd[1]);
+        }
       }
     }
     if (read(svd[0].fdcontrol, &ch, 1) == 1) ctrl(&svd[0], ch);
@@ -518,11 +519,11 @@ int main(int argc, char **argv) {
     if (svd[0].want == W_EXIT && svd[0].state == S_DOWN) {
       if (svd[1].pid == 0) _exit(0);
       if (svd[1].want != W_EXIT) {
-	svd[1].want =W_EXIT;
-	/* stopservice(&svd[1]); */
-	update_status(&svd[1]);
-	if (close(logpipe[1]) == -1) warn("unable to close logpipe[1]");
-	if (close(logpipe[0]) == -1) warn("unable to close logpipe[0]");
+        svd[1].want =W_EXIT;
+        /* stopservice(&svd[1]); */
+        update_status(&svd[1]);
+        if (close(logpipe[1]) == -1) warn("unable to close logpipe[1]");
+        if (close(logpipe[0]) == -1) warn("unable to close logpipe[0]");
       }
     }
   }

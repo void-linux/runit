@@ -31,8 +31,9 @@
 #include "taia.h"
 #include "fmt.h"
 #include "ndelay.h"
+#include "iopause.h"
 
-#define USAGE " [-tv] [-r c] [-R abc] [-l n ] [-b n] dir ..."
+#define USAGE " [-ttv] [-r c] [-R abc] [-l len] [-b buflen] dir ..."
 #define VERSION "$Id$"
 
 #define FATAL "svlogd: fatal: "
@@ -57,6 +58,7 @@ struct stat st;
 stralloc sa;
 int wstat;
 struct taia now;
+struct taia trotate;
 
 char *databuf;
 buffer data;
@@ -66,7 +68,9 @@ unsigned int exitasap =0;
 unsigned int rotateasap =0;
 unsigned int reopenasap =0;
 unsigned int linecomplete =1;
+unsigned int tmaxflag =0;
 int fdudp =-1;
+iopause_fd in;
 
 struct logdir {
   int fddir;
@@ -76,6 +80,9 @@ struct logdir {
   unsigned long size;
   unsigned long sizemax;
   unsigned long nmax;
+  unsigned long nmin;
+  unsigned long tmax;
+  struct taia trotate;
   stralloc processor;
   int ppid;
   char fnsave[FMT_PTIME];
@@ -83,6 +90,7 @@ struct logdir {
   int fdcur;
   int fdlock;
   char match;
+  char matcherr;
   struct sockaddr_in udpaddr;
   unsigned int udponly;
 } *dir;
@@ -142,14 +150,14 @@ unsigned int processorstart(struct logdir *ld) {
       fatal2("unable to move filedescriptor for processor", ld->name);
     if ((fd =open_read("state")) == -1) {
       if (errno == error_noent) {
-	if ((fd =open_trunc("state")) == -1)
-	  fatal2("unable to create empty state for processor", ld->name);
-	close(fd);
-	if ((fd =open_read("state")) == -1)
-	  fatal2("unable to open state for processor", ld->name);
+        if ((fd =open_trunc("state")) == -1)
+          fatal2("unable to create empty state for processor", ld->name);
+        close(fd);
+        if ((fd =open_read("state")) == -1)
+          fatal2("unable to open state for processor", ld->name);
       }
       else
-	fatal2("unable to open state for processor", ld->name);
+        fatal2("unable to open state for processor", ld->name);
     }
     if (fd_move(4, fd) == -1)
       fatal2("unable to move filedescriptor for processor", ld->name);
@@ -215,8 +223,7 @@ unsigned int rotate(struct logdir *ld) {
   char tmp[FMT_ULONG +1];
   char oldest[FMT_PTIME];
 
-  if (ld->fddir == -1) return(0);
-  if (ld->size <= 0) return(1);
+  if (ld->fddir == -1) { ld->tmax =0; return(0); }
   if (ld->ppid) while(! processorstop(ld));
 
   while (fchdir(ld->fddir) == -1)
@@ -235,45 +242,53 @@ unsigned int rotate(struct logdir *ld) {
     errno =0;
   } while ((stat(ld->fnsave, &st) != -1) || (errno != error_noent));
 
-  buffer_flush(&ld->b);
-  while (fsync(ld->fdcur) == -1)
-    pause2("unable to fsync current logfile", ld->name);
-  while (fchmod(ld->fdcur, 0744) == -1)
-    pause2("unable to set mode of current", ld->name);
-  close(ld->fdcur);
-  if (verbose) {
-    tmp[0] =' '; tmp[fmt_ulong(tmp +1, ld->size) +1] =0;
-    strerr_warn6(INFO, "rename: ", ld->name, "/current ",
-		 ld->fnsave, tmp, 0);
+  if (ld->tmax && taia_less(&ld->trotate, &now)) {
+    taia_uint(&ld->trotate, ld->tmax);
+    taia_add(&ld->trotate, &now, &ld->trotate);
+    if (taia_less(&ld->trotate, &trotate)) trotate =ld->trotate;
   }
-  while (rename("current", ld->fnsave) == -1)
-    pause2("unable to rename current", ld->name);
-  while ((ld->fdcur =open_append("current")) == -1)
-    pause2("unable to create new current", ld->name);
-  coe(ld->fdcur);
-  ld->size =0;
-  while (fchmod(ld->fdcur, 0644) == -1)
-    pause2("unable to set mode of current", ld->name);
 
-  oldest[0] ='A'; oldest[1] =oldest[27] =0;
-  while (! (d =opendir(".")))
-    pause2("unable to open directory, want rotate", ld->name);
-  errno =0;
-  while ((f =readdir(d)))
-    if ((f->d_name[0] == '@') && (str_len(f->d_name) == 27)) {
-      ++n;
-      if (str_diff(f->d_name, oldest) < 0) byte_copy(oldest, 27, f->d_name);
+  if (ld->size > 0) {
+    buffer_flush(&ld->b);
+    while (fsync(ld->fdcur) == -1)
+      pause2("unable to fsync current logfile", ld->name);
+    while (fchmod(ld->fdcur, 0744) == -1)
+      pause2("unable to set mode of current", ld->name);
+    close(ld->fdcur);
+    if (verbose) {
+      tmp[0] =' '; tmp[fmt_ulong(tmp +1, ld->size) +1] =0;
+      strerr_warn6(INFO, "rename: ", ld->name, "/current ",
+                   ld->fnsave, tmp, 0);
     }
-  if (errno) warn2("unable to read directory", ld->name);
-  closedir(d);
-  
-  if (ld->nmax && (n >= ld->nmax)) {
-    if (verbose) strerr_warn5(INFO, "delete: ", ld->name, "/", oldest, 0);
-    if ((*oldest == '@') && (unlink(oldest) == -1))
-      warn2("unable to unlink oldest logfile", ld->name);
+    while (rename("current", ld->fnsave) == -1)
+      pause2("unable to rename current", ld->name);
+    while ((ld->fdcur =open_append("current")) == -1)
+      pause2("unable to create new current", ld->name);
+    coe(ld->fdcur);
+    ld->size =0;
+    while (fchmod(ld->fdcur, 0644) == -1)
+      pause2("unable to set mode of current", ld->name);
+    
+    oldest[0] ='A'; oldest[1] =oldest[27] =0;
+    while (! (d =opendir(".")))
+      pause2("unable to open directory, want rotate", ld->name);
+    errno =0;
+    while ((f =readdir(d)))
+      if ((f->d_name[0] == '@') && (str_len(f->d_name) == 27)) {
+        ++n;
+        if (str_diff(f->d_name, oldest) < 0) byte_copy(oldest, 27, f->d_name);
+      }
+    if (errno) warn2("unable to read directory", ld->name);
+    closedir(d);
+    
+    if (ld->nmax && (n >= ld->nmax)) {
+      if (verbose) strerr_warn5(INFO, "delete: ", ld->name, "/", oldest, 0);
+      if ((*oldest == '@') && (unlink(oldest) == -1))
+        warn2("unable to unlink oldest logfile", ld->name);
+    }
+    processorstart(ld);
   }
 
-  processorstart(ld);
   while (fchdir(fdwdir) == -1)
     pause1("unable to change to initial working directory");
   return(1);
@@ -287,8 +302,47 @@ int buffer_pwrite(int n, char *s, unsigned int len) {
     if (len > ((dir +n)->sizemax -(dir +n)->size))
       len =(dir +n)->sizemax -(dir +n)->size;
   }
-  while ((i =write((dir +n)->fdcur, s, len)) == -1)
-    pause2("unable to write to current", (dir +n)->name);
+  while ((i =write((dir +n)->fdcur, s, len)) == -1) {
+    if ((errno == ENOSPC) && ((dir +n)->nmin < (dir +n)->nmax)) {
+      DIR *d;
+      direntry *f;
+      char oldest[FMT_PTIME];
+      int j =0;
+
+      while (fchdir((dir +n)->fddir) == -1)
+        pause2("unable to change directory, want remove old logfile",
+               (dir +n)->name);
+      oldest[0] ='A'; oldest[1] =oldest[27] =0;
+      while (! (d =opendir(".")))
+        pause2("unable to open directory, want remove old logfile",
+               (dir +n)->name);
+      errno =0;
+      while ((f =readdir(d)))
+        if ((f->d_name[0] == '@') && (str_len(f->d_name) == 27)) {
+          ++j;
+          if (str_diff(f->d_name, oldest) < 0)
+            byte_copy(oldest, 27, f->d_name);
+        }
+      if (errno) warn2("unable to read directory, want remove old logfile",
+                       (dir +n)->name);
+      closedir(d);
+      errno =ENOSPC;
+      if (j > (dir +n)->nmin)
+        if (*oldest == '@') {
+          strerr_warn5(WARNING, "out of disk space, delete: ", (dir +n)->name,
+                       "/", oldest, 0);
+          errno =0;
+          if (unlink(oldest) == -1) {
+            warn2("unable to unlink oldest logfile", (dir +n)->name);
+            errno =ENOSPC;
+          }
+          while (fchdir(fdwdir) == -1)
+            pause1("unable to change to initial working directory");
+        }
+    }
+    if (errno) pause2("unable to write to current", (dir +n)->name);
+  }
+
   (dir +n)->size +=i;
   if ((dir +n)->sizemax)
     if (s[i -1] == '\n')
@@ -358,7 +412,8 @@ unsigned int logdir_open(struct logdir *ld, const char *fn) {
 
   ld->size =0;
   ld->sizemax =1000000;
-  ld->nmax =10;
+  ld->nmax =ld->nmin =10;
+  ld->tmax =0;
   ld->name =(char*)fn;
   ld->ppid =0;
   ld->match ='+';
@@ -377,57 +432,76 @@ unsigned int logdir_open(struct logdir *ld, const char *fn) {
     if (verbose) strerr_warn4(INFO, "read: ", ld->name, "/config", 0);
     for (i =0; i +1 < sa.len; ++i) {
       if ((len =byte_chr(&sa.s[i], sa.len -i, '\n')) == 1) {
-	++i; continue;
+        ++i; continue;
       }
       sa.s[len +i] =0;
       switch(sa.s[i]) {
       case '\n':
       case '#':
-	 break;
+         break;
       case '+':
       case '-':
       case 'e':
       case 'E':
-	while (! stralloc_catb(&ld->inst, &sa.s[i], len)) pause_nomem();
-	while (! stralloc_0(&ld->inst)) pause_nomem();
-	break;
+        while (! stralloc_catb(&ld->inst, &sa.s[i], len)) pause_nomem();
+        while (! stralloc_0(&ld->inst)) pause_nomem();
+        break;
       case 's':
-	scan_ulong(&sa.s[i +1], &ld->sizemax);
-	break;
+        switch (sa.s[scan_ulong(&sa.s[i +1], &ld->sizemax) +i +1]) {
+        case 'm': ld->sizemax *=1024;
+        case 'k': ld->sizemax *=1024;
+        }
+        break;
       case 'n':
-	scan_ulong(&sa.s[i +1], &ld->nmax);
-	if (ld->nmax == 1) ld->nmax =2;
-	break;
+        scan_ulong(&sa.s[i +1], &ld->nmax);
+        break;
+      case 'N':
+        scan_ulong(&sa.s[i +1], &ld->nmin);
+        break;
+      case 't':
+        switch (sa.s[scan_ulong(&sa.s[i +1], &ld->tmax) +i +1]) {
+        /* case 'd': ld->tmax *=24; */
+        case 'h': ld->tmax *=60;
+        case 'm': ld->tmax *=60;
+        }
+        if (ld->tmax) {
+          taia_uint(&ld->trotate, ld->tmax);
+          taia_add(&ld->trotate, &now, &ld->trotate);
+          if (! tmaxflag || taia_less(&ld->trotate, &trotate))
+            trotate =ld->trotate;
+          tmaxflag =1;
+        }
+        break;
       case '!':
-	while (! stralloc_copys(&ld->processor, &sa.s[i +1])) pause_nomem();
-	while (! stralloc_0(&ld->processor)) pause_nomem();
-	break;
+        while (! stralloc_copys(&ld->processor, &sa.s[i +1])) pause_nomem();
+        while (! stralloc_0(&ld->processor)) pause_nomem();
+        break;
       case 'U':
-	ld->udponly =1;
+        ld->udponly =1;
       case 'u':
-	if (! (c =ip4_scan(sa.s +i +1, (char *)&ld->udpaddr.sin_addr))) {
-	  warnx("unable to scan ip address", sa.s +i +1);
-	  break;
-	}
-	if (sa.s[i +1 +c] == ':') {
-	  scan_ulong(sa.s +i +c +2, &port);
-	  if (port == 0) {
-	    warnx("unable to scan port number", sa.s +i +c +2);
-	    break;
-	  }
-	}
-	else
-	  port =514;
-	ld->udpaddr.sin_port =htons(port);
-	if (fdudp == -1) {
-       	  fdudp =socket(AF_INET, SOCK_DGRAM, 0);
-	  if (fdudp)
-	    if (ndelay_on(fdudp) == -1) {
-	      close(fdudp);
-	      fdudp =-1;
-	    }
-	}
-	break;
+        if (! (c =ip4_scan(sa.s +i +1, (char *)&ld->udpaddr.sin_addr))) {
+          warnx("unable to scan ip address", sa.s +i +1);
+          break;
+        }
+        if (sa.s[i +1 +c] == ':') {
+          scan_ulong(sa.s +i +c +2, &port);
+          if (port == 0) {
+            warnx("unable to scan port number", sa.s +i +c +2);
+            break;
+          }
+        }
+        else
+          port =514;
+        ld->udpaddr.sin_port =htons(port);
+        if (fdudp == -1) {
+                 fdudp =socket(AF_INET, SOCK_DGRAM, 0);
+          if (fdudp)
+            if (ndelay_on(fdudp) == -1) {
+              close(fdudp);
+              fdudp =-1;
+            }
+        }
+        break;
       }
       i +=len;
     }
@@ -438,12 +512,12 @@ unsigned int logdir_open(struct logdir *ld, const char *fn) {
     if (st.st_size && ! (st.st_mode & S_IXUSR)) {
       ld->fnsave[25] ='.'; ld->fnsave[26] ='u'; ld->fnsave[27] =0;
       do {
-	taia_now(&now);
-	fmt_taia(ld->fnsave, &now);
-	errno =0;
+        taia_now(&now);
+        fmt_taia(ld->fnsave, &now);
+        errno =0;
       } while ((stat(ld->fnsave, &st) != -1) || (errno != error_noent));
       while (rename("current", ld->fnsave) == -1)
-	pause2("unable to rename current", ld->name);
+        pause2("unable to rename current", ld->name);
       i =-1;
     }
     else
@@ -454,7 +528,7 @@ unsigned int logdir_open(struct logdir *ld, const char *fn) {
       logdir_close(ld);
       warn2("unable to stat current", ld->name);
       while (fchdir(fdwdir) == -1)
-	pause1("unable to change to initial working directory");
+        pause1("unable to change to initial working directory");
       return(0);
     }
   while ((ld->fdcur =open_append("current")) == -1)
@@ -478,6 +552,8 @@ void logdirs_reopen(void) {
   int l;
   int ok =0;
 
+  tmaxflag =0;
+  taia_now(&now);
   for (l =0; l < dirn; ++l) {
     logdir_close(&dir[l]);    
     if (logdir_open(&dir[l], fndir[l])) ok =1;
@@ -501,16 +577,28 @@ int buffer_pread(int fd, char *s, unsigned int len) {
     logdirs_reopen();
     reopenasap =0;
   }
+  taia_now(&now);
+  taia_uint(&trotate, 2744);
+  taia_add(&trotate, &now, &trotate);
+  for (i =0; i < dirn; ++i)
+    if ((dir +i)->tmax) {
+      if (taia_less(&dir[i].trotate, &now)) rotate(dir +i);
+      if (taia_less(&dir[i].trotate, &trotate)) trotate =dir[i].trotate;
+    }
   sig_unblock(sig_term);
   sig_unblock(sig_child);
   sig_unblock(sig_alarm);
   sig_unblock(sig_hangup);
-  i =read(fd, s, len);
+  iopause(&in, 1, &trotate, &now);
   sig_block(sig_term);
   sig_block(sig_child);
   sig_block(sig_alarm);
   sig_block(sig_hangup);
-  if (i == -1) if (errno != error_intr) warn("unable to read standard input");
+  i =read(fd, s, len);
+  if (i == -1) {
+    if (errno == error_again) errno =error_intr;
+    if (errno != error_intr) warn("unable to read standard input");
+  }
   if (i > 0) linecomplete =(s[i -1] == '\n');
   return(i);
 }
@@ -525,9 +613,9 @@ void sig_child_handler(void) {
   while ((pid =wait_nohang(&wstat)) > 0)
     for (l =0; l < dirn; ++l)
       if (dir[l].ppid == pid) {
-	dir[l].ppid =0;
-	processorstop(&dir[l]);
-	break;
+        dir[l].ppid =0;
+        processorstop(&dir[l]);
+        break;
       }
 }
 void sig_alarm_handler(void) {
@@ -543,28 +631,18 @@ void logmatch(struct logdir *ld) {
   int i;
 
   ld->match ='+';
+  ld->matcherr ='E';
   for (i =0; i < ld->inst.len; ++i) {
     switch(ld->inst.s[i]) {
     case '+':
     case '-':
       if (pmatch(&ld->inst.s[i +1], line, linelen))
-	ld->match =ld->inst.s[i];
+        ld->match =ld->inst.s[i];
       break;
     case 'e':
-      if (pmatch(&ld->inst.s[i +1], line, linelen)) {
-	if (timestamp) buffer_puts(buffer_2, stamp);
-	buffer_put(buffer_2, line, linelen);
-	if (linelen == linemax) buffer_puts(buffer_2, "...");
-	buffer_put(buffer_2, "\n", 1); buffer_flush(buffer_2);
-      }
-      break;
     case 'E':
-      if (! pmatch(&ld->inst.s[i +1], line, linelen)) {
-	if (timestamp) buffer_puts(buffer_2, stamp);
-	buffer_put(buffer_2, line, linelen);
-	if (linelen == linemax) buffer_puts(buffer_2, "...");
-	buffer_put(buffer_2, "\n", 1); buffer_flush(buffer_2);
-      }
+      if (pmatch(&ld->inst.s[i +1], line, linelen))
+        ld->matcherr =ld->inst.s[i];
       break;
     }
     i +=byte_chr(&ld->inst.s[i], ld->inst.len -i, 0);
@@ -595,7 +673,7 @@ int main(int argc, const char **argv) {
       if (buflen == 0) buflen =1024;
       break;
     case 't':
-      ++timestamp;
+      if (++timestamp > 2) timestamp =2;
       break;
     case 'v':
       ++verbose;
@@ -626,6 +704,9 @@ int main(int argc, const char **argv) {
   line =(char*)alloc(linemax *sizeof(char));
   if (! line) die_nomem();
   fndir =argv;
+  in.fd =0;
+  in.events =IOPAUSE_READ;
+  ndelay_on(in.fd);
 
   sig_block(sig_term);
   sig_block(sig_child);
@@ -645,93 +726,94 @@ int main(int argc, const char **argv) {
     if (exitasap && ! data.p) break; /* data buffer is empty */
     for (linelen =0; linelen < linemax; ++linelen) {
       if (buffer_GETC(&data, &ch) <= 0) {
-	exitasap =1;
-	break;
+        exitasap =1;
+        break;
       }
       if (! linelen && timestamp) {
-	taia_now(&now);
-	switch (timestamp) {
-	case 1:
-	  stamp[fmt_taia(stamp, &now)] =' ';
-	  stamp[26] =0;
-	  break;
-	case 2:
-	  stamp[fmt_ptime(stamp, &now)] =' ';
-	  stamp[26] =0;
-	  break;
-	case 3:
-	  stamp[fmt_ptime(stamp, &now)] =0;
-	  stamp[19] =' '; stamp[20] =0;
-	  break;
-	}
+        taia_now(&now);
+        switch (timestamp) {
+        case 1:
+          stamp[fmt_taia(stamp, &now)] =' ';
+          stamp[26] =0;
+          break;
+        case 2:
+          stamp[fmt_ptime(stamp, &now)] =' ';
+          stamp[26] =0;
+          break;
+        }
       }
       if (ch == '\n') break;
       if (repl) {
-	if ((ch < 32) || (ch > 126))
-	  ch =repl;
-	else
-	  for (i =0; replace[i]; ++i)
-	    if (ch == replace[i]) {
-	      ch =repl;
-	      break;
-	    }
+        if ((ch < 32) || (ch > 126))
+          ch =repl;
+        else
+          for (i =0; replace[i]; ++i)
+            if (ch == replace[i]) {
+              ch =repl;
+              break;
+            }
       }
       line[linelen] =ch;
     }
     if (! linelen) continue;
     for (i =0; i < dirn; ++i)
       if (dir[i].fddir != -1) {
-	if (dir[i].inst.len) logmatch(&dir[i]);
-	if (dir[i].match != '+') continue;
-	if (! dir[i].udponly) {
-	  if (timestamp) buffer_puts(&dir[i].b, stamp);
-	  buffer_put(&dir[i].b, line, linelen);
-	}
-	if (dir[i].udpaddr.sin_port != 0) {
-	  if (fdudp == -1) {
-	    buffer_puts(&dir[i].b, "warning: no udp socket available: ");
-	    buffer_put(&dir[i].b, line, linelen);
-	    buffer_put(&dir[i].b, "\n", 1);
-	    buffer_flush(&dir[i].b);
-	  }
-	  else {
-	    if (linelen >= linemax -1) {
-	      line[linemax -4] =line[linemax -3] =line[linemax -2] ='.';
-	      linelen =linemax -1;
-	    }
-	    if (line[linelen -1] != '\n') line[linelen++] ='\n';
-	    if (sendto(fdudp, line, linelen, 0,
-		       (struct sockaddr *)&dir[i].udpaddr,
-		       sizeof(dir[i].udpaddr)) != linelen) {
-	      buffer_puts(&dir[i].b, "warning: failure sending through udp: ");
-	      buffer_put(&dir[i].b, line, linelen);
-	      buffer_put(&dir[i].b, "\n", 1);
-	      buffer_flush(&dir[i].b);
-	    }
-	  }
-	}
+        if (dir[i].inst.len) logmatch(&dir[i]);
+        if (dir[i].matcherr == 'e') {
+          buffer_put(buffer_2, line, linelen);
+          if (linelen == linemax) buffer_puts(buffer_2, "...");
+          buffer_put(buffer_2, "\n", 1); buffer_flush(buffer_2);
+        }
+        if (dir[i].match != '+') continue;
+        if (! dir[i].udponly) {
+          if (timestamp) buffer_puts(&dir[i].b, stamp);
+          buffer_put(&dir[i].b, line, linelen);
+        }
+        if (dir[i].udpaddr.sin_port != 0) {
+          if (fdudp == -1) {
+            buffer_puts(&dir[i].b, "warning: no udp socket available: ");
+            buffer_put(&dir[i].b, line, linelen);
+            buffer_put(&dir[i].b, "\n", 1);
+            buffer_flush(&dir[i].b);
+          }
+          else {
+            if (linelen >= linemax -1) {
+              line[linemax -4] =line[linemax -3] =line[linemax -2] ='.';
+              linelen =linemax -1;
+            }
+            if (line[linelen -1] != '\n') line[linelen++] ='\n';
+            if (sendto(fdudp, line, linelen, 0,
+                       (struct sockaddr *)&dir[i].udpaddr,
+                       sizeof(dir[i].udpaddr)) != linelen) {
+              buffer_puts(&dir[i].b, "warning: failure sending through udp: ");
+              buffer_put(&dir[i].b, line, linelen);
+              buffer_put(&dir[i].b, "\n", 1);
+              buffer_flush(&dir[i].b);
+            }
+          }
+        }
       }
     if (linelen == linemax)
       for (;;) {
-	if (buffer_GETC(&data, &ch) <= 0) {
-	  exitasap =1;
-	  break;
-	}
-	if (ch == '\n') break;
-	for (i =0; i < dirn; ++i)
-	  if (dir[i].fddir != -1) {
-	    if (dir[i].match != '+') continue;
-	    if (! dir[i].udponly) buffer_PUTC(&dir[i].b, ch);
-	  }
+        if (buffer_GETC(&data, &ch) <= 0) {
+          exitasap =1;
+          break;
+        }
+        if (ch == '\n') break;
+        for (i =0; i < dirn; ++i)
+          if (dir[i].fddir != -1) {
+            if (dir[i].match != '+') continue;
+            if (! dir[i].udponly) buffer_PUTC(&dir[i].b, ch);
+          }
       }
     for (i =0; i < dirn; ++i)
       if (dir[i].fddir != -1) {
-	if (dir[i].match != '+') continue;
-	if (! dir[i].udponly) {
-	  ch ='\n';
-	  buffer_PUTC(&dir[i].b, ch);
-	  buffer_flush(&dir[i].b);
-	}
+        if (dir[i].match != '+') continue;
+        if (! dir[i].udponly) {
+          ch ='\n';
+          buffer_PUTC(&dir[i].b, ch);
+          buffer_flush(&dir[i].b);
+        }
       }
   }
   
