@@ -1,5 +1,5 @@
 runit 1.0.3
-Sat, 26 Jun 2004 14:23:30 +0000
+Sat, 26 Jun 2004 14:50:41 +0000
   * chpst.c, man/chpst.8: new option -/ chroot.
   * runit.c, man/runit.8: if stage 1 crashes or exits 100, stage 2 will be
     skipped; if stage 2 crashes or exits 111, it will be restarted.

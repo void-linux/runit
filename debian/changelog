@@ -4,7 +4,7 @@ runit (1.0.3-1) unstable; urgency=low
   * debian/diff/chpst-chroot.diff: remove; included upstream.
   * debian/rules: don't apply diff; shorten architecture-check.
 
- -- Gerrit Pape <pape@smarden.org>  Sat, 26 Jun 2004 14:35:37 +0000
+ -- Gerrit Pape <pape@smarden.org>  Sat, 26 Jun 2004 14:50:51 +0000
 
 runit (1.0.2-3) unstable; urgency=low
 
