@@ -1,0 +1,61 @@
+
+
+
+<HTML>
+<HEAD>
+<TITLE>utmpset(8) manual page</TITLE>
+</HEAD>
+<BODY bgcolor=white>
+<a href="http://smarden.org/pape/">G. Pape</a><br><A HREF="index.html">runit</A><hr><P>
+
+<H2><A NAME="sect0">Name</A></H2>
+utmpset - logout a line from utmp and wtmp file 
+<H2><A NAME="sect1">Synopsis</A></H2>
+<B>utmpset</B> [ <B>-w</B>
+] <I>line</I> 
+<H2><A NAME="sect2">Description</A></H2>
+The <B>utmpset</B> program modifies the user accounting database
+<B><I>utmp</B>(5)</I> and optionally <B><I>wtmp</B>(5)</I> to indicate that the user on the terminal
+<I>line</I> has logged out. <P>
+Ordinary <B><I>init</B>(8)</I> processes handle utmp file records
+for local login accounting. The <B><I>runit</B>(8)</I> program doesn't include code to
+update the utmp file, the <B><I>getty</B>(8)</I> processes are handled the same as all
+other services. <P>
+To enable local login accounting, add <B>utmpset</B> to the <B><I>getty</B>(8)</I>
+run scripts, e.g.: <P>
+ #!/bin/sh<BR>
+  /package/admin/runit/command/utmpset -w tty5<BR>
+  exec /sbin/getty 38400 tty5 linux<BR>
+ 
+<H2><A NAME="sect3">Options</A></H2>
+
+<DL>
+
+<DT><B>-w</B> </DT>
+<DD>wtmp. Additionally to the utmp file, write an empty record for
+<I>line</I> to the wtmp file. </DD>
+</DL>
+
+<H2><A NAME="sect4">Exit Codes</A></H2>
+<B>utmpset</B> returns 111 on error, 1 on wrong
+usage, 0 in all other cases. 
+<H2><A NAME="sect5">See Also</A></H2>
+<I>runit(8)</I>, <I>runit-init(8)</I>, <I>svwaitdown(8)</I>,
+<I>svwaitup(8)</I> <P>
+<I>http://smarden.org/runit/</I> 
+<H2><A NAME="sect6">Author</A></H2>
+Gerrit Pape &lt;pape@smarden.org&gt;
+<P>
+
+<HR><P>
+<A NAME="toc"><B>Table of Contents</B></A><P>
+<UL>
+<LI><A NAME="toc0" HREF="#sect0">Name</A></LI>
+<LI><A NAME="toc1" HREF="#sect1">Synopsis</A></LI>
+<LI><A NAME="toc2" HREF="#sect2">Description</A></LI>
+<LI><A NAME="toc3" HREF="#sect3">Options</A></LI>
+<LI><A NAME="toc4" HREF="#sect4">Exit Codes</A></LI>
+<LI><A NAME="toc5" HREF="#sect5">See Also</A></LI>
+<LI><A NAME="toc6" HREF="#sect6">Author</A></LI>
+</UL>
+</BODY></HTML>
