@@ -542,11 +542,18 @@ unsigned int lineflush(struct logdir *ld, char *s, int len) {
     linestart(ld, s, len);
     break;
   case '+':
-    ld->match =0;
-    if (ld->udponly) return(0);
+    if (ld->udponly) {
+      ld->match =0;
+      return(0);
+    }
     buffer_put(&ld->b, s, len);
+    ld->size +=len;
+    break;
+  }
+  if (ld->match == '+') {
     buffer_putflush(&ld->b, "\n", 1);
-    ld->size +=len +1;
+    ld->size +=1;
+    ld->match =0;
     if (ld->sizemax)
       if ((linelen > ld->sizemax) || (ld->size >= (ld->sizemax -linelen)))
 	rotate(ld);

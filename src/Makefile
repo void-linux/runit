@@ -33,8 +33,9 @@ utmpset: load utmpset.o unix.a byte.a
 runsvchdir: load runsvchdir.o unix.a byte.a
 	./load runsvchdir unix.a byte.a
 
-svlogd: load svlogd.o pmatch.o fmt_ptime.o unix.a byte.a time.a
-	./load svlogd pmatch.o fmt_ptime.o unix.a byte.a time.a
+svlogd: load svlogd.o pmatch.o fmt_ptime.o unix.a byte.a time.a socket.lib
+	./load svlogd pmatch.o fmt_ptime.o unix.a byte.a time.a \
+	`cat socket.lib`
 
 chpst: load chpst.o uidgid.o unix.a byte.a
 	./load chpst uidgid.o unix.a byte.a
@@ -93,6 +94,15 @@ uw_tmp.h: compile uw_tmp.h1 uw_tmp.h2
 	( ./compile tryuwtmpx.c 2>/dev/null && cat uw_tmp.h2 >uw_tmp.h ) || \
 	( ./compile tryuwtmp.c 2>/dev/null && cat uw_tmp.h1 >uw_tmp.h )
 	rm -f tryuwtmp.o tryuwtmpx.o
+
+socket.lib: compile load trysocketlib.c
+	./compile trysocketlib.c
+	( ./load trysocketlib >/dev/null 2>&1 || \
+	  ( ./load trysocketlib -lxnet >/dev/null 2>&1 && echo '-lxnet' ) || \
+	  ( ./load trysocketlib -lsocket -lnsl >/dev/null 2>&1 && \
+	    echo '-lsocket -lnsl' ) \
+	) >socket.lib
+	rm -f trysocketlib.o trysocketlib
 
 clean:
 	find . -name \*~ -exec rm -f {} \;
@@ -355,9 +365,9 @@ subgetopt.o: compile subgetopt.c subgetopt.h
 
 sysdeps: compile direntry.h hasflock.h hasmkffo.h hassgact.h \
 hassgprm.h hasshsgr.h haswaitp.h iopause.h load select.h systype \
-uint64.h reboot_system.h uw_tmp.h
+uint64.h reboot_system.h uw_tmp.h socket.lib
 	rm -f sysdeps
-	cat systype compile load >>sysdeps
+	cat systype compile load socket.lib >>sysdeps
 	grep sysdep direntry.h >>sysdeps
 	grep sysdep haswaitp.h >>sysdeps
 	grep sysdep hassgact.h >>sysdeps
