@@ -1,3 +1,10 @@
+  * chpst.c: typo.
+  * svwaitdown.c: minimum timeout is 1 second; service directories no longer
+    must start with /.
+  * svwaitup.c: minimum uptime of services is 1 second; service directories
+    no longer must start with /; print number of seconds a service is up if
+    verbose.
+  * man/svwaitdown.8, man/svwaitup.8: adapt.
   * doc/runscripts.html: add contributed run scripts (thx Stefan Karrmann,
     Kevin Berry, Karl Chen).
 

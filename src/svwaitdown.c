@@ -8,9 +8,9 @@
 #include "buffer.h"
 
 #define FATAL "svwaitdown: fatal: "
-#define WARNING "svwaitdown: warning: "
+#define WARN "svwaitdown: warning: "
 #define INFO "svwaitdown: "
-#define USAGE " [-v] [-t 2..6000] service ..."
+#define USAGE " [-v] [-t 1..6000] service ..."
 
 #define VERSION "$Id$"
 
@@ -18,12 +18,12 @@ const char *progname;
 const char * const *dir;
 unsigned int rc =0;
 
-void usage() { strerr_die4x(1, "usage: ", progname, USAGE, "\n"); }
-
+void fatal(const char *m) { strerr_die3sys(111, FATAL, m, ": "); }
 void warn(const char *s1, const char *s2, struct strerr *e) {
   dir++; rc++;
-  strerr_warn3(WARNING, s1, s2, e);
+  strerr_warn3(WARN, s1, s2, e);
 }
+void usage() { strerr_die4x(1, "usage: ", progname, USAGE, "\n"); }
 
 int main(int argc, const char * const *argv) {
   int opt;
@@ -31,6 +31,7 @@ int main(int argc, const char * const *argv) {
   int verbose =0;
   int doexit =0;
   int dokill =0;
+  int wdir;
   int fd;
   char status[20];
   int r;
@@ -44,7 +45,7 @@ int main(int argc, const char * const *argv) {
     switch(opt) {
     case 't':
       scan_ulong(optarg, &sec);
-      if ((sec < 2) || (sec > 6000)) usage();
+      if ((sec < 1) || (sec > 6000)) usage();
       break;
     case 'x':
       doexit =1;
@@ -64,8 +65,12 @@ int main(int argc, const char * const *argv) {
   argv +=optind;
   if (! argv || ! *argv) usage();
 
+  if (! (wdir =open_read(".")))
+    fatal("unable to open current working directory");
+
   for (dir =argv; *dir; ++dir) {
-    if (*dir[0] != '/') continue; /* bummer */
+    if (dir != argv)
+      if (fchdir(wdir) == -1) fatal("unable to switch to starting directory");
     if (chdir(*dir) == -1) continue; /* bummer */
     if ((fd =open_write("supervise/control")) == -1) continue; /* bummer */
     if (write(fd, "dx", 1 +doexit) != (1 +doexit)) {
@@ -77,10 +82,7 @@ int main(int argc, const char * const *argv) {
 
   tai_now(&start);
   while (*dir) {
-    if (*dir[0] != '/') {
-      warn(*dir, ": service directory must start with a slash.", 0);
-      continue;
-    }
+    if (fchdir(wdir) == -1) fatal("unable to switch to starting directory");
     if (chdir(*dir) == -1) {
       warn(*dir, ": unable to change directory: ", &strerr_sys);
       continue;
@@ -167,6 +169,9 @@ int main(int argc, const char * const *argv) {
     }
     sleep(1);
   }
+  if (fchdir(wdir) == -1) 
+    strerr_warn2(WARN, "unable to switch to starting directory: ", &strerr_sys);
+  close(wdir);
   if (rc > 100) rc =100;
   _exit(rc);
 }

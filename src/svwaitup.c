@@ -6,23 +6,24 @@
 #include "open.h"
 #include "tai.h"
 #include "buffer.h"
+#include "fmt.h"
 
 #define FATAL "svwaitup: fatal: "
-#define WARNING "svwaitup: warning: "
+#define WARN "svwaitup: warning: "
 #define INFO "svwaitup: "
-#define USAGE " [-v] [-s 2..600] service ..."
+#define USAGE " [-v] [-s 1..600] service ..."
 
 const char *progname;
 unsigned long sec =2;
 unsigned int rc =0;
 const char * const *dir;
 
-void usage() { strerr_die4x(1, "usage: ", progname, USAGE, "\n"); }
-
+void fatal(const char *m) { strerr_die3sys(111, FATAL, m, ": "); }
 void warn(const char *s1, const char *s2, struct strerr *e) {
   dir++; rc++;
-  strerr_warn3(WARNING, s1, s2, e);
+  strerr_warn3(WARN, s1, s2, e);
 }
+void usage() { strerr_die4x(1, "usage: ", progname, USAGE, "\n"); }
 
 int main(int argc, const char * const *argv) {
   int opt;
@@ -31,17 +32,19 @@ int main(int argc, const char * const *argv) {
   int fd;
   int is;
   int r;
+  int wdir;
   unsigned long pid;
   struct tai when;
   struct tai now;
-  
+  char sulong[FMT_ULONG];
+
   progname =*argv;
   
   while ((opt =getopt(argc, argv, "s:vV")) != opteof) {
     switch(opt) {
     case 's': 
       scan_ulong(optarg, &sec);
-      if ((sec < 2) || (sec > 600)) usage();
+      if ((sec < 1) || (sec > 600)) usage();
       break;
     case 'v':
       verbose =1;
@@ -55,12 +58,13 @@ int main(int argc, const char * const *argv) {
   argv +=optind;
   if (! argv || ! *argv) usage();
 
+  if (! (wdir =open_read(".")))
+    fatal("unable to open current working directory");
+
   dir =argv;
   while (*dir) {
-    if (*dir[0] != '/') {
-      warn(*dir, ": service directory must start with a slash.", 0);
-      continue;
-    }
+    if (dir != argv)
+      if (fchdir(wdir) == -1) fatal("unable to switch to starting directory");
     if (chdir(*dir) == -1) {
       warn(*dir, ": unable to change directory: ", &strerr_sys);
       continue;
@@ -105,12 +109,18 @@ int main(int argc, const char * const *argv) {
     
     if (is >= sec) {
       /* ok */
-      if (verbose) strerr_warn3(INFO, *dir, ": is up.", 0);
+      if (verbose) {
+	sulong[fmt_ulong(sulong, is)] =0;
+	strerr_warn5(INFO, *dir, ": is up (", sulong, " seconds)", 0);
+      }
       dir++;
       continue;
     }
     sleep(sec -is);
   }
+  if (fchdir(wdir) == -1) 
+    strerr_warn2(WARN, "unable to switch to starting directory: ", &strerr_sys);
+  close(wdir);
   if (rc > 100) rc =100;
   _exit(rc);
 }
