@@ -15,7 +15,7 @@ ifneq ($(DEB_HOST_ARCH),alpha)
 ifneq ($(DEB_HOST_ARCH),arm)
 ifneq ($(DEB_HOST_ARCH),hppa)
 ifneq ($(DEB_HOST_ARCH),i386)
-#ifneq ($(DEB_HOST_ARCH),ia64)
+ifneq ($(DEB_HOST_ARCH),ia64)
 ifneq ($(DEB_HOST_ARCH),mips)
 ifneq ($(DEB_HOST_ARCH),mipsel)
 ifneq ($(DEB_HOST_ARCH),powerpc)
@@ -29,7 +29,7 @@ endif
 endif
 endif
 endif
-#endif
+endif
 
 configure: configure-stamp
 configure-stamp:
