@@ -84,9 +84,9 @@ It is possible to just add <tt>/etc/init.d/rc 2</tt> for having all services
 from the former runlevel 2 started as one time tasks, but keep the goal above
 in mind, supervising services has great advantages.
 <p>
-Repeat step 4 and 5, using <tt>/sbin/runit-reboot</tt> to reboot the system,
-until your are satisfied with your services startup. If anything goes wrong,
-reboot the system with the default <i>sysvinit</i> <tt>/sbin/init</tt>
+Repeat step 4 and 5, using <tt><b>/sbin/runit-init 6</b></tt> to reboot the
+system, until you are satisfied with your services startup. If anything goes
+wrong, reboot the system into the default <i>sysvinit</i> <tt>/sbin/init</tt>
 and repair the <i>runit</i> stages, then start again at step 4.
 <h3>Step 6: Replace /sbin/init</h3>
 Now it is time to replace the <i>sysvinit</i> <tt>/sbin/init</tt> binary:
@@ -102,7 +102,7 @@ default Unix process no 1 <i>runit</i>.
 </pre>
 To report success:
 <pre>
-  # ( uname -a ; cat /etc/runit/[123] ) | mail pape-runit-0.1.2@smarden.org
+  # ( uname -a ; cat /etc/runit/[123] ) | mail pape-runit-0.2.0@smarden.org
 </pre>
 <hr>
 <address><a href="mailto:pape@smarden.org">

@@ -19,20 +19,30 @@ or
 .B init 6\fR:
 .TP
 .B init 0
-run
-.BR runit-halt (8)
-to halt the system.
+tells the Unix process no 1 to shutdown and halt the system. To signal
+.BR runit (8)
+the system halt request, the
+.I /etc/runit/reboot
+file is removed and
+.I /etc/runit/stopit
+is touched. Then a CONT signal is sent to
+.BR runit (8).
 .TP
 .B init 6
-run
-.BR runit-reboot (8)
-to reboot the system.
+tells the Unix process no 1 to shutdown and reboot the system. To signal
+.BR runit (8)
+the system reboot request, the
+.I /etc/runit/reboot
+and
+.I /etc/runit/stopit
+files are touched. Then a CONT signal is sent to
+.BR runit (8).
 .SH EXIT CODES
 .B runit-init
 returns 111 on error, 0 in all other cases.
 .SH SEE ALSO
-runit(8),
-runit-halt(8),
-runit-reboot(8)
+runit(8)
+
+http://smarden.org/pape/runit/
 .SH AUTHOR
 Gerrit Pape <pape@smarden.org>

@@ -1,3 +1,10 @@
+runit 0.2.0
+Mon, 26 Nov 2001 12:29:44 +0100
+  * runit-halt, runit-reboot removed, integrated into runit-init
+  * tested with dietlibc
+  * doc: usedietlibs.html added.
+  * BSD license.
+
 runit 0.1.2
 Thu, 22 Nov 2001 18:29:05 +0100
   * collects all terminated children in all stages

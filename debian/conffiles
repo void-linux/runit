@@ -2,5 +2,3 @@
 /etc/runit/2
 /etc/runit/3
 /etc/runit/ctrlaltdel
-/sbin/runit-halt
-/sbin/runit-reboot

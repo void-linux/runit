@@ -9,12 +9,11 @@
 <h1>runit - minimal replacement for <i>sysvinit</i></h1>
 <hr>
 <a href="install.html">How to install runit</a><br>
-<a href="replaceinit.html">How to replace init</a>
+<a href="replaceinit.html">How to replace init</a><br>
+<a href="usedietlibc.html">How to use dietlibc</a>
 <p>
 <a href="runit.8.html">The <tt>runit</tt> program</a><br>
-<a href="runit-init.8.html">The <tt>runit-init</tt> program</a><br>
-<a href="runit-halt.8.html">The <tt>runit-halt</tt> program</a><br>
-<a href="runit-reboot.8.html">The <tt>runit-reboot</tt> program</a>
+<a href="runit-init.8.html">The <tt>runit-init</tt> program</a>
 <hr>
 <i>runit</i> cooperates with djb's
 <a href="http://cr.yp.to/daemontools.html">daemontools</a> package to create
@@ -67,8 +66,20 @@ done in other programs, see
 Dependencies and runlevels</a>
 for an example, the amount of code in process no 1 should be minimal.
 <hr>
-See <a href="replaceinit.html">How to replace init</a> for smoothly migrating
-from <i>sysvinit</i>.
+See <a href="install.html">How to install runit</a> for installing
+<i>runit</i> and <a href="replaceinit.html">How to replace init</a> for
+smoothly escaping from <i>sysvinit</i>.
+<hr>
+If <i>runit</i> is compiled and linked with
+<a href="http://www.fefe.de/dietlibc/">dietlibc</a> it yields in a statically
+linked <tt>runit</tt> binary of 14k size and this <tt>ps axuw</tt> output
+on my system:
+<pre>
+  USER       PID %CPU %MEM   VSZ  RSS TTY      STAT START   TIME COMMAND
+  root         1  0.0  0.0    24   20 ?        S    Nov22   0:01 runit
+</pre>
+I recommend doing this; for instructions, see
+<a href="usedietlibc.html">How to use dietlibc</a>.
 <hr>
 See <a href="http://smarden.org/runit/">http://smarden.org/runit/</a>
 for recent informations.

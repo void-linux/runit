@@ -44,7 +44,7 @@ exists,
 .B runit
 runs
 .IR /etc/runit/ctrlaltdel ,
-waits for it to terminate and then enters Stage 3 for system shutdown.
+waits for it to terminate and then sends itself a CONT signal.
 .SH SIGNALS
 .B runit
 only accepts signals in Stage 2.
@@ -61,8 +61,8 @@ if
 .B runit
 receives an INT signal, a ctrl-alt-del keyboard request is triggered.
 .SH SEE ALSO
-init(8),
-runit-halt(8),
-runit-reboot(8)
+runit-init(8)
+
+http://smarden.org/pape/runit/
 .SH AUTHOR
 Gerrit Pape <pape@smarden.org>

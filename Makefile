@@ -1,8 +1,8 @@
 DESTDIR=
 
-PACKAGE=runit-0.1.2
+PACKAGE=runit-0.2.0
 DIRS=doc man etc package src
-MANPAGES=man/runit.8 man/runit-init.8 man/runit-halt.8 man/runit-reboot.8
+MANPAGES=man/runit.8 man/runit-init.8
 DAEMONTOOLS_PD=daemontools-pd-0.76
 
 all: clean .manpages $(DAEMONTOOLS_PD).tar.gz $(PACKAGE).tar.gz

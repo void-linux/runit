@@ -10,14 +10,16 @@ mkdir -p compile command
 test -r compile/home || echo $here > compile/home
 test -h compile/src || ln -s $here/src compile/src
 
+# support, default: ../daemontools/compile
+test -h src/support || ln -s ../../daemontools/compile src/support
+test -d src/support || \
+  ( echo 'daemontools not found.'; rm -f src/support; exit 1 )
+
 echo 'Linking ./src/* into ./compile...'
 for i in `ls src`
 do
   test -h compile/$i || ln -s src/$i compile/$i
 done
-
-# support, default: ../daemontools/compile
-test -h compile/support || ln -s ../../daemontools/compile compile/support
 
 echo 'Compiling everything in ./compile...'
 ( cd compile; exec make )

@@ -47,6 +47,7 @@ void sig_child_handler (void) {
 }
 
 int main (int argc, const char * const *argv, const char * const *envp) {
+  const char * prog[2];
   int pid, pid2;
   int wstat;
   int fd;
@@ -92,7 +93,6 @@ int main (int argc, const char * const *argv, const char * const *envp) {
     }
     if (!pid) {
       /* child */
-      const char * prog[2];
 
       prog[0] =stage[st];
       prog[1] =0;
@@ -112,7 +112,7 @@ int main (int argc, const char * const *argv, const char * const *envp) {
             
       strerr_warn3(INFO, "enter stage: ", stage[st], 0);
       pathexec_run(*prog, (const char* const *) prog, envp);
-      strerr_warn3(FATAL, "could not start child: ", stage[st], &strerr_sys);
+      strerr_die3sys(0, FATAL, "could not start child: ", stage[st]);
     }
 
     x.fd =selfpipe[0];
@@ -153,7 +153,7 @@ int main (int argc, const char * const *argv, const char * const *envp) {
 	continue;
       }
 
-      /* sig */
+      /* sig? */
       if (!sigc  && !sigi) {
 #ifdef DEBUG
 	strerr_warn2(WARNING, "poll: ", &strerr_sys);
@@ -161,13 +161,17 @@ int main (int argc, const char * const *argv, const char * const *envp) {
 	continue;
       }
       if (st != 1) {
-	strerr_warn2(WARNING, "sigs only work in stage 2.", 0);
+	strerr_warn2(WARNING, "signals only work in stage 2.", 0);
 	sigc =sigi =0;
 	continue;
       }
-      if (sigi && ((fd =open_write(CTRLALTDEL)) != -1)) {
+      if (sigi && ((fd =open_read(CTRLALTDEL)) != -1)) {
 	close(fd);
 	strerr_warn2(INFO, "ctrl-alt-del request...", 0);
+
+	prog[0] =CTRLALTDEL;
+	prog[1] =0;
+
 	while ((pid2 =fork()) == -1) {
 	  strerr_warn4(FATAL,
 		       "unable to fork for \"", CTRLALTDEL, "\" pausing: ",
@@ -176,14 +180,9 @@ int main (int argc, const char * const *argv, const char * const *envp) {
 	}
 	if (!pid2) {
 	  /* child */
-	  const char * prog[2];
-
-	  prog[0] =CTRLALTDEL;
-	  prog[1] =0;
-            
 	  strerr_warn3(INFO, "enter stage: ", prog[0], 0);
-	  pathexec_run(*prog, (const char* const *) prog, envp);
-	  strerr_warn3(FATAL, "could not start child: ", prog[0], &strerr_sys);
+	  pathexec_run(*prog, (const char * const *) prog, envp);
+	  strerr_die3sys(0, FATAL, "could not start child: ", prog[0]);
 	}
 	if (wait_pid(&wstat, pid2) == -1) {
 	  strerr_warn2(FATAL, "wait_pid: ", &strerr_sys);
@@ -191,6 +190,7 @@ int main (int argc, const char * const *argv, const char * const *envp) {
 	if (wait_crashed(wstat)) {
 	  strerr_warn3(WARNING, "child crashed: ", CTRLALTDEL, 0);
 	}
+	strerr_warn3(INFO, "leave stage: ", prog[0], 0);
 	sigi =0;
 	sigc++;
       }
@@ -233,6 +233,7 @@ int main (int argc, const char * const *argv, const char * const *envp) {
 	  }
 	}
 	sigc =0;
+	strerr_warn3(INFO, "leave stage: ", stage[st], 0);
 
 	/* enter stage 3 */
 	break;
