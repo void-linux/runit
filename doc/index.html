@@ -42,10 +42,10 @@
 replacement for
 <a href="ftp://ftp.cistron.nl/pub/people/miquels/sysvinit/">sysvinit</a>
 and other init schemes. <i>runit</i> runs on <b>GNU/Linux</b>,
-<b>OpenBSD</b>, <b>FreeBSD</b>, <b>MacOSX</b>, and can easily be adapted to
-other unix operating systems.
-If <i>runit</i> runs for you on any other operating system or Linux
-distribution, please let me know.
+<b>OpenBSD</b>, <b>FreeBSD</b>, <b>MacOSX</b>, <b>Solaris</b>, and can
+easily be adapted to other unix operating systems.
+If <i>runit</i> runs for you on any other operating system, please let me
+know.
 <p>
 <b>Warning:</b> Replacing <i>sysvinit</i> or <i>init</i> can cause the
 system's boot to fail. Make sure you are able to recover and repair your
@@ -97,11 +97,9 @@ keep working. On *BSD systems use <b><tt>init 0</tt></b> for system halt
 and <b><tt>init 6</tt></b> for reboot.
 <a href="runlevels.html">Runlevels</a> are handled through the
 <a href="runsvdir.8.html">runsvdir</a> and
-<a href="runsvchdir.8.html">runsvchdir</a> programs. Service dependencies
-are rudimentarily handled through the <a href="svwaitup.8.html">svwaitup</a>
-and <a href="svwaitdown.8.html">svwaitdown</a> programs, see
-<a href="http://smarden.org/pape/djb/daemontools/noinit.html">
-Dependencies and runlevels</a> for an example.
+<a href="runsvchdir.8.html">runsvchdir</a> programs.
+Service <a href="dependencies.html">dependencies</a> are resolved
+automatically.
 <p>
 <i>runit</i> is optimized for reliability and small size. The amount of
 code in process no 1 should be minimal.
@@ -115,24 +113,24 @@ no 1, here is an example:
  # strings /proc/1/exe |grep Id
  &#36;Id: runit.c,v 1.7 2002/02/13 09:59:52 pape Exp &#36;
  # uptime
-  12:26:12 up 283 days, 22:47,  1 user,  load average: 0.00, 0.00, 0.00
+  11:59:13 up 365 days, 23:22,  3 users,  load average: 0.01, 0.02, 0.00
  # ps axuw |head -n20
  USER       PID %CPU %MEM   VSZ  RSS TTY      STAT START   TIME COMMAND
  root         1  0.0  0.0    20   16 ?        S     2002   0:07 runit
  root         2  0.0  0.0     0    0 ?        SW    2002   0:00 [keventd]
- root         3  0.0  0.0     0    0 ?        SWN   2002   0:00 [ksoftirqd_CPU0]
- root         4  0.0  0.0     0    0 ?        SW    2002   3:30 [kswapd]
+ root         3  0.0  0.0     0    0 ?        SWN   2002   0:51 [ksoftirqd_CPU0]
+ root         4  0.0  0.0     0    0 ?        SW    2002 144:38 [kswapd]
  root         5  0.0  0.0     0    0 ?        SW    2002   0:08 [bdflush]
- root         6  0.0  0.0     0    0 ?        SW    2002   0:15 [kupdated]
- root       168  0.0  0.0  1652  168 ?        S     2002   0:00 /usr/sbin/cron
- root       174  0.0  0.0    36   24 ?        S     2002   0:00 runsvdir /var/service log: ....................................................................................................
+ root         6  0.0  0.0     0    0 ?        SW    2002   7:24 [kupdated]
+ root       168  0.0  0.0  1652  168 ?        S     2002   0:27 /usr/sbin/cron
+ root       174  0.0  0.0    36   24 ?        S     2002   1:06 runsvdir /var/service log: ...............................................................................................
  root       176  0.0  0.0    20   20 ?        S     2002   0:00 runsv qmail-send
  root       177  0.0  0.0    20   20 ?        S     2002   0:00 runsv getty-5
  root       178  0.0  0.0    20   20 ?        S     2002   0:00 runsv getty-4
  root       179  0.0  0.0    20   20 ?        S     2002   0:00 runsv getty-3
  root       180  0.0  0.0    20   20 ?        S     2002   0:00 runsv getty-2
  root       182  0.0  0.0    20   20 ?        S     2002   0:00 runsv socklog-unix
- root       183  0.0  0.0  1256    4 tty5     S     2002   0:00 getty 38400 tty5 linux
+ root       183  0.0  0.0  1256    4 tty5     S     2002   0:00 /sbin/getty 38400 tty5 linux
  root       184  0.0  0.0  1256    4 tty3     S     2002   0:00 getty 38400 tty3 linux
  root       185  0.0  0.0    20   20 ?        S     2002   0:00 runsv socklog-klog
  root       186  0.0  0.0    20   20 ?        S     2002   0:00 runsv ssh
@@ -148,18 +146,17 @@ no 1, here is an example:
        `-runsvdir-+-runsv-+-multilog
                   |       `-qmail-send-+-qmail-clean
                   |                    |-qmail-lspawn
-                  |                    `-qmail-rspawn
+                  |                    `-qmail-rspawn---qmail-remote
                   |-4*[runsv---getty]
                   |-2*[runsv-+-multilog]
                   |          `-socklog]
                   |-runsv-+-multilog
-                  |       `-sshd-+-sshd---bash---tail
-                  |              |-sshd---sshd---cvs
-                  |              `-sshd---sshd---bash---bash---pstree
+                  |       `-sshd-+-sshd---sshd---bash---bash---pstree
+                  |              `-sshd---sshd---rsync
                   |-runsv---clockspeed
                   |-runsv-+-dnscache
                   |       `-multilog
-                  |-runsv---apache-ssl-+-10*[apache-ssl]
+                  |-runsv---apache-ssl-+-9*[apache-ssl]
                   |                    |-gcache
                   |                    `-4*[multilog]
                   |-7*[runsv-+-multilog]
@@ -170,27 +167,10 @@ no 1, here is an example:
                   |-2*[runsv-+-multilog]
                   |          `-tcpsvd]
                   |-runsv-+-svlogd
-                  |       `-tcpsvd---smtpfront-qmail
+                  |       `-tcpsvd-+-smtpfront-qmail
+                  |                `-smtpfront-qmail---qmail-queue
                   `-runsv-+-svlogd
                           `-tcpsvd---bincimap-up---bincimapd
-</pre>
-This is from a more busy system:
-<pre>
- # strings /proc/1/exe |grep Id
- &#36;Id: runit.c,v 1.7 2002/02/13 09:59:52 pape Exp &#36;
- # uptime
-  13:21:22 up 114 days, 35 min,  3 users,  load average: 0.77, 0.56, 0.54
- # ps axuw |head
- USER       PID %CPU %MEM   VSZ  RSS TTY      STAT START   TIME COMMAND
- root         1  0.0  0.0    20    4 ?        S    Feb11   0:04 runit
- root         2  0.0  0.0     0    0 ?        SW   Feb11   0:01 [keventd]
- root         3  0.0  0.0     0    0 ?        SW   Feb11   0:25 [kapmd]
- root         4  0.0  0.0     0    0 ?        SWN  Feb11   1:02 [ksoftirqd_CPU0]
- root         5  0.0  0.0     0    0 ?        SW   Feb11  11:57 [kswapd]
- root         6  0.0  0.0     0    0 ?        SW   Feb11   7:58 [bdflush]
- root         7  0.0  0.0     0    0 ?        SW   Feb11  13:49 [kupdated]
- root        57  0.0  0.0     0    0 ?        SW   Feb11   0:00 [msp3410 [auto]]
- root       191  0.0  0.0    36   24 ?        S    Feb11   2:42 runsvdir /var/service log: ....................................
 </pre>
 <hr>
 See <a href="install.html">How to install runit</a> for installing

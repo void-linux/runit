@@ -11,7 +11,8 @@
 <hr>
 <a href="#sysv">How to replace sysvinit on GNU/Linux</a><br>
 <a href="#bsd">How to replace init on *BSD</a><br>
-<a href="#macosx">How to replace init on MacOSX</a>
+<a href="#macosx">How to replace init on MacOSX</a><br>
+<a href="#solaris">How to replace init on Solaris</a>
 <hr>
 <a name="sysv"><h2>Replacing sysvinit (GNU/Linux)</h2></a>
 Follow these steps to migrate from <i>sysvinit</i> to <i>runit</i> on
@@ -48,12 +49,17 @@ The <i>runit</i> programs must reside on the root partition, copy them to
 At least one getty must run in stage 2 so you are able to login, choose a
 free <tt>tty</tt>, say <tt>tty5</tt>, where <i>sysvinit</i> is not running
 any getty (edit <tt>/etc/inittab</tt> and <tt>kill -HUP 1</tt> if
-needed) and tell <a href="http://cr.yp.to/daemontools/svscan.html">svscan</a>
-about the getty-5 <i>service</i>:
+needed) and tell <a href="runsvdir.8.html">runsvdir</a> about the getty-5
+<i>service</i>:
 <pre>
-  # ln -s /etc/runit/getty-5 /service/
+  # mkdir -p /var/service
+  # ln -s /etc/runit/getty-5 /var/service/
 </pre>
-Check if the getty is running.
+Start <i>runit</i>'s stage 2 for testing:
+<pre>
+  # /etc/runit/2 &
+</pre>
+And check if the getty is running.
 <h3>Step 4: Reboot into runit for testing</h3>
 Boot your system with <i>runit</i> for the first time. This does not change
 the default boot behavior of your system, <i>lilo</i> will be told to use
@@ -158,12 +164,17 @@ FreeBSD 4.4:
   # cp -p /package/admin/runit/etc/freebsd/getty-ttyv4/run /etc/runit/getty-5/
   # cp -p /package/admin/runit/etc/freebsd/getty-ttyv4/finish /etc/runit/getty-5/
 </pre>
-and tell
-<a href="http://cr.yp.to/daemontools/svscan.html">svscan</a>
-about the <tt>getty-5</tt> <i>service</i>:
+and tell <a href="runsvdir.8.html">runsvdir</a> about the <tt>getty-5</tt>
+<i>service</i>:
 <pre>
-  # ln -s /etc/runit/getty-5 /service/
+  # mkdir -p /var/service
+  # ln -s /etc/runit/getty-5 /var/service/
 </pre>
+Start <i>runit</i>'s stage 2 for testing:
+<pre>
+  # /etc/runit/2 &
+</pre>
+And check if the getty is running.
 <h3>Step 4: Replace the <tt>/sbin/init</tt> binary</h3>
 Before replacing the <tt>init</tt> binary, make sure that you are able
 to boot your system alternatively, e.g. with a boot floppy, to restore the
@@ -217,6 +228,12 @@ service startup from the <tt>/etc/rc.*</tt> scripts and tell
 Replacing init on MacOSX is not yet supported.
 Please refer to the <a href="useinit.html">instructions</a> on how to use
 <i>runit</i> service supervision with the MacOSX init scheme.
+<hr>
+
+<a name="solaris"><h2>Replacing init on Solaris</h2></a>
+Replacing init on Solaris is not yet supported.
+Please refer to the <a href="useinit.html">instructions</a> on how to use
+<i>runit</i> service supervision with the Solaris sysvinit scheme.
 <hr>
 <address><a href="mailto:pape@smarden.org">
 Gerrit Pape &lt;pape@smarden.org&gt;

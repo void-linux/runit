@@ -8,6 +8,12 @@
   * utmpset.c: support systems with utmp or utmpx (solaris).
   * Makefile: adapt.
   * supports the solaris platform (thx Uffe Jakobsen).
+  * doc/benefits.html, doc/index.html, doc/replaceinit.html,
+    doc/runlevels.html, doc/useinit.html: default service directory is
+    /var/service; minor.
+  * etc/2, etc/debian/3, etc/freebsd/3, etc/macosx/StartupItems/runit,
+    etc/openbsd/3, man/runsv.8, man/runsvchdir.8, man/runsvdir.8: default
+    service directory is /var/service.
 
 runit 0.11.2
 Tue, 23 Sep 2003 10:15:32 +0200

@@ -65,7 +65,7 @@ and (optionally)
 are provided to give commands to
 .BR runsv .
 You can use
-.BR svc (8)
+.BR runsvctrl (8)
 to control the service or just write one of the following characters to
 the named pipe:
 .TP
@@ -124,10 +124,10 @@ exits.
 This command is ignored if it is given to
 .IR service /log/supervise/control.
 .P
-For example, to send a TERM signal to /service/socklog-unix, either do
-  # svc \-t /service/socklog-unix
+Example: to send a TERM signal to the socklog-unix service, either do
+  # runsvctrl term /var/service/socklog-unix
  or
-  # echo \-n t >/service/socklog-unix/supervise/control
+  # echo \-n t >/var/service/socklog-unix/supervise/control
 .P
 If
 .BR echo (1)
@@ -162,10 +162,7 @@ runsvchdir(8),
 svlogd(8),
 svwaitdown(8),
 svwaitup(8),
-svc(8),
-supervise(8)
 .P
- http://smarden.org/runit/
- http://cr.yp.to/daemontools.html
+http://smarden.org/runit/
 .SH AUTHOR
 Gerrit Pape <pape@smarden.org>
