@@ -23,7 +23,9 @@ automatically restarts stage 2.
 <p>
 The <a href="svwaitdown.8.html">svwaitdown</a> program has new options: -k
 and -x. They are used in <tt>runit</tt>'s stage 3 (<tt>/etc/runit/3</tt>).
-Please adapt your <tt>/etc/runit/3</tt> script, see the examples in
+Please adapt your <tt>/etc/runit/3</tt> script after the changes to stage 2
+have taken effect (<tt>runsvdir</tt> must run instead of
+<tt>svscanboot</tt>); see the examples in
 <tt>/package/admin/runit/etc/</tt>.
 <h3>0.4.1 to 0.5.0</h3>
 There is a new program: <a href="utmpset.8.html">utmpset</a>. This program
