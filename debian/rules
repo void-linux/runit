@@ -66,6 +66,7 @@ install: build
 	mv debian/runit/package/admin/runit-0.1.0/man .
 	mv debian/runit/package/admin/runit-0.1.0/doc .
 	mv debian/runit/package/admin/runit-0.1.0/etc .
+	cp -a debian/runit/package/admin/runit-0.1.0/package .
 
 	# /etc/runit
 	cp -p admin/runit-0.1.0/etc/debian/[123] \
