@@ -1,0 +1,105 @@
+
+
+
+<HTML>
+<HEAD>
+<TITLE>runsvctrl(8) manual page</TITLE>
+</HEAD>
+<BODY bgcolor=white>
+<a href="http://smarden.org/pape/">G. Pape</a><br><A HREF="index.html">runit</A><hr><P>
+
+<H2><A NAME="sect0">Name</A></H2>
+runsvctrl - controls a service monitored by <B><I>runsv</B>(8)</I>. 
+<H2><A NAME="sect1">hSYNOPSIS</A></H2>
+<B>runsvctrl</B>
+<I>command</I> <I>services</I> 
+<H2><A NAME="sect2">Description</A></H2>
+<I>services</I> consists of one or more arguments,
+each argument naming a directory used by <B><I>runsv</B>(8)</I>. <I>command</I> is one of up,
+down, once, pause, cont, hup, alarm, interrupt, 1, 2, term, kill, or exit.
+<P>
+For each <I>service</I> of <I>services</I>, <B>runsvctrl</B> sends the command <I>command</I> to the
+<I>service</I>, which must be controlled by <B><I>runsv</B>(8)</I>. 
+<H2><A NAME="sect3">Commands</A></H2>
+
+<DL>
+
+<DT><B>up</B> </DT>
+<DD>If the service
+is not running, start it. If the service stops, restart it. </DD>
+
+<DT><B>down</B> </DT>
+<DD>If the service
+is running, send it a TERM signal. If ./run exits, start ./finish if it exists.
+After it stops, do not restart service. </DD>
+
+<DT><B>once</B> </DT>
+<DD>If the service is not running,
+start it. Do not restart it if it stops. </DD>
+
+<DT><B>pause</B> </DT>
+<DD>If the service is running,
+send it a STOP signal. </DD>
+
+<DT><B>cont</B> </DT>
+<DD>If the service is running, send it a CONT signal.
+</DD>
+
+<DT><B>hup</B> </DT>
+<DD>If the service is running, send it a HUP signal. </DD>
+
+<DT><B>alarm</B> </DT>
+<DD>If the service
+is running, send it a ALRM signal. </DD>
+
+<DT><B>interrupt</B> </DT>
+<DD>If the service is running,
+send it a INT signal. </LI><B></B><LI>User-defined 1. If the service is running, send it a
+USR1 signal. </LI><B></B><LI>User-defined 2. If the service is running, send it a USR2 signal.
+</DD>
+
+<DT><B>term</B> </DT>
+<DD>If the service is running, send it a TERM signal. </DD>
+
+<DT><B>kill</B> </DT>
+<DD>If the service
+is running, send it a KILL signal. </DD>
+
+<DT><B>exit</B> </DT>
+<DD>If the service is running, send
+it a TERM signal. Do not restart the service. If the service is down, and
+no log service exists, <B><I>runsv</B>(8)</I> exits. If the service is down and a log
+service exists, send a TERM signal to the log service. If the log service
+is down, <B><I>runsv</B>(8)</I> exits. This command is ignored if it is given to <I>service</I>/log/supervise/control.
+</DD>
+</DL>
+<P>
+<B>runsvctrl</B> actually looks only at the first character of <I>command</I>. 
+<H2><A NAME="sect4">Exit Codes</A></H2>
+<B>runsvctrl</B>
+exits 0, if the <I>command</I> was sent successfully to all <I>services</I>. <P>
+For each
+<I>service</I> that caused an error (e.g. the directory is not controlled by a <B><I>runsv</B>(8)</I>
+process), <B>runsvctrl</B> increases the exit code by one and exits non zero. The
+maximum is 100. <P>
+<B>runsvctrl</B> exits 111 on error. 
+<H2><A NAME="sect5">See Also</A></H2>
+<I>runsvstat(8)</I>, <I>runit(8)</I>,
+<I>runit-init(8)</I>, <I>runsvdir(8)</I>, <I>runsv(8)</I>, <I>svwaitdown(8)</I>, <I>svwaitup(8)</I> <P>
+ <I>http://smarden.org/runit/</I><BR>
+ 
+<H2><A NAME="sect6">Author</A></H2>
+Gerrit Pape &lt;pape@smarden.org&gt; <P>
+
+<HR><P>
+<A NAME="toc"><B>Table of Contents</B></A><P>
+<UL>
+<LI><A NAME="toc0" HREF="#sect0">Name</A></LI>
+<LI><A NAME="toc1" HREF="#sect1">hSYNOPSIS</A></LI>
+<LI><A NAME="toc2" HREF="#sect2">Description</A></LI>
+<LI><A NAME="toc3" HREF="#sect3">Commands</A></LI>
+<LI><A NAME="toc4" HREF="#sect4">Exit Codes</A></LI>
+<LI><A NAME="toc5" HREF="#sect5">See Also</A></LI>
+<LI><A NAME="toc6" HREF="#sect6">Author</A></LI>
+</UL>
+</BODY></HTML>
