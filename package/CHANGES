@@ -1,5 +1,5 @@
 runit 0.11.0
-Fri, 08 Aug 2003 11:59:13 +0200
+Fri, 08 Aug 2003 12:37:14 +0200
   * uidgid.c, uidgid.h: new; get uid/gid by name.
   * chpst: new; run program with a changed process state (includes envdir,
     envuidgid, pgrphack, setlock, setuidgid, softlimit functionality).
