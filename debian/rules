@@ -120,7 +120,7 @@ install: build
 	  install -m0644 admin/runit/package/$$i \
 	    $(CURDIR)/debian/runit/usr/share/doc/runit/; \
 	done
-	for i in README.Debian copyright; do
+	for i in README.Debian copyright; do \
 	  install -m0644 debian/$$i \
 	    $(CURDIR)/debian/runit/usr/share/doc/runit/; \
 	done
