@@ -4,8 +4,10 @@ runit (1.0.5-1) unstable; urgency=low
   * debian/getty-tty5.run: don't use absolute pathname.
   * debian/control, debian/rules, runit.postinst, runit.postrm: minor
     cleanup.
+  * debian/diff/svlogd.diff: remove; obsolete.
+  * debian/rules: don't apply patch.
 
- -- Gerrit Pape <pape@smarden.org>  Mon, 20 Sep 2004 20:03:21 +0000
+ -- Gerrit Pape <pape@smarden.org>  Mon, 20 Sep 2004 20:07:03 +0000
 
 runit (1.0.4-2) unstable; urgency=medium
 
