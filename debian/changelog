@@ -15,8 +15,9 @@ runit (0.11.1-1) unstable; urgency=low
     on install and upgrade; barf on fresh install if SV entry is present.
   * debian/runit.postrm: new; remove SV inittab entry on de-install; force
     remove /var/run/getty-5/ on purge.
+  * debian/control: Standards-Version: 3.6.0
 
- -- Gerrit Pape <pape@smarden.org>  Mon, 22 Sep 2003 09:36:59 +0000
+ -- Gerrit Pape <pape@smarden.org>  Mon, 22 Sep 2003 09:57:07 +0000
 
 runit (0.11.0-1) unstable; urgency=low
 
