@@ -14,6 +14,7 @@
 #include "ndelay.h"
 #include "wait.h"
 #include "open.h"
+#include "reboot_system.h"
 
 /* #define DEBUG */
 
@@ -69,8 +70,9 @@ int main (int argc, const char * const *argv, char * const *envp) {
 
   /* console */
   if ((ttyfd =open_write("/dev/console")) != -1) {
-    if (ioctl(ttyfd, TIOCSCTTY, (char *)NULL) != -1)
-      strerr_warn2(WARNING, "ioctl: ", &strerr_sys);
+#ifdef TIOCSCTTY
+    ioctl(ttyfd, TIOCSCTTY, (char *)0);
+#endif
     dup2(ttyfd, 0); dup2(ttyfd, 1); dup2(ttyfd, 2);
     if (ttyfd > 2) close(ttyfd);
   }
@@ -86,8 +88,8 @@ int main (int argc, const char * const *argv, char * const *envp) {
   ndelay_on(selfpipe[1]);
 
 #ifdef RB_DISABLE_CAD
-  /* activate ctrlaltdel handling, glibc */
-  if (RB_DISABLE_CAD == 0) reboot(0);
+  /* activate ctrlaltdel handling, glibc, dietlibc */
+  if (RB_DISABLE_CAD == 0) reboot_system(0);
 #endif
 
   strerr_warn3(INFO, "$Id$",
@@ -280,6 +282,12 @@ int main (int argc, const char * const *argv, char * const *envp) {
     }
   }
 
+  /* reget stderr */
+  if ((ttyfd =open_write("/dev/console")) != -1) {
+    dup2(ttyfd, 2);
+    if (ttyfd > 2) close(ttyfd);
+  }
+
 #ifdef RB_AUTOBOOT
   /* fallthrough stage 3 */
   strerr_warn2(INFO, "sending KILL signal to all processes...", 0);
@@ -287,20 +295,30 @@ int main (int argc, const char * const *argv, char * const *envp) {
 
   if ((stat(REBOOT, &s) != -1) && (s.st_mode & S_IXUSR)) {
     strerr_warn2(INFO, "system reboot.", 0);
-    reboot(RB_AUTOBOOT);
+    sync();
+    reboot_system(RB_AUTOBOOT);
   }
   else {
-#ifdef RB_HALT_SYSTEM
 #ifdef RB_POWER_OFF
     strerr_warn2(INFO, "power off...", 0);
-    reboot(RB_POWER_OFF);
+    sync();
+    reboot_system(RB_POWER_OFF);
     sleep(2);
 #endif
+#ifdef RB_HALT_SYSTEM
     strerr_warn2(INFO, "system halt.", 0);
-    reboot(RB_HALT_SYSTEM);
+    sync();
+    reboot_system(RB_HALT_SYSTEM);
+#else
+#ifdef RB_HALT
+    strerr_warn2(INFO, "system halt.", 0);
+    sync();
+    reboot_system(RB_HALT);
 #else
     strerr_warn2(INFO, "system reboot.", 0);
-    reboot(RB_AUTOBOOT);
+    sync();
+    reboot_system(RB_AUTOBOOT);
+#endif
 #endif
   }
 #endif

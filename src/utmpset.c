@@ -3,8 +3,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include <utmp.h>
 #include <string.h>
+#include "uw_tmp.h"
 #include "strerr.h"
 #include "sgetopt.h"
 #include "seek.h"
@@ -23,21 +23,24 @@ void usage(void) { strerr_die4x(1, "usage: ", progname, USAGE, "\n"); }
 
 int utmp_logout(const char *line) {
   int fd;
-  struct utmp ut;
+  uw_tmp ut;
   int ok =-1;
 
-  if ((fd =open(_PATH_UTMP, O_RDWR, 0)) < 0)
-    strerr_die4sys(111, FATAL, "unable to open ", _PATH_UTMP, ": ");
+  if ((fd =open(UW_TMP_UFILE, O_RDWR, 0)) < 0)
+    strerr_die4sys(111, FATAL, "unable to open ", UW_TMP_UFILE, ": ");
   if (lock_ex(fd) == -1)
-    strerr_die4sys(111, FATAL, "unable to lock: ", _PATH_UTMP, ": ");
+    strerr_die4sys(111, FATAL, "unable to lock: ", UW_TMP_UFILE, ": ");
 
-  while (read(fd, &ut, sizeof(struct utmp)) == sizeof(struct utmp)) {
+  while (read(fd, &ut, sizeof(uw_tmp)) == sizeof(uw_tmp)) {
     if (!ut.ut_name[0] || (str_diff(ut.ut_line, line) != 0)) continue;
-    memset(ut.ut_name, 0, UT_NAMESIZE);
-    memset(ut.ut_host, 0, UT_HOSTSIZE);
+    memset(ut.ut_name, 0, sizeof ut.ut_name);
+    memset(ut.ut_host, 0, sizeof ut.ut_host);
     if (time(&ut.ut_time) == -1) break;
-    if (lseek(fd, -(off_t)sizeof(struct utmp), SEEK_CUR) == -1) break;
-    if (write(fd, &ut, sizeof(struct utmp)) != sizeof(struct utmp)) break;
+#ifdef DEAD_PROCESS
+    ut.ut_type =DEAD_PROCESS;
+#endif
+    if (lseek(fd, -(off_t)sizeof(uw_tmp), SEEK_CUR) == -1) break;
+    if (write(fd, &ut, sizeof(uw_tmp)) != sizeof(uw_tmp)) break;
     ok =1;
     break;
   }
@@ -48,25 +51,28 @@ int wtmp_logout(const char *line) {
   int fd;
   int len;
   struct stat st;
-  struct utmp ut;
+  uw_tmp ut;
 
-  if ((fd = open_append(_PATH_WTMP)) == -1)
-    strerr_die4sys(111, FATAL, "unable to open ", _PATH_WTMP, ": ");
+  if ((fd = open_append(UW_TMP_WFILE)) == -1)
+    strerr_die4sys(111, FATAL, "unable to open ", UW_TMP_WFILE, ": ");
   if (lock_ex(fd) == -1)
-    strerr_die4sys(111, FATAL, "unable to lock ", _PATH_WTMP, ": ");
+    strerr_die4sys(111, FATAL, "unable to lock ", UW_TMP_WFILE, ": ");
 
   if (fstat(fd, &st) == -1) {
     close(fd);
     return(-1);
   }
-  memset(&ut, 0, sizeof(struct utmp));
-  if ((len =str_len(line)) > UT_LINESIZE) len =UT_LINESIZE -1;
+  memset(&ut, 0, sizeof(uw_tmp));
+  if ((len =str_len(line)) > sizeof ut.ut_line) len =sizeof ut.ut_line -2;
   byte_copy(ut.ut_line, len, line);
   if (time(&ut.ut_time) == -1) {
     close(fd);
     return(-1);
   }
-  if (write(fd, &ut, sizeof(struct utmp)) != sizeof(struct utmp)) {
+#ifdef DEAD_PROCESS
+  ut.ut_type =DEAD_PROCESS;
+#endif
+  if (write(fd, &ut, sizeof(uw_tmp)) != sizeof(uw_tmp)) {
     ftruncate(fd, st.st_size);
     close(fd);
     return(-1);

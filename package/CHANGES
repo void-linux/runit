@@ -1,3 +1,14 @@
+  * runsv.c: don't use EOVERFLOW as it is not standard (thx Christoph
+    Scheurer).
+  * reboot_system.h1, reboot_system.h2, tryreboot.c: new; test if reboot()
+    function takes one or two arguments (solaris).
+  * runit.c: fallthrough stage 3: re-get stderr; sync() before reboot().
+  * uw_tmp.h1, uw_tmp.h2, tryuwtmp.c, tryuwtmpx.c: new; test for utmpx or
+    utmp support.
+  * utmpset.c: support systems with utmp or utmpx (solaris).
+  * Makefile: adapt.
+  * supports the solaris platform (thx Uffe Jakobsen).
+
 runit 0.11.2
 Tue, 23 Sep 2003 10:15:32 +0200
   * doc/useinit.html, etc/macosx/StartupItems/runit: don't use /etc/runit/2
@@ -46,12 +57,12 @@ Wed, 04 Jun 2003 13:56:33 +0200
   * man/svlogd.8: document -v option; minor.
   * etc/freebsd/3, etc/openbsd/3: check if magic files in /etc/runit/ are
     executable, not readable.
-  A
   * etc/*/getty-tty*/run: remove utmpset from script.
   * etc/*/getty-tty*/finish: new: run utmpset.
   * doc/replaceinit.html: adapt.
   * setuidgid.c: new: daemontools' setuidgid drop in replacement (not
     installed by default).
+  A
   * Makefile: build setuidgid.
   * doc/index.html: update.
 
