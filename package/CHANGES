@@ -1,5 +1,5 @@
 runit 1.0.0
-Tue, 10 Feb 2004 12:55:07 +0000
+Tue, 10 Feb 2004 13:11:23 +0000
   * doc/benefits.html, doc/dependencies.html, doc/index.html,
     doc/replaceinit.html, doc/runlevels.html, doc/upgrade.html,
     doc/useinit.html: cleanup; minor.
