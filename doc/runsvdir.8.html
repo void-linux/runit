@@ -1,0 +1,55 @@
+
+
+
+<HTML>
+<HEAD>
+<TITLE>runsvdir(8) manual page</TITLE>
+</HEAD>
+<BODY bgcolor=white>
+<a href="http://smarden.org/pape/">G. Pape</a><br><A HREF="index.html">runit</A><hr><P>
+
+<H2><A NAME="sect0">Name</A></H2>
+runsvdir - starts and monitors a collection of <I>runsv(8)</I> processes 
+<H2><A NAME="sect1">Synopsis</A></H2>
+<B>runsvdir</B>
+<I>dir</I> [ <I>log</I> ] 
+<H2><A NAME="sect2">Description</A></H2>
+<I>dir</I> must be a directory. <I>log</I> is a space holder for
+a readproctitle log and must be at least seven characters long. <P>
+<B>runsvdir</B>
+starts a <B><I>runsv</B>(8)</I> process for each subdirectory in <I>dir</I>, up to a limit of
+1000 subdirectories. <B>runsvdir</B> skips subdirectory names starting with dots.
+<B><I>runsv</B>(8)</I> must be in <B>runsvdir</B>'s PATH. <P>
+At least every five seconds, <B>runsvdir</B>
+checks if <I>dir</I> has changed. If it sees a new subdirectory in <I>dir</I>, it starts
+a new <B><I>runsv</B>(8)</I> process. If it sees an old sudirectory where a <B><I>runsv</B>(8)</I> process
+has exited, it restarts the <B><I>runsv</B>(8)</I> process. If <B>runsvdir</B> sees a subdirectory
+being removed that was previously there, it sends the corresponding <B><I>runsv</B>(8)</I>
+process a TERM signal, stops monitoring this process, and so does not restart
+the <B><I>runsv</B>(8)</I> process if it exits. <P>
+If the <I>log</I> argument is given to <B>runsvdir</B>,
+all output to standard error is redirected to this <I>log</I>, which is similar
+to the <B><I>readproctitle</B>(8)</I> log. To see the most recent error messages, use
+a process-listing tool such as <B><I>ps</B>(1)</I>. <B>runsvdir</B> writes a dot to the readproctitle
+log every 15 minutes so that old error messages expire. <P>
+Normally <B>runsvdir</B>
+is started by <B><I>runit</B>(8)</I> in stage 2. 
+<H2><A NAME="sect3">See Also</A></H2>
+<I>runit(8)</I>, <I>runit-init(8)</I>, <I>runsv(8)</I>,
+<I>readproctitle(8)</I>, <I>svscan(8)</I> <P>
+ <I>http://smarden.org/runit/</I><BR>
+  <I>http://cr.yp.to/daemontools.html</I><BR>
+ 
+<H2><A NAME="sect4">Author</A></H2>
+Gerrit Pape &lt;pape@smarden.org&gt; <P>
+
+<HR><P>
+<A NAME="toc"><B>Table of Contents</B></A><P>
+<UL>
+<LI><A NAME="toc0" HREF="#sect0">Name</A></LI>
+<LI><A NAME="toc1" HREF="#sect1">Synopsis</A></LI>
+<LI><A NAME="toc2" HREF="#sect2">Description</A></LI>
+<LI><A NAME="toc3" HREF="#sect3">See Also</A></LI>
+<LI><A NAME="toc4" HREF="#sect4">Author</A></LI>
+</UL>
+</BODY></HTML>

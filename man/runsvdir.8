@@ -1,0 +1,83 @@
+.TH runsvdir 8
+.SH NAME
+runsvdir \- starts and monitors a collection of runsv(8) processes
+.SH SYNOPSIS
+.B runsvdir
+.I dir
+[
+.I log
+]
+.SH DESCRIPTION
+.I dir
+must be a directory.
+.I log
+is a space holder for a readproctitle log and must be at least seven
+characters long.
+.P
+.B runsvdir
+starts a
+.BR runsv (8)
+process for each subdirectory in
+.IR dir ,
+up to a limit of 1000 subdirectories.
+.B runsvdir
+skips subdirectory names starting with dots.
+.BR runsv (8)
+must be in
+.BR runsvdir 's
+PATH.
+.P
+At least every five seconds,
+.B runsvdir
+checks if
+.I dir
+has changed. If it sees a new subdirectory in
+.IR dir ,
+it starts a new
+.BR runsv (8)
+process. If it sees an old sudirectory where a
+.BR runsv (8)
+process has exited, it restarts the
+.BR runsv (8)
+process.
+If
+.B runsvdir
+sees a subdirectory being removed that was previously there, it sends
+the corresponding
+.BR runsv (8)
+process a TERM signal, stops monitoring this process, and so does not
+restart the
+.BR runsv (8)
+process if it exits.
+.P
+If the
+.I log
+argument is given to
+.BR runsvdir ,
+all output to standard error is redirected to this
+.IR log ,
+which is similar to the
+.BR readproctitle (8)
+log. To see the most recent error messages, use a process-listing tool
+such as
+.BR ps (1).
+.B runsvdir
+writes a dot to the readproctitle log every 15 minutes so that old
+error messages expire.
+.P
+Normally
+.B runsvdir
+is started by
+.BR runit (8)
+in stage 2.
+.SH SEE ALSO
+runit(8),
+runit-init(8),
+runsv(8),
+readproctitle(8),
+svscan(8)
+.P
+ http://smarden.org/runit/
+ http://cr.yp.to/daemontools.html
+.SH AUTHOR
+Gerrit Pape <pape@smarden.org>

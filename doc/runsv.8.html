@@ -1,0 +1,128 @@
+
+
+
+<HTML>
+<HEAD>
+<TITLE>runsv(8) manual page</TITLE>
+</HEAD>
+<BODY bgcolor=white>
+<a href="http://smarden.org/pape/">G. Pape</a><br><A HREF="index.html">runit</A><hr><P>
+
+<H2><A NAME="sect0">Name</A></H2>
+runsv - starts and monitors a service and optionally an appendant log
+service 
+<H2><A NAME="sect1">Synopsis</A></H2>
+<B>runsv</B> <I>service</I> 
+<H2><A NAME="sect2">Description</A></H2>
+<I>service</I> must be a directory. <P>
+<B>runsv</B>
+switches to the directory <I>service</I> and starts ./run. if ./run exits and ./finish
+exists, <B>runsv</B> starts ./finish. If ./finish doesn't exist or ./finish exits,
+<B>runsv</B> restarts ./run. <P>
+If ./run or ./finish exit immediatly, <B>runsv</B> waits a second
+before starting ./finish or restarting ./run. <P>
+If the file <I>service</I>/down exists,
+<B>runsv</B> does not start ./run immediately. The control interface (see below)
+can be used to start the service and to give other commands to <B>runsv</B>. <P>
+If
+the directory <I>service</I>/log exists, <B>runsv</B> creates a pipe, redirects <I>service</I>/run's
+and <I>service</I>/finish's standard output to the pipe, switches to the directory
+<I>service</I>/log and starts ./run (and ./finish) exactly as described above for
+the <I>service</I> directory. The standard input of the log service a redirected
+to read from the pipe. <P>
+<B>runsv</B> maintains status information in a binary format
+compatible to <B><I>supervise</B>(8)</I> in <I>service</I>/supervise/status ( and <I>service</I>/log/supervise/status),
+and in a human readable format in <I>service</I>/supervise/stat ( and <I>service</I>/log/supervise/stat).
+
+<H2><A NAME="sect3">Control</A></H2>
+The named pipe <I>service</I>/supervise/control (and <I>service</I>/log/supervise/control)
+is provided to give commands to <B>runsv</B>. You can use <B><I>svc</B>(8)</I> to control the
+service or just write one of the following characters to the named pipe:
+
+<DL>
+
+<DT><B>u</B> </DT>
+<DD>Up. If the service is not running, start it. If the service stops, restart
+it. </DD>
+
+<DT><B>d</B> </DT>
+<DD>Down. If the service is running, send it a TERM signal. If ./run exits,
+start ./finish if it exists. After it stops, do not restart service. </DD>
+
+<DT><B>o</B> </DT>
+<DD>Once.
+If the service is not running, start it. Do not restart it if it stops. </DD>
+
+<DT><B>p</B>
+</DT>
+<DD>Pause. If the service is running, send it a STOP signal. </DD>
+
+<DT><B>c</B> </DT>
+<DD>Continue. If the
+service is running, send it a CONT signal. </DD>
+
+<DT><B>h</B> </DT>
+<DD>Hangup. If the service is running,
+send it a HUP signal. </DD>
+
+<DT><B>a</B> </DT>
+<DD>Alarm. If the service is running, send it a ALRM
+signal. </DD>
+
+<DT><B>i</B> </DT>
+<DD>Interrupt. If the service is running, send it a INT signal. </LI><B></B><LI>User-defined
+1. If the service is running, send it a USR1 signal. </LI><B></B><LI>User-defined 2. If the
+service is running, send it a USR2 signal. </DD>
+
+<DT><B>t</B> </DT>
+<DD>Terminate. If the service is
+running, send it a TERM signal. </DD>
+
+<DT><B>k</B> </DT>
+<DD>Kill. If the service is running, send it
+a KILL signal. </DD>
+
+<DT><B>x or <B>e</B> </B></DT>
+<DD>Exit. If the service is running, send it a TERM signal.
+Do not restart the service. If the service is down, and no log service exists,
+<B>runsv</B> exits. If the service is down and a log service exists, send a TERM
+signal to the log service. If the log service is down, <B>runsv</B> exits. This
+command is ignored if it is given to <I>service</I>/log/supervise/control. </DD>
+</DL>
+<P>
+For
+example, to send a TERM signal to /service/socklog-unix, either do   # svc
+-t /service/socklog-unix<BR>
+  or<BR>
+   # echo -n t &gt;/service/socklog-unix/supervise/control<BR>
+ 
+<H2><A NAME="sect4">Signals</A></H2>
+If <B>runsv</B> receives a TERM signal, it acts as if the character x
+was written to the control pipe. 
+<H2><A NAME="sect5">Exit Codes</A></H2>
+<B>runsv</B> exits 111 on an error on
+startup or if another <B>runsv</B> is running in <I>service</I>. <P>
+<B>runsv</B> exits 0 if it was
+told to exit. 
+<H2><A NAME="sect6">See Also</A></H2>
+<I>runit(8)</I>, <I>runit-init(8)</I>, <I>runsvdir(8)</I>, <I>svc(8)</I>, <I>supervise(8)</I>
+<P>
+ <I>http://smarden.org/runit/</I><BR>
+  <I>http://cr.yp.to/daemontools.html</I><BR>
+ 
+<H2><A NAME="sect7">Author</A></H2>
+Gerrit Pape &lt;pape@smarden.org&gt; <P>
+
+<HR><P>
+<A NAME="toc"><B>Table of Contents</B></A><P>
+<UL>
+<LI><A NAME="toc0" HREF="#sect0">Name</A></LI>
+<LI><A NAME="toc1" HREF="#sect1">Synopsis</A></LI>
+<LI><A NAME="toc2" HREF="#sect2">Description</A></LI>
+<LI><A NAME="toc3" HREF="#sect3">Control</A></LI>
+<LI><A NAME="toc4" HREF="#sect4">Signals</A></LI>
+<LI><A NAME="toc5" HREF="#sect5">Exit Codes</A></LI>
+<LI><A NAME="toc6" HREF="#sect6">See Also</A></LI>
+<LI><A NAME="toc7" HREF="#sect7">Author</A></LI>
+</UL>
+</BODY></HTML>
