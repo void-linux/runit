@@ -21,8 +21,9 @@ an operating system not stated here, please
 Thanks go to the following people for contributing run scripts:
 Alessandro Bono, Robin S. Socha, Claus Alboege, Paul Jarc, clemens fischer,
 Jesse Cablek, Lukas Beeler, Thomas Baden, Ralf Hildebrandt, Antonio Dias,
-Erich Schubert, Lang Martin, Tomasz Nidecki.
+Erich Schubert, Lang Martin, Tomasz Nidecki, Marek Bartnikowski.
 <hr>
+<a href="#atftpd">atftpd</a><br>
 <a href="#apache">apache</a><br>
 <a href="#apache2">apache2</a><br>
 <a href="#bind9">bind9</a><br>
@@ -70,6 +71,15 @@ logging console messages</a><br>
 <a href="#xdm">xdm</a><br>
 <hr>
 
+<h3><a name="atftpd">An <tt>atftpd</tt> run script</a></h3>
+(<i>Debian</i>)
+<pre>
+ #!/bin/sh
+ exec /usr/sbin/in.tftpd --daemon --no-fork --tftpd-timeout 30 \
+   --retry-timeout 5 --no-tsize --no-blksize --no-multicast \
+   --maxthread 1000 --verbose=7 /var/atfpd 2&gt;&amp;1
+</pre>
+<hr>
 <h3><a name="apache">An <tt>apache</tt> run script</a></h3>
 (<i>SunOS</i>, Apache 1.*, patched to run under supervise)
 <pre>
@@ -251,7 +261,6 @@ to be set up.
 The <a href="index.html">runit</a> package does not care about utmp records
 for getties. You should choose a getty that handles its own utmp and wtmp
 records. Debian's <tt>mingetty</tt> does create his own utmp record.
-<p>
 <h3>An <tt>agetty</tt> run script</h3>
 (<i>Slackware Linux 9.0</i>)
 <pre>
@@ -265,6 +274,16 @@ records. Debian's <tt>mingetty</tt> does create his own utmp record.
  #!/bin/sh
  exec 2&gt;&amp;1
  exec oidentd -i -S -t 10 -u daemon -g daemon
+</pre>
+This service needs a
+<a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
+to be set up.
+<p>
+(<i>Debian</i>)
+<pre>
+ #!/bin/sh
+ exec /usr/local/sbin/oidentd --nosyslog -i -u ident -g ident -l 15 -m \
+   -C /etc/oidentd/oidentd.conf 2&gt;&amp;1
 </pre>
 This service needs a
 <a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
