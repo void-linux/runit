@@ -5,6 +5,7 @@ Fri, 04 Oct 2002 10:57:02 +0200
     to mtime; sleep 1 second if stat(service directory) fails.
   * runsvstat.c: new option -l: only show log service if -l is set.
   * runsvchdir: new; change service directory runsvdir is running in.
+  * man/runsvchdir.8, doc/runsvchdir.8.html: new.
 
 runit 0.6.0
 Fri, 27 Sep 2002 16:34:57 +0200

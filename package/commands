@@ -2,6 +2,7 @@ runit
 runit-init
 runsv
 runsvdir
+runsvchdir
 svwaitdown
 svwaitup
 utmpset
