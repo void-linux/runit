@@ -25,6 +25,8 @@ chpst.o
 pmatch.o
 fmt_ptime.o
 uidgid.o
+reboot_system.h
+uw_tmp.h
 alloc.o
 alloc_re.o
 buffer.o

@@ -6,14 +6,14 @@
 <title>runsvstat(8) manual page</title>
 </head>
 <body bgcolor='white'>
-<a href='#toc'>Table of Contents</a><p>
+<a href='http://smarden.org/pape/'>G. Pape</a><br><a href='index.html'>runit</A><hr><p>
 
-<h2><a name='sect0' href='#toc0'>Name</a></h2>
+<h2><a name='sect0'>Name</a></h2>
 runsvstat - prints the status of services monitored by <i><b>runsv</b>(8)</i>. 
-<h2><a name='sect1' href='#toc1'>Synopsis</a></h2>
+<h2><a name='sect1'>Synopsis</a></h2>
 <b>runsvstat</b>
 [ <b>-l</b> ] <i>services</i> 
-<h2><a name='sect2' href='#toc2'>Description</a></h2>
+<h2><a name='sect2'>Description</a></h2>
 <i>services</i> consists of one or more arguments, each
 argument naming a directory. <p>
 <b>runsvstat</b> checks for each directory if <i><b>runsv</b>(8)</i>
@@ -21,7 +21,7 @@ is successfully running this <i>service</i>, and if so, prints one human-readabl
 line reporting the status of this <i>service</i>. Optionally <i><b>runsvstat</b>(8)</i> prints
 a second line, also in human-readable format, reporting the status of the
 corresponding <i>log</i> <i>service</i>. 
-<h2><a name='sect3' href='#toc3'>Options</a></h2>
+<h2><a name='sect3'>Options</a></h2>
 
 <dl>
 
@@ -31,7 +31,7 @@ there exists a corresponding <i>log</i> <i>service</i>. If so, print an addition
 line reporting the status of the <i>log</i> <i>service</i>. </dd>
 </dl>
 
-<h2><a name='sect4' href='#toc4'>Exit Codes</a></h2>
+<h2><a name='sect4'>Exit Codes</a></h2>
 <b>runsvstat</b> exits
 0, if the states of all <i>services</i> were reported successfully. <p>
 For each <i>service</i>
@@ -39,13 +39,13 @@ that caused an error (e.g. the directory is not controlled by a <i><b>runsv</b>(
 process), <b>runsvstat</b> increases the exit code by one and exits non zero. The
 maximum is 100. <p>
 <b>runsvstat</b> exits 111 on error. 
-<h2><a name='sect5' href='#toc5'>See Also</a></h2>
+<h2><a name='sect5'>See Also</a></h2>
 <i>runsvctrl(8)</i>, <i>runsv(8)</i>,
 <i>runsvdir(8)</i>, <i>runsvchdir(8)</i>, <i>runit(8)</i>, <i>runit-init(8)</i>, <i>svlogd(8)</i>, <i>svwaitdown(8)</i>,
 <i>svwaitup(8)</i> <p>
  <i>http://smarden.org/runit/</i><br>
  
-<h2><a name='sect6' href='#toc6'>Author</a></h2>
+<h2><a name='sect6'>Author</a></h2>
 Gerrit Pape &lt;pape@smarden.org&gt; <p>
 
 <hr><p>

@@ -1,0 +1,9 @@
+#include <sys/types.h>
+#include <utmp.h>
+
+/* sysdep: -utmpx */
+
+#define UW_TMP_UFILE _PATH_UTMP
+#define UW_TMP_WFILE _PATH_WTMP
+
+typedef struct utmp uw_tmp;

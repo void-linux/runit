@@ -21,7 +21,7 @@
 
 #define USAGE " dir"
 
-#define VERSION "$Id: runsv.c,v 1.12 2003/09/23 08:01:17 pape Exp $"
+#define VERSION "$Id: runsv.c,v 1.13 2003/10/28 12:06:44 pape Exp $"
 
 char *progname;
 int selfpipe[2];
@@ -64,6 +64,9 @@ void fatal(char *m) {
 }
 void fatal2(char *m1, char *m2) {
   strerr_die6sys(111, "runsv ", dir, ": fatal: ", m1, m2, ": ");
+}
+void fatalx(char *m1, char *m2) {
+  strerr_die5x(111, "runsv ", dir, ": fatal: ", m1, m2);
 }
 void warn(char *m) {
   strerr_warn5("runsv ", dir, ": warning: ", m, ": ", &strerr_sys);
@@ -370,10 +373,8 @@ int main(int argc, char **argv) {
 
   if (mkdir("supervise", 0700) == -1) {
     if ((fd =readlink("supervise", buf, 256)) != -1) {
-      if (fd == 256) {
-	errno =EOVERFLOW;
-	fatal("unable to readlink ./supervise");
-      }
+      if (fd == 256)
+	fatalx("unable to readlink ./supervise: ", "name too long");
       buf[fd] =0;
       mkdir(buf, 0700);
     }

@@ -4,10 +4,10 @@ exec 2>&1
 PATH=/command:/sbin:/bin:/usr/sbin:/usr/bin
 
 echo 'Waiting for getties to stop...'
-svwaitdown -xk -t14 /service/getty-*
+svwaitdown -xk -t14 /var/service/getty-*
 
 echo 'Waiting for services to stop...'
-svwaitdown -xk -t350 /service/*
+svwaitdown -xk -t350 /var/service/*
 
 echo 'Shutdown...'
 if test -x /etc/runit/reboot; then

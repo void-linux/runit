@@ -63,7 +63,7 @@ svwaitup.o: compile sysdeps svwaitup.c
 svwaitdown.o: compile sysdeps svwaitdown.c
 	./compile svwaitdown.c
 
-utmpset.o: compile utmpset.c
+utmpset.o: compile sysdeps utmpset.c
 	./compile utmpset.c
 
 runsvchdir.o: compile runsvchdir.c
@@ -85,6 +85,14 @@ pmatch.o: compile pmatch.c
 fmt_ptime.o: compile sysdeps fmt_ptime.c
 	./compile fmt_ptime.c
 
+reboot_system.h: choose compile reboot_system.h1 reboot_system.h2
+	./choose c tryreboot reboot_system.h1 reboot_system.h2 > \
+	  reboot_system.h
+
+uw_tmp.h: compile uw_tmp.h1 uw_tmp.h2
+	( ./compile tryuwtmpx.c 2>/dev/null && cat uw_tmp.h2 >uw_tmp.h ) || \
+	( ./compile tryuwtmp.c 2>/dev/null && cat uw_tmp.h1 >uw_tmp.h )
+	rm -f tryuwtmp.o tryuwtmpx.o
 
 clean:
 	find . -name \*~ -exec rm -f {} \;
@@ -347,19 +355,21 @@ subgetopt.o: compile subgetopt.c subgetopt.h
 
 sysdeps: compile direntry.h hasflock.h hasmkffo.h hassgact.h \
 hassgprm.h hasshsgr.h haswaitp.h iopause.h load select.h systype \
-uint64.h
+uint64.h reboot_system.h uw_tmp.h
 	rm -f sysdeps
-	cat systype compile load >> sysdeps
-	grep sysdep direntry.h >> sysdeps
-	grep sysdep haswaitp.h >> sysdeps
-	grep sysdep hassgact.h >> sysdeps
-	grep sysdep hassgprm.h >> sysdeps
-	grep sysdep select.h >> sysdeps
-	grep sysdep uint64.h >> sysdeps
-	grep sysdep iopause.h >> sysdeps
-	grep sysdep hasmkffo.h >> sysdeps
-	grep sysdep hasflock.h >> sysdeps
-	grep sysdep hasshsgr.h >> sysdeps
+	cat systype compile load >>sysdeps
+	grep sysdep direntry.h >>sysdeps
+	grep sysdep haswaitp.h >>sysdeps
+	grep sysdep hassgact.h >>sysdeps
+	grep sysdep hassgprm.h >>sysdeps
+	grep sysdep select.h >>sysdeps
+	grep sysdep uint64.h >>sysdeps
+	grep sysdep iopause.h >>sysdeps
+	grep sysdep hasmkffo.h >>sysdeps
+	grep sysdep hasflock.h >>sysdeps
+	grep sysdep hasshsgr.h >>sysdeps
+	grep sysdep reboot_system.h >>sysdeps
+	grep sysdep uw_tmp.h >>sysdeps
 	cat sysdeps
 
 systype: find-systype.sh trycpp.c x86cpuid.c

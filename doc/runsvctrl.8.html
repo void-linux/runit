@@ -6,21 +6,21 @@
 <title>runsvctrl(8) manual page</title>
 </head>
 <body bgcolor='white'>
-<a href='#toc'>Table of Contents</a><p>
+<a href='http://smarden.org/pape/'>G. Pape</a><br><a href='index.html'>runit</A><hr><p>
 
-<h2><a name='sect0' href='#toc0'>Name</a></h2>
+<h2><a name='sect0'>Name</a></h2>
 runsvctrl - controls a service monitored by <i><b>runsv</b>(8)</i>. 
-<h2><a name='sect1' href='#toc1'>Synopsis</a></h2>
+<h2><a name='sect1'>Synopsis</a></h2>
 <b>runsvctrl</b>
 <i>command</i> <i>services</i> 
-<h2><a name='sect2' href='#toc2'>Description</a></h2>
+<h2><a name='sect2'>Description</a></h2>
 <i>services</i> consists of one or more arguments,
 each argument naming a directory used by <i><b>runsv</b>(8)</i>. <i>command</i> is one of up,
 down, once, pause, cont, hup, alarm, interrupt, 1, 2, term, kill, or exit.
 <p>
 For each <i>service</i> of <i>services</i>, <b>runsvctrl</b> sends the command <i>command</i> to the
 <i>service</i>, which must be controlled by <i><b>runsv</b>(8)</i>. 
-<h2><a name='sect3' href='#toc3'>Commands</a></h2>
+<h2><a name='sect3'>Commands</a></h2>
 
 <dl>
 
@@ -79,7 +79,7 @@ is down, <i><b>runsv</b>(8)</i> exits. This command is ignored if it is given to
 </dl>
 <p>
 <b>runsvctrl</b> actually looks only at the first character of <i>command</i>. 
-<h2><a name='sect4' href='#toc4'>Exit Codes</a></h2>
+<h2><a name='sect4'>Exit Codes</a></h2>
 <b>runsvctrl</b>
 exits 0, if the <i>command</i> was sent successfully to all <i>services</i>. <p>
 For each
@@ -87,13 +87,13 @@ For each
 process), <b>runsvctrl</b> increases the exit code by one and exits non zero. The
 maximum is 100. <p>
 <b>runsvctrl</b> exits 111 on error. 
-<h2><a name='sect5' href='#toc5'>See Also</a></h2>
+<h2><a name='sect5'>See Also</a></h2>
 <i>runsvstat(8)</i>, <i>runsv(8)</i>,
 <i>runit(8)</i>, <i>runit-init(8)</i>, <i>runsvdir(8)</i>, <i>runsvchdir(8)</i>, <i>svlogd(8)</i>, <i>svwaitdown(8)</i>,
 <i>svwaitup(8)</i> <p>
  <i>http://smarden.org/runit/</i><br>
  
-<h2><a name='sect6' href='#toc6'>Author</a></h2>
+<h2><a name='sect6'>Author</a></h2>
 Gerrit Pape &lt;pape@smarden.org&gt; <p>
 
 <hr><p>
