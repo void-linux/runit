@@ -19,7 +19,7 @@ an operating system not stated here, please
 <p>
 Thanks go to the following people for contributing run scripts:
 Alessandro Bono, Robin S. Socha, Claus Alboege, Paul Jarc, clemens fischer,
-Jesse Cablek, Lukas Beeler.
+Jesse Cablek, Lukas Beeler, Thomas Baden.
 <hr>
 <a href="#apache">apache</a><br>
 <a href="#apache2">apache2</a><br>
@@ -158,6 +158,24 @@ this page</a>.
 This service needs a
 <a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
 to be set up.
+<p>
+(<i>Solaris 8</i>, uses additional dsvclockd service, would get fired off
+automatically, but then it's not supervised)
+<pre>
+ #!/bin/sh
+ exec 2>&1
+ exec /command/envdir ./env /usr/lib/inet/dsvclockd -f
+</pre>
+<pre>
+ #!/bin/sh
+ if /command/svok /service/dsvclockd; then
+   /usr/bin/sleep 2 # wait to make sure dsvclockd is initialized
+   exec 2>&1
+   exec /command/envdir ./env /usr/lib/inet/in.dhcpd -b manual -d # -v
+ fi
+ echo dsvclockd is not running - aborting
+ exec /usr/bin/sleep 5
+</pre>
 <hr>
 <h3><a name="expireproctitle">
 <tt>expireproctitle</tt> run script examples</a></h3>
