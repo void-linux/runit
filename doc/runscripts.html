@@ -19,12 +19,14 @@ an operating system not stated here, please
 <p>
 Thanks go to the following people for contributing run scripts:
 Alessandro Bono, Robin S. Socha, Claus Alboege, Paul Jarc, clemens fischer,
-Jesse Cablek.
+Jesse Cablek, Lukas Beeler.
 <hr>
 <a href="#apache">apache</a><br>
 <a href="#apache2">apache2</a><br>
+<a href="#bind9">bind9</a><br>
 <a href="#boa">boa</a><br>
 <a href="#cfengine">cfengine</a><br>
+<a href="#courier-imap">courier-imap</a></br>
 <a href="#cups">cups</a><br>
 <a href="#dhclient">dhclient</a><br>
 <a href="#dhcpcd">dhcpcd</a><br>
@@ -33,11 +35,13 @@ Jesse Cablek.
 <a href="#gdm">gdm</a><br>
 <a href="#getty">getty</a><br>
 <a href="#identd">identd</a><br>
+<a href="#inn">inn</a><br>
 <a href="#klogd">klogd</a><br>
 <a href="#loglinuxkernel">logging Linux kernel messages</a><br>
 <a href="http://multivac.cwru.edu./fdtools/grabconsole/">
 logging console messages</a><br>
 <a href="#mysql">mysql</a><br>
+<a href="#ntpd">ntpd</a><br>
 <a href="#pop3-ssl">pop3-ssl</a><br>
 <a href="#postgresql">postgresql</a><br>
 <a href="#ppp">ppp</a><br>
@@ -52,6 +56,7 @@ logging console messages</a><br>
 <a href="#stunnel">stunnel</a><br>
 <a href="#taiclockd">taiclockd</a><br>
 <a href="#tomcat">tomcat</a><br>
+<a href="#xdm">xdm</a><br>
 <hr>
 
 <h3><a name="apache">An <tt>apache</tt> run script</a></h3>
@@ -78,6 +83,16 @@ logging console messages</a><br>
  /pack/apache/2.0.43-1/sbin/httpd -DFOREGROUND 2>&1
 </pre>
 <hr>
+<h3><a name="bind9">A <tt>bind9</tt> run script</a></h3>
+(<i>Linux</i>)
+<pre>
+ #!/bin/sh
+ MEM="`head -1 ./env/MEM`"
+ CHROOT="`head -1 ./env/CHROOT`"
+ exec softlimit -m "${MEM}" \
+   named -u bind -t "${CHROOT}" -g 2>&1
+</pre>
+<hr>
 <h3><a name="boa">A <tt>boa</tt> run script</a></h3>
 (<i>SunOS</i>)
 <pre>
@@ -94,6 +109,22 @@ logging console messages</a><br>
  /pack/cfengine/sbin/cfagent --file /pack/cfengine/etc/cfagent.conf \
    -L -v -q exec sleep 3600
 </pre>
+<hr>
+<h3><a name="courier-imap">A <tt>courier-imap</tt> run script</a></h3>
+(<i>SunOS</i>)
+<pre>
+ #!/bin/sh
+ exec 2>&1
+ PREFIX="/usr/lib/courier-imap"
+ exec envdir ./env \
+   tcpserver -v -R 0 143 \
+   $PREFIX/sbin/imaplogin \
+   $PREFIX/libexec/authlib/authshadow \
+   $PREFIX/libexec/authlib/authvchkpw \
+   $PREFIX/bin/imapd Maildir
+</pre>
+See also <a href="http://jonaspasche.de/courier-imap-daemontools.txt">
+this page</a>.
 <hr>
 <h3><a name="cups">A <tt>cups</tt> run script</a></h3>
 (<i>Debian woody</i>, a.bono)
@@ -162,6 +193,16 @@ records. Debian's <tt>mingetty</tt> does create his own utmp record.
  exec oidentd -n -udaemon -gdaemon
 </pre>
 <hr>
+<h3><a name="inn">An <tt>innd</tt> run script</a></h3>
+(<i>Linux</i>)
+<pre>
+ #!/bin/sh
+ MEM="`head -1 ./env/MEM`"
+ exec softlimit -m "${MEM}" \
+   setuidgid news \
+   /usr/sw/bin/news/inndstart -f -r
+</pre>
+<hr>
 <h3><a name="klogd">A <tt>klogd</tt> run script</a></h3>
 (<i>Debian woody</i>)
 <pre>
@@ -197,6 +238,15 @@ A run script for <tt>logging Linux kernel messages with multilog</tt></a></h3>
  cd
 </pre>
 <hr>
+<h3><a name="ntpd">A <tt>ntpd</tt> run script</a></h3>
+(<i>Linux</i>)
+<pre>
+ #!/bin/sh
+ MEM="`head -1 ./env/MEM`"
+ exec softlimit -m ${MEM} \
+   ntpd -n -p /var/run/ntpd.pid
+</pre>
+<hr>
 <h3><a name="pop3-ssl">A <tt>pop3-ssl</tt> run script</a></h3>
 (<i>BSD</i>)
 <pre>
@@ -228,7 +278,8 @@ to be set up.
 </pre>
 <hr>
 <h3><a name="proftpd">A <tt>proftpd</tt> run script</a></h3>
-(<i>Linux</i>, ProFTPD Version 1.2.8rc1)
+(<i>Linux</i>, ProFTPD Version 1.2.8rc1,
+configure it to use 'ErrorLog "/dev/stdout"')
 <pre>
  #!/bin/sh
  exec 2>&1
@@ -370,6 +421,14 @@ to be set up.
  exec \
  setuidgid apache \
  /pack/tomcat/current/bin/catalina.sh run
+</pre>
+<hr>
+<h3><a name="xdm">A <tt>xdm</tt> run script</a></h3>
+(<i>Linux</i>)
+<pre>
+ #!/bin/sh
+ svwaitup -s 2 /service/vc-*
+ exec xdm -nodaemon
 </pre>
 <hr>
 <address><a href="mailto:pape@smarden.org">
