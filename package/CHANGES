@@ -1,7 +1,7 @@
 runit 0.2.2
-Sat, 22 Dec 2001 20:37:03 +0100
+Sun, 23 Dec 2001 18:12:29 +0100
   * runit: checks for pid == 1
-  * new: svwaitdown, svwaitup
+  * new: svwaitdown, svwaitup, svwaitdown.8, svwaitup.8
   * stage3: uses svwaitdown
   * doc: runscripts.html added
 

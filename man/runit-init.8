@@ -1,6 +1,6 @@
 .TH runit-init 8
 .SH NAME
-init \- the UNIX process no 1
+init \- a UNIX process no 1
 .SH SYNOPSIS
 .B init
 [ 0 | 6 ]
@@ -41,8 +41,10 @@ files are touched. Then a CONT signal is sent to
 .B runit-init
 returns 111 on error, 0 in all other cases.
 .SH SEE ALSO
-runit(8)
-
+runit(8),
+svwaitdown(8),
+svwaitup(8)
+.P
 http://smarden.org/runit/
 .SH AUTHOR
 Gerrit Pape <pape@smarden.org>

@@ -17,7 +17,7 @@
 
 #define FATAL "svwaitdown: fatal: "
 #define WARNING "svwaitdown: warning: "
-#define INFO "svwaitdown: info: "
+#define INFO "svwaitdown: "
 #define USAGE " [ -v ] [ -t 2..6000 ] service ..."
 
 const char *progname;

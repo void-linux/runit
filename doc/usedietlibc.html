@@ -12,17 +12,9 @@
 Check that you have the recent version of
 <a href="http://www.fefe.de/dietlibc/">dietlibc</a> installed.
 <p>
-Change to the source directory of <i>runit</i> and modify the Makefile to
-use <tt>diet</tt>:
+Change to the source directory of <i>runit</i>:
 <pre>
   # cd /package/admin/runit/src
-  # vi Makefile
-</pre>
-Modify the <tt>CC</tt> and <tt>LDFLAGS</tt> variables in the
-<tt>Makefile</tt> to these settings:
-<pre>
-  CC=diet gcc
-  LDFLAGS=-Wall -O3 -s -Os -pipe
 </pre>
 Download
 <a href="http://smarden.org/pape/djb/manpages/daemontools-pd-0.76.tar.gz">

@@ -1,0 +1,73 @@
+.TH svwaitup 8
+.SH NAME
+svwaitup \- waits for services controlled by supervise(8) to be up
+.SH SYNOPSIS
+.B svwaitup
+[
+.B \-v
+]
+[
+.B \-s
+.I sec
+]
+.I services
+.SH DESCRIPTION
+.I services
+consist of one or more arguments.
+.P
+.B svwaitup
+checks each
+.I service
+given at the command line for being at least the specified number of seconds
+.I sec
+up. The
+.I services
+given at the command line must be controlled by
+.BR supervise (8).
+.P
+.B svwaitup
+blocks until all services are running the requested number of seconds or
+reports errors.
+.SH OPTIONS
+.TP
+.B \-v
+verbose. Print verbose messages to stderr.
+.TP
+.B \-s \fIsec
+Set the number of seconds the
+.I services
+have to be up to
+.I sec
+seconds.
+.I sec
+must be between 2 and 600. Default is 2.
+.SH EXIT CODES
+.B svwaitup
+returns 0 as soon as all
+.I services
+are at least
+.I sec
+seconds up.
+.P
+For each
+.I service
+that is down and not requested to become up, or that causes an error while
+checking (e.g.
+.BR supervise (8)
+is not running),
+.B svwaitup
+increases the exit code by one and exits non zero. The maximum is 100.
+.P
+.B svwaitup
+returns 111 on error.
+.SH SEE ALSO
+svwaitdown(8),
+supervise(8),
+svscan(8),
+runit(8),
+runit-init(8)
+.P
+ http://smarden.org/runit/
+ http://cr.yp.to/daemontools.html
+.SH AUTHOR
+Gerrit Pape <pape@smarden.org>

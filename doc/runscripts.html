@@ -27,8 +27,8 @@ an operating system not stated here, please
 <h3><a name="getty">A <tt>mingetty</tt> run script</a></h3>
 <i>(Debian)</i>
 <pre>
-#!/bin/sh
-exec mingetty tty5
+  #!/bin/sh
+  exec mingetty tty5
 </pre>
 The <a href="index.html">runit</a> package does not care about utmp records
 for getties. You should choose a getty that handles its own utmp and wtmp
@@ -37,9 +37,9 @@ records. Debian's <tt>mingetty</tt> does create his own utmp record.
 <h3><a name="sshd">A <tt>sshd</tt> run script</a></h3>
 <i>(Debian woody)</i>
 <pre>
-#!/bin/sh
-exec 2>&1
-exec sshd -D -e
+  #!/bin/sh
+  exec 2>&1
+  exec sshd -D -e
 </pre>
 This service needs a
 <a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
@@ -50,17 +50,16 @@ The <tt>sshd</tt> program is version <tt>OpenSSH_2.9p2</tt>.
 <h3><a name="klogd">A <tt>klogd</tt> run script</a></h3>
 <i>(Debian woody)</i>
 <pre>
-#!/bin/sh
-exec 2>&1
-exec /sbin/klogd -n
+  #!/bin/sh
+  exec /sbin/klogd -n
 </pre>
 <hr>
 <h3><a name="dhcpd">A <tt>dhcpd</tt> run script</a></h3>
 <i>(Debian woody)</i>
 <pre>
-#!/bin/sh
-exec 2>&1
-exec dhcpd-2.2.x -d -f
+  #!/bin/sh
+  exec 2>&1
+  exec dhcpd-2.2.x -d -f
 </pre>
 This service needs a
 <a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
@@ -69,15 +68,15 @@ to be set up.
 <h3><a name="dhclient">A <tt>dhclient</tt> run script</a></h3>
 <i>(Debian woody)</i>
 <pre>
-#!/bin/sh
-exec dhclient -d eth0
+  #!/bin/sh
+  exec dhclient -d eth0
 </pre>
 <hr>
 <h3><a name="gdm">A <tt>gdm</tt> run script</a></h4>
 <i>(Debian woody)</i>
 <pre>
-#!/bin/sh
-exec gdm -nodaemon
+  #!/bin/sh
+  exec gdm -nodaemon
 </pre>
 <hr>
 <address><a href="mailto:pape@smarden.org">
