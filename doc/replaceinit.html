@@ -13,6 +13,8 @@ Follow these steps to migrate from <i>sysvinit</i> to <i>runit</i> on
 <a href="http://www.debian.org/releases/woody/">Debian GNU/Linux (woody)</a>.
 The <tt>/sbin/init</tt> binary is not replaced until step 6, <i>runit</i> is
 the default Unix process no 1 after step 7.
+<p>
+If you have installed the precompiled debian package, start at step 3.
 <h3>Step 1: The three stages</h3>
 <i>runit</i> looks for the three stages implementing the system's
 <i>booting</i>, <i>running</i> and <i>shutdown</i> in <tt>/etc/runit/1</tt>,
@@ -20,6 +22,11 @@ the default Unix process no 1 after step 7.
 <pre>
   # mkdir -p /etc/runit
   # cp -p /package/admin/runit/etc/debian/[123] /etc/runit/
+</pre>
+Create also a getty service directory:
+<pre>
+  # mkdir -p /etc/runit/getty-tty5
+  # cp -p /package/admin/runit/etc/debian/getty-tty5/run /etc/runit/getty-tty5
 </pre>
 If you want <i>runit</i> to handle the ctrl-alt-del keyboard request, do:
 <pre>
@@ -35,13 +42,13 @@ The <i>runit</i> programs must reside on the root partition, copy them to
 At least one getty must run in stage 2 so you are able to login, choose a
 free <tt>tty</tt>, say <tt>tty5</tt>, where <i>sysvinit</i> is not running
 any getty (edit <tt>/etc/inittab</tt> and <tt>kill -HUP 1</tt> if
-needed) and install a getty as <i>service</i>:
+needed) and tell <a href="http://cr.yp.to/daemontools/svscan.html">svscan</a>
+about the getty-tty5 <i>service</i>:
 <pre>
-  # cp -pr /package/admin/runit/etc/debian/getty-tty5 /etc/runit/
   # ln -s /etc/runit/getty-tty5 /service/
 </pre>
 Check if the getty is running.
-<h3>Step 4: Reboot into runit for test</h3>
+<h3>Step 4: Reboot into runit for testing</h3>
 Boot your system with <i>runit</i> for the first time. This does not change
 the default boot behavior of your system, <i>lilo</i> will be told to use
 <i>runit</i> just once:
