@@ -62,6 +62,7 @@ logging console messages</a><br>
 <a href="#rsyncd">rsyncd</a><br>
 <a href="#samba">samba (smbd, nmbd)</a><br>
 <a href="#shoutcast">shoutcast</a><br>
+<a href="#spamd">spamd</a><br>
 <a href="#squid">squid</a><br>
 <a href="#sshd">sshd</a><br>
 <a href="#sshdtcpserver">sshd under tcpserver</a><br>
@@ -544,6 +545,16 @@ to be set up.
  exec 2&gt;&amp;1
  exec /usr/local/bin/setuidgid sc_serv \
    /usr/local/sc_serv/bin/sc_serv /etc/sc_serv.conf
+</pre>
+This service needs a
+<a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
+to be set up.
+<hr>
+<h3><a name="spamd">A <tt>spamd</tt> run script</a></h3>
+(<i>Debian woody</i>)
+<pre>
+ #!/bin/sh
+ exec /usr/sbin/spamd -m 20 -a -H -s stderr 2&gt;&amp;1
 </pre>
 This service needs a
 <a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
