@@ -4,7 +4,7 @@ Sat, 03 May 2003 17:40:23 +0200
   * doc/index.html: adapt; reorder programs; runsvstat, runsvctrl installed
     by default.
   * doc/install.html: remove dependency on daemontools; create /package.
-  * doc/replaceinit.html, man/runsv.8: typo.
+  * doc/replaceinit.html, man/runsv.8: typos.
   * man/svwaitdown.8, man/svwaitup.8: refer to runit and supervise.
   * svlogd.c: fix counter var namespace.
   * package/commands: add runsvctrl, runsvstat.

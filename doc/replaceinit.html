@@ -77,13 +77,12 @@ not migrated to use <tt>run</tt> scripts yet, add the corresponding
 <pre>
   #!/bin/sh
   # one time tasks
-  rm -f /etc/runit/stopit
-  /etc/init.d/rcS
 
   /etc/init.d/kerneld start
   /etc/init.d/rmnologin
 
-  exit 0
+  touch /etc/runit/stopit
+  chmod 0 /etc/runit/stopit
 </pre>
 It is possible to just add <tt>/etc/init.d/rc 2</tt> for having all services
 from the former runlevel 2 started as one time tasks, but keep the goal above
@@ -200,11 +199,11 @@ services are started automatically:
 <pre>
   #!/bin/sh
   # system one time tasks
-  rm -f /etc/runit/stopit
 
   /bin/sh /etc/rc autoboot
 
-  exit 0
+  touch /etc/runit/stopit
+  chmod 0 /etc/runit/stopit
 </pre>
 To migrate a service, create a service directory, disable the service if
 it is running, disable the service in <tt>/etc/rc.conf</tt> or remove the
