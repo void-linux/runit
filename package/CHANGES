@@ -1,5 +1,6 @@
 runit 0.9.2
 Sat, 03 May 2003 17:40:23 +0200
+  * doc/runscripts.html: changes from Jesse Cablek.
   * doc/dependencies.html, doc/useinit.html: new.
   * doc/index.html: adapt; reorder programs; runsvstat, runsvctrl installed
     by default.
