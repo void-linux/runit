@@ -1,7 +1,7 @@
 usage: svwaitdown [-v] [-t 1..6000] service ...
 
 1
-$Id: svwaitdown.c,v 1.12 2005/01/10 19:35:51 pape Exp $
+$Id: svwaitdown.c,v 1.13 2005/04/03 09:21:47 pape Exp $
 usage: svwaitdown [-v] [-t 1..6000] service ...
 
 1
