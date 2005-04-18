@@ -62,10 +62,12 @@ Stefan Karrmann, Kevin Berry, Karl Chen.
 <a href="#loglinuxkernel">logging Linux kernel messages</a><br>
 <a href="http://multivac.cwru.edu./fdtools/grabconsole/">
 logging console messages</a><br>
+<a href="#mdadm">mdadm</a><br>
 <a href="#minidentd">minidentd</a><br>
 <a href="#mpd">mpd</a><br>
-<a href="#mysql">mysql</a><br>
+<a href="#nscd">nscd</a><br>
 <a href="#ntpd">ntpd</a><br>
+<a href="#nullidentd">nullidentd</a><br>
 <a href="#polipo">polipo</a><br>
 <a href="#pop3-ssl">pop3-ssl</a><br>
 <a href="#pop3vscan">pop3vscan</a><br>
@@ -543,6 +545,16 @@ A run script for <tt>logging Linux kernel messages with multilog</tt></a></h3>
  multilog t n64 ./main
 </pre>
 <hr>
+<h3><a name="mdadm">A <tt>mdadm</tt> run script</a></h3>
+(<i>Debian sarge</i>)
+<pre>
+ #!/bin/sh
+ DEBIANCONFIG=/etc/default/mdadm
+ MAIL_TO=root
+ test -f $DEBIANCONFIG && . $DEBIANCONFIG
+ exec mdadm --monitor --scan --mail $MAIL_TO
+</pre>
+<hr>
 <h3><a name="minidentd">A <tt>minidentd</tt> run script</a></h3>
 (<i>Linux</i>)
 <pre>
@@ -568,34 +580,19 @@ This service needs a
 <a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
 to be set up.
 <hr>
-<h3><a name="mysql">A <tt>mysql</tt> run script</a></h3>
-(<i>SunOS</i>)
+<h3><a name="nscd">A <tt>nscd</tt> run script</a></h3>
+(<i>Debian sarge</i>)
 <pre>
  #!/bin/sh
- exec setuidgid mysql /pack/mysql/current/libexec/mysqld \
-         --basedir=/pack/mysql/current \
-         --datadir=/pack/mysql/data/ \
-         --socket=/tmp/mysql.sock \
-         --pid-file=/pack/mysql/data/mysql.pid 2&gt;&amp;1
-</pre>
-(<i>LFS</i>)
-<pre>
- #!/bin/sh
- exec 2&gt;&amp;1
- exec /usr/sbin/mysqld -u mysql
-</pre>
-(<i>Debian</i>, ``It's an ugly hack, but it works'')
-<pre>
- #!/bin/sh
- cd /
- umask 077
- 
- MYSQLADMIN='/usr/bin/mysqladmin --defaults-extra-file=/etc/mysql/debian.cnf'
- 
- trap "$MYSQLADMIN shutdown" 0
- trap 'exit 2' 1 2 3 15
- 
- /usr/bin/mysqld_safe &amp; wait
+ secure=""
+ for table in passwd group
+   do
+     if egrep '^'$table':.*nisplus' /etc/nsswitch.conf >/dev/null
+       then
+         nscd_nischeck $table || secure="$secure -S $table,yes"
+     fi
+ done
+ exec nscd -d -- $secure
 </pre>
 <hr>
 <h3><a name="ntpd">A <tt>ntpd</tt> run script</a></h3>
@@ -606,6 +603,17 @@ to be set up.
  exec softlimit -m "${MEM}" \
    ntpd -n
 </pre>
+<hr>
+<h3><a name="nullidentd">A <tt>nullidentd</tt> run script</a></h3>
+(<i>Debian sarge</i>)
+<pre>
+ #!/bin/sh
+ exec 2>&1
+ exec tcpsvd -u nobody -x nullidentd-cdb -t 60 0 113 nullidentd
+</pre>
+This service needs a
+<a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
+to be set up.
 <hr>
 <h3><a name="polipo">A <tt>polipo</tt> run script</a></h3>
 (<i>Linux</i>)

@@ -1,3 +1,10 @@
+runit 1.2.3
+
+  * doc/runscripts.html: add contributed run scripts (thx Kevin Berry);
+    remove mysql run scripts.
+  * svlogd.dist, svwaitdown.dist, svwaitup.dist: fix program selftest's
+    false alarms (thx Ian Stokes-Rees).
+
 runit 1.2.2
 Sun, 03 Apr 2005 09:21:52 +0000
   * doc/index.html, doc/replaceinit.html: no longer refer to sysvinit's
