@@ -1,5 +1,5 @@
 runit 1.2.3
-
+Mon, 18 Apr 2005 17:08:35 +0000
   * doc/runscripts.html: add contributed run scripts (thx Kevin Berry);
     remove mysql run scripts.
   * svlogd.dist, svwaitdown.dist, svwaitup.dist: fix program selftest's
