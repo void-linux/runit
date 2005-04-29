@@ -1,3 +1,5 @@
+  * man/runsv.8: typo.
+
 runit 1.2.3
 Mon, 18 Apr 2005 17:08:35 +0000
   * doc/runscripts.html: add contributed run scripts (thx Kevin Berry);
