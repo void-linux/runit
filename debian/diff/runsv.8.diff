@@ -1,0 +1,16 @@
+Index: man/runsv.8
+===================================================================
+RCS file: /cvs/runit/man/runsv.8,v
+retrieving revision 1.14
+retrieving revision 1.15
+diff -u -r1.14 -r1.15
+--- man/runsv.8	12 Dec 2004 20:14:26 -0000	1.14
++++ man/runsv.8	29 Apr 2005 08:52:49 -0000	1.15
+@@ -111,6 +111,7 @@
+ .B q
+ Quit.
+ If the service is running, send it a QUIT signal.
++.TP
+ .B 1
+ User-defined 1.
+ If the service is running, send it a USR1 signal.

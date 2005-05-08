@@ -1,9 +1,13 @@
-runit (1.2.1-1) unstable; urgency=low
+runit (1.2.3-1) unstable; urgency=low
 
   * new upstream version.
-  * debian/copyright: adapt, 2005.
+  * debian/copyright: 2005.
+  * debian/control: Suggests: fgetty.
+  * debian/getty-tty5.run: use fgetty if available.
+  * debian/diff/runsv.8.diff: new; fix typo in man page.
+  * debian/rules: target unpack: apply diff.
 
- -- Gerrit Pape <pape@smarden.org>  Sun, 13 Mar 2005 13:57:08 +0000
+ -- Gerrit Pape <pape@smarden.org>  Sun,  8 May 2005 14:46:16 +0000
 
 runit (1.0.5-3) unstable; urgency=low
 

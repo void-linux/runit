@@ -8,7 +8,7 @@ Standards-Version: 3.6.1.0
 Package: runit
 Architecture: any
 Depends: ${shlibs:Depends}
-Suggests: runit-run
+Suggests: runit-run, fgetty
 Description: a UNIX init scheme with service supervision
  runit is a daemontools alike replacement for SysV-init and other init
  schemes.  runit currently runs on Debian GNU/Linux, OpenBSD, FreeBSD,

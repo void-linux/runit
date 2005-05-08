@@ -23,8 +23,9 @@ DIR =$(shell pwd)/debian/runit
 
 unpack: deb-checkdir unpack-stamp
 unpack-stamp:
-	tar xzf runit-1.2.1.tar.gz
-	ln -s runit-1.2.1 admin/runit
+	tar xzf runit-1.2.3.tar.gz
+	ln -s runit-1.2.3 admin/runit
+	(cd admin/runit/ && patch -p0) <debian/diff/runsv.8.diff
 	echo '$(CC) $(CFLAGS)' >admin/runit/src/conf-cc
 	echo '$(CC) $(LDFLAGS)' >admin/runit/src/conf-ld
 	touch unpack-stamp
