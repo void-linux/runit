@@ -65,10 +65,8 @@ install: deb-checkdir deb-checkuid build-stamp
 	install -m0755 debian/2 '$(DIR)'/usr/sbin/runsvdir-start
 	# getty-5 service
 	install -d -m0755 '$(DIR)'/etc/runit/getty-5
-	install -m0755 admin/runit/etc/debian/getty-tty5/run \
-	  '$(DIR)'/etc/runit/getty-5/run
-	install -m0755 admin/runit/etc/debian/getty-tty5/finish \
-	  '$(DIR)'/etc/runit/getty-5/finish
+	install -m0755 debian/getty-tty5.run '$(DIR)'/etc/runit/getty-5/run
+	install -m0755 debian/getty-tty5.finish '$(DIR)'/etc/runit/getty-5/finish
 	# lintian overrides
 	install -m0755 -d '$(DIR)'/usr/share/lintian/overrides
 	install -m0644 debian/runit.lintian \

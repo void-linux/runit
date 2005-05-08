@@ -5,9 +5,10 @@ runit (1.2.3-1) unstable; urgency=low
   * debian/control: Suggests: fgetty.
   * debian/getty-tty5.run: use fgetty if available.
   * debian/diff/runsv.8.diff: new; fix typo in man page.
-  * debian/rules: target unpack: apply diff.
+  * debian/rules: target unpack: apply diff; install debian/getty-tty5.run,
+    debian/getty-tty5.finish.
 
- -- Gerrit Pape <pape@smarden.org>  Sun,  8 May 2005 14:46:16 +0000
+ -- Gerrit Pape <pape@smarden.org>  Sun,  8 May 2005 17:49:37 +0000
 
 runit (1.0.5-3) unstable; urgency=low
 
