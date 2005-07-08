@@ -1,4 +1,6 @@
   * man/runsv.8: typo.
+  * doc/runscripts.html: don't use absolute pathnames for programs in $PATH;
+    add contributed run scripts (thx Sascha Huedepohl); typos.
 
 runit 1.2.3
 Mon, 18 Apr 2005 17:08:35 +0000

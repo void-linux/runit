@@ -23,7 +23,7 @@ Alessandro Bono, Robin S. Socha, Claus Alboege, Paul Jarc, clemens fischer,
 Jesse Cablek, Lukas Beeler, Thomas Baden, Ralf Hildebrandt, Antonio Dias,
 Erich Schubert, Lang Martin, Tomasz Nidecki, Marek Bartnikowski,
 Thomas Schwinge, Gael Canal, Woon Wai Keen, Richard A Downing, Phil Genera,
-Stefan Karrmann, Kevin Berry, Karl Chen.
+Stefan Karrmann, Kevin Berry, Karl Chen, Sascha Huedepohl.
 <hr>
 <a href="#atftpd">atftpd</a><br>
 <a href="#apache">apache</a><br>
@@ -35,6 +35,7 @@ Stefan Karrmann, Kevin Berry, Karl Chen.
 <a href="#cfsd">cfsd</a><br>
 <a href="#chrony">chrony</a><br>
 <a href="#clamav">clamav</a><br>
+<a href="#clamsmtpd">clamsmtpd</a><br>
 <a href="#courier-imap">courier-imap</a><br>
 <a href="#cron">cron</a><br>
 <a href="#cups">cups</a><br>
@@ -103,7 +104,7 @@ logging console messages</a><br>
 (<i>Debian</i>)
 <pre>
  #!/bin/sh
- exec /usr/sbin/in.tftpd --daemon --no-fork --tftpd-timeout 30 \
+ exec in.tftpd --daemon --no-fork --tftpd-timeout 30 \
    --retry-timeout 5 --no-tsize --no-blksize --no-multicast \
    --maxthread 1000 --verbose=7 /var/atfpd 2&gt;&amp;1
 </pre>
@@ -159,7 +160,7 @@ logging console messages</a><br>
 (<i>HP-UX/GNU</i>, <i>Linux</i>)
 <pre>
  #!/bin/sh
- exec /usr/sbin/named -f -t /var/spool/named/ -u named
+ exec named -f -t /var/spool/named/ -u named
 </pre>
 <hr>
 <h3><a name="boa">A <tt>boa</tt> run script</a></h3>
@@ -210,7 +211,7 @@ logging console messages</a><br>
 <pre>
  #!/bin/sh
  exec 2&gt;&amp;1
- exec  /usr/sbin/chronyd -d -r -s
+ exec chronyd -d -r -s
 </pre>
 This service needs a
 <a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
@@ -221,12 +222,19 @@ to be set up.
 <pre>
  #!/bin/sh
  exec 2&gt;&amp;1
- exec /usr/local/bin/setuidgid clamav \
-   /usr/local/bin/softlimit -a 40000000 /usr/local/sbin/clamd
+ exec setuidgid clamav softlimit -a 40000000 clamd
 </pre>
 This service needs a
 <a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
 to be set up.
+<hr>
+<h3><a name="clamsmtpd">A <tt>clamsmtpd</tt> run script</a></h3>
+(<i>Debian sarge</i>)
+<pre>
+ #!/bin/sh
+ exec 2&gt;&amp;1
+ exec chpst -uclamav clamsmtpd -d 3
+</pre>
 <hr>
 <h3><a name="courier-imap">A <tt>courier-imap</tt> run script</a></h3>
 (<i>SunOS</i>)
@@ -257,7 +265,7 @@ this page</a>.
 <pre>
  #!/bin/sh
  exec 2&gt;&amp;1
- exec /usr/sbin/cupsd -f
+ exec cupsd -f
 </pre>
 <hr>
 <h3><a name="dhclient">A <tt>dhclient</tt> run script</a></h3>
@@ -290,14 +298,14 @@ automatically, but then it's not supervised)
 <pre>
  #!/bin/sh
  exec 2&gt;&amp;1
- exec /command/envdir ./env /usr/lib/inet/dsvclockd -f
+ exec envdir ./env /usr/lib/inet/dsvclockd -f
 </pre>
 <pre>
  #!/bin/sh
- if /command/svok /service/dsvclockd; then
-   /usr/bin/sleep 2 # wait to make sure dsvclockd is initialized
+ if svok /service/dsvclockd; then
+   sleep 2 # wait to make sure dsvclockd is initialized
    exec 2&gt;&amp;1
-   exec /command/envdir ./env /usr/lib/inet/in.dhcpd -b manual -d # -v
+   exec envdir ./env /usr/lib/inet/in.dhcpd -b manual -d # -v
  fi
  echo dsvclockd is not running - aborting
  exec /usr/bin/sleep 5
@@ -310,7 +318,7 @@ to be set up.
 (<i>Debian sarge</i>)
 <pre>
  #!/bin/sh
- exec 2>&1
+ exec 2&gt;&amp;1
  exec dictd -d nodetach
 </pre>
 <hr>
@@ -357,7 +365,7 @@ to be set up.
 <pre>
  #!/bin/sh
  exec 2&gt;&amp;1
- exec /usr/bin/fam -L -f -v
+ exec fam -L -f -v
 </pre>
 This service needs a
 <a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
@@ -376,7 +384,7 @@ to be set up.
 <pre>
  #!/bin/sh
  exec 2&gt;&amp;1
- exec /usr/sbin/fcron -f -y
+ exec fcron -f -y
 </pre>
 This service needs a
 <a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
@@ -403,7 +411,7 @@ Debian's <tt>mingetty</tt> creates its own utmp record.
 (<i>Slackware Linux 9.0</i>)
 <pre>
  #!/bin/sh
- exec /sbin/agetty 38400 tty1 linux
+ exec agetty 38400 tty1 linux
 </pre>
 <h3>A <tt>fgetty</tt> run script</h3>
 (<i>Linux</i>)
@@ -431,7 +439,7 @@ process state for those <i>getties</i>.
 <pre>
  #!/bin/sh
  exec 2&gt,&amp;1
- exec tcpsvd -l0 -u nobody 127.0.0.1 110 /usr/sbin/hotwayd
+ exec tcpsvd -l0 -u nobody 127.0.0.1 110 hotwayd
 </pre>
 <hr>
 <h3><a name="identd">An <tt>oidentd</tt> run script</a></h3>
@@ -473,7 +481,7 @@ to be set up.
  if [ -f /usr/local/jabber/jabber.pid ]; then
    rm /usr/local/jabber/jabber.pid
  fi
- exec /usr/local/bin/setuidgid jabberd \
+ exec setuidgid jabberd \
    /usr/local/jabber/jabberd/jabberd -D -c /etc/jabber.xml
 </pre>
 This service needs a
@@ -483,7 +491,7 @@ to be set up.
  #!/bin/sh
  exec 2&gt;&amp;1
  sleep 5 # so that jit starts after jabberd is up
- exec /usr/local/bin/setuidgid jabberd \
+ exec setuidgid jabberd \
    /usr/local/jabber/jit/jabberd/jabberd -c /etc/jit.xml
 </pre>
 This service needs a
@@ -494,7 +502,7 @@ to be set up.
 (<i>Debian sarge</i>)
 <pre>
  #!/bin/sh
- exec 2>&1
+ exec 2&gt;&amp;1
  DAEMON=junkbuster
  exec "$DAEMON" /etc/junkbuster/config
 </pre>
@@ -519,7 +527,7 @@ to be set up.
 (<i>Debian woody</i>)
 <pre>
  #!/bin/sh
- exec /sbin/klogd -n
+ exec klogd -n
 </pre>
 <hr>
 <h3><a name="leafnode">A <tt>leafnode</tt> run script</a></h3>
@@ -608,7 +616,7 @@ to be set up.
 (<i>Debian sarge</i>)
 <pre>
  #!/bin/sh
- exec 2>&1
+ exec 2&gt;&amp;1
  exec tcpsvd -u nobody -x nullidentd-cdb -t 60 0 113 nullidentd
 </pre>
 This service needs a
@@ -631,7 +639,7 @@ to be set up.
 (<i>BSD</i>)
 <pre>
  #!/bin/sh
- exec /usr/local/bin/tcpserver -R -v -c 50 0 995 /usr/local/sbin/stunnel
+ exec tcpserver -R -v -c 50 0 995 /usr/local/sbin/stunnel
  -f  -p /etc/ssl/stunnel.pem \
  -l /var/qmail/bin/qmail-popup -- /var/qmail/bin/qmail-popup
  "`cat /var/qmail/control/me`" vchkpw /var/qmail/bin/qmail-pop3d Maildir 2&gt;&amp;1
@@ -645,7 +653,7 @@ to be set up.
 <pre>
  #!/bin/sh
  exec 2&gt;&amp;1
- exec /usr/local/bin/setuidgid pop3vscan /usr/sbin/pop3vscan -d
+ exec setuidgid pop3vscan pop3vscan -d
 </pre>
 This service needs a
 <a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
@@ -676,7 +684,7 @@ to be set up.
  #!/bin/sh
  exec 2&gt;&amp;1
  echo "ppp -ddial dsl "
- exec /usr/sbin/ppp -unit0 -foreground dsl
+ exec ppp -unit0 -foreground dsl
 </pre>
 <h3>A <tt>pppd</tt> run script</h3>
 (<i>Linux</i>)
@@ -714,7 +722,7 @@ to be set up.
 <pre>
  #!/bin/sh
  exec 2&gt;&amp;1
- exec /usr/sbin/pure-ftpd -a 50 -E -l pam -u 100
+ exec pure-ftpd -a 50 -E -l pam -u 100
 </pre>
 <hr>
 <h3><a name="radiusd">A <tt>radiusd</tt> run script</a></h3>
@@ -733,7 +741,7 @@ to be set up.
 <pre>
  #!/bin/sh
  exec 2&gt;&amp;1
- exec softlimit -d 100000000 /usr/local/bin/tcpserver \
+ exec softlimit -d 100000000 tcpserver \
    -x /pack/rsync/rsync.service/tcp.rsync.cdb -v -c 100 -U -H -l 0 -R \
    1.2.3.4 873 nice -2 /pack/rsync/bin/rsync --daemon --no-detach \
    --config /pack/rsync/etc/rsyncd.conf
@@ -770,7 +778,7 @@ to be set up.
 <pre>
  #!/bin/sh
  exec 2&gt;&amp;1
- exec /usr/local/bin/setuidgid sc_serv \
+ exec setuidgid sc_serv \
    /usr/local/sc_serv/bin/sc_serv /etc/sc_serv.conf
 </pre>
 This service needs a
@@ -781,7 +789,7 @@ to be set up.
 (<i>Debian woody</i>)
 <pre>
  #!/bin/sh
- exec /usr/sbin/spamd -m 20 -a -H -s stderr 2&gt;&amp;1
+ exec spamd -m 20 -a -H -s stderr 2&gt;&amp;1
 </pre>
 This service needs a
 <a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
@@ -831,7 +839,7 @@ to be set up.
    grep -q lockdctl /proc/ksyms || NEED_LOCKD=no
  fi
  if [ "$NEED_LOCKD" = yes ]; then
-   /sbin/rpc.lockd
+   rpc.lockd
  fi
  exec rpc.statd -F -d
 </pre>
@@ -849,11 +857,11 @@ RPCMOUNTDOPTS=
 trap '/usr/bin/killall -2 nfsd' 0
 trap 'exit 2' 1 2 3 15
 
-/usr/sbin/exportfs -r
-/usr/sbin/rpc.nfsd -- $RPCNFSDCOUNT
-/usr/bin/rpcinfo -u localhost nfs 3 &gt;/dev/null 2&gt;&amp;1 ||
+exportfs -r
+rpc.nfsd -- $RPCNFSDCOUNT
+rpcinfo -u localhost nfs 3 &gt;/dev/null 2&gt;&amp;1 ||
   RPCMOUNTDOPTS="$RPCMOUNTDOPTS --no-nfs-version 3"
-/usr/sbin/rpc.mountd -F $RPCMOUNTDOPTS
+rpc.mountd -F $RPCMOUNTDOPTS
 </pre>
 <hr>
 <h3><a name="stunnel">A <tt>stunnel</tt> run script</a></h3>
@@ -867,7 +875,7 @@ trap 'exit 2' 1 2 3 15
 <pre>
  #!/bin/sh
  exec 2&gt;&amp;1
- exec tcpsvd -l0 127.0.0.1 901 /usr/sbin/swat
+ exec tcpsvd -l0 127.0.0.1 901 swat
 </pre>
 <hr>
 <h3><a name="syslogd">A <tt>syslogd</tt> run script</a></h3>
@@ -917,7 +925,7 @@ to be set up.
 <pre>
  #!/bin/sh
  exec 2&gt;&amp;1
- exec /usr/local/bin/tcpserver -c30 -Xv -llocalhost \
+ exec tcpserver -c30 -Xv -llocalhost \
    -x/etc/tcp.ftp.cdb -uvsftpd -gvsftpd 0 ftp \
      softlimit -d300000 /var/vsftpd/bin/vsftpd
 </pre>
