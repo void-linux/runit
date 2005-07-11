@@ -155,7 +155,7 @@ int main(int argc, char **argv) {
 	  }
 	}
       }
-      buffer_putsflush(buffer_1, "\n");
+      buffer_puts(buffer_1, "\n"); buffer_flush(buffer_1);
     }
     if (fchdir(curdir) == -1) {
       rc =100;

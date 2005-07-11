@@ -52,9 +52,9 @@ int main(int argc, char **argv) {
   if (! argv || ! *argv) usage();
 
   switch ((c =**argv)) {
-  case 'u': case 'd': case 'o': case 'x': case 'e': case 'p': case 'c':
-  case 'h': case 'a': case 'i': case 't': case 'k': case 'q': case '1':
-  case '2':
+  case 'e': c ='x';
+  case 'u': case 'd': case 'o': case 'x': case 'p': case 'c': case 'h':
+  case 'a': case 'i': case 't': case 'k': case 'q': case '1': case '2':
     break;
   default:
     usage();

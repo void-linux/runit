@@ -128,7 +128,7 @@ If the service is running, send it a TERM signal.
 Kill.
 If the service is running, send it a KILL signal.
 .TP
-.B x \fRor \fBe
+.B x
 Exit.
 If the service is running, send it a TERM signal, and then a CONT signal.
 Do not restart the service.
@@ -176,6 +176,18 @@ The command
 .I o
 is always considered as command
 .IR u .
+On command
+.I d
+first
+.I service\fR/control/t
+is checked, and then
+.I service\fR/control/d.
+On command
+.I x
+first
+.I service\fR/control/t
+is checked, and then
+.I service\fR/control/x.
 The control of the optional log service cannot be customized.
 .SH SIGNALS
 If

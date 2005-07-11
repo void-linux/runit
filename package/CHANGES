@@ -1,6 +1,9 @@
-  * man/runsv.8: typo.
+  * man/runsv.8: typo; no longer document the e control character; clarify
+    custom control on d and x.
   * doc/runscripts.html: don't use absolute pathnames for programs in $PATH;
     add contributed run scripts (thx Sascha Huedepohl); typos.
+  * runsvchdir.c, runsvstat.c: optimize output buffer handling.
+  * runsvctrl.c: write x control character to runsv on e.
 
 runit 1.2.3
 Mon, 18 Apr 2005 17:08:35 +0000
