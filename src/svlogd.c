@@ -766,10 +766,6 @@ int main(int argc, const char **argv) {
           buffer_put(buffer_2, "\n", 1); buffer_flush(buffer_2);
         }
         if (dir[i].match != '+') continue;
-        if (! dir[i].udponly) {
-          if (timestamp) buffer_puts(&dir[i].b, stamp);
-          buffer_put(&dir[i].b, line, linelen);
-        }
         if (dir[i].udpaddr.sin_port != 0) {
           if (fdudp == -1) {
             buffer_puts(&dir[i].b, "warning: no udp socket available: ");
@@ -792,6 +788,10 @@ int main(int argc, const char **argv) {
               buffer_flush(&dir[i].b);
             }
           }
+        }
+        if (! dir[i].udponly) {
+          if (timestamp) buffer_puts(&dir[i].b, stamp);
+          buffer_put(&dir[i].b, line, linelen);
         }
       }
     if (linelen == linemax)

@@ -4,6 +4,8 @@
     add contributed run scripts (thx Sascha Huedepohl); typos.
   * runsvchdir.c, runsvstat.c: optimize output buffer handling.
   * runsvctrl.c: write x control character to runsv on e.
+  * svlogd.c: write to log dir after possibly writing through udp (fixes
+    line break issue).
 
 runit 1.2.3
 Mon, 18 Apr 2005 17:08:35 +0000
