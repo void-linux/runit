@@ -1,5 +1,8 @@
   * man/runsv.8: typo; no longer document the e control character; clarify
     custom control on d and x.
+  * doc/useinit.html: how to use runit with macosx 10.4 (thx Lars Uffmann).
+  * etc/macosx/org.smarden.runit.plist: new; launchd plist file for
+    runsvdir-start (thx Lars Uffmann).
   * doc/runscripts.html: don't use absolute pathnames for programs in $PATH;
     add contributed run scripts (thx Sascha Huedepohl); typos.
   * runsvchdir.c, runsvstat.c: optimize output buffer handling.
