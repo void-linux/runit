@@ -24,6 +24,9 @@ runsvstat: load runsvstat.o unix.a byte.a time.a
 runsvctrl: load runsvctrl.o unix.a byte.a
 	./load runsvctrl unix.a byte.a
 
+sv: load sv.o unix.a byte.a time.a
+	./load sv unix.a byte.a time.a
+
 svwaitup: load svwaitup.o unix.a byte.a time.a
 	./load svwaitup unix.a byte.a time.a
 
@@ -60,6 +63,9 @@ runsvstat.o: compile sysdeps runsvstat.c
 
 runsvctrl.o: compile runsvctrl.c
 	./compile runsvctrl.c
+
+sv.o: compile sysdeps sv.c
+	./compile sv.c
 
 svwaitup.o: compile sysdeps svwaitup.c
 	./compile svwaitup.c

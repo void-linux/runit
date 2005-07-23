@@ -10,6 +10,8 @@ runsvstat
 runsvstat.o
 runsvctrl
 runsvctrl.o
+sv
+sv.o
 svwaitdown
 svwaitdown.o
 svwaitup
