@@ -322,5 +322,5 @@ int main(int argc, char **argv) {
       usleep(USLEEPDELAY);
       taia_now(&tnow);
     }
-  return(rc);
+  return(rc > 99 ? 99 : rc);
 }
