@@ -6,6 +6,7 @@ runsvchdir
 runsvctrl
 runsvdir
 runsvstat
+sv
 svlogd
 svwaitdown
 svwaitup
