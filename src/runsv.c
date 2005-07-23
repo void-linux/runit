@@ -101,7 +101,8 @@ void update_status(struct svdir *s) {
     spid[fmt_ulong(spid, (unsigned long)s->pid)] =0;
     if (s->pid) {
       buffer_puts(&b, spid);
-      buffer_putsflush(&b, "\n");
+      buffer_puts(&b, "\n");
+      buffer_flush(&b);
     }
     close(fd);
     if (s->islog) {
@@ -147,7 +148,8 @@ void update_status(struct svdir *s) {
       buffer_puts(&b, ", want exit");
       break;
     }
-  buffer_putsflush(&b, "\n");
+  buffer_puts(&b, "\n");
+  buffer_flush(&b);
   close(fd);
   if (s->islog) {
     if (rename("supervise/stat.new", "log/supervise/stat") == -1)
@@ -233,15 +235,26 @@ unsigned int custom(struct svdir *s, char c) {
       return(! wait_exitcode(w));
     }
   }
-  else
-    if (errno != error_noent) warn("unable to stat control/?");
+  else {
+    if (errno == error_noent) return(0);
+    warn("unable to stat control/?");
+  }
   return(0);
 }
 void stopservice(struct svdir *s) {
-  if (s->pid) kill(s->pid, SIGTERM);
-  s->ctrl |=C_TERM;
-  update_status(s);
-  if ((s->want == W_DOWN) || (s->want == W_EXIT)) kill(s->pid, SIGCONT);
+  if (s->pid && ! custom(s, 't')) {
+    kill(s->pid, SIGTERM);
+    s->ctrl |=C_TERM;
+    update_status(s);
+  }
+  if (s->want == W_DOWN) {
+    kill(s->pid, SIGCONT);
+    custom(s, 'd'); return;
+  }
+  if (s->want == W_EXIT) {
+    kill(s->pid, SIGCONT);
+    custom(s, 'x');
+  }
 }
 
 void startservice(struct svdir *s) {
@@ -301,25 +314,24 @@ int ctrl(struct svdir *s, char c) {
   case 'd': /* down */
     s->want =W_DOWN;
     update_status(s);
-    if (s->pid && s->state != S_FINISH && ! custom(s, c)) stopservice(s);
+    if (s->pid && s->state != S_FINISH) stopservice(s);
     break;
   case 'u': /* up */
     s->want =W_UP;
     update_status(s);
     if (s->pid == 0) startservice(s);
     break;
-  case 'e':
   case 'x': /* exit */
     if (s->islog) break;
     s->want =W_EXIT;
     update_status(s);
-    if (s->pid && s->state != S_FINISH && ! custom(s, c)) stopservice(s);
+    if (s->pid && s->state != S_FINISH) stopservice(s);
     break;
   case 't': /* sig term */
-    if (s->pid && s->state != S_FINISH && ! custom(s, c)) stopservice(s);
+    if (s->pid && s->state != S_FINISH) stopservice(s);
     break;
   case 'k': /* sig kill */
-    if (s->pid) kill(s->pid, SIGKILL);
+    if (s->pid && ! custom(s, c)) kill(s->pid, SIGKILL);
     s->state =S_DOWN;
     break;
   case 'p': /* sig pause */
