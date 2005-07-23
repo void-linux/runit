@@ -23,14 +23,11 @@
 #define WARN  "warning: "
 #define OK    "ok: "
 
-/* #define VARSERVICE "./" */
-#define VARSERVICE "/var/service/"
-/* #define ETCRUNITRUNSV "/etc/runit/runsv/" */
-#define USLEEPDELAY 250000
 
 char *progname;
 char *action;
 char actch =0;
+char *varservice ="/var/service/";
 char **service;
 char **servicex;
 unsigned int services;
@@ -224,6 +221,7 @@ int main(int argc, char **argv) {
   service =argv;
   services =1;
   lsb =(str_diff(progname, "sv"));
+  if ((x =env_get("SVDIR"))) varservice =x;
   if ((x =env_get("SVWAIT"))) scan_ulong(x, &wait);
   while ((i =getopt(argc, (const char* const*)argv, "w:vV")) != opteof) {
     switch(i) {
@@ -275,7 +273,7 @@ int main(int argc, char **argv) {
   servicex =service;
   for (i =0; i < services; ++i) {
     if ((**service != '/') && (**service != '.')) {
-      if ((chdir(VARSERVICE) == -1) || (chdir(*service) == -1)) {
+      if ((chdir(varservice) == -1) || (chdir(*service) == -1)) {
         fail("unable to change to service directory");
         *service =0;
       }
@@ -297,7 +295,7 @@ int main(int argc, char **argv) {
       for (i =0; i < services; ++i, ++service) {
         if (! *service) continue;
         if ((**service != '/') && (**service != '.')) {
-          if ((chdir(VARSERVICE) == -1) || (chdir(*service) == -1)) {
+          if ((chdir(varservice) == -1) || (chdir(*service) == -1)) {
             fail("unable to change to service directory");
             *service =0;
           }
@@ -319,7 +317,7 @@ int main(int argc, char **argv) {
           fatal("unable to change to original directory");
       }
       if (done) break;
-      usleep(USLEEPDELAY);
+      usleep(250000);
       taia_now(&tnow);
     }
   return(rc > 99 ? 99 : rc);
