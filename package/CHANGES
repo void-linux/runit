@@ -10,8 +10,9 @@ runit 1.2.6
   * runsvctrl.c: write x control character to runsv on e.
   * svlogd.c: write to log dir after possibly writing through udp (fixes
     line break issue).
-  * runsv.c: optimize output buffer handling; porperly run custom t, d, x,
-    k, when stopping service; no longer support e control character.
+  * runsv.c, runsv.check: optimize output buffer handling; porperly run
+    custom t, d, x, k, when stopping service; no longer support e control
+    character.
   * sv.c: new sv program to control services, optionally can be linked to
     /etc/init.d/ as lsb "init script" command line interface.
   * Makefile, TARGETS: adapt.
