@@ -255,6 +255,7 @@ void softlimit(int, const char *const *);
 int main(int argc, const char *const *argv) {
   int opt;
   int i;
+  unsigned long ul;
 
   progname =argv[0];
   for (i =str_len(progname); i; --i)
@@ -279,25 +280,25 @@ int main(int argc, const char *const *argv) {
     case 'U': env_user =(char*)optarg; break;
     case 'e': env_dir =optarg; break;
     case 'm':
-      if (optarg[scan_ulong(optarg, &limitd)]) usage();
-      limits =limitl =limita =limitd;
+      if (optarg[scan_ulong(optarg, &ul)]) usage();
+      limits =limitl =limita =limitd =ul;
       break;
-    case 'o': if (optarg[scan_ulong(optarg, &limito)]) usage(); break;
-    case 'p': if (optarg[scan_ulong(optarg, &limitp)]) usage(); break;
-    case 'f': if (optarg[scan_ulong(optarg, &limitf)]) usage(); break;
-    case 'c': if (optarg[scan_ulong(optarg, &limitc)]) usage(); break;
-    case 'r': if (optarg[scan_ulong(optarg, &limitr)]) usage(); break;
-    case 't': if (optarg[scan_ulong(optarg, &limitt)]) usage(); break;
+    case 'o': if (optarg[scan_ulong(optarg, &ul)]) usage(); limito =ul; break;
+    case 'p': if (optarg[scan_ulong(optarg, &ul)]) usage(); limitp =ul; break;
+    case 'f': if (optarg[scan_ulong(optarg, &ul)]) usage(); limitf =ul; break;
+    case 'c': if (optarg[scan_ulong(optarg, &ul)]) usage(); limitc =ul; break;
+    case 'r': if (optarg[scan_ulong(optarg, &ul)]) usage(); limitr =ul; break;
+    case 't': if (optarg[scan_ulong(optarg, &ul)]) usage(); limitt =ul; break;
     case '/': root =optarg; break;
     case 'n':
       switch (*optarg) {
         case '-':
-          if (optarg[scan_ulong(++optarg, &nicelvl)]) usage();
+          if (optarg[scan_ulong(++optarg, &ul)]) usage(); nicelvl =ul;
           nicelvl *=-1;
           break;
         case '+': ++optarg;
         default:
-          if (optarg[scan_ulong(optarg, &nicelvl)]) usage();
+          if (optarg[scan_ulong(optarg, &ul)]) usage(); nicelvl =ul;
           break;
       }
       break;
@@ -419,12 +420,15 @@ void setlock(int argc, const char *const *argv) {
 }
 void softlimit(int argc, const char *const *argv) {
   int opt;
+  unsigned long ul;
+  
   void usage() {
     strerr_die4x(100, "usage: ", progname, USAGE_SOFTLIMIT, "\n");
   }
   void getlarg(long *l) {
-    if (str_equal(optarg, "=")) *l =-1;
-    else if (optarg[scan_ulong(optarg, l)]) usage();
+    if (str_equal(optarg, "=")) { *l =-1; return; }
+    if (optarg[scan_ulong(optarg, &ul)]) usage();
+    *l =ul;
   }
 
   while ((opt =getopt(argc,argv,"a:c:d:f:l:m:o:p:r:s:t:")) != opteof)

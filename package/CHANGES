@@ -16,6 +16,7 @@ runit 1.2.6
   * sv.c: new sv program to control services, optionally can be linked to
     /etc/init.d/ as lsb "init script" command line interface.
   * Makefile, TARGETS: adapt.
+  * chpst.c: fix pointer types.
 
 runit 1.2.3
 Mon, 18 Apr 2005 17:08:35 +0000
