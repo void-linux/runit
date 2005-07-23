@@ -1,6 +1,6 @@
 DESTDIR=
 
-PACKAGE=runit-1.2.3
+PACKAGE=runit-1.2.6
 DIRS=doc man etc package src
 MANPAGES=runit.8 runit-init.8 runsvdir.8 runsv.8 svwaitdown.8 svwaitup.8 \
 utmpset.8 runsvchdir.8 runsvstat.8 runsvctrl.8 svlogd.8 chpst.8
@@ -33,9 +33,10 @@ $(PACKAGE).tar.gz:
 	chmod -R g-ws TEMP/admin
 	chmod +t TEMP/admin
 	find TEMP -exec touch {} \;
-	su -c 'chown -R root:root TEMP/admin ; \
-		( cd TEMP ; tar cpfz ../$(PACKAGE).tar.gz admin --exclude CVS ) ; \
-		rm -rf TEMP'
+	su -c '\
+	  chown -R root:root TEMP/admin ; \
+	  (cd TEMP && tar --exclude CVS -cpzf ../$(PACKAGE).tar.gz admin); \
+	  rm -rf TEMP'
 
 clean:
 	find . -name \*~ -exec rm -f {} \;

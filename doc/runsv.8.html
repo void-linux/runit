@@ -75,37 +75,33 @@ service is running, send it a ALRM signal. </dd>
 running, send it a INT signal. </dd>
 
 <dt><b>q</b> </dt>
-<dd>Quit. If the service is running, send it a QUIT signal. </dd>
+<dd>Quit. If the service is running, send it
+a QUIT signal. </li><b></b><li>User-defined 1. If the service is running, send it a USR1 signal.
+</li><b></b><li>User-defined 2. If the service is running, send it a USR2 signal. </dd>
 
-<dt><b>1</b> </dt>
-<dd>User-defined 1. If the service is running, send it a USR1 signal. </dd>
-
-<dt><b>2</b> </dt>
-<dd>User-defined 2. If the service is running, send it a USR2 signal. </dd>
-
-<dt><b>t</b>
-</dt>
-<dd>Terminate. If the service is running, send it a TERM signal. </dd>
+<dt><b>t</b> </dt>
+<dd>Terminate.
+If the service is running, send it a TERM signal. </dd>
 
 <dt><b>k</b> </dt>
-<dd>Kill. If the
-service is running, send it a KILL signal. </dd>
+<dd>Kill. If the service
+is running, send it a KILL signal. </dd>
 
-<dt><b>x or <b>e</b> </b></dt>
-<dd>Exit. If the service is
-running, send it a TERM signal, and then a CONT signal. Do not restart the
-service. If the service is down, and no log service exists, <b>runsv</b> exits.
-If the service is down and a log service exists, <b>runsv</b> closes the standard
-input of the log service, and waits for it to terminate. If the log service
-is down, <b>runsv</b> exits. This command is ignored if it is given to <i>service</i>/log/supervise/control.
+<dt><b>x</b> </dt>
+<dd>Exit. If the service is running, send
+it a TERM signal, and then a CONT signal. Do not restart the service. If
+the service is down, and no log service exists, <b>runsv</b> exits. If the service
+is down and a log service exists, <b>runsv</b> closes the standard input of the
+log service, and waits for it to terminate. If the log service is down,
+<b>runsv</b> exits. This command is ignored if it is given to <i>service</i>/log/supervise/control.
 </dd>
 </dl>
 <p>
-Example: to send a TERM signal to the socklog-unix service, either do<br>
-  # runsvctrl term /var/service/socklog-unix<br>
- or<br>
-  # echo -n t &gt;/var/service/socklog-unix/supervise/control<br>
-<p>
+Example: to send a TERM signal to the socklog-unix service, either do  
+# runsvctrl term /var/service/socklog-unix<br>
+  or<br>
+   # echo -n t &gt;/var/service/socklog-unix/supervise/control<br>
+ <p>
 If <i><b>echo</b>(1)</i> on your systems does not provide the -n option, leave it out,
 <b>runsv</b> ignores unknown characters written to the control pipe. <i><b>echo</b>(1)</i> usually
 blocks if no <b>runsv</b> process is running in the service directory. 
@@ -115,23 +111,26 @@ For each control character <i>c</i> sent to the control pipe, <b>runsv</b> first
 checks if <i>service/control/<i>c</i> exists and is executable. If so, it starts <i>service</i>/control/<i>c</i>
 and waits for it to terminate, before interpreting the command. If the program
 exits with return code 0, <b>runsv</b> refrains from sending the service the corresponding
-signal. The command <i>o</i> is always considered as command <i>u</i>. The control of the
-optional log service cannot be customized. 
-<h2><a name='sect5'></i>Signals</a></h2>
-If <b>runsv</b> receives a TERM
-signal, it acts as if the character x was written to the control pipe. 
-<h2><a name='sect6'>Exit
-Codes</a></h2>
-<b>runsv</b> exits 111 on an error on startup or if another <b>runsv</b> is running
-in <i>service</i>. <p>
+signal. The command <i>o</i> is always considered as command <i>u</i>. On command <i>d</i> first
+<i>service</i>/control/t</i> is checked, and then <i>service/control/d.</i> On command <i>x</i> first
+<i>service/control/t</i> is checked, and then <i>service/control/x.</i> The control of
+the optional log service cannot be customized. 
+<h2><a name='sect5'>Signals</a></h2>
+If <b>runsv</b> receives
+a TERM signal, it acts as if the character x was written to the control
+pipe. 
+<h2><a name='sect6'>Exit Codes</a></h2>
+<b>runsv</b> exits 111 on an error on startup or if another <b>runsv</b>
+is running in <i>service</i>. <p>
 <b>runsv</b> exits 0 if it was told to exit. 
 <h2><a name='sect7'>See Also</a></h2>
-<i>runsvctrl(8)</i>, <i>runsvstat(8)</i>,
-<i>chpst(8)</i>, <i>svlogd(8)</i>, <i>runit(8)</i>, <i>runit-init(8)</i>, <i>runsvdir(8)</i>, <i>runsvchdir(8)</i>,
-<i>utmpset(8)</i> <p>
+<i>runsvctrl(8)</i>,
+<i>runsvstat(8)</i>, <i>chpst(8)</i>, <i>svlogd(8)</i>, <i>runit(8)</i>, <i>runit-init(8)</i>, <i>runsvdir(8)</i>,
+<i>runsvchdir(8)</i>, <i>utmpset(8)</i> <p>
 <i>http://smarden.org/runit/</i> 
 <h2><a name='sect8'>Author</a></h2>
-Gerrit Pape &lt;pape@smarden.org&gt; <p>
+Gerrit Pape &lt;pape@smarden.org&gt;
+<p>
 
 <hr><p>
 <a name='toc'><b>Table of Contents</b></a><p>
