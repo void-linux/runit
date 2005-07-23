@@ -1,3 +1,4 @@
+runit 1.2.6
   * man/runsv.8: typo; no longer document the e control character; clarify
     custom control on d and x.
   * doc/useinit.html: how to use runit with macosx 10.4 (thx Lars Uffmann).
@@ -9,6 +10,11 @@
   * runsvctrl.c: write x control character to runsv on e.
   * svlogd.c: write to log dir after possibly writing through udp (fixes
     line break issue).
+  * runsv.c: optimize output buffer handling; porperly run custom t, d, x,
+    k, when stopping service; no longer support e control character.
+  * sv.c: new sv program to control services, optionally can be linked to
+    /etc/init.d/ as lsb "init script" command line interface.
+  * Makefile, TARGETS: adapt.
 
 runit 1.2.3
 Mon, 18 Apr 2005 17:08:35 +0000
