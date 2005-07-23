@@ -1,4 +1,4 @@
-IT=chpst runit runit-init runsv runsvchdir runsvctrl runsvdir runsvstat \
+IT=chpst runit runit-init runsv runsvchdir runsvctrl runsvdir runsvstat sv \
   svlogd svwaitdown svwaitup utmpset
 
 default: sysdeps $(IT)
