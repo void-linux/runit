@@ -17,6 +17,7 @@ runit 1.2.6
     /etc/init.d/ as lsb "init script" command line interface.
   * Makefile, TARGETS: adapt.
   * chpst.c: fix pointer types.
+  * man/sv.8: new.
   * package/TODO: new.
 
 runit 1.2.3
