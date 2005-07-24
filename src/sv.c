@@ -39,7 +39,7 @@ unsigned int rc =0;
 unsigned int lsb;
 unsigned int verbose =0;
 unsigned long wait =7;
-unsigned int kill =0;
+unsigned int kll =0;
 struct taia tstart, tnow, tdiff;
 struct tai tstatus;
 
@@ -246,11 +246,11 @@ int main(int argc, char **argv) {
   case 'x': case 'e':
     actch ='x'; break;
   case 'X': case 'E':
-    actch ='x'; kill =1; cbk =&check; break;
+    actch ='x'; kll =1; cbk =&check; break;
   case 'D':
-    actch ='d'; kill =1; cbk =&check; break;
+    actch ='d'; kll =1; cbk =&check; break;
   case 'T':
-    actch ='t'; kill =1; cbk =&check; break;
+    actch ='t'; kll =1; cbk =&check; break;
   case 'u': case 'd': case 'o': case 't': case 'p': case 'c': case 'h':
   case 'a': case 'i': case 'k': case 'q': case '1': case '2':
     actch =*action; break;
@@ -265,11 +265,11 @@ int main(int argc, char **argv) {
     usage();
   case 'f':
     if (!str_diff(action, "force-reload"))
-      { actch ='t'; kill =1; cbk =&check; break; }
+      { actch ='t'; kll =1; cbk =&check; break; }
     if (!str_diff(action, "force-shutdown"))
-      { actch ='x'; kill =1; cbk =&check; break; }
+      { actch ='x'; kll =1; cbk =&check; break; }
     if (!str_diff(action, "force-stop"))
-      { actch ='d'; kill =1; cbk =&check; break; }
+      { actch ='d'; kll =1; cbk =&check; break; }
   default:
     usage();
   }
@@ -311,10 +311,10 @@ int main(int argc, char **argv) {
           }
         if (*service) { if (cbk(actch) != 0) *service =0; else done =0; }
         if (*service && taia_approx(&tdiff) > wait) {
-	  kill ? outs(KILL) : outs(TIMEOUT);
+	  kll ? outs(KILL) : outs(TIMEOUT);
           if (svstatus_get() > 0) { svstatus_print(*service); ++rc; }
           flush("\n");
-	  if (kill) control('k');
+	  if (kll) control('k');
           *service =0;
         }
         if (fchdir(curdir) == -1)
