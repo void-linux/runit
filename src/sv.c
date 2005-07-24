@@ -30,7 +30,7 @@
 
 char *progname;
 char *action;
-char actch =0;
+char *acts;
 char *varservice ="/var/service/";
 char **service;
 char **servicex;
@@ -43,8 +43,8 @@ unsigned int kll =0;
 struct taia tstart, tnow, tdiff;
 struct tai tstatus;
 
-int (*act)(char) =0;
-int (*cbk)(char) =0;
+int (*act)(char*) =0;
+int (*cbk)(char*) =0;
 
 int curdir, fd, r;
 char svstatus[20];
@@ -86,7 +86,7 @@ void flush(const char *s) { outs(s); buffer_flush(buffer_1); }
 int svstatus_get() {
   if ((fd =open_write("supervise/ok")) == -1) {
     if (errno == error_nodevice) {
-      actch == 'x' ? ok("runsv not running") : failx("runsv not running");
+      *acts == 'x' ? ok("runsv not running") : failx("runsv not running");
       return(0);
     }
     warn("unable to open supervise/ok");
@@ -145,7 +145,7 @@ unsigned int svstatus_print(char *m) {
   if (pid && svstatus[18]) outs(", got TERM");
   return(pid ? 1 : 2);
 }
-int status(char unused) {
+int status(char *unused) {
   r =svstatus_get();
   switch(r) { case -1: if (lsb) done(4); case 0: return(0); }
   r =svstatus_print(*service);
@@ -165,20 +165,21 @@ int status(char unused) {
   return(r);
 }
  
-int check(char a) {
+int check(char *a) {
   unsigned int pid;
 
   if ((r =svstatus_get()) == -1) return(-1);
-  if (r == 0) { if (a == 'x') return(1); return(-1); }
+  if (r == 0) { if (*a == 'x') return(1); return(-1); }
   pid =(unsigned char) svstatus[15];
   pid <<=8; pid +=(unsigned char)svstatus[14];
   pid <<=8; pid +=(unsigned char)svstatus[13];
   pid <<=8; pid +=(unsigned char)svstatus[12];
-  switch (a) {
+  switch (*a) {
   case 'x': return(0);
   case 'u': if (!pid) return(0); break;
   case 'd': if (pid) return(0); break;
   case 't':
+    if (!pid && svstatus[17] == 'd') break;
     tai_unpack(svstatus, &tstatus);
     if ((tstart.sec.x > tstatus.x) || ! pid || svstatus[18]) return(0);
     break;
@@ -190,19 +191,19 @@ int check(char a) {
   outs(OK); svstatus_print(*service); flush("\n");
   return(1);
 }
-int control(char a) {
+int control(char *a) {
   if (svstatus_get() <= 0) return(-1);
-  if (svstatus[17] == a) return(0);
+  if (svstatus[17] == *a) return(0);
   if ((fd =open_write("supervise/control")) == -1) {
     if (errno != error_nodevice)
       warn("unable to open supervise/control");
     else
-      a == 'x' ? ok("runsv not running") : failx("runsv not running");
+      *a == 'x' ? ok("runsv not running") : failx("runsv not running");
     return(-1);
   }
-  r =write(fd, &a, 1);
+  r =write(fd, a, str_len(a));
   close(fd);
-  if (r != 1) {
+  if (r != str_len(a)) {
     warn("unable to write to supervise/control");
     return(-1);
   }
@@ -240,36 +241,38 @@ int main(int argc, char **argv) {
   if ((curdir =open_read(".")) == -1)
     fatal("unable to open current directory");
 
-  act =&control;
+  act =&control; acts ="s";
   if (verbose) cbk =&check;
   switch (*action) {
   case 'x': case 'e':
-    actch ='x'; break;
+    acts ="x"; break;
   case 'X': case 'E':
-    actch ='x'; kll =1; cbk =&check; break;
+    acts ="x"; kll =1; cbk =&check; break;
   case 'D':
-    actch ='d'; kll =1; cbk =&check; break;
+    acts ="d"; kll =1; cbk =&check; break;
   case 'T':
-    actch ='t'; kll =1; cbk =&check; break;
+    acts ="tc"; kll =1; cbk =&check; break;
   case 'u': case 'd': case 'o': case 't': case 'p': case 'c': case 'h':
   case 'a': case 'i': case 'k': case 'q': case '1': case '2':
-    actch =*action; break;
+    action[1] =0; acts =action; break;
   case 's':
-    if (!str_diff(action, "shutdown")) { actch ='x'; cbk =&check; break; }
-    if (!str_diff(action, "start")) { actch ='u'; cbk =&check; break; }
-    if (!str_diff(action, "stop")) { actch ='d'; cbk =&check; break; }
+    if (!str_diff(action, "shutdown")) { acts ="x"; cbk =&check; break; }
+    if (!str_diff(action, "start")) { acts ="u"; cbk =&check; break; }
+    if (!str_diff(action, "stop")) { acts ="d"; cbk =&check; break; }
     if (lsb && str_diff(action, "status")) usage();
     act =&status; cbk =0; break;
   case 'r':
-    if (!str_diff(action, "restart")) { actch ='t'; cbk =&check; break; }
+    if (!str_diff(action, "restart")) { acts ="tcu"; cbk =&check; break; }
     usage();
   case 'f':
     if (!str_diff(action, "force-reload"))
-      { actch ='t'; kll =1; cbk =&check; break; }
+      { acts ="tc"; kll =1; cbk =&check; break; }
+    if (!str_diff(action, "force-restart"))
+      { acts ="tcu"; kll =1; cbk =&check; break; }
     if (!str_diff(action, "force-shutdown"))
-      { actch ='x'; kll =1; cbk =&check; break; }
+      { acts ="x"; kll =1; cbk =&check; break; }
     if (!str_diff(action, "force-stop"))
-      { actch ='d'; kll =1; cbk =&check; break; }
+      { acts ="d"; kll =1; cbk =&check; break; }
   default:
     usage();
   }
@@ -287,7 +290,7 @@ int main(int argc, char **argv) {
         fail("unable to change to service directory");
         *service =0;
       }
-    if (*service) if (act(actch) == -1) *service =0;
+    if (*service) if (act(acts) == -1) *service =0;
     if (fchdir(curdir) == -1) fatal("unable to change to original directory");
     service++;
   }
@@ -309,12 +312,12 @@ int main(int argc, char **argv) {
             fail("unable to change to service directory");
             *service =0;
           }
-        if (*service) { if (cbk(actch) != 0) *service =0; else done =0; }
+        if (*service) { if (cbk(acts) != 0) *service =0; else done =0; }
         if (*service && taia_approx(&tdiff) > wait) {
 	  kll ? outs(KILL) : outs(TIMEOUT);
           if (svstatus_get() > 0) { svstatus_print(*service); ++rc; }
           flush("\n");
-	  if (kll) control('k');
+	  if (kll) control("k");
           *service =0;
         }
         if (fchdir(curdir) == -1)
