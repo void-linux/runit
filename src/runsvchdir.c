@@ -49,7 +49,8 @@ int main (int argc, char **argv) {
   if ((s.st_ino == ino) && (s.st_dev == dev)) {
     buffer_puts(buffer_1, "runsvchdir: ");
     buffer_puts(buffer_1, new);
-    buffer_putsflush(buffer_1, ": current.\n");
+    buffer_puts(buffer_1, ": current.\n");
+    buffer_flush(buffer_1);
     _exit(0);
   }
 
@@ -69,6 +70,7 @@ int main (int argc, char **argv) {
   }
   buffer_puts(buffer_1, "runsvchdir: ");
   buffer_puts(buffer_1, new);
-  buffer_putsflush(buffer_1, ": now current.\n");
+  buffer_puts(buffer_1, ": now current.\n");
+  buffer_flush(buffer_1);
   _exit(0);
 }

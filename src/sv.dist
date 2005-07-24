@@ -1,0 +1,12 @@
+usage: sv [-v] [-w sec] action service ...
+
+100
+$Id: sv.c,v 1.7 2005/07/24 13:44:24 pape Exp $
+usage: sv [-v] [-w sec] action service ...
+
+100
+starting
+0
+down
+0
+0

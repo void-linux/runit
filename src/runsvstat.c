@@ -11,7 +11,7 @@
 
 #define USAGE " [ -l ] service ..."
 
-#define VERSION "$Id: runsvstat.c,v 1.7 2003/05/04 09:41:10 pape Exp $"
+#define VERSION "$Id: runsvstat.c,v 1.8 2005/07/11 10:13:53 pape Exp $"
 
 #define FATAL "runsvstat: fatal: "
 #define WARNING "runsvstat: warning: "
@@ -155,7 +155,7 @@ int main(int argc, char **argv) {
 	  }
 	}
       }
-      buffer_putsflush(buffer_1, "\n");
+      buffer_puts(buffer_1, "\n"); buffer_flush(buffer_1);
     }
     if (fchdir(curdir) == -1) {
       rc =100;

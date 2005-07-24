@@ -10,6 +10,8 @@ runsvstat
 runsvstat.o
 runsvctrl
 runsvctrl.o
+sv
+sv.o
 svwaitdown
 svwaitdown.o
 svwaitup
@@ -134,6 +136,7 @@ runsvchdir.local
 runsvctrl.local
 runsvdir.local
 runsvstat.local
+sv.local
 svlogd.local
 svwaitdown.local
 svwaitup.local

@@ -1,7 +1,7 @@
 usage: chpst [-vP012] [-u user[:group]] [-U user[:group]] [-e dir] [-/ root] [-n nice] [-l|-L lock] [-m n] [-o n] [-p n] [-f n] [-c n] prog
 
 100
-$Id: chpst.c,v 1.6 2005/01/10 19:35:51 pape Exp $
+$Id: chpst.c,v 1.7 2005/07/23 12:49:47 pape Exp $
 usage: chpst [-vP012] [-u user[:group]] [-U user[:group]] [-e dir] [-/ root] [-n nice] [-l|-L lock] [-m n] [-o n] [-p n] [-f n] [-c n] prog
 
 100
