@@ -441,7 +441,7 @@ process state for those <i>getties</i>.
 (<i>LFS</i>)
 <pre>
  #!/bin/sh
- exec 2&gt,&amp;1
+ exec 2&gt;&amp;1
  exec tcpsvd -l0 -u nobody 127.0.0.1 110 hotwayd
 </pre>
 <hr>
@@ -806,11 +806,11 @@ to be set up.
 </pre>
 <hr>
 <h3><a name="sshd">A <tt>sshd</tt> run script</a></h3>
-(<i>Debian woody</i>, sshd version OpenSSH_2.9p2)
+(<i>Debian</i>)
 <pre>
  #!/bin/sh
  exec 2&gt;&amp;1
- exec sshd -D -e
+ exec /usr/sbin/sshd -D -e
 </pre>
 This service needs a
 <a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
