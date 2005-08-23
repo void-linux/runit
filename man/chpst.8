@@ -50,7 +50,12 @@ set the gid to
 gid instead of
 .IR user 's
 gid.
-All supplementary groups are removed.
+If
+.I group
+consists of a colon-separated list of group names,
+.B chpst
+sets the group ids of all listed groups.
+All initial supplementary groups are removed.
 .TP
 .B \-U \fIuser[:group]
 envuidgid.
@@ -66,6 +71,12 @@ set $GID to the
 gid instead of
 .IR user 's
 gid.
+If
+.I group
+consists of a colon-separated list of group names,
+.B chpst
+sets the group ids of all listed groups.
+All initial supplementary groups are removed.
 .TP
 .B \-e \fIdir
 envdir.

@@ -226,9 +226,10 @@ unsigned int custom(struct svdir *s, char c) {
         prog[0] =a;
         prog[1] =0;
         execve(a, prog, environ);
-	fatal("unable to run control/?");
+        fatal("unable to run control/?");
       }
-      if (wait_pid(&w, pid) == -1) {
+      while (wait_pid(&w, pid) == -1) {
+        if (errno == error_intr) continue;
         warn("unable to wait for child control/?");
         return(0);
       }
