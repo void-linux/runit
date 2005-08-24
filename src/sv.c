@@ -83,6 +83,8 @@ void ok(char *m1) { errno =0; out(OK, m1); }
 
 void outs(const char *s) { buffer_puts(buffer_1, s); }
 void flush(const char *s) { outs(s); buffer_flush(buffer_1); }
+void outs2(const char *s) { buffer_puts(buffer_2, s); }
+void flush2(const char *s) { outs2(s); buffer_flush(buffer_2); }
 
 int svstatus_get() {
   if ((fd =open_write("supervise/ok")) == -1) {
@@ -114,8 +116,8 @@ unsigned int svstatus_print(char *m) {
  
   if (stat("down", &s) == -1) {
     if (errno != error_noent) {
-      outs(WARN); outs("unable to stat "); outs(*service); outs("/down: ");
-      outs(error_str(errno)); flush("\n");
+      outs2(WARN); outs2("unable to stat "); outs2(*service); outs2("/down: ");
+      outs2(error_str(errno)); flush2("\n");
       return(0);
     }
     normallyup =1;
@@ -174,29 +176,29 @@ int checkscript() {
 
   if (stat("check", &s) == -1) {
     if (errno == error_noent) return(1);
-    outs(WARN); outs("unable to stat "); outs(*service); outs("/check: ");
-    outs(error_str(errno)); flush("\n");
+    outs2(WARN); outs2("unable to stat "); outs2(*service); outs2("/check: ");
+    outs2(error_str(errno)); flush2("\n");
     return(0);
   }
   /* if (!(s.st_mode & S_IXUSR)) return(1); */
   if ((pid =fork()) == -1) {
-    outs(WARN); outs("unable to fork for "); outs(*service); outs("/check: ");
-    outs(error_str(errno)); flush("\n");
+    outs2(WARN); outs2("unable to fork for "); outs2(*service);
+    outs2("/check: "); outs2(error_str(errno)); flush2("\n");
     return(0);
   }
   if (!pid) {
     prog[0] ="./check";
     prog[1] =0;
-    close(1); close(2);
+    close(1);
     execve("check", prog, environ);
-    outs(WARN); outs("unable to run "); outs(*service); outs("/check: ");
-    outs(error_str(errno)); flush("\n");
+    outs2(WARN); outs2("unable to run "); outs2(*service); outs2("/check: ");
+    outs2(error_str(errno)); flush2("\n");
     _exit(0);
   }
   while (wait_pid(&w, pid) == -1) {
     if (errno == error_intr) continue;
-    outs(WARN); outs("unable to wait for child "); outs(*service);
-    outs("/check: "); outs(error_str(errno)); flush("\n");
+    outs2(WARN); outs2("unable to wait for child "); outs2(*service);
+    outs2("/check: "); outs2(error_str(errno)); flush2("\n");
     return(0);
   }
   return(!wait_exitcode(w));
@@ -205,8 +207,6 @@ int checkscript() {
 int check(char *a) {
   unsigned int pid;
 
-  if (!a || !*a) return(-1);
-  while(*(a +1)) ++a;
   if ((r =svstatus_get()) == -1) return(-1);
   if (r == 0) { if (*a == 'x') return(1); return(-1); }
   pid =(unsigned char)svstatus[15];
@@ -220,7 +220,8 @@ int check(char *a) {
   case 't':
     if (!pid && svstatus[17] == 'd') break;
     tai_unpack(svstatus, &tstatus);
-    if ((tstart.sec.x > tstatus.x) || !pid || svstatus[18]) return(0);
+    if ((tstart.sec.x > tstatus.x) || !pid || svstatus[18] || !checkscript())
+      return(0);
     break;
   case 'o':
     tai_unpack(svstatus, &tstatus);
