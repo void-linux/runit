@@ -95,6 +95,14 @@ Same as
 .IR up ,
 but wait up to 7 seconds for the command to take effect.
 Then report the status or timeout.
+If the script
+.I ./check
+exists in the service directory,
+.B sv
+runs this script to check whether the service is up and available;
+it's considered to be available if
+.I ./check
+exits with 0.
 .TP
 .B stop
 Same as
@@ -110,6 +118,14 @@ and
 .I up
 to the service, and wait up to 7 seconds for the service to restart.
 Then report the status or timeout.
+If the script
+.I ./check
+exists in the service directory,
+.B sv
+runs this script to check whether the service is up and available again;
+it's considered to be available if
+.I ./check
+exits with 0.
 .TP
 .B shutdown
 Same as
@@ -147,6 +163,14 @@ commands, and wait up to 7 seconds for the service to restart.
 Then report the status, and on timeout send the service the
 .I kill
 command.
+If the script
+.I ./check
+exists in the service directory,
+.B sv
+runs this script to check whether the service is up and available again;
+it's considered to be available if
+.I ./check
+exits with 0.
 .TP
 .B force-shutdown
 Same as

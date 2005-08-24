@@ -70,7 +70,8 @@ void suidgid(char *user, unsigned int dogrp) {
     else
       fatalx("unknown account", user);
   }
-  if (prot_gid(ugid.gid) == -1) fatal("unable to setgid");
+  if (setgroups(ugid.gids, ugid.gid) == -1) fatal("unable to setgroups");
+  if (setgid(*ugid.gid) == -1) fatal("unable to setgid");
   if (prot_uid(ugid.uid) == -1) fatal("unable to setuid");
 }
 
@@ -84,7 +85,7 @@ void euidgid(char *user, unsigned int dogrp) {
     else
       fatalx("unknown account", user);
   }
-  bufnum[fmt_ulong(bufnum, ugid.gid)] =0;
+  bufnum[fmt_ulong(bufnum, *ugid.gid)] =0;
   if (! pathexec_env("GID", bufnum)) die_nomem();
   bufnum[fmt_ulong(bufnum, ugid.uid)] =0;
   if (! pathexec_env("UID", bufnum)) die_nomem();
@@ -309,7 +310,7 @@ int main(int argc, const char *const *argv) {
     case '0': nostdin =1; break;
     case '1': nostdout =1; break;
     case '2': nostderr =1; break;
-    case 'V': strerr_warn1("$Id: chpst.c,v 1.7 2005/07/23 12:49:47 pape Exp $", 0);
+    case 'V': strerr_warn1("$Id: chpst.c,v 1.8 2005/08/23 22:36:28 pape Exp $", 0);
     case '?': usage();
     }
   argv +=optind;

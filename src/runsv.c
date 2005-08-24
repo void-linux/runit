@@ -22,7 +22,7 @@
 
 #define USAGE " dir"
 
-#define VERSION "$Id: runsv.c,v 1.23 2005/07/23 12:04:36 pape Exp $"
+#define VERSION "$Id: runsv.c,v 1.24 2005/08/23 22:36:28 pape Exp $"
 
 char *progname;
 int selfpipe[2];
@@ -226,9 +226,10 @@ unsigned int custom(struct svdir *s, char c) {
         prog[0] =a;
         prog[1] =0;
         execve(a, prog, environ);
-	fatal("unable to run control/?");
+        fatal("unable to run control/?");
       }
-      if (wait_pid(&w, pid) == -1) {
+      while (wait_pid(&w, pid) == -1) {
+        if (errno == error_intr) continue;
         warn("unable to wait for child control/?");
         return(0);
       }
