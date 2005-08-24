@@ -11,6 +11,6 @@ documentation[0] or install the runit-run package.
 
 runit's default directory for services is /var/service/.
 
-[0] http://smarden.org/runit1/replaceinit.html
+[0] http://smarden.org/runit/replaceinit.html
 
  -- Gerrit Pape <pape@smarden.org>, Mon, 22 Sep 2003 10:34:51 +0200
