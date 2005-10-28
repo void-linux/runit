@@ -16,14 +16,14 @@ them monitored by the
 <a href="http://smarden.org/runit/">runit</a> package.
 If you have additional run scripts or one of these run scripts works for you on
 an operating system not stated here, please
-<a href="mailto:pape-runscripts@smarden.org">let me know</a>. 
+<a href="mailto:supervision@list.skarnet.org">let me know</a>. 
 <p>
 Thanks go to the following people for contributing run scripts:
 Alessandro Bono, Robin S. Socha, Claus Alboege, Paul Jarc, clemens fischer,
 Jesse Cablek, Lukas Beeler, Thomas Baden, Ralf Hildebrandt, Antonio Dias,
 Erich Schubert, Lang Martin, Tomasz Nidecki, Marek Bartnikowski,
 Thomas Schwinge, Gael Canal, Woon Wai Keen, Richard A Downing, Phil Genera,
-Stefan Karrmann, Kevin Berry, Karl Chen, Sascha Huedepohl.
+Stefan Karrmann, Kevin Berry, Karl Chen, Sascha Huedepohl, Jason Smith.
 <hr>
 <a href="#atftpd">atftpd</a><br>
 <a href="#apache">apache</a><br>
@@ -79,6 +79,7 @@ logging console messages</a><br>
 <a href="#proftpd">proftpd</a><br>
 <a href="#pure-ftpd">pure-ftpd</a><br>
 <a href="#radiusd">radiusd</a><br>
+<a href="#rmrtg">rmrtg</a><br>
 <a href="#rsyncd">rsyncd</a><br>
 <a href="#samba">samba (smbd, nmbd)</a><br>
 <a href="#shoutcast">shoutcast</a><br>
@@ -738,6 +739,17 @@ to be set up.
 This service needs a
 <a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
 to be set up.
+<hr>
+<h3><a name="rmrtg">A <tt>rmrtg</tt> run script</a></h3>
+()
+<pre>
+ #!/bin/sh
+ MRTGUID=`id -u mrtg`
+ MRTGGID=`id -g mrtg`
+ exec 2&gt;&amp;1
+ exec tcpserver -l 0 -R -H -q \
+   -u"${MRTGUID}" -g"${MRTGGID}" 0 5660 /home/mrtg/ext/rmrtg
+</pre>
 <hr>
 <h3><a name="rsyncd">A <tt>rsyncd</tt> run script</a></h3>
 (<i>SunOS</i>)
