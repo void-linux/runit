@@ -59,8 +59,8 @@ argument is given to
 .BR runsvdir ,
 all output to standard error is redirected to this
 .IR log ,
-which is similar to the
-.BR readproctitle (8)
+which is similar to the daemontools'
+.B readproctitle
 log.
 To see the most recent error messages, use a process-listing tool such as
 .BR ps (1).
@@ -86,17 +86,14 @@ receives a HUP signal, it sends a TERM signal to each
 .BR runsv (8)
 process it is monitoring and then exits with 111.
 .SH SEE ALSO
+sv(8),
 runsv(8),
+runsvchdir(8),
 runit(8),
 runit-init(8),
-runsvchdir(8),
-runsvctrl(8),
-runsvstat(8),
 chpst(8),
 svlogd(8),
 utmpset(8),
-svwaitdown(8),
-svwaitup(8),
 setsid(2)
 .P
 http://smarden.org/runit/

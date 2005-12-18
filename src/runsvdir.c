@@ -229,7 +229,7 @@ int main(int argc, char **argv) {
       
       if (stat(svdir, &s) != -1) {
 	if (check || \
-	    s.st_mtime > mtime || s.st_ino != ino || s.st_dev != dev) {
+	    s.st_mtime != mtime || s.st_ino != ino || s.st_dev != dev) {
 	  /* svdir modified */
 	  if (chdir(svdir) != -1) {
 	    mtime =s.st_mtime;

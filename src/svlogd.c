@@ -784,9 +784,9 @@ int main(int argc, const char **argv) {
                        sizeof(dir[i].udpaddr)) != linelen) {
               buffer_puts(&dir[i].b, "warning: failure sending through udp: ");
               buffer_put(&dir[i].b, line, linelen);
-              buffer_put(&dir[i].b, "\n", 1);
               buffer_flush(&dir[i].b);
             }
+	    if (line[linelen -1] == '\n') --linelen;
           }
         }
         if (! dir[i].udponly) {

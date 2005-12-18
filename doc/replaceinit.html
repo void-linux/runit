@@ -77,9 +77,8 @@ of your boot loader on how to pass <tt>init=/sbin/runit-init</tt> to the
 kernel.
 <h3>Step 5: Service migration</h3>
 The goal is to migrate all services from <i>sysvinit</i> scheme to the
-<a href="http://cr.yp.to/daemontools.html">daemontools</a> design; take a
-look at these <a href="runscripts.html">run scripts</a> for popular
-services.
+<i>runit</i> service supervision design; take a look at these
+<a href="runscripts.html">run scripts</a> for popular services.
 The migration can be done smoothly.
 For those services that are not migrated to use <tt>run</tt> scripts yet,
 add the corresponding <tt>init</tt>-script startup to <tt>/etc/runit/1</tt>,
@@ -210,9 +209,8 @@ To report success:
 </pre>
 <h3>Step 5: Service migration</h3>
 The goal is to migrate all services from <i>/etc/rc.*</i> scheme to the
-<a href="http://cr.yp.to/daemontools.html">daemontools</a> design; take a
-look at these <a href="runscripts.html">run scripts</a> for popular
-services.
+<i>runit</i> service supervision design; take a look at these
+<a href="runscripts.html">run scripts</a> for popular services.
 The migration can be done smoothly.
 By default <i>runit</i> runs the <tt>/etc/rc</tt> scripts in stage 1 as a
 one time task, so the services are started automatically:
