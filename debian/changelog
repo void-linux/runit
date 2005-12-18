@@ -1,3 +1,13 @@
+runit (1.3.2-1) unstable; urgency=low
+
+  * new upstream version.
+    * svlogd.c: don't print extra newlines to the log if additionally
+      writing to the network through udp (thx Andras Korn, closes: #339030).
+  * debian/control: update long description; Standards-Version: 3.6.2.1.
+  * debian/rules: get upstream version from debian/changelog.
+
+ -- Gerrit Pape <pape@smarden.org>  Sun, 18 Dec 2005 11:52:21 +0000
+
 runit (1.3.1-1) unstable; urgency=low
 
   * new upstream version.
