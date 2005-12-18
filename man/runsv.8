@@ -49,9 +49,10 @@ directory.
 The standard input of the log service is redirected to read from the pipe.
 .P
 .B runsv
-maintains status information in a binary format compatible to
-.BR supervise (8)
-in
+maintains status information in a binary format (compatible to the
+daemontools'
+.B supervise
+program) in
 .IR service /supervise/status
 and
 .IR service /log/supervise/status,
@@ -204,8 +205,7 @@ is running in
 .B runsv
 exits 0 if it was told to exit.
 .SH SEE ALSO
-runsvctrl(8),
-runsvstat(8),
+sv(8),
 chpst(8),
 svlogd(8),
 runit(8),

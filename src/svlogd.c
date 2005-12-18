@@ -34,7 +34,7 @@
 #include "iopause.h"
 
 #define USAGE " [-ttv] [-r c] [-R abc] [-l len] [-b buflen] dir ..."
-#define VERSION "$Id: svlogd.c,v 1.16 2005/07/11 11:53:46 pape Exp $"
+#define VERSION "$Id: svlogd.c,v 1.17 2005/12/18 11:15:51 pape Exp $"
 
 #define FATAL "svlogd: fatal: "
 #define WARNING "svlogd: warning: "
@@ -784,9 +784,9 @@ int main(int argc, const char **argv) {
                        sizeof(dir[i].udpaddr)) != linelen) {
               buffer_puts(&dir[i].b, "warning: failure sending through udp: ");
               buffer_put(&dir[i].b, line, linelen);
-              buffer_put(&dir[i].b, "\n", 1);
               buffer_flush(&dir[i].b);
             }
+	    if (line[linelen -1] == '\n') --linelen;
           }
         }
         if (! dir[i].udponly) {

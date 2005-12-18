@@ -34,9 +34,9 @@ contains some number of old log files, and the current log file
 .IR current .
 Old log files have a file name starting with
 .I @
-followed by a precise timestamp (see
-.BR tai64n (8)),
-indicating when
+followed by a precise timestamp (see the daemontools'
+.B tai64n
+program), indicating when
 .I current
 was rotated and renamed to this file.
 .P
@@ -328,13 +328,30 @@ matches any string.
 Timestamps optionally added by
 .B svlogd
 are not considered part of the log message.
+.P
+An
+.B svlogd
+pattern is not a regular expression.
+For example consider a log message like this
+.P
+ 2005-12-18_09:13:50.97618 tcpsvd: info: pid 1977 from 10.4.1.14
+.P
+The following pattern doesn't match
+.P
+ -*pid*
+.P
+because the first star matches up to the first p in tcpsvd, and then the
+match fails because i is not s.
+To match this log message, you can use a pattern like this instead
+.P
+ -*: *: pid *
 .SH OPTIONS
 .TP
 .B \-t
 timestamp.
-Prefix each selected line with a precise timestamp (see
-.BR tai64n (8))
-when writing to
+Prefix each selected line with a precise timestamp (see the daemontools'
+.B tai64n
+program) when writing to
 .I log
 or to standard error.
 .TP
@@ -415,16 +432,13 @@ with a non empty
 .I current
 log file.
 .SH SEE ALSO
+sv(8),
 runsv(8),
-runsvctrl(8),
-runsvstat(8),
 chpst(8),
 runit(8),
 runit-init(8),
 runsvdir(8),
-runsvchdir(8),
-utmpset(8),
-multilog(8)
+runsvchdir(8)
 .P
 http://smarden.org/runit/
 .SH AUTHOR

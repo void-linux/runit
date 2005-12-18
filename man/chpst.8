@@ -71,12 +71,6 @@ set $GID to the
 gid instead of
 .IR user 's
 gid.
-If
-.I group
-consists of a colon-separated list of group names,
-.B chpst
-sets the group ids of all listed groups.
-All initial supplementary groups are removed.
 .TP
 .B \-e \fIdir
 envdir.
@@ -207,21 +201,23 @@ Otherwise its exit code is the same as that of
 If
 .B chpst
 is called as
-.BR envdir (8),
-.BR envuidgid (8),
-.BR pgrphack (8),
-.BR setlock (8),
-.BR setuidgid (8),
+.BR envdir ,
+.BR envuidgid ,
+.BR pgrphack ,
+.BR setlock ,
+.BR setuidgid ,
 or
-.BR softlimit (8),
+.BR softlimit ,
 it emulates the functionality of these programs from the daemontools package
 respectively.
 .SH SEE ALSO
+sv(8),
 runsv(8),
-runsvctrl(8),
-runsvstat(8),
+setsid(2),
+runit(8),
+runit-init(8),
 runsvdir(8),
-setsid(2)
+runsvchdir(8)
 .P
  http://smarden.org/runit/
  http://cr.yp.to/daemontools.html
