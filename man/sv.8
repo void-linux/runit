@@ -49,7 +49,8 @@ to be controlled then is specified by the base name of the ``init script''.
 .SH COMMANDS
 .TP
 .B status
-Report the current status of the service to standard output.
+Report the current status of the service, and the appendant log service if
+available, to standard output.
 .TP
 .B up
 If the service is not running, start it.
@@ -181,13 +182,29 @@ process to terminate.
 Then report the status, and on timeout send the service the
 .I kill
 command.
+.SH Additional Commands
+.TP
+.B check
+Check for the service to be in the state that's been requested.
+Wait up to 7 seconds for the service to reach the requested state, then
+report the status or timeout.
+If the requested state of the service is
+.IR up ,
+and the script
+.I ./check
+exists in the service directory,
+.B sv
+runs this script to check whether the service is up and running; it's
+considered to be up if
+.I ./check
+exits with 0.
 .SH OPTIONS
 .TP
 .B \-v
 If the
 .I command
-is up, down, term, once, or exit, then wait up to 7 seconds for the command
-to take effect.
+is up, down, term, once, cont, or exit, then wait up to 7 seconds for the
+command to take effect.
 Then report the status or timeout.
 .TP
 .B \-w \fIsec

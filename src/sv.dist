@@ -1,7 +1,7 @@
 usage: sv [-v] [-w sec] action service ...
 
 100
-$Id: sv.c,v 1.9 2005/08/24 20:11:40 pape Exp $
+$Id: sv.c,v 1.10 2006/01/02 20:38:11 pape Exp $
 usage: sv [-v] [-w sec] action service ...
 
 100
