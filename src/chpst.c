@@ -322,18 +322,17 @@ int main(int argc, const char *const *argv) {
     if (chdir(root) == -1) fatal2("unable to change directory", root);
     if (chroot(".") == -1) fatal("unable to change root directory");
   }
+  slimit();
+  if (nicelvl) {
+    errno =0;
+    if (nice(nicelvl) == -1) if (errno) fatal("unable to set nice level");
+  }
   if (env_user) euidgid(env_user, 1);
   if (set_user) suidgid(set_user, 1);
-  slimit();
   if (lock) slock(lock, lockdelay, 0);
   if (nostdin) if (close(0) == -1) fatal("unable to close stdin");
   if (nostdout) if (close(1) == -1) fatal("unable to close stdout");
   if (nostderr) if (close(2) == -1) fatal("unable to close stderr");
-  if (nicelvl) {
-    errno =0;
-    if (nice(nicelvl) == -1)
-      if (errno) fatal("unable to set nice level");
-  }
   pathexec(argv);
   fatal2("unable to run", *argv);
   return(0);

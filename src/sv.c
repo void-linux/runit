@@ -217,6 +217,7 @@ int check(char *a) {
   case 'x': return(0);
   case 'u': if (!pid) return(0); if (!checkscript()) return(0); break;
   case 'd': if (pid) return(0); break;
+  case 'c': if (pid) if (!checkscript()) return(0); break;
   case 't':
     if (!pid && svstatus[17] == 'd') break;
     tai_unpack(svstatus, &tstatus);
@@ -292,7 +293,9 @@ int main(int argc, char **argv) {
     acts ="d"; kll =1; cbk =&check; break;
   case 'T':
     acts ="tc"; kll =1; cbk =&check; break;
-  case 'u': case 'd': case 'o': case 't': case 'p': case 'c': case 'h':
+  case 'c':
+    if (!str_diff(action, "check")) { act =0; acts ="c"; cbk =&check; break; }
+  case 'u': case 'd': case 'o': case 't': case 'p': case 'h':
   case 'a': case 'i': case 'k': case 'q': case '1': case '2':
     action[1] =0; acts =action; break;
   case 's':
@@ -330,7 +333,7 @@ int main(int argc, char **argv) {
         fail("unable to change to service directory");
         *service =0;
       }
-    if (*service) if (act(acts) == -1) *service =0;
+    if (*service) if (act && (act(acts) == -1)) *service =0;
     if (fchdir(curdir) == -1) fatal("unable to change to original directory");
     service++;
   }
