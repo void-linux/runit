@@ -201,7 +201,7 @@ logging console messages</a><br>
  test -n "$CFS_MOUNT" || exit 0
  test -n "$CFS_UMOUNT" || exit 0
  
- svwaitup -s 2 /var/service/portmap
+ sv start portmap || exit 1
  
  exec env \
     NODAEMON=1 CFS_MOUNT="$CFS_MOUNT" CFS_UMOUNT="$CFS_UMOUNT" $DAEMON
@@ -379,7 +379,7 @@ to be set up.
 <pre>
  #!/bin/sh
  exec 2&gt;&amp;1
- svwaitup -s 2 /var/service/portmap
+ sv start /var/service/portmap || exit 1
  exec famd -T 0 -f
 </pre>
 <hr>
@@ -515,7 +515,7 @@ to be set up.
 (<i>Debian sid</i>, <i>FreeBSD 5.3-REL</i>)
 <pre>
  #!/bin/sh
- svwaitup -s 2 /service/getty-*
+ sv start /service/getty-* || exit 1
  exec kdm -nodaemon
 </pre>
 <hr>
@@ -865,7 +865,7 @@ to be set up.
 (<i>Debian</i>)
 <pre>
 #!/bin/sh
-svwaitup /var/service/statd
+sv start portmap statd || exit 1
 RPCNFSDCOUNT=8  # Number of servers to be started up by default
 RPCMOUNTDOPTS=
 
@@ -964,7 +964,7 @@ to be set up.
 (<i>Linux</i>)
 <pre>
  #!/bin/sh
- svwaitup -s 2 /service/vc-*
+ sv start /service/vc-* || exit 1
  exec xdm -nodaemon
 </pre>
 <hr>

@@ -22,7 +22,7 @@ Create the following directories and symbolic links:
 <pre>
  # mkdir -p /etc/runit/runsvdir/default
  # mkdir -p /etc/runit/runsvdir/single
- # ln -s /etc/runit/getty-5 /etc/runit/runsvdir/single/getty-5
+ # ln -s /etc/sv/getty-5 /etc/runit/runsvdir/single/
  # ln -s default /etc/runit/runsvdir/current
 </pre>
 Copy the contents of <tt>/var/service/</tt> to
@@ -72,7 +72,7 @@ You can check the status of the <tt>previous</tt> runlevel through
 <hr>
 <a name="create"><h3>Creating new runlevels</h3></a>
 To create a new runlevel, simply create a new directory in
-<tt>/etc/runit/runsvdir</tt>.
+<tt>/etc/runit/runsvdir/</tt>.
 The name of the directory is the name of the new runlevel.
 The name must not start with a dot and must not be <tt>current</tt>,
 <tt>current.new</tt>, or <tt>previous</tt>, e.g.:
@@ -82,9 +82,9 @@ The name must not start with a dot and must not be <tt>current</tt>,
 Add the services you want to run in the runlevel <tt>maintenance</tt> to the
 newly created directory, e.g.:
 <pre>
- # ln -s /etc/runit/getty-5 /etc/runit/runsvdir/maintenance/
- # ln -s /etc/runit/runsv/ssh /etc/runit/runsvdir/maintenance/
- # ln -s /etc/runit/runsv/dnscache /etc/runit/runsvdir/maintenance/
+ # ln -s /etc/sv/getty-5 /etc/runit/runsvdir/maintenance/
+ # ln -s /etc/sv/ssh /etc/runit/runsvdir/maintenance/
+ # ln -s /etc/sv/dnscache /etc/runit/runsvdir/maintenance/
 </pre>
 If you want to switch to the runlevel <tt>maintenance</tt>, do:
 <pre>

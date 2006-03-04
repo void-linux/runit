@@ -17,16 +17,6 @@
 <a href="#packaging">Packaging friendly</a><br>
 <a href="#smallcode">Small code size</a>
 <hr>
-<i>runit</i>'s service supervision concept is heavily based on the
-<a href="http://cr.yp.to/daemontools.html">daemontools</a>' one, and mostly
-compatible with it.
-The benefits described in the
-<a href="http://cr.yp.to/daemontools/faq/create.html#why">
-daemontools faq</a> also apply to <i>runit</i>'s service supervision.
-Many of the benefits described here also apply to the
-<a href="http://cr.yp.to/daemontools.html">daemontools</a> package.
-Some are described in both places.
-<hr>
 <a name="supervision"><h3>Service supervision</h3></a>
 Each service is associated with a <i>service directory</i>, and each
 service daemon runs as a child process of a supervising
@@ -34,23 +24,19 @@ service daemon runs as a child process of a supervising
 The <a href="runsv.8.html">runsv</a> program provides a reliable interface
 for signalling the service daemon and controlling the service and
 supervisor.
-Normally the <a href="runsvctrl.8.html">runsvctrl</a> program is used to
-send commands through this interface.
-The <a href="runsvstat.8.html">runsvstat</a> program can be used to print
-status information about the service.
+Normally the <a href="sv.8.html">sv</a> program is used to send commands
+through this interface, and to query status informations about the service.
 <p>
 The <a href="runsv.8.html">runsv</a> program supervises the corresponding
 service daemon.
 By default a service is defined to be up, that means, if the service daemon
 dies, it will be restarted.
-Of course you can <a href="runsvctrl.8.html">tell runsv</a> otherwise.
+Of course you can <a href="sv.8.html">tell runsv</a> otherwise.
 <p>
-You don't have such a control interface with <i>sysv init</i> for example.
-Using the control interface to send signals to the service daemon saves a
-lot of extra (non trivial) work to reliably find out the daemon's process
-id.
-Also <i>sysv init</i> only supports &quot;respawning&quot; of services
-started from <tt>inittab</tt>.
+This reliable interface to control daemons and supervisors obsolete
+pid-guessing programs, such as <tt>pidof</tt>, <tt>killall</tt>,
+<tt>start-stop-daemon</tt>, which, due to guessing, are prone to failures
+by design.
 <hr>
 <a name="state"><h3>Clean process state</h3></a>
 <i>runit</i> guarantees each service a clean process state, no matter if the
@@ -106,9 +92,7 @@ output to write to the pipe.
 Restarting the service does not require restarting the log service, and vice
 versa.
 A good choice for a log daemon is <i>runit</i>'s service logging daemon
-<a href="svlogd.8.html">svlogd</a>, or
-<a href="http://cr.yp.to/daemontools/multilog.html">multilog</a> from the
-<i>daemontools</i> package.
+<a href="svlogd.8.html">svlogd</a>.
 <p>
 The service daemon and the log daemon can run with different process states,
 and under different user id's.

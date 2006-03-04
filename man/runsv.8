@@ -69,7 +69,7 @@ and (optionally)
 are provided to give commands to
 .BR runsv .
 You can use
-.BR runsvctrl (8)
+.BR sv (8)
 to control the service or just write one of the following characters to
 the named pipe:
 .TP
@@ -146,7 +146,7 @@ This command is ignored if it is given to
 .IR service /log/supervise/control.
 .P
 Example: to send a TERM signal to the socklog-unix service, either do
-  # runsvctrl term /var/service/socklog-unix
+  # sv term /var/service/socklog-unix
  or
   # echo \-n t >/var/service/socklog-unix/supervise/control
 .P

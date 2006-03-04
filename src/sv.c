@@ -14,8 +14,8 @@
 #include "taia.h"
 #include "wait.h"
 
-#define USAGE " [-v] [-w sec] action service ..."
-#define USAGELSB " [-w sec] action"
+#define USAGE " [-v] [-w sec] command service ..."
+#define USAGELSB " [-w sec] command"
 
 #define VERSION "$Id$"
 

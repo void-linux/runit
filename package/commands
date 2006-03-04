@@ -3,11 +3,7 @@ runit
 runit-init
 runsv
 runsvchdir
-runsvctrl
 runsvdir
-runsvstat
 sv
 svlogd
-svwaitdown
-svwaitup
 utmpset

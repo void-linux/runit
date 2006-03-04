@@ -1,3 +1,23 @@
+runit 1.4.0
+Sat, 04 Mar 2006 14:13:49 +0000
+  * doc/faq.html: new.
+  * doc/benefits.html: use sv program instead of runsvstat, runsvctrl;
+    minor.
+  * doc/replaceinit.html, doc/runlevels.html: put getty service directory
+    into /etc/sv/.
+  * doc/runscripts.html: use sv program instead of svwaitup.
+  * etc/*/3, etc/macosx/StartupItems/runit: use sv program instead of
+    svwaitdown.
+  * man/runsv.8: use sv program instead of runsvctrl.
+  * man/sv.8: minor.
+  * Makefile, package/commands: no longer build/install runsvctrl,
+    runsvstat, svwaitdown, svwaitup.
+  * man/runsvctrl.8, man/runsvstat.8, man/svwaitdown.8, man/svwaitup.8:
+    remove; obsolete.
+  * doc/index.html: add faq; remove runsvctrl, runsvstat, svwaitdown,
+    svwaitup.
+  * sv.c: fix usage output.
+
 runit 1.3.3
 Mon, 02 Jan 2006 20:35:34 +0000
   * chpst.c: adjust nice value and set limits before dropping permissions.
