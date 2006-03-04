@@ -18,6 +18,8 @@ chpst \- runs a program with a changed process state
 .IR lock ]
 [-m
 .IR bytes ]
+[-d
+.IR bytes ]
 [-o
 .IR n ]
 [-p
@@ -145,6 +147,12 @@ Limit the data segment, stack segment, locked physical pages, and total of
 all segment per process to
 .I bytes
 bytes each.
+.TP
+.B \-d \fIbytes
+limit data segment.
+Limit the data segment per process to
+.I bytes
+bytes.
 .TP
 .B \-o \fIn
 limit open files.

@@ -20,7 +20,7 @@
 #include "openreadclose.h"
 #include "direntry.h"
 
-#define USAGE_MAIN " [-vP012] [-u user[:group]] [-U user[:group]] [-e dir] [-/ root] [-n nice] [-l|-L lock] [-m n] [-o n] [-p n] [-f n] [-c n] prog"
+#define USAGE_MAIN " [-vP012] [-u user[:group]] [-U user[:group]] [-e dir] [-/ root] [-n nice] [-l|-L lock] [-m n] [-d n] [-o n] [-p n] [-f n] [-c n] prog"
 #define FATAL "chpst: fatal: "
 #define WARNING "chpst: warning: "
 
@@ -136,33 +136,32 @@ void edir(const char *dirname) {
   close(wdir);
 }
 
+void slock_die(const char *m, const char *f, unsigned int x) {
+  if (! x) fatal2(m, f);
+  _exit(0);
+}
 void slock(const char *f, unsigned int d, unsigned int x) {
   int fd;
-  void die(const char *m) {
-    if (! x) fatal2(m, f);
-    _exit(0);
-  }
 
-  if ((fd =open_append(f)) == -1) die("unable to open lock");
+  if ((fd =open_append(f)) == -1) slock_die("unable to open lock", f, x);
   if (d) {
-    if (lock_ex(fd) == -1) die("unable to lock");
+    if (lock_ex(fd) == -1) slock_die("unable to lock", f, x);
     return;
   }
-  if (lock_exnb(fd) == -1) die("unable to lock");
+  if (lock_exnb(fd) == -1) slock_die("unable to lock", f, x);
 }
 
+void limit(int what, long l) {
+  struct rlimit r;
+
+  if (getrlimit(what, &r) == -1) fatal("unable to getrlimit()");
+  if ((l < 0) || (l > r.rlim_max))
+    r.rlim_cur =r.rlim_max;
+  else
+    r.rlim_cur =l;
+  if (setrlimit(what, &r) == -1) fatal("unable to setrlimit()");
+}
 void slimit() {
-  void limit(int what, long l) {
-    struct rlimit r;
-
-    if (getrlimit(what, &r) == -1) fatal("unable to getrlimit()");
-    if ((l < 0) || (l > r.rlim_max))
-      r.rlim_cur =r.rlim_max;
-    else
-      r.rlim_cur =l;
-    if (setrlimit(what, &r) == -1) fatal("unable to setrlimit()");
-  }
-
   if (limitd >= -1) {
 #ifdef RLIMIT_DATA
     limit(RLIMIT_DATA, limitd);
@@ -274,7 +273,7 @@ int main(int argc, const char *const *argv) {
   if (str_equal(progname, "setlock")) setlock(argc, argv);
   if (str_equal(progname, "softlimit")) softlimit(argc, argv);
 
-  while ((opt =getopt(argc, argv, "u:U:e:m:o:p:f:c:r:t:/:n:l:L:vP012V"))
+  while ((opt =getopt(argc, argv, "u:U:e:m:d:o:p:f:c:r:t:/:n:l:L:vP012V"))
          != opteof)
     switch(opt) {
     case 'u': set_user =(char*)optarg; break;
@@ -284,6 +283,7 @@ int main(int argc, const char *const *argv) {
       if (optarg[scan_ulong(optarg, &ul)]) usage();
       limits =limitl =limita =limitd =ul;
       break;
+    case 'd': if (optarg[scan_ulong(optarg, &ul)]) usage(); limitd =ul; break;
     case 'o': if (optarg[scan_ulong(optarg, &ul)]) usage(); limito =ul; break;
     case 'p': if (optarg[scan_ulong(optarg, &ul)]) usage(); limitp =ul; break;
     case 'f': if (optarg[scan_ulong(optarg, &ul)]) usage(); limitf =ul; break;
@@ -346,60 +346,63 @@ int main(int argc, const char *const *argv) {
 #define USAGE_SETLOCK " [ -nNxX ] file program [ arg ... ]"
 #define USAGE_SOFTLIMIT " [-a allbytes] [-c corebytes] [-d databytes] [-f filebytes] [-l lockbytes] [-m membytes] [-o openfiles] [-p processes] [-r residentbytes] [-s stackbytes] [-t cpusecs] child"
 
+void setuidgid_usage() {
+  strerr_die4x(100, "usage: ", progname, USAGE_SETUIDGID, "\n");
+}
 void setuidgid(int argc, const char *const *argv) {
   const char *account;
-  void usage() {
-    strerr_die4x(100, "usage: ", progname, USAGE_SETUIDGID, "\n");
-  }
 
-  if (! (account =*++argv)) usage();
-  if (! *++argv) usage();
+  if (! (account =*++argv)) setuidgid_usage();
+  if (! *++argv) setuidgid_usage();
   suidgid((char*)account, 0);
   pathexec(argv);
   fatal2("unable to run", *argv);
 }
+
+void envuidgid_usage() {
+  strerr_die4x(100, "usage: ", progname, USAGE_ENVUIDGID, "\n");
+}
 void envuidgid(int argc, const char *const *argv) {
   const char *account;
-  void usage() {
-    strerr_die4x(100, "usage: ", progname, USAGE_ENVUIDGID, "\n");
-  }
 
-  if (! (account =*++argv)) usage();
-  if (! *++argv) usage();
+  if (! (account =*++argv)) envuidgid_usage();
+  if (! *++argv) envuidgid_usage();
   euidgid((char*)account, 0);
   pathexec(argv);
   fatal2("unable to run", *argv);
 }
+
+void envdir_usage() {
+  strerr_die4x(100, "usage: ", progname, USAGE_ENVDIR, "\n");
+}
 void envdir(int argc, const char *const *argv) {
   const char *dir;
-  void usage() {
-    strerr_die4x(100, "usage: ", progname, USAGE_ENVDIR, "\n");
-  }
 
-  if (! (dir =*++argv)) usage();
-  if (! *++argv) usage();
+  if (! (dir =*++argv)) envdir_usage();
+  if (! *++argv) envdir_usage();
   edir(dir);
   pathexec(argv);
   fatal2("unable to run", *argv);
 }
-void pgrphack(int argc, const char *const *argv) {
-  void usage() {
-    strerr_die4x(100, "usage: ", progname, USAGE_PGRPHACK, "\n");
-  }
 
-  if (! *++argv) usage();
+void pgrphack_usage() {
+  strerr_die4x(100, "usage: ", progname, USAGE_PGRPHACK, "\n");
+}
+void pgrphack(int argc, const char *const *argv) {
+  if (! *++argv) pgrphack_usage();
   setsid();
   pathexec(argv);
   fatal2("unable to run", *argv);
+}
+
+void setlock_usage() {
+  strerr_die4x(100, "usage: ", progname, USAGE_SETLOCK, "\n");
 }
 void setlock(int argc, const char *const *argv) {
   int opt;
   unsigned int delay =0;
   unsigned int x =0;
   const char *fn;
-  void usage() {
-    strerr_die4x(100, "usage: ", progname, USAGE_SETLOCK, "\n");
-  }
 
   while ((opt =getopt(argc, argv, "nNxX")) != opteof)
     switch(opt) {
@@ -407,33 +410,34 @@ void setlock(int argc, const char *const *argv) {
       case 'N': delay =0; break;
       case 'x': x =1; break;
       case 'X': x =0; break;
-      default: usage();
+      default: setlock_usage();
     }
   argv +=optind;
-  if (! (fn =*argv)) usage();
-  if (! *++argv) usage();
+  if (! (fn =*argv)) setlock_usage();
+  if (! *++argv) setlock_usage();
 
   slock(fn, delay, x);
   pathexec(argv);
   if (! x) fatal2("unable to run", *argv);
   _exit(0);
 }
+
+void softlimit_usage() {
+  strerr_die4x(100, "usage: ", progname, USAGE_SOFTLIMIT, "\n");
+}
+void getlarg(long *l) {
+  unsigned long ul;
+
+  if (str_equal(optarg, "=")) { *l =-1; return; }
+  if (optarg[scan_ulong(optarg, &ul)]) usage();
+  *l =ul;
+}
 void softlimit(int argc, const char *const *argv) {
   int opt;
-  unsigned long ul;
   
-  void usage() {
-    strerr_die4x(100, "usage: ", progname, USAGE_SOFTLIMIT, "\n");
-  }
-  void getlarg(long *l) {
-    if (str_equal(optarg, "=")) { *l =-1; return; }
-    if (optarg[scan_ulong(optarg, &ul)]) usage();
-    *l =ul;
-  }
-
   while ((opt =getopt(argc,argv,"a:c:d:f:l:m:o:p:r:s:t:")) != opteof)
     switch(opt) {
-    case '?': usage();
+    case '?': softlimit_usage();
     case 'a': getlarg(&limita); break;
     case 'c': getlarg(&limitc); break;
     case 'd': getlarg(&limitd); break;
@@ -447,7 +451,7 @@ void softlimit(int argc, const char *const *argv) {
     case 't': getlarg(&limitt); break;
     }
   argv +=optind;
-  if (!*argv) usage();
+  if (!*argv) softlimit_usage();
   slimit();
   pathexec(argv);
   fatal2("unable to run", *argv);
