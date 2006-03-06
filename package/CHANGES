@@ -1,5 +1,5 @@
 runit 1.4.0
-Sat, 04 Mar 2006 17:10:50 +0000
+Mon, 06 Mar 2006 12:45:08 +0000
   * doc/faq.html: new.
   * doc/benefits.html: use sv program instead of runsvstat, runsvctrl;
     minor.
