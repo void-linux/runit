@@ -14,10 +14,10 @@
 #include "taia.h"
 #include "wait.h"
 
-#define USAGE " [-v] [-w sec] action service ..."
-#define USAGELSB " [-w sec] action"
+#define USAGE " [-v] [-w sec] command service ..."
+#define USAGELSB " [-w sec] command"
 
-#define VERSION "$Id: sv.c,v 1.10 2006/01/02 20:38:11 pape Exp $"
+#define VERSION "$Id: sv.c,v 1.11 2006/03/04 14:14:49 pape Exp $"
 
 #define FATAL   "fatal: "
 #define FAIL    "fail: "
@@ -269,7 +269,7 @@ int main(int argc, char **argv) {
     case 'w': scan_ulong(optarg, &wait);
     case 'v': verbose =1; break;
     case 'V':
-      strerr_warn1("$Id: sv.c,v 1.10 2006/01/02 20:38:11 pape Exp $", 0);
+      strerr_warn1("$Id: sv.c,v 1.11 2006/03/04 14:14:49 pape Exp $", 0);
     case '?': usage();
     }
   }

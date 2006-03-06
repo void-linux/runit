@@ -12,7 +12,8 @@ StartService() {
 }
 StopService() {
   ConsoleMessage "Stopping runit service supervision"
-  svwaitdown -xk -t14 /var/service/*
+  sv -w196 force-stop /var/service/*
+  sv exit /var/service/*
 }
 RestartService() {
   return 0
