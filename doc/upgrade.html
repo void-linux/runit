@@ -9,6 +9,16 @@
 <hr>
 <h1>runit - upgrading from previous versions</h1>
 <hr>
+<h3>1.3.x to 1.4.0</h3>
+With this version the <tt>runsvctrl</tt>, <tt>runsvstat</tt>,
+<tt>svwaitdown</tt>, and <tt>svwaitup</tt> programs no longer are being
+installed, the functionality of these programs has been incorporated into
+the <a href="sv.8.html">sv</a> program.
+The documentation now suggest to put service directories by default into
+the <tt>/etc/sv/</tt> directory, and a list of frequently asked questions
+with answers has been added.
+The <a href="chpst.8.html">chpst</a> program understands a new option -d
+to limit memory of the data segment per process.
 <h3>1.2.x to 1.3.x</h3>
 This release introduces a first test version of the <a href="sv.8.html">sv</a>
 program, which can be used to control the state and query the status of
