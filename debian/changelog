@@ -11,7 +11,7 @@ runit (1.4.1-1) unstable; urgency=low
   * debian/runit.preinst, debian/runit.postinst: move conffiles, preserve
     user changes.
 
- -- Gerrit Pape <pape@smarden.org>  Mon, 20 Mar 2006 19:11:51 +0000
+ -- Gerrit Pape <pape@smarden.org>  Mon, 20 Mar 2006 19:34:34 +0000
 
 runit (1.3.3-1) unstable; urgency=low
 

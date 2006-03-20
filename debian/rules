@@ -73,7 +73,8 @@ install: deb-checkdir deb-checkuid build-stamp
 	  '$(DIR)'/usr/share/lintian/overrides/runit
 	# man pages
 	install -d -m0755 '$(DIR)'/usr/share/man/man8
-	for i in runsvdir runsv sv svlogd chpst runsvchdir utmpset; do \
+	for i in runit runit-init runsvdir runsv sv svlogd chpst runsvchdir \
+	 utmpset; do \
 	  install -m0644 admin/runit/man/$$i.8 \
 	    '$(DIR)'/usr/share/man/man8/ || exit 1; \
 	done
