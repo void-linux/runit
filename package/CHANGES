@@ -1,3 +1,9 @@
+1.4.1
+Mon, 20 Mar 2006 18:54:41 +0000
+  * doc/faq.html: typos; add usercontrol, userservices; minor.
+  * src/uidgid.h: use uid_t, git_t (fix setting of multiple groups with
+    dietlibc, thx Tino Keitel)
+
 runit 1.4.0
 Mon, 06 Mar 2006 12:45:08 +0000
   * doc/faq.html: new.

@@ -50,7 +50,6 @@ How can I send signals to a service daemon
 <a href="#status"> 
 How can I query the status of a service
 </a><br>
-
 <a href="#remove">
 How do I remove a service
 </a><br>
@@ -71,6 +70,12 @@ What about runlevels
 What about LSB init scripts compliance
 </a><br>
 <p>
+<a href="#user">
+Is it possible to allow a user other than root to control a service
+</a><br>
+<a href="#userservices">
+Does runit support user-specific services?
+</a><br>
 <a href="#readonlyfs">
 Does runit work on a read-only filesystem
 </a><br>
@@ -118,6 +123,10 @@ Answer:
 <a name="license"><h3>
 What's the license, is runit free software
 </h3></a>
+I would like to distribute runit, in source and binary form.
+Am I allowed to do so?
+<p>
+Answer:
 runit is free software, it's licensed under a three-clause BSD alike
 license.
 See the file <tt>package/COPYING</tt> in the runit tarball.
@@ -163,6 +172,7 @@ interprets the script to replace itself with the service daemon
 <tt>getty</tt>; this is necessary to make
 <a href="#control">controlling the service</a> work properly.
 
+<!--
 <hr>
 <a name="log"><h3>
 What is a log service
@@ -172,7 +182,7 @@ log service.
 What does that mean?
 <p>
 Answer:
-
+-->
 
 <hr>
 <a name="createlog"><h3>
@@ -330,7 +340,7 @@ What about runlevels
 Other init schemes support runlevels, what about runit?
 <p>
 Answer:
-runit support runlevels, even more flexible than traditional init schemes.
+runit supports runlevels, even more flexible than traditional init schemes.
 See <a href="runlevels.html">the documentation</a>.
 
 <hr>
@@ -339,10 +349,11 @@ What about LSB init scripts compliance
 </a></h3>
 I know about the <a href="sv.8.html">sv</a> program to control a service,
 but have applications that rely on the <tt>/etc/init.d/</tt> scripts
-interface as defined in the LSB.
+interface as defined through LSB.
 Do I need to change the application to work with runit?
 <p>
 Answer:
+You don't need to change the application.
 The <a href="sv.8.html">sv</a> program supports the <tt>/etc/init.d/</tt>
 script interface
 <a href="http://refspecs.freestandards.org/LSB_2.1.0/LSB-generic/LSB-generic/iniscrptact.html">
@@ -358,11 +369,52 @@ in <tt>/etc/init.d/</tt>, named as the service daemon, pointing to the
 </pre>
 
 <hr>
+<a name="user"><h3>
+Is it possible to allow a user other than root to control a service
+</a></h3>
+Using the <a href="sv.8.html">sv</a> program to control a service, or query
+its status informations, only works as root.
+Is it possible to allow non-root users to control a service too?
+<p>
+Answer:
+Yes, you simply need to adjust file system permissions for the
+<tt>./supervise/</tt> subdirectory in the service directory.
+E.g.: to allow the user <tt>burdon</tt> to control the service
+<tt>dhcp</tt>, change to the <tt>dhcp</tt> service directory, and do
+<pre>
+ # chmod 755 ./supervise
+ # chown burdon ./supervise/ok ./supervise/control ./supervise/status
+</pre>
+This works similarly with groups, of course.
+
+<hr>
+<a name="userservices"><h3>
+Does runit support user-specific services?
+</a></h3>
+It's very nice to simply
+<a href="#tell">create symbolic links</a> to add system-wide services.
+Does this work for user-specific services too?
+<p>
+Answer:
+Yes.
+E.g.: to provide the user <tt>floyd</tt> with facility to manage services
+through <tt>~/service/</tt>, <a href="#createlog">create a service</a>
+<tt>runsvdir-floyd</tt> with the following run script and a usual log/run
+script, and <a href="#tell">tell runit</a> about the service
+<pre>
+ #!/bin/sh
+ exec 2>&1
+ exec chpst -ufloyd runsvdir /home/floyd/service
+</pre>
+Now <tt>floyd</tt> can create services on his own, and manage them through
+symbolic links in <tt>~/service/</tt> to have them run under his user id.
+
+<hr>
 <a name="readonlyfs"><h3>
 Does runit work on a read-only filesystem
 </a></h3>
 On my system <tt>/etc/</tt> is mounted read-only by default.
-runit uses many files in <tt>/etc/</tt> it need to write to, like
+runit uses many files in <tt>/etc/</tt> it needs to write to, like
 <tt>/etc/runit/stopit</tt>, and the <tt>./supervise/</tt>
 subdirectories in the service directories.
 How can I make runit work on my system?

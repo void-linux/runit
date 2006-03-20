@@ -1,9 +1,11 @@
 #ifndef UIDGID_H
 #define UIDGID_H
 
+#include <sys/types.h>
+
 struct uidgid {
-  int uid;
-  int gid[61];
+  uid_t uid;
+  gid_t gid[61];
   int gids;
 };
 
