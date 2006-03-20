@@ -52,8 +52,7 @@ install: deb-checkdir deb-checkuid build-stamp
 	for i in runit runit-init; do \
 	  install -m0755 admin/runit/src/$$i '$(DIR)'/sbin/ || exit 1; \
 	done
-	for i in runsvdir runsv sv svlogd svwaitdown svwaitup runsvstat \
-	  runsvctrl chpst; do \
+	for i in runsvdir runsv sv svlogd chpst; do \
 	  install -m0755 admin/runit/src/$$i '$(DIR)'/usr/bin/ || exit 1; \
 	done
 	for i in runsvchdir utmpset; do \
@@ -64,22 +63,24 @@ install: deb-checkdir deb-checkuid build-stamp
 	# runsvdir-start to be used from /etc/inittab
 	install -m0755 debian/2 '$(DIR)'/usr/sbin/runsvdir-start
 	# getty-5 service
-	install -d -m0755 '$(DIR)'/etc/runit/getty-5
-	install -m0755 debian/getty-tty5.run '$(DIR)'/etc/runit/getty-5/run
+	install -d -m0755 '$(DIR)'/etc/sv/getty-5
+	install -m0755 debian/getty-tty5.run '$(DIR)'/etc/sv/getty-5/run
 	install -m0755 debian/getty-tty5.finish \
-	  '$(DIR)'/etc/runit/getty-5/finish
+	  '$(DIR)'/etc/sv/getty-5/finish
 	# lintian overrides
 	install -m0755 -d '$(DIR)'/usr/share/lintian/overrides
 	install -m0644 debian/runit.lintian \
 	  '$(DIR)'/usr/share/lintian/overrides/runit
 	# man pages
 	install -d -m0755 '$(DIR)'/usr/share/man/man8
-	install -m0644 admin/runit/man/*.8 '$(DIR)'/usr/share/man/man8/
+	for i in runsvdir runsv sv svlogd chpst runsvchdir utmpset; do \
+	  install -m0644 admin/runit/man/$$i.8 \
+	    '$(DIR)'/usr/share/man/man8/ || exit 1; \
+	done
 	install -m0644 debian/runsvdir-start.8 '$(DIR)'/usr/share/man/man8/
 	gzip -9 '$(DIR)'/usr/share/man/man8/*.8
 	# links
-	install -d -m0755 '$(DIR)'/var/run/getty-5
-	ln -s /var/run/getty-5 '$(DIR)'/etc/runit/getty-5/supervise
+	ln -s /var/run/sv.getty-5 '$(DIR)'/etc/sv/getty-5/supervise
 	# additional docs
 	install -d -m0755 '$(DIR)'/usr/share/doc/runit/debian
 	for i in 1 2 3 ctrlaltdel; do \
