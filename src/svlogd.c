@@ -93,6 +93,7 @@ struct logdir {
   char matcherr;
   struct sockaddr_in udpaddr;
   unsigned int udponly;
+  stralloc prefix;
 } *dir;
 unsigned int dirn =0;
 
@@ -419,6 +420,7 @@ unsigned int logdir_open(struct logdir *ld, const char *fn) {
   ld->match ='+';
   ld->udpaddr.sin_port =0;
   ld->udponly =0;
+  while (! stralloc_copys(&ld->prefix, "")) pause_nomem();
   while (! stralloc_copys(&ld->inst, "")) pause_nomem();
   while (! stralloc_copys(&ld->processor, "")) pause_nomem();
 
@@ -431,9 +433,7 @@ unsigned int logdir_open(struct logdir *ld, const char *fn) {
 
     if (verbose) strerr_warn4(INFO, "read: ", ld->name, "/config", 0);
     for (i =0; i +1 < sa.len; ++i) {
-      if ((len =byte_chr(&sa.s[i], sa.len -i, '\n')) == 1) {
-        ++i; continue;
-      }
+      len =byte_chr(&sa.s[i], sa.len -i, '\n');
       sa.s[len +i] =0;
       switch(sa.s[i]) {
       case '\n':
@@ -473,8 +473,10 @@ unsigned int logdir_open(struct logdir *ld, const char *fn) {
         }
         break;
       case '!':
-        while (! stralloc_copys(&ld->processor, &sa.s[i +1])) pause_nomem();
-        while (! stralloc_0(&ld->processor)) pause_nomem();
+        if (len > 1) {
+          while (! stralloc_copys(&ld->processor, &sa.s[i +1])) pause_nomem();
+          while (! stralloc_0(&ld->processor)) pause_nomem();
+        }
         break;
       case 'U':
         ld->udponly =1;
@@ -494,12 +496,18 @@ unsigned int logdir_open(struct logdir *ld, const char *fn) {
           port =514;
         ld->udpaddr.sin_port =htons(port);
         if (fdudp == -1) {
-                 fdudp =socket(AF_INET, SOCK_DGRAM, 0);
+          fdudp =socket(AF_INET, SOCK_DGRAM, 0);
           if (fdudp)
             if (ndelay_on(fdudp) == -1) {
               close(fdudp);
               fdudp =-1;
             }
+        }
+        break;
+      case 'p':
+        if (len > 1) {
+          while (! stralloc_copys(&ld->prefix, &sa.s[i +1])) pause_nomem();
+          while (! stralloc_0(&ld->prefix)) pause_nomem();
         }
         break;
       }
@@ -723,7 +731,6 @@ int main(int argc, const char **argv) {
     char ch;
 
     linelen =0;
-    if (exitasap && ! data.p) break; /* data buffer is empty */
     for (linelen =0; linelen < linemax; ++linelen) {
       if (buffer_GETC(&data, &ch) <= 0) {
         exitasap =1;
@@ -755,12 +762,13 @@ int main(int argc, const char **argv) {
       }
       line[linelen] =ch;
     }
-    if (! linelen) continue;
+    if (exitasap && ! data.p) break; /* data buffer is empty */
     for (i =0; i < dirn; ++i)
       if (dir[i].fddir != -1) {
         if (dir[i].inst.len) logmatch(&dir[i]);
         if (dir[i].matcherr == 'e') {
           if (timestamp) buffer_puts(buffer_2, stamp);
+          if (dir[i].prefix.len) buffer_puts(buffer_2, dir[i].prefix.s);
           buffer_put(buffer_2, line, linelen);
           if (linelen == linemax) buffer_puts(buffer_2, "...");
           buffer_put(buffer_2, "\n", 1); buffer_flush(buffer_2);
@@ -769,28 +777,31 @@ int main(int argc, const char **argv) {
         if (dir[i].udpaddr.sin_port != 0) {
           if (fdudp == -1) {
             buffer_puts(&dir[i].b, "warning: no udp socket available: ");
+            if (dir[i].prefix.len) buffer_puts(&dir[i].b, dir[i].prefix.s);
             buffer_put(&dir[i].b, line, linelen);
             buffer_put(&dir[i].b, "\n", 1);
             buffer_flush(&dir[i].b);
           }
           else {
-            if (linelen >= linemax -1) {
-              line[linemax -4] =line[linemax -3] =line[linemax -2] ='.';
-              linelen =linemax -1;
-            }
-            if (line[linelen -1] != '\n') line[linelen++] ='\n';
-            if (sendto(fdudp, line, linelen, 0,
+            while (! stralloc_copys(&sa, "")) pause_nomem();
+            if (dir[i].prefix.len)
+              while (! stralloc_cats(&sa, dir[i].prefix.s)) pause_nomem();
+            while (! stralloc_catb(&sa, line, linelen)) pause_nomem();
+            if (linelen == linemax)
+              while (! stralloc_cats(&sa, "...")) pause_nomem();
+            while (! stralloc_append(&sa, "\n")) pause_nomem();
+            if (sendto(fdudp, sa.s, sa.len, 0,
                        (struct sockaddr *)&dir[i].udpaddr,
-                       sizeof(dir[i].udpaddr)) != linelen) {
+                       sizeof(dir[i].udpaddr)) != sa.len) {
               buffer_puts(&dir[i].b, "warning: failure sending through udp: ");
-              buffer_put(&dir[i].b, line, linelen);
+              buffer_put(&dir[i].b, sa.s, sa.len);
               buffer_flush(&dir[i].b);
             }
-	    if (line[linelen -1] == '\n') --linelen;
           }
         }
         if (! dir[i].udponly) {
           if (timestamp) buffer_puts(&dir[i].b, stamp);
+          if (dir[i].prefix.len) buffer_puts(&dir[i].b, dir[i].prefix.s);
           buffer_put(&dir[i].b, line, linelen);
         }
       }

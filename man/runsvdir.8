@@ -18,9 +18,13 @@ characters long or absent.
 .B runsvdir
 starts a
 .BR runsv (8)
-process for each subdirectory in the services directory
+process for each subdirectory, or symlink to a directory, in the services
+directory
 .IR dir ,
-up to a limit of 1000 subdirectories.
+up to a limit of 1000 subdirectories,
+and restarts a
+.BR runsv (8)
+process if it terminates.
 .B runsvdir
 skips subdirectory names starting with dots.
 .BR runsv (8)
@@ -30,20 +34,17 @@ PATH.
 .P
 At least every five seconds
 .B runsvdir
-checks whether the services directory
+checks whether the time of last modification, the inode, or the device, of
+the services directory
 .I dir
 has changed.
-If it sees a new subdirectory in
+If so, it re-scans the service directory, and if it sees a new subdirectory,
+or new symlink to a directory, in
 .IR dir ,
 it starts a new
 .BR runsv (8)
-process.
-If it sees an old sudirectory where a
-.BR runsv (8)
-process has exited, it restarts the
-.BR runsv (8)
-process.
-If
+process;
+if
 .B runsvdir
 sees a subdirectory being removed that was previously there, it sends the
 corresponding

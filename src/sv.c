@@ -215,7 +215,10 @@ int check(char *a) {
   pid <<=8; pid +=(unsigned char)svstatus[12];
   switch (*a) {
   case 'x': return(0);
-  case 'u': if (!pid) return(0); if (!checkscript()) return(0); break;
+  case 'u':
+    if (!pid || svstatus[19] != 1) return(0);
+    if (!checkscript()) return(0);
+    break;
   case 'd': if (pid) return(0); break;
   case 'c': if (pid) if (!checkscript()) return(0); break;
   case 't':

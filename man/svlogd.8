@@ -158,8 +158,7 @@ exists, and if so, reads the file line by line and adjusts configuration for
 .I log
 as follows:
 .P
-If the line is empty, less than two characters long, or starts with a ``#'',
-it is ignored.
+If the line is empty, or starts with a ``#'', it is ignored.
 A line of the form
 .TP
 .RI s size
@@ -272,6 +271,13 @@ but transmitted through udp only.
 Error messages from
 .B svlogd
 concerning sending udp packages still go to the log directory.
+.TP
+.RI p prefix
+tells
+.B svlogd
+to prefix each line to be written to the log directory, to standard error,
+or through UDP, with
+.IR prefix .
 .P
 If a line starts with a
 .IR \- ,

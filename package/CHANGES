@@ -1,3 +1,14 @@
+1.5.0
+Mon, 10 Apr 2006 06:09:08 +0000
+  * man/runsvdir.8: document that the services directory is re-scanned if
+    the time of last modification, the inode, or the device has changed.
+  * sv.c: don't report success on 'sv start' if the service is in state
+    finish (thx Matthew R. Dempsky).
+  * svlogd.c: new config line p: optionally prefix each line written to
+    logs, stderr, or through udp; no longer skip empty lines (just
+    containing '\n'), old behavior can be restored with '-' in config.
+  * man/svlogd.8: document new p config line; adapt.
+
 1.4.1
 Mon, 20 Mar 2006 18:54:41 +0000
   * doc/faq.html: typos; add usercontrol, userservices; minor.
