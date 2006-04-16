@@ -17,7 +17,7 @@
 #define USAGE " [-v] [-w sec] command service ..."
 #define USAGELSB " [-w sec] command"
 
-#define VERSION "$Id: sv.c,v 1.11 2006/03/04 14:14:49 pape Exp $"
+#define VERSION "$Id: sv.c,v 1.12 2006/04/10 06:09:43 pape Exp $"
 
 #define FATAL   "fatal: "
 #define FAIL    "fail: "
@@ -215,7 +215,10 @@ int check(char *a) {
   pid <<=8; pid +=(unsigned char)svstatus[12];
   switch (*a) {
   case 'x': return(0);
-  case 'u': if (!pid) return(0); if (!checkscript()) return(0); break;
+  case 'u':
+    if (!pid || svstatus[19] != 1) return(0);
+    if (!checkscript()) return(0);
+    break;
   case 'd': if (pid) return(0); break;
   case 'c': if (pid) if (!checkscript()) return(0); break;
   case 't':
@@ -269,7 +272,7 @@ int main(int argc, char **argv) {
     case 'w': scan_ulong(optarg, &wait);
     case 'v': verbose =1; break;
     case 'V':
-      strerr_warn1("$Id: sv.c,v 1.11 2006/03/04 14:14:49 pape Exp $", 0);
+      strerr_warn1("$Id: sv.c,v 1.12 2006/04/10 06:09:43 pape Exp $", 0);
     case '?': usage();
     }
   }

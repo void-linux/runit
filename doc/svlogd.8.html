@@ -70,58 +70,62 @@ On startup, and after receiving a HUP signal, <b>svlogd</b> checks
 for each log directory <i>log</i> if the configuration file <i>log/config</i> exists,
 and if so, reads the file line by line and adjusts configuration for <i>log</i>
 as follows: <p>
-If the line is empty, less than two characters long, or starts
-with a &lsquo;&lsquo;#&rsquo;&rsquo;, it is ignored. A line of the form 
+If the line is empty, or starts with a &lsquo;&lsquo;#&rsquo;&rsquo;, it is ignored. A line
+of the form 
 <dl>
 
 <dt>s<i>size</i> </dt>
-<dd>sets the maximum file
-size of <i>current</i> when <b>svlogd</b> should rotate the current log file to <i>size</i>
-bytes. Default is 1000000. If <i>size</i> is zero, <b>svlogd</b> doesn&rsquo;t rotate log files.
-You should set <i>size</i> to at least (2 * <i>len</i>). </dd>
+<dd>sets the maximum file size of <i>current</i> when <b>svlogd</b> should
+rotate the current log file to <i>size</i> bytes. Default is 1000000. If <i>size</i> is
+zero, <b>svlogd</b> doesn&rsquo;t rotate log files. You should set <i>size</i> to at least (2
+* <i>len</i>). </dd>
 
 <dt>n<i>num</i> </dt>
-<dd>sets the number of old log
-files <b>svlogd</b> should maintain to <i>num</i>. If <b>svlogd</b> sees more that <i>num</i> old log
-files in <i>log</i> after log file rotation, it deletes the oldest one. Default
-is 10. If <i>num</i> is zero, <b>svlogd</b> doesn&rsquo;t remove old log files. </dd>
+<dd>sets the number of old log files <b>svlogd</b> should maintain to
+<i>num</i>. If <b>svlogd</b> sees more that <i>num</i> old log files in <i>log</i> after log file rotation,
+it deletes the oldest one. Default is 10. If <i>num</i> is zero, <b>svlogd</b> doesn&rsquo;t remove
+old log files. </dd>
 
 <dt>N<i>min</i> </dt>
-<dd>sets the
-minimum number of old log files <b>svlogd</b> should maintain to <i>min</i>. <i>min</i> must
-be less than <i>num</i>. If <i>min</i> is set, and <b>svlogd</b> cannot write to <i>current</i> because
-the filesystem is full, and it sees more than <i>min</i> old log files, it deletes
-the oldest one. </dd>
+<dd>sets the minimum number of old log files <b>svlogd</b> should
+maintain to <i>min</i>. <i>min</i> must be less than <i>num</i>. If <i>min</i> is set, and <b>svlogd</b> cannot
+write to <i>current</i> because the filesystem is full, and it sees more than
+<i>min</i> old log files, it deletes the oldest one. </dd>
 
 <dt>t<i>timeout</i> </dt>
-<dd>sets the maximum age of the <i>current</i> log file when
-<b>svlogd</b> should rotate the current log file to <i>timeout</i> seconds. If <i>current</i>
-is <i>timeout</i> seconds old, and is not empty, <b>svlogd</b> forces log file rotation.
-</dd>
+<dd>sets the maximum
+age of the <i>current</i> log file when <b>svlogd</b> should rotate the current log file
+to <i>timeout</i> seconds. If <i>current</i> is <i>timeout</i> seconds old, and is not empty,
+<b>svlogd</b> forces log file rotation. </dd>
 
 <dt>!<i>processor</i> </dt>
-<dd>tells <b>svlogd</b> to feed each recent log file through <i>processor</i>
-(see above) on log file rotation. By default log files are not processed.
-</dd>
+<dd>tells <b>svlogd</b> to feed each recent
+log file through <i>processor</i> (see above) on log file rotation. By default
+log files are not processed. </dd>
 
 <dt>u<i>a.b.c.d[:port]</i> </dt>
-<dd>tells <b>svlogd</b> to transmit the first <i>len</i> characters of selected
-log messages to the IP address <i>a.b.c.d</i>, port number <i>port</i>. If <i>port</i> isn&rsquo;t set,
-the default port for syslog is used (514). <i>len</i> can be set through the -l
-option, see below. If <b>svlogd</b> has trouble sending udp packets, it writes
-error messages to the log directory. Attention: logging through udp is unreliable,
-and should be used in private networks only. </dd>
+<dd>tells <b>svlogd</b> to transmit the first
+<i>len</i> characters of selected log messages to the IP address <i>a.b.c.d</i>, port number
+<i>port</i>. If <i>port</i> isn&rsquo;t set, the default port for syslog is used (514). <i>len</i> can
+be set through the -l option, see below. If <b>svlogd</b> has trouble sending udp
+packets, it writes error messages to the log directory. Attention: logging
+through udp is unreliable, and should be used in private networks only.
+</dd>
 
 <dt>U<i>a.b.c.d[:port]</i> </dt>
-<dd>is the same as
-the <i>u</i> line above, but the log messages are no longer written to the log
-directory, but transmitted through udp only. Error messages from <b>svlogd</b>
-concerning sending udp packages still go to the log directory. </dd>
+<dd>is the same as the <i>u</i> line above, but the log messages are
+no longer written to the log directory, but transmitted through udp only.
+Error messages from <b>svlogd</b> concerning sending udp packages still go to
+the log directory. </dd>
+
+<dt>p<i>prefix</i> </dt>
+<dd>tells <b>svlogd</b> to prefix each line to be written
+to the log directory, to standard error, or through UDP, with <i>prefix</i>. </dd>
 </dl>
 <p>
-If a line
-starts with a <i>-</i>, <i>+</i>, <i>e</i>, or <i>E</i>, <b>svlogd</b> matches the first <i>len</i> characters of
-each log message against <i>pattern</i> and acts accordingly: 
+If
+a line starts with a <i>-</i>, <i>+</i>, <i>e</i>, or <i>E</i>, <b>svlogd</b> matches the first <i>len</i> characters
+of each log message against <i>pattern</i> and acts accordingly: 
 <dl>
 
 <dt>-<i>pattern</i> </dt>
