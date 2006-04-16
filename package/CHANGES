@@ -1,5 +1,5 @@
 1.5.0
-Mon, 10 Apr 2006 06:09:08 +0000
+Sun, 16 Apr 2006 12:26:50 +0000
   * man/runsvdir.8: document that the services directory is re-scanned if
     the time of last modification, the inode, or the device has changed.
   * sv.c: don't report success on 'sv start' if the service is in state
