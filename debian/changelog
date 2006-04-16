@@ -3,8 +3,9 @@ runit (1.5.0-1) unstable; urgency=low
   * new upstream version.
     * adds configuration option p (prefix) to svlogd (closes: #356339).
   * debian/implicit: update to revision 1.11.
+  * debian/control: Recommends: fgetty; Suggests: socklog-run.
 
- -- Gerrit Pape <pape@smarden.org>  Sun, 16 Apr 2006 12:36:55 +0000
+ -- Gerrit Pape <pape@smarden.org>  Sun, 16 Apr 2006 12:40:11 +0000
 
 runit (1.4.1-1) unstable; urgency=low
 

@@ -8,7 +8,8 @@ Standards-Version: 3.6.2.1
 Package: runit
 Architecture: any
 Depends: ${shlibs:Depends}
-Suggests: runit-run, fgetty
+Recommends: fgetty
+Suggests: runit-run, socklog-run
 Description: a UNIX init scheme with service supervision
  runit is a replacement for SysV-init and other init schemes.  It runs on
  Debian GNU/Linux, *BSD, MacOSX, and Solaris, and may be easily adapted
