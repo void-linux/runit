@@ -22,7 +22,7 @@
 
 #define USAGE " dir"
 
-#define VERSION "$Id: runsv.c,v 1.24 2005/08/23 22:36:28 pape Exp $"
+#define VERSION "$Id: runsv.c,v 1.25 2006/05/10 20:50:38 pape Exp $"
 
 char *progname;
 int selfpipe[2];
@@ -560,8 +560,11 @@ int main(int argc, char **argv) {
           pidchanged =1;
           svd[1].state =S_DOWN;
           svd[1].ctrl &=~C_TERM;
+          taia_uint(&deadline, 1);
+          taia_add(&deadline, &svd[1].start, &deadline);
           taia_now(&svd[1].start);
           update_status(&svd[1]);
+          if (taia_less(&svd[1].start, &deadline)) sleep(1);
         }
       }
     }

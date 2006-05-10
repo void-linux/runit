@@ -17,7 +17,7 @@
 #include "ndelay.h"
 
 #define USAGE " [-P] dir"
-#define VERSION "$Id: runsvdir.c,v 1.17 2005/12/18 11:15:51 pape Exp $"
+#define VERSION "$Id: runsvdir.c,v 1.18 2006/05/10 20:50:38 pape Exp $"
 
 #define MAXSERVICES 1000
 
@@ -68,9 +68,6 @@ void runsv(int no, char *name) {
     prog[0] ="runsv";
     prog[1] =name;
     prog[2] =0;
-    if (rplog)
-      if (fd_move(2, logpipe[1]) == -1)
-	warn("unable to set filedescriptor for log service", 0);
     sig_uncatch(sig_hangup);
     sig_uncatch(sig_term);
     if (pgrp) setsid();
