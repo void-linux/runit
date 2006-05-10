@@ -68,9 +68,6 @@ void runsv(int no, char *name) {
     prog[0] ="runsv";
     prog[1] =name;
     prog[2] =0;
-    if (rplog)
-      if (fd_move(2, logpipe[1]) == -1)
-	warn("unable to set filedescriptor for log service", 0);
     sig_uncatch(sig_hangup);
     sig_uncatch(sig_term);
     if (pgrp) setsid();

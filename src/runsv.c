@@ -560,8 +560,11 @@ int main(int argc, char **argv) {
           pidchanged =1;
           svd[1].state =S_DOWN;
           svd[1].ctrl &=~C_TERM;
+          taia_uint(&deadline, 1);
+          taia_add(&deadline, &svd[1].start, &deadline);
           taia_now(&svd[1].start);
           update_status(&svd[1]);
+          if (taia_less(&svd[1].start, &deadline)) sleep(1);
         }
       }
     }

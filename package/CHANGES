@@ -1,3 +1,9 @@
+1.5.1
+Wed, 10 May 2006 20:47:34 +0000
+  * runsv.c: delay restart of log service at least 1 sec, just as the main
+    service.
+  * runsvdir.c: don't double-copy filedescriptor.
+
 1.5.0
 Sun, 16 Apr 2006 12:26:50 +0000
   * man/runsvdir.8: document that the services directory is re-scanned if
