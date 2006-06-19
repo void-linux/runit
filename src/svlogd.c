@@ -200,8 +200,6 @@ unsigned int processorstop(struct logdir *ld) {
       pause1("unable to change to initial working directory");
     return(ld->processor.len ? 0 : 1);
   }
-  if (unlink(ld->fnsave) == -1)
-    strerr_warn5(WARNING, "unable to unlink: ", ld->name, "/", ld->fnsave, 0);
   ld->fnsave[26] ='t';
   byte_copy(f, 26, ld->fnsave);
   f[26] ='s'; f[27] =0;
@@ -209,6 +207,9 @@ unsigned int processorstop(struct logdir *ld) {
     pause2("unable to rename processed", ld->name);
   while (chmod(f, 0744) == -1)
     pause2("unable to set mode of processed", ld->name);
+  ld->fnsave[26] ='u';
+  if (unlink(ld->fnsave) == -1)
+    strerr_warn5(WARNING, "unable to unlink: ", ld->name, "/", ld->fnsave, 0);
   while (rename("newstate", "state") == -1)
     pause2("unable to rename state", ld->name);
   if (verbose) strerr_warn5(INFO, "processed: ", ld->name, "/", f, 0);
@@ -217,12 +218,40 @@ unsigned int processorstop(struct logdir *ld) {
   return(1);
 }
 
-unsigned int rotate(struct logdir *ld) {
+void rmoldest(struct logdir *ld) {
   DIR *d;
   direntry *f;
-  int n =0;
-  char tmp[FMT_ULONG +1];
   char oldest[FMT_PTIME];
+  int n =0;
+
+  oldest[0] ='A'; oldest[1] =oldest[27] =0;
+  while (! (d =opendir(".")))
+    pause2("unable to open directory, want rotate", ld->name);
+  errno =0;
+  while ((f =readdir(d)))
+    if ((f->d_name[0] == '@') && (str_len(f->d_name) == 27)) {
+      if (f->d_name[26] == 't') {
+        if (unlink(f->d_name) == -1)
+          warn2("unable to unlink processor leftover", f->d_name);
+      }
+      else {
+        ++n;
+        if (str_diff(f->d_name, oldest) < 0) byte_copy(oldest, 27, f->d_name);
+      }
+      errno =0;
+    }
+  if (errno) warn2("unable to read directory", ld->name);
+  closedir(d);
+
+  if (ld->nmax && (n > ld->nmax)) {
+    if (verbose) strerr_warn5(INFO, "delete: ", ld->name, "/", oldest, 0);
+    if ((*oldest == '@') && (unlink(oldest) == -1))
+      warn2("unable to unlink oldest logfile", ld->name);
+  }
+}
+
+unsigned int rotate(struct logdir *ld) {
+  char tmp[FMT_ULONG +1];
 
   if (ld->fddir == -1) { ld->tmax =0; return(0); }
   if (ld->ppid) while(! processorstop(ld));
@@ -269,24 +298,7 @@ unsigned int rotate(struct logdir *ld) {
     ld->size =0;
     while (fchmod(ld->fdcur, 0644) == -1)
       pause2("unable to set mode of current", ld->name);
-    
-    oldest[0] ='A'; oldest[1] =oldest[27] =0;
-    while (! (d =opendir(".")))
-      pause2("unable to open directory, want rotate", ld->name);
-    errno =0;
-    while ((f =readdir(d)))
-      if ((f->d_name[0] == '@') && (str_len(f->d_name) == 27)) {
-        ++n;
-        if (str_diff(f->d_name, oldest) < 0) byte_copy(oldest, 27, f->d_name);
-      }
-    if (errno) warn2("unable to read directory", ld->name);
-    closedir(d);
-    
-    if (ld->nmax && (n >= ld->nmax)) {
-      if (verbose) strerr_warn5(INFO, "delete: ", ld->name, "/", oldest, 0);
-      if ((*oldest == '@') && (unlink(oldest) == -1))
-        warn2("unable to unlink oldest logfile", ld->name);
-    }
+    rmoldest(ld);
     processorstart(ld);
   }
 
@@ -526,6 +538,7 @@ unsigned int logdir_open(struct logdir *ld, const char *fn) {
       } while ((stat(ld->fnsave, &st) != -1) || (errno != error_noent));
       while (rename("current", ld->fnsave) == -1)
         pause2("unable to rename current", ld->name);
+      rmoldest(ld);
       i =-1;
     }
     else
@@ -777,6 +790,7 @@ int main(int argc, const char **argv) {
         if (dir[i].udpaddr.sin_port != 0) {
           if (fdudp == -1) {
             buffer_puts(&dir[i].b, "warning: no udp socket available: ");
+            if (timestamp) buffer_puts(&dir[i].b, stamp);
             if (dir[i].prefix.len) buffer_puts(&dir[i].b, dir[i].prefix.s);
             buffer_put(&dir[i].b, line, linelen);
             buffer_put(&dir[i].b, "\n", 1);
@@ -784,6 +798,8 @@ int main(int argc, const char **argv) {
           }
           else {
             while (! stralloc_copys(&sa, "")) pause_nomem();
+            if (timestamp)
+              while (! stralloc_cats(&sa, stamp)) pause_nomem();
             if (dir[i].prefix.len)
               while (! stralloc_cats(&sa, dir[i].prefix.s)) pause_nomem();
             while (! stralloc_catb(&sa, line, linelen)) pause_nomem();
