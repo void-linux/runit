@@ -4,7 +4,7 @@ runit (1.6.0-0) unstable; urgency=low
     * cleanup *.t files possibly leftover by processor when interrupted by
       signal, also on startup (thx Andras Korn, closes: #369840).
 
- -- Gerrit Pape <pape@smarden.org>  Tue, 20 Jun 2006 20:43:34 +0000
+ -- Gerrit Pape <pape@smarden.org>  Tue, 20 Jun 2006 20:57:23 +0000
 
 runit (1.5.1-1) unstable; urgency=low
 
