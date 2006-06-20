@@ -53,8 +53,8 @@ log files if there are already more than <i>num</i> log files.
 If <b>svlogd</b>
 is told to process recent log files, it saves <i>current</i> to @<i>timestamp.u,</i> feeds
 @<i>timestamp.u</i> through &lsquo;&lsquo;sh -c "<i>processor</i>"&rsquo;&rsquo; and writes the output to @<i>timestamp.t.</i>
-If the <i>processor</i> finishes successfully, @<i>timestamp.u</i> is deleted and @<i>timestamp.t</i>
-is renamed to @<i>timestamp.s,</i> otherwise @<i>timestamp.t</i> is deleted and the <i>processor</i>
+If the <i>processor</i> finishes successfully, @<i>timestamp.t</i> is renamed to @<i>timestamp.s,</i>
+and @<i>timestamp.u</i> is deleted; otherwise @<i>timestamp.t</i> is deleted and the <i>processor</i>
 is started again. <b>svlogd</b> also saves any output that the <i>processor</i> writes
 to file descriptor 5, and makes that output available on file descriptor
 4 when running <i>processor</i> on the next log file rotation. <p>
