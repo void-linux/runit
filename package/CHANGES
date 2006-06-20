@@ -1,6 +1,6 @@
 1.6.0
 
-  * src/svlogd.c: cleanup *.t files possibly leftover by processor when
+  * svlogd.c: cleanup *.t files possibly leftover by processor when
     interrupted by signal, also on startup (thx Andras Korn,
     http://bugs.debian.org/369840); 1st rename .t to .s, then remove .u.
   * man/svlogd.8: adapt.
