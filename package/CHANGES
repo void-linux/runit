@@ -7,6 +7,7 @@ Tue, 20 Jun 2006 20:57:09 +0000
   * svlogd.c: prepend optional timestamp to log messages sent through UDP,
     as done for messages written to dir and to stderr.
   * uidgid.c: properly fixup user/group argument on getpwnam() error.
+  * doc/benefits.html: typo; wording.
 
 1.5.1
 Wed, 10 May 2006 20:55:35 +0000

@@ -33,7 +33,7 @@ By default a service is defined to be up, that means, if the service daemon
 dies, it will be restarted.
 Of course you can <a href="sv.8.html">tell runsv</a> otherwise.
 <p>
-This reliable interface to control daemons and supervisors obsolete
+This reliable interface to control daemons and supervisors obsoletes
 pid-guessing programs, such as <tt>pidof</tt>, <tt>killall</tt>,
 <tt>start-stop-daemon</tt>, which, due to guessing, are prone to failures
 by design.
@@ -47,7 +47,7 @@ resource limits, open file descriptors, and controlling terminals.
 <p>
 You don't necessarily have that with <i>sysv init</i> scripts for example.
 It requires a carefully written init script that reliably cleans up and sets
-the initial process state before starting the service daemon.
+the process state before starting the service daemon.
 This adds even more complexity to the init script in comparison with a run
 script used by <i>runit</i>.
 Many of today's init scripts don't provide a clean process state, here is
@@ -146,7 +146,7 @@ the default
 <a href="http://packages.debian.org/unstable/base/sysvinit.html">
 sysvinit</a>.
 <p>
-Stage 2 already is packaging friendly:
+Stage 2 is packaging friendly:
 all a software package that provides a service needs to do is to include
 a <i>service directory</i> in the package, and to provide a symbolic link
 to this directory in <tt>/var/service/</tt>.
