@@ -15,7 +15,7 @@ unsigned int uidgid_get(struct uidgid *u, char *ug, unsigned int dogrp) {
       ug[d] =0;
       g =ug +d +1;
     }
-  if (! (pwd =getpwnam(ug))) { ug[d] =':'; return(0); }
+  if (! (pwd =getpwnam(ug))) { if (g) ug[d] =':'; return(0); }
   if (g) {
     ug[d] =':';
     for (i =0; i < 60; ++i) {
