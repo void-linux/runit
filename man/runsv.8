@@ -24,6 +24,17 @@ If ./run or ./finish exit immediately,
 .B runsv
 waits a second before starting ./finish or restarting ./run.
 .P
+Two arguments are given to ./finish.
+The first one is ./run's exit code, or -1 if ./run didn't exit normally.
+The second one is the least significant byte of the exit status as
+determined by
+.BR waitpid (2);
+for instance it is 0 if ./run exited normally, and the signal number
+if ./run was terminated by a signal.
+If
+.B runsv
+cannot start ./run for some reason, the exit code is 111 and the status is 0.
+.P
 If the file
 .IR service /down
 exists,

@@ -1,3 +1,11 @@
+1.7.0
+
+  * svlogd.c, fmt_ptime.*, man/svlogd.8: new option -ttt: prefix log
+    messages with sortable UTC timestamp YYYY-MM-DDTHH:MM:SS.xxxxx.
+  * runsv.c, runsv.8: give to arguments to ./finish: exit code and exit
+    status of ./run (mostly copied from pipe-tools' npt-supervise, thx
+    Laurent Bercot).
+
 1.6.0
 Thu, 29 Jun 2006 07:52:35 +0000
   * svlogd.c: cleanup *.t files possibly leftover by processor when

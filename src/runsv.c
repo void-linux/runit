@@ -46,6 +46,7 @@ struct svdir {
   int ctrl;
   int want;
   struct taia start;
+  int wstat;
   int fdlock;
   int fdcontrol;
   int fdcontrolwrite;
@@ -260,15 +261,23 @@ void stopservice(struct svdir *s) {
 
 void startservice(struct svdir *s) {
   int p;
-  char *run[2];
+  char *run[4];
+  char code[FMT_ULONG];
+  char stat[FMT_ULONG];
 
-  if (s->state == S_FINISH)
+  if (s->state == S_FINISH) {
     run[0] ="./finish";
+    code[fmt_ulong(code, wait_exitcode(s->wstat))] =0;
+    run[1] =wait_crashed(s->wstat) ? "-1" : code;
+    stat[fmt_ulong(stat, s->wstat & 0xff)] =0;
+    run[2] =stat;
+    run[3] =0;
+  }
   else {
     run[0] ="./run";
     custom(s, 'u');
+    run[1] =0;
   }
-  run[1] =0;
 
   if (s->pid != 0) stopservice(s); /* should never happen */
   while ((p =fork()) == -1) {
@@ -539,6 +548,7 @@ int main(int argc, char **argv) {
       if (child == svd[0].pid) {
         svd[0].pid =0;
         pidchanged =1;
+        svd[0].wstat =wstat;
         svd[0].ctrl &=~C_TERM;
         if (svd[0].state != S_FINISH)
           if ((fd =open_read("finish")) != -1) {

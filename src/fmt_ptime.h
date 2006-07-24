@@ -8,6 +8,7 @@
 #include "taia.h"
 
 extern unsigned int fmt_ptime(char *, struct taia *);
+extern unsigned int fmt_ptime_iso8601(char *, struct taia *);
 extern unsigned int fmt_taia(char *, struct taia *);
 
 #endif
