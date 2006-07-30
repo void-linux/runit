@@ -3,7 +3,7 @@ Section: admin
 Priority: optional
 Maintainer: Gerrit Pape <pape@smarden.org>
 Build-Depends: dietlibc-dev (>> 0.28-0) [alpha amd64 arm hppa i386 ia64 mips mipsel powerpc ppc64 s390 sparc]
-Standards-Version: 3.6.2.1
+Standards-Version: 3.7.2.1
 
 Package: runit
 Architecture: any
