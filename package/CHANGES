@@ -1,5 +1,5 @@
 1.7.0
-Sun, 30 Jul 2006 12:10:24 +0000
+Sun, 30 Jul 2006 12:32:48 +0000
   * svlogd.c, fmt_ptime.*, man/svlogd.8: new option -ttt: prefix log
     messages with sortable UTC timestamp YYYY-MM-DDTHH:MM:SS.xxxxx.
   * runsv.c, runsv.8: give two arguments to ./finish: exit code and exit
