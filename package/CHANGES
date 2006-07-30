@@ -2,7 +2,7 @@
 
   * svlogd.c, fmt_ptime.*, man/svlogd.8: new option -ttt: prefix log
     messages with sortable UTC timestamp YYYY-MM-DDTHH:MM:SS.xxxxx.
-  * runsv.c, runsv.8: give to arguments to ./finish: exit code and exit
+  * runsv.c, runsv.8: give two arguments to ./finish: exit code and exit
     status of ./run (mostly copied from pipe-tools' npt-supervise, thx
     Laurent Bercot).
 
