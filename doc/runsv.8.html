@@ -21,6 +21,12 @@ exists, <b>runsv</b> starts ./finish. If ./finish doesn&rsquo;t exist or ./finis
 <b>runsv</b> restarts ./run. <p>
 If ./run or ./finish exit immediately, <b>runsv</b> waits a
 second before starting ./finish or restarting ./run. <p>
+Two arguments are given
+to ./finish. The first one is ./run&rsquo;s exit code, or -1 if ./run didn&rsquo;t exit normally.
+The second one is the least significant byte of the exit status as determined
+by <i><b>waitpid</b>(2)</i>; for instance it is 0 if ./run exited normally, and the signal
+number if ./run was terminated by a signal. If <b>runsv</b> cannot start ./run for
+some reason, the exit code is 111 and the status is 0. <p>
 If the file <i>service</i>/down
 exists, <b>runsv</b> does not start ./run immediately. The control interface (see
 below) can be used to start the service and to give other commands to <b>runsv</b>.

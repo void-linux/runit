@@ -11,7 +11,7 @@
 <h2><a name='sect0'>Name</a></h2>
 svlogd - runit&rsquo;s service logging daemon 
 <h2><a name='sect1'>Synopsis</a></h2>
-<b>svlogd</b> [-ttv] [-r <i>c]</i> [-R
+<b>svlogd</b> [-tttv] [-r <i>c]</i> [-R
 <i>xyz]</i> [-l <i>len]</i> [-b <i>buflen]</i> <i>logs</i> 
 <h2><a name='sect2'>Description</a></h2>
 <i>logs</i> consists of one or more arguments,
@@ -187,50 +187,55 @@ error. </dd>
 UTC timestamp of the form YYYY-MM-DD_HH:MM:SS.xxxxx when writing to <i>log</i> or
 to standard error. </dd>
 
+<dt><b>-ttt</b> </dt>
+<dd>timestamp. Prefix each selected line with a human
+readable, sortable UTC timestamp of the form YYYY-MM-DDTHH:MM:SS.xxxxx when
+writing to <i>log</i> or to standard error. </dd>
+
 <dt><b>-r <i>c</b> </i></dt>
-<dd>replace. <i>c</i> must be a single character. Replace non-printable
-characters in log messages with <i>c</i>. Characters are replaced before pattern
-matching is applied. </dd>
+<dd>replace. <i>c</i> must be a single character.
+Replace non-printable characters in log messages with <i>c</i>. Characters are replaced
+before pattern matching is applied. </dd>
 
 <dt><b>-R <i>xyz</b> </i></dt>
-<dd>replace charset. Additionally to non-printable
-characters, replace all characters found in <i>xyz</i> with <i>c</i> (default &lsquo;&lsquo;_&rsquo;&rsquo;). </dd>
+<dd>replace charset. Additionally to
+non-printable characters, replace all characters found in <i>xyz</i> with <i>c</i> (default
+&lsquo;&lsquo;_&rsquo;&rsquo;). </dd>
 
-<dt><b>-l <i>len</b>
-</i></dt>
-<dd>line length. Pattern matching applies to the first <i>len</i> characters of a log
-message only. Default is 1000. </dd>
+<dt><b>-l <i>len</b> </i></dt>
+<dd>line length. Pattern matching applies to the first <i>len</i> characters
+of a log message only. Default is 1000. </dd>
 
 <dt><b>-b <i>buflen</b> </i></dt>
-<dd>buffer size. Set the size of the buffer
-<b>svlogd</b> uses when reading from standard input and writing to <i>logs</i> to <i>buflen</i>.
-Default is 1024. <i>buflen</i> must be greater than <i>len</i>. </dd>
+<dd>buffer size. Set the size
+of the buffer <b>svlogd</b> uses when reading from standard input and writing
+to <i>logs</i> to <i>buflen</i>. Default is 1024. <i>buflen</i> must be greater than <i>len</i>. </dd>
 
 <dt><b>-v</b> </dt>
-<dd>verbose. Print verbose
-messages to standard error. </dd>
+<dd>verbose.
+Print verbose messages to standard error. </dd>
 </dl>
 
 <h2><a name='sect9'>Signals</a></h2>
-If <b>svlogd</b> is sent a HUP signal, it closes
-and reopens all <i>logs</i>, and updates their configuration according to <i>log/config</i>.
-If <b>svlogd</b> has trouble opening a log directory, it prints a warning, and
-discards this log directory. If <b>svlogd</b> is unable to open all log directories
-given at the command line, it exits with an error. <p>
-If <b>svlogd</b> is sent a TERM
-signal, or if it sees end-of-file on standard input, it stops reading standard
-input, processes the data in the buffer, waits for all <i>processor</i> subprocesses
-to finish if any, and exits 0 as soon as possible. <p>
-If <b>svlogd</b> is sent an
-ALRM signal, it forces log file rotation for all <i>logs</i> with a non empty
-<i>current</i> log file. 
+If <b>svlogd</b> is sent a HUP
+signal, it closes and reopens all <i>logs</i>, and updates their configuration
+according to <i>log/config</i>. If <b>svlogd</b> has trouble opening a log directory,
+it prints a warning, and discards this log directory. If <b>svlogd</b> is unable
+to open all log directories given at the command line, it exits with an
+error. <p>
+If <b>svlogd</b> is sent a TERM signal, or if it sees end-of-file on standard
+input, it stops reading standard input, processes the data in the buffer,
+waits for all <i>processor</i> subprocesses to finish if any, and exits 0 as soon
+as possible. <p>
+If <b>svlogd</b> is sent an ALRM signal, it forces log file rotation
+for all <i>logs</i> with a non empty <i>current</i> log file. 
 <h2><a name='sect10'>See Also</a></h2>
-<i>sv(8)</i>, <i>runsv(8)</i>, <i>chpst(8)</i>, <i>runit(8)</i>, <i>runit-init(8)</i>,
-<i>runsvdir(8)</i>, <i>runsvchdir(8)</i> <p>
-<i>http://smarden.org/runit/</i> 
+<i>sv(8)</i>, <i>runsv(8)</i>,
+<i>chpst(8)</i>, <i>runit(8)</i>, <i>runit-init(8)</i>, <i>runsvdir(8)</i>, <i>runsvchdir(8)</i> <p>
+<i>http://smarden.org/runit/</i>
+
 <h2><a name='sect11'>Author</a></h2>
-Gerrit Pape &lt;pape@smarden.org&gt;
-<p>
+Gerrit Pape &lt;pape@smarden.org&gt; <p>
 
 <hr><p>
 <a name='toc'><b>Table of Contents</b></a><p>
