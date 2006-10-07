@@ -34,7 +34,7 @@
 #include "iopause.h"
 
 #define USAGE " [-ttv] [-r c] [-R abc] [-l len] [-b buflen] dir ..."
-#define VERSION "$Id: svlogd.c,v 1.19 2006/06/19 19:55:08 pape Exp $"
+#define VERSION "$Id: svlogd.c,v 1.20 2006/07/24 21:01:37 pape Exp $"
 
 #define FATAL "svlogd: fatal: "
 #define WARNING "svlogd: warning: "
@@ -694,7 +694,7 @@ int main(int argc, const char **argv) {
       if (buflen == 0) buflen =1024;
       break;
     case 't':
-      if (++timestamp > 2) timestamp =2;
+      if (++timestamp > 3) timestamp =3;
       break;
     case 'v':
       ++verbose;
@@ -752,15 +752,11 @@ int main(int argc, const char **argv) {
       if (! linelen && timestamp) {
         taia_now(&now);
         switch (timestamp) {
-        case 1:
-          stamp[fmt_taia(stamp, &now)] =' ';
-          stamp[26] =0;
-          break;
-        case 2:
-          stamp[fmt_ptime(stamp, &now)] =' ';
-          stamp[26] =0;
-          break;
+        case 1: fmt_taia(stamp, &now); break;
+        case 2: fmt_ptime(stamp, &now); break;
+        case 3: fmt_ptime_iso8601(stamp, &now); break;
         }
+	stamp[25] =' '; stamp[26] =0;
       }
       if (ch == '\n') break;
       if (repl) {

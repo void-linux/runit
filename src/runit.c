@@ -70,9 +70,6 @@ int main (int argc, const char * const *argv, char * const *envp) {
 
   /* console */
   if ((ttyfd =open_write("/dev/console")) != -1) {
-#ifdef TIOCSCTTY
-    ioctl(ttyfd, TIOCSCTTY, (char *)0);
-#endif
     dup2(ttyfd, 0); dup2(ttyfd, 1); dup2(ttyfd, 2);
     if (ttyfd > 2) close(ttyfd);
   }
@@ -92,7 +89,7 @@ int main (int argc, const char * const *argv, char * const *envp) {
   if (RB_DISABLE_CAD == 0) reboot_system(0);
 #endif
 
-  strerr_warn3(INFO, "$Id: runit.c,v 1.12 2004/06/26 14:28:12 pape Exp $",
+  strerr_warn3(INFO, "$Id: runit.c,v 1.13 2006/10/07 18:25:29 pape Exp $",
 	       ": booting.", 0);
 
   /* runit */
@@ -111,6 +108,9 @@ int main (int argc, const char * const *argv, char * const *envp) {
       /* stage 1 gets full control of console */
       if (st == 0) {
 	if ((ttyfd =open("/dev/console", O_RDWR)) != -1) {
+#ifdef TIOCSCTTY 
+          ioctl(ttyfd, TIOCSCTTY, (char *)0);
+#endif
 	  dup2(ttyfd, 0);
 	  if (ttyfd > 2) close(ttyfd);
 	}
@@ -294,6 +294,10 @@ int main (int argc, const char * const *argv, char * const *envp) {
   strerr_warn2(INFO, "sending KILL signal to all processes...", 0);
   kill(-1, SIGKILL);
 
+  pid =fork();
+  switch (pid) {
+  case  0:
+  case -1:
   if ((stat(REBOOT, &s) != -1) && (s.st_mode & S_IXUSR)) {
     strerr_warn2(INFO, "system reboot.", 0);
     sync();
@@ -321,6 +325,12 @@ int main (int argc, const char * const *argv, char * const *envp) {
     reboot_system(RB_AUTOBOOT);
 #endif
 #endif
+  }
+  if (pid == 0) _exit(0);
+  break;
+  default:
+  sig_unblock(sig_child);
+  while (wait_pid(pid, 0, 0) == -1);
   }
 #endif
 
