@@ -1,10 +1,13 @@
 1.7.0
-Sun, 30 Jul 2006 12:32:48 +0000
+Sat, 07 Oct 2006 18:24:17 +0000
   * svlogd.c, fmt_ptime.*, man/svlogd.8: new option -ttt: prefix log
     messages with sortable UTC timestamp YYYY-MM-DDTHH:MM:SS.xxxxx.
   * runsv.c, runsv.8: give two arguments to ./finish: exit code and exit
     status of ./run (mostly copied from pipe-tools' npt-supervise, thx
     Laurent Bercot).
+  * runit.c: don't make console the controlling terminal for process 1,
+    but for stage 1 only; fork before initiating system halt or reboot,
+    the linux kernel calls do_exit(0) in kernel/sys.c (thx Jan Kampe).
 
 1.6.0
 Thu, 29 Jun 2006 07:52:35 +0000
