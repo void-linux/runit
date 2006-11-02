@@ -208,6 +208,7 @@ int check(char *a) {
   unsigned int pid;
 
   if ((r =svstatus_get()) == -1) return(-1);
+  while (*a) {
   if (r == 0) { if (*a == 'x') return(1); return(-1); }
   pid =(unsigned char)svstatus[15];
   pid <<=8; pid +=(unsigned char)svstatus[14];
@@ -220,8 +221,9 @@ int check(char *a) {
     if (!checkscript()) return(0);
     break;
   case 'd': if (pid) return(0); break;
-  case 'c': if (pid) if (!checkscript()) return(0); break;
+    case 'C': if (pid) if (!checkscript()) return(0); break;
   case 't':
+    case 'k':
     if (!pid && svstatus[17] == 'd') break;
     tai_unpack(svstatus, &tstatus);
     if ((tstart.sec.x > tstatus.x) || !pid || svstatus[18] || !checkscript())
@@ -231,6 +233,11 @@ int check(char *a) {
     tai_unpack(svstatus, &tstatus);
     if ((!pid && tstart.sec.x > tstatus.x) || (pid && svstatus[17] != 'd'))
       return(0);
+      break;
+    case 'p': if (pid && !svstatus[16]) return(0); break;
+    case 'c': if (pid && svstatus[16]) return(0); break;
+    }
+    ++a;
   }
   outs(OK); svstatus_print(*service); flush("\n");
   return(1);
@@ -297,7 +304,7 @@ int main(int argc, char **argv) {
   case 'T':
     acts ="tc"; kll =1; cbk =&check; break;
   case 'c':
-    if (!str_diff(action, "check")) { act =0; acts ="c"; cbk =&check; break; }
+    if (!str_diff(action, "check")) { act =0; acts ="C"; cbk =&check; break; }
   case 'u': case 'd': case 'o': case 't': case 'p': case 'h':
   case 'a': case 'i': case 'k': case 'q': case '1': case '2':
     action[1] =0; acts =action; break;

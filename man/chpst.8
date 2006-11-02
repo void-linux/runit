@@ -38,18 +38,21 @@ changes the process state according to the given options, and runs
 .IR prog .
 .SH OPTIONS
 .TP
-.B \-u \fIuser[:group]
+.B \-u \fI[:]user[:group]
 setuidgid.
 Set uid and gid to the
 .IR user 's
-uid and gid.
+uid and gid, as found in
+.IR /etc/passwd .
 If
 .I user
 is followed by a colon and a
 .IR group ,
 set the gid to
 .IR group 's
-gid instead of
+gid, as found in
+.IR /etc/group ,
+instead of
 .IR user 's
 gid.
 If
@@ -57,22 +60,41 @@ If
 consists of a colon-separated list of group names,
 .B chpst
 sets the group ids of all listed groups.
+If
+.I user
+is prefixed with a colon, the
+.I user
+and all
+.I group
+arguments are interpreted as uid and gids respectivly, and not looked up in
+the password or group file.
 All initial supplementary groups are removed.
 .TP
-.B \-U \fIuser[:group]
+.B \-U \fI[:]user[:group]
 envuidgid.
 Set the environment variables $UID and $GID to the
 .IR user 's
-uid and gid.
+uid and gid, as found in
+.IR /etc/passwd .
 If
 .I user
 is followed by a colon and a
 .IR group ,
 set $GID to the
 .IR group 's
-gid instead of
+gid, as found in
+.IR /etc/group ,
+instead of
 .IR user 's
 gid.
+If
+.I user
+is prefixed with a colon, the
+.I user
+and
+.I group
+arguments are interpreted as uid and gid respectivly, and not looked up in
+the password or group file.
 .TP
 .B \-e \fIdir
 envdir.

@@ -1,3 +1,12 @@
+1.8.0
+
+  * chpst.c, uidgid.c, uidgid.h: support numerical uid gid through
+    chpst -[u|U] :uid:gid...
+  * man/chpst.8: adapt; clarify that users and groups are looked up in
+    /etc/passwd and /etc/group only.
+  * sv.c: properly wait for a service to be restarted on 'restart';
+    support checks through -v for pause, cont, kill.
+
 1.7.0
 Sat, 07 Oct 2006 18:24:17 +0000
   * svlogd.c, fmt_ptime.*, man/svlogd.8: new option -ttt: prefix log

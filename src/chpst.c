@@ -61,30 +61,40 @@ const char *lock =0;
 const char *root =0;
 unsigned int lockdelay;
 
-void suidgid(char *user, unsigned int dogrp) {
+void suidgid(char *user, unsigned int ext) {
   struct uidgid ugid;
 
-  if (! uidgid_get(&ugid, user, dogrp)) {
-    if (dogrp)
+  if (ext) {
+    if (! uidgids_get(&ugid, user)) {
+      if (*user == ':')
+        fatalx("invalid uid/gids", user +1);
+      else
       fatalx("unknown user/group", user);
-    else
-      fatalx("unknown account", user);
+    }
   }
+    else
+    if (! uidgid_get(&ugid, user))
+      fatalx("unknown account", user);
   if (setgroups(ugid.gids, ugid.gid) == -1) fatal("unable to setgroups");
   if (setgid(*ugid.gid) == -1) fatal("unable to setgid");
   if (prot_uid(ugid.uid) == -1) fatal("unable to setuid");
 }
 
-void euidgid(char *user, unsigned int dogrp) {
+void euidgid(char *user, unsigned int ext) {
   struct uidgid ugid;
   char bufnum[FMT_ULONG];
 
-  if (! uidgid_get(&ugid, user, dogrp)) {
-    if (dogrp)
+  if (ext) {
+    if (! uidgids_get(&ugid, user)) {
+      if (*user == ':')
+        fatalx("invalid uid/gids", user +1);
+      else
       fatalx("unknown user/group", user);
-    else
-      fatalx("unknown account", user);
+    }
   }
+    else
+    if (! uidgid_get(&ugid, user))
+      fatalx("unknown account", user);
   bufnum[fmt_ulong(bufnum, *ugid.gid)] =0;
   if (! pathexec_env("GID", bufnum)) die_nomem();
   bufnum[fmt_ulong(bufnum, ugid.uid)] =0;
