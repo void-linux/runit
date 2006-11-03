@@ -19,11 +19,18 @@ an operating system not stated here, please
 <a href="mailto:supervision@list.skarnet.org">let me know</a>. 
 <p>
 Thanks go to the following people for contributing run scripts:
+<small>
 Alessandro Bono, Robin S. Socha, Claus Alboege, Paul Jarc, clemens fischer,
 Jesse Cablek, Lukas Beeler, Thomas Baden, Ralf Hildebrandt, Antonio Dias,
 Erich Schubert, Lang Martin, Tomasz Nidecki, Marek Bartnikowski,
 Thomas Schwinge, Gael Canal, Woon Wai Keen, Richard A Downing, Phil Genera,
-Stefan Karrmann, Kevin Berry, Karl Chen, Sascha Huedepohl, Jason Smith.
+Stefan Karrmann, Kevin Berry, Karl Chen, Sascha Huedepohl, Jason Smith,
+Kevin, marlowe, ed neville, xavier dutoit.
+</small>
+<p>
+See also
+<a href="http://thedjbway.org/services.html">here</a> for some more run
+scripts.
 <hr>
 <a href="#atftpd">atftpd</a><br>
 <a href="#apache">apache</a><br>
@@ -48,6 +55,7 @@ Stefan Karrmann, Kevin Berry, Karl Chen, Sascha Huedepohl, Jason Smith.
 <a href="#expireproctitle">expireproctitle</a><br>
 <a href="#fam">fam</a><br>
 <a href="#fcron">fcron</a><br>
+<a href="#fetchmail">fetchmail</a><br>
 <a href="#gdm">gdm</a><br>
 <a href="#getty">getty</a><br>
 <a href="#gpm">gpm</a><br>
@@ -73,7 +81,9 @@ logging console messages</a><br>
 <a href="#pop3-ssl">pop3-ssl</a><br>
 <a href="#pop3vscan">pop3vscan</a><br>
 <a href="#portmap">portmap</a><br>
+<a href="#postfix">postfix</a><br>
 <a href="#postgresql">postgresql</a><br>
+<a href="#powernowd">powernowd</a><br>
 <a href="#ppp">ppp</a><br>
 <a href="#privoxy">privoxy</a><br>
 <a href="#proftpd">proftpd</a><br>
@@ -89,6 +99,7 @@ logging console messages</a><br>
 <a href="#sshdtcpserver">sshd under tcpserver</a><br>
 <a href="#statd">statd</a>, <a href="#mountd">mountd</a><br>
 <a href="#stunnel">stunnel</a><br>
+<a href="#subversion">subversion</a><br>
 <a href="#swat">swat</a><br>
 <a href="#syslogd">syslogd</a><br>
 <a href="#taiclockd">taiclockd</a><br>
@@ -383,6 +394,23 @@ to be set up.
  exec famd -T 0 -f
 </pre>
 <hr>
+<h3><a name="postfix">A postfix <tt>master</tt> run script</a></h3>
+(<i>Debian etch</i>)
+<pre>
+ #!/bin/sh
+ exec 1>&2
+ 
+ daemon_directory=/usr/lib/postfix \
+ command_directory=/usr/sbin \
+ config_directory=/etc/postfix \
+ queue_directory=/var/spool/postfix \
+ mail_owner=postfix \
+ setgid_group=postdrop \
+   /etc/postfix/postfix-script check || exit 1
+ 
+ exec /usr/lib/postfix/master
+</pre>
+<hr>
 <h3><a name="fcron">A <tt>fcron</tt> run script</a></h3>
 (<i>LFS</i>)
 <pre>
@@ -393,6 +421,20 @@ to be set up.
 This service needs a
 <a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
 to be set up.
+<hr>
+<h3><a name="fetchmail">A <tt>fetchmail</tt> run script</a></h3>
+(<i>Linux</i>)
+<pre>
+ #!/bin/sh
+ INTERVAL=551
+ exec 2>&1
+ echo "*** Starting fetchmail service..."
+ exec env FETCHMAILHOME="./pid" \
+   chpst -u fetchmail fetchmail -v \
+     -f ./fetchmail.conf \
+     --nodetach \
+     --daemon ${INTERVAL}
+</pre>
 <hr>
 <h3><a name="gdm">A <tt>gdm</tt> run script</a></h3>
 (<i>Debian woody</i>)
@@ -615,6 +657,14 @@ to be set up.
  exec softlimit -m "${MEM}" \
    ntpd -n
 </pre>
+(<i>OpenNTPD on OpenBSD/Linux</i>)
+<pre>
+ #!/bin/sh
+ exec /usr/sbin/ntpd -s -d 2>&1
+</pre>
+This service needs a
+<a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
+to be set up.
 <hr>
 <h3><a name="nullidentd">A <tt>nullidentd</tt> run script</a></h3>
 (<i>Debian sarge</i>)
@@ -681,6 +731,20 @@ to be set up.
 This service needs a
 <a href="http://cr.yp.to/daemontools/faq/create.html#runlog">log service</a>
 to be set up.
+<hr>
+<h3><a name="powernowd">A <tt>powernowd</tt> run script</a></h3>
+(<i>Debian</i>)
+<pre>
+ #!/bin/sh
+ set -e  # barf if modprobe fails
+ modprobe cpufreq-userspace
+ test ! -f /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor ||
+   exec /usr/sbin/powernowd -d
+ 
+ echo "required sysfs objects not found!"
+ echo "Read /usr/share/doc/powernowd/README.Debian for more information."
+ sv down "$(pwd)"
+</pre>
 <hr>
 <h3><a name="ppp">A <tt>ppp</tt> run script</a></h3>
 (<i>FreeBSD</i>)
@@ -864,19 +928,19 @@ to be set up.
 <h3><a name="mountd">A <tt>mountd</tt> run script</a></h3>
 (<i>Debian</i>)
 <pre>
-#!/bin/sh
-sv start portmap statd || exit 1
-RPCNFSDCOUNT=8  # Number of servers to be started up by default
-RPCMOUNTDOPTS=
-
-trap '/usr/bin/killall -2 nfsd' 0
-trap 'exit 2' 1 2 3 15
-
-exportfs -r
-rpc.nfsd -- $RPCNFSDCOUNT
-rpcinfo -u localhost nfs 3 &gt;/dev/null 2&gt;&amp;1 ||
-  RPCMOUNTDOPTS="$RPCMOUNTDOPTS --no-nfs-version 3"
-rpc.mountd -F $RPCMOUNTDOPTS
+ #!/bin/sh
+ sv start portmap statd || exit 1
+ RPCNFSDCOUNT=8  # Number of servers to be started up by default
+ RPCMOUNTDOPTS=
+ 
+ trap '/usr/bin/killall -2 nfsd' 0
+ trap 'exit 2' 1 2 3 15
+ 
+ exportfs -r
+ rpc.nfsd -- $RPCNFSDCOUNT
+ rpcinfo -u localhost nfs 3 &gt;/dev/null 2&gt;&amp;1 ||
+   RPCMOUNTDOPTS="$RPCMOUNTDOPTS --no-nfs-version 3"
+ exec rpc.mountd -F $RPCMOUNTDOPTS
 </pre>
 <hr>
 <h3><a name="stunnel">A <tt>stunnel</tt> run script</a></h3>
@@ -884,6 +948,14 @@ rpc.mountd -F $RPCMOUNTDOPTS
 <pre>
  #!/bin/sh
  exec /usr/local/sbin/stunnel -f -d 1234 -r 25 -v3 -a /etc/ssl/mailcerts 2&gt;&amp;1
+</pre>
+<hr>
+<h3><a name="subversion">A <tt>svnserve</tt> run script</a></h3>
+(<i>Debian</i>)
+<pre>
+ #!/bin/sh
+ exec 2>&1
+ exec /usr/bin/svnserve -d --foreground
 </pre>
 <hr>
 <h3><a name="swat">A <tt>swat</tt> run script</a></h3>
