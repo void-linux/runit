@@ -1,3 +1,11 @@
+runit (1.7.1-1) unstable; urgency=low
+
+  * new upstream version.
+    * clarifies that chpst looks up users/groups in /etc/passwd/group
+      only, allows to specify users/groups by uid/gid (closes: #380261).
+
+ -- Gerrit Pape <pape@smarden.org>  Sat,  4 Nov 2006 19:24:50 +0000
+
 runit (1.7.0-1) unstable; urgency=low
 
   * new upstream version.
