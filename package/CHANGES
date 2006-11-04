@@ -1,3 +1,14 @@
+1.7.1
+Sat, 04 Nov 2006 19:23:29 +0000
+  * chpst.c, uidgid.c, uidgid.h: support numerical uid gid through
+    chpst -[u|U] :uid:gid...
+  * man/chpst.8: adapt; clarify that users and groups are looked up in
+    /etc/passwd and /etc/group only.
+  * sv.c: properly wait for a service to be restarted on 'restart';
+    support checks through -v for pause, cont, kill.
+  * doc/runscripts.html: add contributed run scripts (thx Kevin, marlowe,
+    ed neville, xavier dutoit).
+
 1.7.0
 Sat, 07 Oct 2006 18:24:17 +0000
   * svlogd.c, fmt_ptime.*, man/svlogd.8: new option -ttt: prefix log
