@@ -23,103 +23,109 @@ and runs <i>prog</i>.
 
 <dl>
 
-<dt><b>-u <i>user[:group]</b> </i></dt>
-<dd>setuidgid. Set uid and gid to the <i>user</i>&rsquo;s
-uid and gid. If <i>user</i> is followed by a colon and a <i>group</i>, set the gid to
-<i>group</i>&rsquo;s gid instead of <i>user</i>&rsquo;s gid. If <i>group</i> consists of a colon-separated list
-of group names, <b>chpst</b> sets the group ids of all listed groups. All initial
+<dt><b>-u <i>[:]user[:group]</b> </i></dt>
+<dd>setuidgid. Set uid and gid to the
+<i>user</i>&rsquo;s uid and gid, as found in <i>/etc/passwd</i>. If <i>user</i> is followed by a colon
+and a <i>group</i>, set the gid to <i>group</i>&rsquo;s gid, as found in <i>/etc/group</i>, instead
+of <i>user</i>&rsquo;s gid. If <i>group</i> consists of a colon-separated list of group names,
+<b>chpst</b> sets the group ids of all listed groups. If <i>user</i> is prefixed with
+a colon, the <i>user</i> and all <i>group</i> arguments are interpreted as uid and gids
+respectivly, and not looked up in the password or group file. All initial
 supplementary groups are removed. </dd>
 
-<dt><b>-U <i>user[:group]</b> </i></dt>
+<dt><b>-U <i>[:]user[:group]</b> </i></dt>
 <dd>envuidgid. Set the environment
-variables $UID and $GID to the <i>user</i>&rsquo;s uid and gid. If <i>user</i> is followed by
-a colon and a <i>group</i>, set $GID to the <i>group</i>&rsquo;s gid instead of <i>user</i>&rsquo;s gid. </dd>
+variables $UID and $GID to the <i>user</i>&rsquo;s uid and gid, as found in <i>/etc/passwd</i>.
+If <i>user</i> is followed by a colon and a <i>group</i>, set $GID to the <i>group</i>&rsquo;s gid,
+as found in <i>/etc/group</i>, instead of <i>user</i>&rsquo;s gid. If <i>user</i> is prefixed with a
+colon, the <i>user</i> and <i>group</i> arguments are interpreted as uid and gid respectivly,
+and not looked up in the password or group file. </dd>
 
-<dt><b>-e
-<i>dir</b> </i></dt>
-<dd>envdir. Set various environment variables as specified by files in the
-directory <i>dir</i>: If <i>dir</i> contains a file named <i>k</i> whose first line is <i>v</i>, <b>chpst</b>
-removes the environment variable <i>k</i> if it exists, and then adds the environment
-variable <i>k</i> with the value <i>v</i>. The name <i>k</i> must not contain =. Spaces and tabs
-at the end of <i>v</i> are removed, and nulls in <i>v</i> are changed to newlines. If
-the file <i>k</i> is empty (0 bytes long), <b>chpst</b> removes the environment variable
-<i>k</i> if it exists, without adding a new variable. </dd>
+<dt><b>-e <i>dir</b> </i></dt>
+<dd>envdir. Set various
+environment variables as specified by files in the directory <i>dir</i>: If <i>dir</i>
+contains a file named <i>k</i> whose first line is <i>v</i>, <b>chpst</b> removes the environment
+variable <i>k</i> if it exists, and then adds the environment variable <i>k</i> with
+the value <i>v</i>. The name <i>k</i> must not contain =. Spaces and tabs at the end of
+<i>v</i> are removed, and nulls in <i>v</i> are changed to newlines. If the file <i>k</i> is
+empty (0 bytes long), <b>chpst</b> removes the environment variable <i>k</i> if it exists,
+without adding a new variable. </dd>
 
 <dt><b>-/ <i>root</b> </i></dt>
-<dd>chroot. Change the
-root directory to <i>root</i> before starting <i>prog</i>. </dd>
+<dd>chroot. Change the root directory to
+<i>root</i> before starting <i>prog</i>. </dd>
 
 <dt><b>-n <i>inc</b> </i></dt>
-<dd>nice. Add <i>inc</i> to the <i><b>nice</b>(2)</i>
-value before starting <i>prog</i>. <i>inc</i> must be an integer, and may start with a
-minus or plus. </dd>
+<dd>nice. Add <i>inc</i> to the <i><b>nice</b>(2)</i> value before
+starting <i>prog</i>. <i>inc</i> must be an integer, and may start with a minus or plus.
+</dd>
 
 <dt><b>-l <i>lock</b> </i></dt>
-<dd>lock. Open the file <i>lock</i> for writing, and obtain an
-exclusive lock on it. <i>lock</i> will be created if it does not exist. If <i>lock</i>
-is locked by another process, wait until a new lock can be obtained. </dd>
+<dd>lock. Open the file <i>lock</i> for writing, and obtain an exclusive lock
+on it. <i>lock</i> will be created if it does not exist. If <i>lock</i> is locked by another
+process, wait until a new lock can be obtained. </dd>
 
-<dt><b>-L <i>lock</b>
-</i></dt>
-<dd>The same as -l, but fail immediately if <i>lock</i> is locked by another process.
-</dd>
+<dt><b>-L <i>lock</b> </i></dt>
+<dd>The same as -l, but
+fail immediately if <i>lock</i> is locked by another process. </dd>
 
 <dt><b>-m <i>bytes</b> </i></dt>
-<dd>limit memory. Limit the data segment, stack segment, locked physical
-pages, and total of all segment per process to <i>bytes</i> bytes each. </dd>
+<dd>limit memory.
+Limit the data segment, stack segment, locked physical pages, and total
+of all segment per process to <i>bytes</i> bytes each. </dd>
 
-<dt><b>-d <i>bytes</b>
-</i></dt>
-<dd>limit data segment. Limit the data segment per process to <i>bytes</i> bytes. </dd>
+<dt><b>-d <i>bytes</b> </i></dt>
+<dd>limit data segment.
+Limit the data segment per process to <i>bytes</i> bytes. </dd>
 
-<dt><b>-o
-<i>n</b> </i></dt>
-<dd>limit open files. Limit the number of open file descriptors per process
-to <i>n</i>. </dd>
+<dt><b>-o <i>n</b> </i></dt>
+<dd>limit open files.
+Limit the number of open file descriptors per process to <i>n</i>. </dd>
 
 <dt><b>-p <i>n</b> </i></dt>
-<dd>limit processes. Limit the number of processes per uid to <i>n</i>. </dd>
+<dd>limit processes.
+Limit the number of processes per uid to <i>n</i>. </dd>
 
-<dt><b>-f <i>bytes</b>
-</i></dt>
-<dd>limit output size. Limit the output file size to <i>bytes</i> bytes. </dd>
+<dt><b>-f <i>bytes</b> </i></dt>
+<dd>limit output size. Limit
+the output file size to <i>bytes</i> bytes. </dd>
 
 <dt><b>-c <i>bytes</b> </i></dt>
-<dd>limit
-core size. Limit the core file size to <i>bytes</i> bytes. </dd>
+<dd>limit core size. Limit the core
+file size to <i>bytes</i> bytes. </dd>
 
 <dt><b>-v</b> </dt>
-<dd>verbose. Print verbose
-messages to standard error. This includes warnings about limits unsupported
-by the system. </dd>
+<dd>verbose. Print verbose messages to standard error.
+This includes warnings about limits unsupported by the system. </dd>
 
 <dt><b>-P</b> </dt>
-<dd>pgrphack. Run <i>prog</i> in a new process group. </dd>
+<dd>pgrphack.
+Run <i>prog</i> in a new process group. </dd>
 
 <dt><b>-0</b> </dt>
-<dd>Close standard
-input before starting <i>prog</i>. </dd>
+<dd>Close standard input before starting
+<i>prog</i>. </dd>
 
 <dt><b>-1</b> </dt>
-<dd>Close standard output before starting <i>prog</i>.
-</dd>
+<dd>Close standard output before starting <i>prog</i>. </dd>
 
 <dt><b>-2</b> </dt>
-<dd>Close standard error before starting <i>prog</i>. </dd>
+<dd>Close standard error
+before starting <i>prog</i>. </dd>
 </dl>
 
 <h2><a name='sect4'>Exit Codes</a></h2>
-<b>chpst</b> exits 100 when
-called with wrong options. It prints an error message and exits 111 if it
-has trouble changing the process state. Otherwise its exit code is the same
-as that of <i>prog</i>. 
+<b>chpst</b> exits 100 when called with wrong options.
+It prints an error message and exits 111 if it has trouble changing the
+process state. Otherwise its exit code is the same as that of <i>prog</i>. 
 <h2><a name='sect5'>Emulation</a></h2>
-If <b>chpst</b> is called as <b>envdir</b>, <b>envuidgid</b>, <b>pgrphack</b>,
-<b>setlock</b>, <b>setuidgid</b>, or <b>softlimit</b>, it emulates the functionality of these
-programs from the daemontools package respectively. 
+If
+<b>chpst</b> is called as <b>envdir</b>, <b>envuidgid</b>, <b>pgrphack</b>, <b>setlock</b>, <b>setuidgid</b>, or
+<b>softlimit</b>, it emulates the functionality of these programs from the daemontools
+package respectively. 
 <h2><a name='sect6'>See Also</a></h2>
-<i>sv(8)</i>, <i>runsv(8)</i>,
-<i>setsid(2)</i>, <i>runit(8)</i>, <i>runit-init(8)</i>, <i>runsvdir(8)</i>, <i>runsvchdir(8)</i> <p>
+<i>sv(8)</i>, <i>runsv(8)</i>, <i>setsid(2)</i>, <i>runit(8)</i>, <i>runit-init(8)</i>,
+<i>runsvdir(8)</i>, <i>runsvchdir(8)</i> <p>
  <i>http://smarden.org/runit/</i><br>
   <i>http://cr.yp.to/daemontools.html</i><br>
  
