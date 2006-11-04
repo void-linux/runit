@@ -1,5 +1,5 @@
 1.7.1
-
+Sat, 04 Nov 2006 19:20:29 +0000
   * chpst.c, uidgid.c, uidgid.h: support numerical uid gid through
     chpst -[u|U] :uid:gid...
   * man/chpst.8: adapt; clarify that users and groups are looked up in
