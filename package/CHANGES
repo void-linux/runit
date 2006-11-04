@@ -1,4 +1,4 @@
-1.8.0
+1.7.1
 
   * chpst.c, uidgid.c, uidgid.h: support numerical uid gid through
     chpst -[u|U] :uid:gid...
