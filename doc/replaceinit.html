@@ -97,6 +97,12 @@ It is possible to just add <tt>/etc/init.d/rc 2</tt> for having all services
 from the former runlevel 2 started as one time tasks, but keep the goal above
 in mind, supervising services has great advantages.
 <p>
+To migrate a service,
+<a href="faq.html#create">create a service directory</a>, disable the service
+if it is running, disable the service in <tt>/etc/rc.conf</tt> or remove the
+service startup from the <tt>/etc/rc.*</tt> scripts and
+<a href="faq.html#tell">tell runsvdir</a> about the new service.
+<p>
 Repeat step 4 and 5, using <tt><b>/sbin/runit-init 6</b></tt> to reboot the
 system, until you are satisfied with your services startup.
 If anything goes wrong, reboot the system into the default <i>sysvinit</i>
@@ -223,10 +229,11 @@ one time task, so the services are started automatically:
  touch /etc/runit/stopit
  chmod 0 /etc/runit/stopit
 </pre>
-To migrate a service, create a service directory, disable the service if
-it is running, disable the service in <tt>/etc/rc.conf</tt> or remove the
-service startup from the <tt>/etc/rc.*</tt> scripts and tell
-<a href="runsvdir.8.html">runsvdir</a> about the new service.
+To migrate a service,
+<a href="faq.html#create">create a service directory</a>, disable the service
+if it is running, disable the service in <tt>/etc/rc.conf</tt> or remove the
+service startup from the <tt>/etc/rc.*</tt> scripts and 
+<a href="faq.html#tell">tell runsvdir</a> about the new service.
 <hr>
 
 <a name="macosx"><h2>Replacing init on MacOSX</h2></a>
