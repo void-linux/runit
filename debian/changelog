@@ -1,3 +1,9 @@
+runit (1.7.2-1) unstable; urgency=low
+
+  * new upstream version.
+
+ -- Gerrit Pape <pape@smarden.org>  Tue, 21 Nov 2006 15:14:55 +0000
+
 runit (1.7.1-1) unstable; urgency=low
 
   * new upstream version.
