@@ -97,6 +97,12 @@ It is possible to just add <tt>/etc/init.d/rc 2</tt> for having all services
 from the former runlevel 2 started as one time tasks, but keep the goal above
 in mind, supervising services has great advantages.
 <p>
+To migrate a service,
+<a href="faq.html#create">create a service directory</a>, disable the service
+if it is running, disable the service in <tt>/etc/rc.conf</tt> or remove the
+service startup from the <tt>/etc/rc.*</tt> scripts and
+<a href="faq.html#tell">tell runsvdir</a> about the new service.
+<p>
 Repeat step 4 and 5, using <tt><b>/sbin/runit-init 6</b></tt> to reboot the
 system, until you are satisfied with your services startup.
 If anything goes wrong, reboot the system into the default <i>sysvinit</i>
@@ -116,7 +122,7 @@ default Unix process no 1 <i>runit</i>.
 </pre>
 To report success:
 <pre>
- # ( uname -a ; cat /etc/runit/[123] ) |mail pape-runit-1.7.1@smarden.org
+ # ( uname -a ; cat /etc/runit/[123] ) |mail pape-runit-1.7.2@smarden.org
 </pre>
 <hr>
 
@@ -205,7 +211,7 @@ This will cause <i>runit</i> to enter stage 3 which runs
 <p>
 To report success:
 <pre>
- # ( uname -a ; cat /etc/runit/[123] ) |mail pape-runit-1.7.1@smarden.org
+ # ( uname -a ; cat /etc/runit/[123] ) |mail pape-runit-1.7.2@smarden.org
 </pre>
 <h3>Step 5: Service migration</h3>
 The goal is to migrate all services from <i>/etc/rc.*</i> scheme to the
@@ -223,10 +229,11 @@ one time task, so the services are started automatically:
  touch /etc/runit/stopit
  chmod 0 /etc/runit/stopit
 </pre>
-To migrate a service, create a service directory, disable the service if
-it is running, disable the service in <tt>/etc/rc.conf</tt> or remove the
-service startup from the <tt>/etc/rc.*</tt> scripts and tell
-<a href="runsvdir.8.html">runsvdir</a> about the new service.
+To migrate a service,
+<a href="faq.html#create">create a service directory</a>, disable the service
+if it is running, disable the service in <tt>/etc/rc.conf</tt> or remove the
+service startup from the <tt>/etc/rc.*</tt> scripts and 
+<a href="faq.html#tell">tell runsvdir</a> about the new service.
 <hr>
 
 <a name="macosx"><h2>Replacing init on MacOSX</h2></a>
@@ -243,6 +250,6 @@ Please refer to the <a href="useinit.html">instructions</a> on how to use
 <address><a href="mailto:pape@smarden.org">
 Gerrit Pape &lt;pape@smarden.org&gt;
 </a></address>
-<small>$Id: replaceinit.html,v 1.74 2006/11/04 19:21:31 pape Exp $</small>
+<small>$Id: replaceinit.html,v 1.76 2006/11/21 15:11:33 pape Exp $</small>
 </body>
 </html>
