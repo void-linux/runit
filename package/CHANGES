@@ -1,5 +1,5 @@
 1.7.2
-
+Tue, 21 Nov 2006 15:13:47 +0000
   * doc/index.html: add list of distributions that are known to include
     or package runit; some reordering.
   * doc/replaceinit.html: point to faq.html#create, faq.html#tell (thx
