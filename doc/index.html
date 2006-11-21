@@ -110,6 +110,55 @@ automatically.
 <i>runit</i> is optimized for reliability and small size.
 The amount of code in process no 1 should be minimal.
 <hr>
+See <a href="install.html">How to install runit</a> for installing
+<i>runit</i>, and <a href="replaceinit.html">How to replace init</a> for
+configuring <i>runit</i> to run as process no 1.
+See <a href="useinit.html">How to use with current init</a> if you want to
+use <i>runit</i> without replacing the current init scheme.
+Please read the list of
+<a href="faq.html">Frequently asked questions with answers</a>.
+<hr>
+If <i>runit</i> on Linux is compiled and linked with the
+<a href="http://www.fefe.de/dietlibc/">dietlibc</a>, it yields in a
+statically linked <tt>runit</tt> binary of 8.5k size and this
+<tt>ps axuw</tt> output on my system:
+<pre>
+ USER       PID %CPU %MEM   VSZ  RSS TTY      STAT START   TIME COMMAND
+ root         1  0.0  0.0    20   16 ?        S     2002   0:02 runit
+</pre>
+I recommend doing this; for instructions, see
+<a href="usedietlibc.html">How to use dietlibc</a>.
+<hr>
+The following distributions are known to include or package <i>runit</i>:
+<ul>
+<li><a href="http://packages.qa.debian.org/runit">
+Debian GNU/Linux</a> (as alternative init scheme)
+<li><a href="http://http://www.freshports.org/sysutils/runit/">
+FreeBSD</a>
+<li><a href="http://www.openbsd.org/cgi-bin/cvsweb/ports/sysutils/runit/">
+OpenBSD</a>
+<li><a href="http://pkgsrc.se/wip/runit/">
+NetBSD</a>
+<li><a href="http://annvix.org/">
+Annvix</a> (as default init scheme)
+<li><a href="http://packages.ubuntu.com/runit">
+Ubuntu</a> (as alternative init scheme)
+<li><a href="http://packages.gentoo.org/search/?sstring=runit">
+Gentoo</a>
+<li><a href="http://www.smeserver.org/">
+SME server</a>
+<li><a href="http://www.opensde.org/">
+OpenSDE</a>
+<li><a href="http://www.t2-project.org/">
+T2</a>
+<li><a href="http://zinux.cynicbytrade.com/">
+Zinux Linux</a> (as default init scheme)
+<li><a href="http://www.gobolinux.org/">
+GoboLinux</a>
+</ul>
+If you know of more distributions, please
+<a href="mailto:supervision@list.skarnet.org">let me know</a>.
+<hr>
 <b><i>runit</i> in use</b>:
 I replaced <i>sysvinit</i> successfully with <i>runit</i> on several server
 systems and a laptop running Debian/GNU Linux sarge, woody, and potato.
@@ -178,55 +227,8 @@ Here is an example:
                           `-tcpsvd---bincimap-up---bincimapd
 </pre>
 <hr>
-See <a href="install.html">How to install runit</a> for installing
-<i>runit</i>, and <a href="replaceinit.html">How to replace init</a> for
-configuring <i>runit</i> to run as process no 1.
-See <a href="useinit.html">How to use with current init</a> if you want to
-use <i>runit</i> without replacing the current init scheme.
-<hr>
-If <i>runit</i> on Linux is compiled and linked with the
-<a href="http://www.fefe.de/dietlibc/">dietlibc</a>, it yields in a
-statically linked <tt>runit</tt> binary of 8.5k size and this
-<tt>ps axuw</tt> output on my system:
-<pre>
-  USER       PID %CPU %MEM   VSZ  RSS TTY      STAT START   TIME COMMAND
-  root         1  0.0  0.0    20   16 ?        S     2002   0:02 runit
-</pre>
-I recommend doing this; for instructions, see
-<a href="usedietlibc.html">How to use dietlibc</a>.
-<hr>
 See <a href="http://smarden.org/runit/">http://smarden.org/runit/</a>
 for recent informations.
-<hr>
-The following distributions are known to include or package <i>runit</i>:
-<ul>
-<li><a href="http://packages.qa.debian.org/runit">
-Debian GNU/Linux</a> (as alternative init scheme)
-<li><a href="http://http://www.freshports.org/sysutils/runit/">
-FreeBSD</a>
-<li><a href="http://www.openbsd.org/cgi-bin/cvsweb/ports/sysutils/runit/">
-OpenBSD</a>
-<li><a href="http://pkgsrc.se/wip/runit/">
-NetBSD</a>
-<li><a href="http://annvix.org/">
-Annvix</a> (as default init scheme)
-<li><a href="http://packages.ubuntu.com/runit">
-Ubuntu</a> (as alternative init scheme)
-<li><a href="http://packages.gentoo.org/search/?sstring=runit">
-Gentoo</a>
-<li><a href="http://www.smeserver.org/">
-SME server</a>
-<li><a href="http://www.opensde.org/">
-OpenSDE</a>
-<li><a href="http://www.t2-project.org/">
-T2</a>
-<li><a href="http://zinux.cynicbytrade.com/">
-Zinux Linux</a> (as default init scheme)
-<li><a href="http://www.gobolinux.org/">
-GoboLinux</a>
-</ul>
-If you know of more distributions, please
-<a href="mailto:supervision@list.skarnet.org">let me know</a>.
 <hr>
 Related links:
 <ul>

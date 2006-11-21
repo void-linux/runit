@@ -1,8 +1,15 @@
-  * doc/index.html: add list of distributions
+1.7.2
+
+  * doc/index.html: add list of distributions that are known to include
+    or package runit; some reordering.
   * doc/replaceinit.html: point to faq.html#create, faq.html#tell (thx
     David Kaufman).
   * doc/runscripts.html: point to faq.html#createlog.
-  
+  * runit.c: fix arguments to wait_pid() after fork for reboot_system()
+    (thx Jan Kampe).
+  * man/runsv.8: suggest printf t instead of echo -n t.
+  * runsv.c: really don't act on commands in state finish; minor.
+
 1.7.1
 Sat, 04 Nov 2006 19:23:29 +0000
   * chpst.c, uidgid.c, uidgid.h: support numerical uid gid through

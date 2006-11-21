@@ -324,58 +324,58 @@ int ctrl(struct svdir *s, char c) {
   case 'd': /* down */
     s->want =W_DOWN;
     update_status(s);
-    if (s->pid && s->state != S_FINISH) stopservice(s);
+    if (s->state == S_RUN) stopservice(s);
     break;
   case 'u': /* up */
     s->want =W_UP;
     update_status(s);
-    if (s->pid == 0) startservice(s);
+    if (s->state == S_DOWN) startservice(s);
     break;
   case 'x': /* exit */
     if (s->islog) break;
     s->want =W_EXIT;
     update_status(s);
-    if (s->pid && s->state != S_FINISH) stopservice(s);
+    if (s->state == S_RUN) stopservice(s);
     break;
   case 't': /* sig term */
-    if (s->pid && s->state != S_FINISH) stopservice(s);
+    if (s->state == S_RUN) stopservice(s);
     break;
   case 'k': /* sig kill */
-    if (s->pid && ! custom(s, c)) kill(s->pid, SIGKILL);
+    if ((s->state == S_RUN) && ! custom(s, c)) kill(s->pid, SIGKILL);
     s->state =S_DOWN;
     break;
   case 'p': /* sig pause */
-    if (s->pid && ! custom(s, c)) kill(s->pid, SIGSTOP);
+    if ((s->state == S_RUN) && ! custom(s, c)) kill(s->pid, SIGSTOP);
     s->ctrl |=C_PAUSE;
     update_status(s);
     break;
   case 'c': /* sig cont */
-    if (s->pid && ! custom(s, c)) kill(s->pid, SIGCONT);
+    if ((s->state == S_RUN) && ! custom(s, c)) kill(s->pid, SIGCONT);
     if (s->ctrl & C_PAUSE) s->ctrl &=~C_PAUSE;
     update_status(s);
     break;
   case 'o': /* once */
     s->want =W_DOWN;
     update_status(s);
-    if (! s->pid) startservice(s);
+    if (s->state == S_DOWN) startservice(s);
     break;
   case 'a': /* sig alarm */
-    if (s->pid && ! custom(s, c)) kill(s->pid, SIGALRM);
+    if ((s->state == S_RUN) && ! custom(s, c)) kill(s->pid, SIGALRM);
     break;
   case 'h': /* sig hup */
-    if (s->pid && ! custom(s, c)) kill(s->pid, SIGHUP);
+    if ((s->state == S_RUN) && ! custom(s, c)) kill(s->pid, SIGHUP);
     break;
   case 'i': /* sig int */
-    if (s->pid && ! custom(s, c)) kill(s->pid, SIGINT);
+    if ((s->state == S_RUN) && ! custom(s, c)) kill(s->pid, SIGINT);
     break;
   case 'q': /* sig quit */
-    if (s->pid && ! custom(s, c)) kill(s->pid, SIGQUIT);
+    if ((s->state == S_RUN) && ! custom(s, c)) kill(s->pid, SIGQUIT);
     break;
   case '1': /* sig usr1 */
-    if (s->pid && ! custom(s, c)) kill(s->pid, SIGUSR1);
+    if ((s->state == S_RUN) && ! custom(s, c)) kill(s->pid, SIGUSR1);
     break;
   case '2': /* sig usr2 */
-    if (s->pid && ! custom(s, c)) kill(s->pid, SIGUSR2);
+    if ((s->state == S_RUN) && ! custom(s, c)) kill(s->pid, SIGUSR2);
     break;
   }
   return(1);
@@ -584,7 +584,7 @@ int main(int argc, char **argv) {
 
     if (sigterm) { ctrl(&svd[0], 'x'); sigterm =0; }
 
-    if (svd[0].want == W_EXIT && svd[0].state == S_DOWN) {
+    if ((svd[0].want == W_EXIT) && (svd[0].state == S_DOWN)) {
       if (svd[1].pid == 0) _exit(0);
       if (svd[1].want != W_EXIT) {
         svd[1].want =W_EXIT;
