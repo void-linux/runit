@@ -2,6 +2,8 @@
     number of log files svlogd should maintain has been reduced; add hint
     about increasing the buffer size if lots of data is to be processed
     in short time.
+  * chpst.c, uidgid.c: improve error reporting if getpwnam() or getgrnam()
+    fails; cleanup.
 
 1.7.2
 Tue, 21 Nov 2006 15:13:47 +0000

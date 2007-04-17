@@ -42,10 +42,10 @@ unsigned int uidgids_get(struct uidgid *u, char *ug) {
   int i, d =0;
 
   if (*ug == ':') return(uidgids_set(u, ug +1));
-    if (ug[(d =str_chr(ug, ':'))] == ':') {
-      ug[d] =0;
-      g =ug +d +1;
-    }
+  if (ug[(d =str_chr(ug, ':'))] == ':') {
+    ug[d] =0;
+    g =ug +d +1;
+  }
   if (! (pwd =getpwnam(ug))) { if (g) ug[d] =':'; return(0); }
   u->uid =pwd->pw_uid;
   if (! g) {
@@ -53,22 +53,22 @@ unsigned int uidgids_get(struct uidgid *u, char *ug) {
     u->gids =1;
     return(1);
   }
-    ug[d] =':';
-    for (i =0; i < 60; ++i) {
-      if (g[(d =str_chr(g, ':'))] == ':') {
-        g[d] =0;
-        if (! (gr =getgrnam(g))) { g[d] =':'; return(0); }
-        g[d] =':';
-        u->gid[i] =gr->gr_gid;
-        g +=d +1;
-      }
-      else {
-        if (! (gr =getgrnam(g))) return(0);
-        u->gid[i++] =gr->gr_gid;
-        break;
-      }
+  ug[d] =':';
+  for (i =0; i < 60; ++i) {
+    if (g[(d =str_chr(g, ':'))] == ':') {
+      g[d] =0;
+      if (! (gr =getgrnam(g))) { g[d] =':'; return(0); }
+      g[d] =':';
+      u->gid[i] =gr->gr_gid;
+      g +=d +1;
     }
-    u->gid[i] =0;
-    u->gids =i;
+    else {
+      if (! (gr =getgrnam(g))) return(0);
+      u->gid[i++] =gr->gr_gid;
+      break;
+    }
+  }
+  u->gid[i] =0;
+  u->gids =i;
   return(1);
 }
