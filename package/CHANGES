@@ -1,3 +1,6 @@
+  * man/svlogd.8: add hint on how to manually remove log files after the
+    number of log files svlogd should maintain has been reduced.
+
 1.7.2
 Tue, 21 Nov 2006 15:13:47 +0000
   * doc/index.html: add list of distributions that are known to include

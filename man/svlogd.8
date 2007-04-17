@@ -97,7 +97,9 @@ or more old log files in the log directory, it removes the oldest one.
 Note that this doesn't decrease the number of log files if there are
 already more than
 .I num
-log files.
+log files, this must be done manually, e.g. for keeping 10 log files:
+.P
+ ls \-1 \\@* |sort |sed \-ne '10,$p' |xargs rm
 .SS PROCESSOR
 If
 .B svlogd
