@@ -4,6 +4,8 @@
     in short time.
   * chpst.c, uidgid.c: improve error reporting if getpwnam() or getgrnam()
     fails; cleanup.
+  * svlogd.c: don't statically bind local udp socket, but request new
+    source port for each log message sent through udp.
 
 1.7.2
 Tue, 21 Nov 2006 15:13:47 +0000
