@@ -412,6 +412,10 @@ Default is 1024.
 .I buflen
 must be greater than
 .IR len .
+For
+.B svlogd
+instances that process a lot of data in short time, the buffer size should
+be increased to improve performance.
 .TP
 .B \-v
 verbose.
