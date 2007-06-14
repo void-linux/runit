@@ -27,11 +27,12 @@ In any case, you first need to copy the <i>stage 2</i> script to
  # mkdir -p /var/service
 </pre>
 <hr>
-<a href="#sysv">How to use with sysvinit</a><br>
+<a href="#sysv">How to use with sysvinit and inittab</a><br>
+<a href="#upstart">How to use with sysvinit and upstart</a><br>
 <a href="#bsd">How to use with *BSD init</a><br>
 <a href="#macosx">How to use with MacOSX init</a>
 <hr>
-<a name="sysv"><h2>Using with sysvinit</h2></a>
+<a name="sysv"><h2>Using with sysvinit and inittab</h2></a>
 If your system uses a sysvinit alike init scheme with a <tt>/etc/inittab</tt>
 file, do:
 <pre>
@@ -40,6 +41,26 @@ file, do:
  EOT
 </pre>
 and tell <i>init</i> to re-read its configuration, e.g.:
+<pre>
+ # init q
+</pre>
+<hr>
+<a name="upstart"><h2>Using with sysvinit and upstart</h2></a>
+If your system uses a sysvinit alike init scheme that utilizes upstart
+instead of inittab, and which has start and stop scripts located in
+<tt>/etc/event.d</tt>, do:
+<pre>
+ # cat >/etc/event.d/SV <<\EOT
+ # for runit - manage /sbin/runsvdir-start
+ start on runlevel-2
+ start on runlevel-3
+ start on runlevel-4
+ start on runlevel-5
+ stop on shutdown
+ respawn /sbin/runsvdir-start
+ EOT
+</pre>
+and tell init to re-read its configuration, e.g.:
 <pre>
  # init q
 </pre>

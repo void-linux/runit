@@ -8,6 +8,8 @@
     source port for each log message sent through udp.
   * runit.c: fix typo in error messages (thx Matthew R. Dempsky); minor
     rewording.
+  * doc/useinit.html: add instructions on how to use with upstart (thx
+    Lloyd Zusman).
 
 1.7.2
 Tue, 21 Nov 2006 15:13:47 +0000
