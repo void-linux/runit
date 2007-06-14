@@ -133,7 +133,7 @@ int main (int argc, const char * const *argv, char * const *envp) {
             
       strerr_warn3(INFO, "enter stage: ", stage[st], 0);
       execve(*prog, (char *const *)prog, envp);
-      strerr_die3sys(0, FATAL, "could not start child: ", stage[st]);
+      strerr_die4sys(0, FATAL, "unable to start child: ", stage[st], ": ");
     }
 
     x.fd =selfpipe[0];
@@ -224,7 +224,7 @@ int main (int argc, const char * const *argv, char * const *envp) {
           /* child */
           strerr_warn3(INFO, "enter stage: ", prog[0], 0);
           execve(*prog, (char *const *) prog, envp);
-          strerr_die3sys(0, FATAL, "could not start child: ", prog[0]);
+          strerr_die4sys(0, FATAL, "unable to start child: ", prog[0], ": ");
         }
         if (wait_pid(&wstat, pid2) == -1)
           strerr_warn2(FATAL, "wait_pid: ", &strerr_sys);

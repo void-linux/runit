@@ -6,6 +6,8 @@
     fails; cleanup.
   * svlogd.c: don't statically bind local udp socket, but request new
     source port for each log message sent through udp.
+  * runit.c: fix typo in error messages (thx Matthew R. Dempsky); minor
+    rewording.
 
 1.7.2
 Tue, 21 Nov 2006 15:13:47 +0000
