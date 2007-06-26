@@ -64,12 +64,13 @@ unsigned int lockdelay;
 void suidgid(char *user, unsigned int ext) {
   struct uidgid ugid;
 
-  if (ext)
+  if (ext) {
     if (! uidgids_get(&ugid, user)) {
       if (*user == ':') fatalx("invalid uid/gids", user +1);
       if (errno) fatal("unable to get password/group file entry");
       fatalx("unknown user/group", user);
     }
+  }
   else
     if (! uidgid_get(&ugid, user)) {
       if (errno) fatal("unable to get password file entry");
@@ -84,12 +85,13 @@ void euidgid(char *user, unsigned int ext) {
   struct uidgid ugid;
   char bufnum[FMT_ULONG];
 
-  if (ext)
+  if (ext) {
     if (! uidgids_get(&ugid, user)) {
       if (*user == ':') fatalx("invalid uid/gids", user +1);
       if (errno) fatal("unable to get password/group file entry");
       fatalx("unknown user/group", user);
     }
+  }
   else
     if (! uidgid_get(&ugid, user)) {
       if (errno) fatal("unable to get password file entry");

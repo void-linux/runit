@@ -10,6 +10,7 @@
     rewording.
   * doc/useinit.html: add instructions on how to use with upstart (thx
     Lloyd Zusman).
+  * chpst.c: add explicit braces to avoid ambiguous 'else'.
 
 1.7.2
 Tue, 21 Nov 2006 15:13:47 +0000
