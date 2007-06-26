@@ -11,6 +11,8 @@
   * doc/useinit.html: add instructions on how to use with upstart (thx
     Lloyd Zusman).
   * chpst.c: add explicit braces to avoid ambiguous 'else'.
+  * uw_tmp.h1: fallback to UTMP_FILE if _PATH_UTMP is not defined as seen
+    on AIX 5.2 ML1, AIX 5.3 ML5 (thx Daniel Clark).
 
 1.7.2
 Tue, 21 Nov 2006 15:13:47 +0000
