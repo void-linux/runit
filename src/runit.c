@@ -157,8 +157,13 @@ int main (int argc, const char * const *argv, char * const *envp) {
       sig_block(sig_child);
       sig_block(sig_int);
       
-      read(selfpipe[0], &ch, 1);
-      child =wait_nohang(&wstat);
+      while (read(selfpipe[0], &ch, 1) == 1) {}
+      while ((child =wait_nohang(&wstat)) > 0)
+        if (child == pid) break;
+      if (child == -1) {
+        strerr_warn2(WARNING, "wait_nohang, pausing: ", &strerr_sys);
+        sleep(5);
+      }
 
       /* reget stderr */
       if ((ttyfd =open_write("/dev/console")) != -1) {
@@ -194,7 +199,7 @@ int main (int argc, const char * const *argv, char * const *envp) {
         strerr_warn3(INFO, "leave stage: ", stage[st], 0);
         break;
       }
-      if (child > 0) {
+      if (child != 0) {
         /* collect terminated children */
         write(selfpipe[1], "", 1);
         continue;

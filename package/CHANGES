@@ -14,6 +14,7 @@
   * uw_tmp.h1: fallback to UTMP_FILE if _PATH_UTMP is not defined as seen
     on AIX 5.2 ML1, AIX 5.3 ML5 (thx Daniel Clark).
   * sv.c: fix race on check for down if pid is 0 and state is run or finish.
+  * runit.c: speed up collecting zombies.
 
 1.7.2
 Tue, 21 Nov 2006 15:13:47 +0000
