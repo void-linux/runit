@@ -99,16 +99,16 @@ void runsvdir() {
     if (! S_ISDIR(s.st_mode)) continue;
     for (i =0; i < svnum; i++) {
       if ((sv[i].ino == s.st_ino) && (sv[i].dev == s.st_dev)) {
-	sv[i].isgone =0;
-	if (! sv[i].pid) runsv(i, d->d_name);
-	break;
+        sv[i].isgone =0;
+        if (! sv[i].pid) runsv(i, d->d_name);
+        break;
       }
     }
     if (i == svnum) {
       /* new service */
       if (svnum >= MAXSERVICES) {
-	warn3x("unable to start runsv ", d->d_name, ": too many services.");
-	continue;
+        warn3x("unable to start runsv ", d->d_name, ": too many services.");
+        continue;
       }
       sv[i].ino =s.st_ino;
       sv[i].dev =s.st_dev;
@@ -202,12 +202,12 @@ int main(int argc, char **argv) {
     for (;;) {
       if ((pid =wait_nohang(&wstat)) <= 0) break;
       for (i =0; i < svnum; i++) {
-	if (pid == sv[i].pid) {
-	  /* runsv has gone */
-	  sv[i].pid =0;
-	  check =1;
-	  break;
-	}
+        if (pid == sv[i].pid) {
+          /* runsv has gone */
+          sv[i].pid =0;
+          check =1;
+          break;
+        }
       }
     }
 
@@ -225,35 +225,35 @@ int main(int argc, char **argv) {
       taia_add(&stampcheck, &now, &deadline);
       
       if (stat(svdir, &s) != -1) {
-	if (check || \
-	    s.st_mtime != mtime || s.st_ino != ino || s.st_dev != dev) {
-	  /* svdir modified */
-	  if (chdir(svdir) != -1) {
-	    mtime =s.st_mtime;
-	    dev =s.st_dev;
-	    ino =s.st_ino;
-	    check =0;
-	    if (now.sec.x <= (4611686018427387914ULL +(uint64)mtime))
-	      sleep(1);
-	    runsvdir();
-	    while (fchdir(curdir) == -1) {
-	      warn("unable to change directory, pausing", 0);
-	      sleep(5);
-	    }
-	  }
-	  else
-	    warn("unable to change directory to ", svdir);
-	}
+        if (check || \
+            s.st_mtime != mtime || s.st_ino != ino || s.st_dev != dev) {
+          /* svdir modified */
+          if (chdir(svdir) != -1) {
+            mtime =s.st_mtime;
+            dev =s.st_dev;
+            ino =s.st_ino;
+            check =0;
+            if (now.sec.x <= (4611686018427387914ULL +(uint64)mtime))
+              sleep(1);
+            runsvdir();
+            while (fchdir(curdir) == -1) {
+              warn("unable to change directory, pausing", 0);
+              sleep(5);
+            }
+          }
+          else
+            warn("unable to change directory to ", svdir);
+        }
       }
       else
-	warn("unable to stat ", svdir);
+        warn("unable to stat ", svdir);
     }
 
     if (rplog)
       if (taia_less(&now, &stamplog) == 0) {
-	write(logpipe[1], ".", 1);
-	taia_uint(&deadline, 900);
-	taia_add(&stamplog, &now, &deadline);
+        write(logpipe[1], ".", 1);
+        taia_uint(&deadline, 900);
+        taia_add(&stamplog, &now, &deadline);
       }
     taia_uint(&deadline, check ? 1 : 5);
     taia_add(&deadline, &now, &deadline);
@@ -267,11 +267,11 @@ int main(int argc, char **argv) {
 
     if (rplog && (io[0].revents | IOPAUSE_READ))
       while (read(logpipe[0], &ch, 1) > 0)
-	if (ch) {
-	  for (i =6; i < rploglen; i++)
-	    rplog[i -1] =rplog[i];
-	  rplog[rploglen -1] =ch;
-	}
+        if (ch) {
+          for (i =6; i < rploglen; i++)
+            rplog[i -1] =rplog[i];
+          rplog[rploglen -1] =ch;
+        }
 
     switch(exitsoon) {
     case 1:

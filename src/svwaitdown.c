@@ -89,11 +89,11 @@ int main(int argc, const char * const *argv) {
     }
     if ((fd =open_write("supervise/ok")) == -1) {
       if (errno == error_nodevice) {
-	if (verbose) strerr_warn3(INFO, *dir, ": runsv not running.", 0);
-	dir++;
+        if (verbose) strerr_warn3(INFO, *dir, ": runsv not running.", 0);
+        dir++;
       }
       else
-	warn(*dir, ": unable to open supervise/ok: ", &strerr_sys);
+        warn(*dir, ": unable to open supervise/ok: ", &strerr_sys);
       continue;
     }
     close(fd);
@@ -106,9 +106,9 @@ int main(int argc, const char * const *argv) {
     close(fd);
     if ((r < 18) || (r == 19)) { /* supervise compatibility */
       if (r == -1)
-	warn(*dir, "unable to read supervise/status: ", &strerr_sys);
+        warn(*dir, "unable to read supervise/status: ", &strerr_sys);
       else
-	warn(*dir, ": unable to read supervise/status: bad format.", 0);
+        warn(*dir, ": unable to read supervise/status: bad format.", 0);
       continue;
     }
     pid =(unsigned char)status[15];
@@ -125,13 +125,13 @@ int main(int argc, const char * const *argv) {
 
     if (status[17] != 'd') { /* catch previous failures */
       if ((fd =open_write("supervise/control")) == -1) {
-	warn(*dir, ": unable to open supervise/control: ", &strerr_sys);
-	continue;
+        warn(*dir, ": unable to open supervise/control: ", &strerr_sys);
+        continue;
       }
       if (write(fd, "dx", 1 +doexit) != (1 +doexit)) {
-	warn(*dir, ": unable to write to supervise/control: ", &strerr_sys);
-	close(fd);
-	continue;
+        warn(*dir, ": unable to write to supervise/control: ", &strerr_sys);
+        close(fd);
+        continue;
       }
       close(fd);
     }
@@ -142,28 +142,28 @@ int main(int argc, const char * const *argv) {
       /* timeout */
       if (verbose) strerr_warn2(INFO, "timeout.", 0);
       if (dokill) {
-	if (chdir(*dir) == -1) {
-	  warn(*dir, ": unable to change directory: ", &strerr_sys);
-	  continue;
-	}
-	if ((fd =open_write("supervise/control")) == -1) {
-	  if (errno == error_nodevice) {
-	    if (verbose)
-	      strerr_warn3(INFO, *dir, ": runsv not running.", 0);
-	    dir++;
-	  }
-	  else
-	    warn(*argv, ": unable to open supervise/control: ", &strerr_sys);
-	  continue;
-	}
-	if (write(fd, "k", 1) != 1)
-	  warn(*argv, ": unable to write to supervise/control: ", &strerr_sys);
-	else
-	  strerr_warn3(INFO, *dir, ": killed.", 0);
-	close(fd);
-	dir++;
-	if (! *dir) _exit(111);
-	continue;
+        if (chdir(*dir) == -1) {
+          warn(*dir, ": unable to change directory: ", &strerr_sys);
+          continue;
+        }
+        if ((fd =open_write("supervise/control")) == -1) {
+          if (errno == error_nodevice) {
+            if (verbose)
+              strerr_warn3(INFO, *dir, ": runsv not running.", 0);
+            dir++;
+          }
+          else
+            warn(*argv, ": unable to open supervise/control: ", &strerr_sys);
+          continue;
+        }
+        if (write(fd, "k", 1) != 1)
+          warn(*argv, ": unable to write to supervise/control: ", &strerr_sys);
+        else
+          strerr_warn3(INFO, *dir, ": killed.", 0);
+        close(fd);
+        dir++;
+        if (! *dir) _exit(111);
+        continue;
       }
       _exit(111);
     }

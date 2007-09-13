@@ -54,7 +54,7 @@ int sgopt(int argc,const char *const *argv,const char *opts)
             optproblem = c;
             return '?';
           }
-	  ++optind;
+          ++optind;
         }
       }
       return c;

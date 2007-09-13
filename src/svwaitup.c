@@ -71,9 +71,9 @@ int main(int argc, const char * const *argv) {
     }
     if ((fd =open_write("supervise/ok")) == -1) {
       if (errno == error_nodevice)
-	warn(*dir, ": runsv not running.", 0);
+        warn(*dir, ": runsv not running.", 0);
       else
-	warn(*dir, ": unable to open supervise/ok: ", &strerr_sys);
+        warn(*dir, ": unable to open supervise/ok: ", &strerr_sys);
       continue;
     }
     close(fd);
@@ -86,9 +86,9 @@ int main(int argc, const char * const *argv) {
     close(fd);
     if (r < sizeof status) {
       if (r == -1)
-	warn(*dir, "unable to read supervise/status: ", &strerr_sys);
+        warn(*dir, "unable to read supervise/status: ", &strerr_sys);
       else
-	warn(*dir, ": unable to read supervise/status: bad format.", 0);
+        warn(*dir, ": unable to read supervise/status: bad format.", 0);
       continue;
     }
     
@@ -110,8 +110,8 @@ int main(int argc, const char * const *argv) {
     if (is >= sec) {
       /* ok */
       if (verbose) {
-	sulong[fmt_ulong(sulong, is)] =0;
-	strerr_warn5(INFO, *dir, ": is up (", sulong, " seconds)", 0);
+        sulong[fmt_ulong(sulong, is)] =0;
+        strerr_warn5(INFO, *dir, ": is up (", sulong, " seconds)", 0);
       }
       dir++;
       continue;

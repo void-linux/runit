@@ -7,24 +7,24 @@ int pmatch(const char *p, const char *s, unsigned int len) {
     case '*':
       if (! (c =*p)) return(1);
       for (;;) {
-	if (! len) return(0);
-	if (*s == c) break;
-	++s; --len;
+        if (! len) return(0);
+        if (*s == c) break;
+        ++s; --len;
       }
       continue;
     case '+':
       if ((c =*p++) != *s) return(0);
       for (;;) {
-	if (! len) return(1);
-	if (*s != c) break;
-	++s; --len;
+        if (! len) return(1);
+        if (*s != c) break;
+        ++s; --len;
       }
       continue;
       /*
     case '?':
       if (*p == '?') {
-	if (*s != '?') return(0);
-	++p;
+        if (*s != '?') return(0);
+        ++p;
       }
       ++s; --len;
       continue;
