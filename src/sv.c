@@ -127,17 +127,16 @@ unsigned int svstatus_print(char *m) {
   pid <<=8; pid +=(unsigned char)svstatus[13];
   pid <<=8; pid +=(unsigned char)svstatus[12];
   tai_unpack(svstatus, &tstatus);
-  if (pid) {
     switch (svstatus[19]) {
+    case 0: outs(DOWN); break;
     case 1: outs(RUN); break;
     case 2: outs(FINISH); break;
     }
-    outs(m); outs(": (pid "); sulong[fmt_ulong(sulong, pid)] =0;
-    outs(sulong); outs(") ");
-  }
-  else {
-    outs(DOWN); outs(m); outs(": ");
-  }
+    outs(m); outs(": ");
+    if (svstatus[19]) {
+      outs("(pid "); sulong[fmt_ulong(sulong, pid)] =0;
+      outs(sulong); outs(") ");
+    }
   buffer_put(buffer_1, sulong,
     fmt_ulong(sulong, tnow.sec.x < tstatus.x ? 0 : tnow.sec.x -tstatus.x));
   outs("s");
@@ -220,7 +219,7 @@ int check(char *a) {
     if (!pid || svstatus[19] != 1) return(0);
     if (!checkscript()) return(0);
     break;
-  case 'd': if (pid) return(0); break;
+  case 'd': if (pid || svstatus[19] != 0) return(0); break;
     case 'C': if (pid) if (!checkscript()) return(0); break;
   case 't':
     case 'k':
