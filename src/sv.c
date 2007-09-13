@@ -278,7 +278,7 @@ int main(int argc, char **argv) {
     switch(i) {
     case 'w': scan_ulong(optarg, &wait);
     case 'v': verbose =1; break;
-    case 'V': strerr_warn1("$Id$", 0);
+    case 'V': strerr_warn1(VERSION, 0);
     case '?': usage();
     }
   }
