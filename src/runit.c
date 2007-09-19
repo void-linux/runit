@@ -49,6 +49,7 @@ int main (int argc, const char * const *argv, char * const *envp) {
   iopause_fd x;
 #ifndef IOPAUSE_POLL
   fd_set rfds;
+  struct timeval t;
 #endif
   char ch;
   int ttyfd;
@@ -138,10 +139,6 @@ int main (int argc, const char * const *argv, char * const *envp) {
 
     x.fd =selfpipe[0];
     x.events =IOPAUSE_READ;
-#ifndef IOPAUSE_POLL
-    FD_ZERO(&rfds);
-    FD_SET(x.fd, &rfds);
-#endif
     for (;;) {
       int child;
 
@@ -149,9 +146,12 @@ int main (int argc, const char * const *argv, char * const *envp) {
       sig_unblock(sig_cont);
       sig_unblock(sig_int);
 #ifdef IOPAUSE_POLL
-      poll(&x, 1, -1);
+      poll(&x, 1, 14000);
 #else
-      select(x.fd +1, &rfds, (fd_set*)0, (fd_set*)0, (struct timeval*)0);
+      t.tv_sec =14; t.tv_usec =0;
+      FD_ZERO(&rfds);
+      FD_SET(x.fd, &rfds);
+      select(x.fd +1, &rfds, (fd_set*)0, (fd_set*)0, &t);
 #endif
       sig_block(sig_cont);
       sig_block(sig_child);
