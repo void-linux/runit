@@ -1,3 +1,0 @@
-#!/bin/sh
-! type fgetty >/dev/null 2>&1 || exec chpst -P fgetty tty5
-exec getty 38400 tty5 linux
