@@ -19,6 +19,7 @@
   * runit.c: speed up collecting zombies.
   * runit.c: force check for zombies after a 14 second timeout without
     signals (CHLD, CONT, INT).
+  * doc/index.html: typo.
 
 1.7.2
 Tue, 21 Nov 2006 15:13:47 +0000
