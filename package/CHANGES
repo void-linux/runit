@@ -1,3 +1,5 @@
+1.8.0
+
   * man/svlogd.8: add hint on how to manually remove log files after the
     number of log files svlogd should maintain has been reduced; add hint
     about increasing the buffer size if lots of data is to be processed
