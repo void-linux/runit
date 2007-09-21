@@ -20,6 +20,7 @@ Fri, 21 Sep 2007 00:33:56 +0000
   * runit.c: force check for zombies after a 14 second timeout without
     signals (CHLD, CONT, INT).
   * doc/index.html: typo.
+  * doc/*.html: remove $Id$.
 
 1.7.2
 Tue, 21 Nov 2006 15:13:47 +0000
