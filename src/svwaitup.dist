@@ -1,7 +1,7 @@
 usage: svwaitup [-v] [-s 1..600] service ...
 
 1
-$Id: svwaitup.c,v 1.9 2005/04/03 09:21:47 pape Exp $
+$Id$
 usage: svwaitup [-v] [-s 1..600] service ...
 
 1

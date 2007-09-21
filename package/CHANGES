@@ -1,3 +1,27 @@
+1.8.0
+Fri, 21 Sep 2007 00:33:56 +0000
+  * man/svlogd.8: add hint on how to manually remove log files after the
+    number of log files svlogd should maintain has been reduced; add hint
+    about increasing the buffer size if lots of data is to be processed
+    in short time.
+  * chpst.c, uidgid.c: improve error reporting if getpwnam() or getgrnam()
+    fails; cleanup.
+  * svlogd.c: don't statically bind local udp socket, but request new
+    source port for each log message sent through udp.
+  * runit.c: fix typo in error messages (thx Matthew R. Dempsky); minor
+    rewording.
+  * doc/useinit.html: add instructions on how to use with upstart (thx
+    Lloyd Zusman).
+  * chpst.c: add explicit braces to avoid ambiguous 'else'.
+  * uw_tmp.h1: fallback to UTMP_FILE if _PATH_UTMP is not defined as seen
+    on AIX 5.2 ML1, AIX 5.3 ML5 (thx Daniel Clark).
+  * sv.c: fix race on check for down if pid is 0 and state is run or finish.
+  * runit.c: speed up collecting zombies.
+  * runit.c: force check for zombies after a 14 second timeout without
+    signals (CHLD, CONT, INT).
+  * doc/index.html: typo.
+  * doc/*.html: remove $Id$.
+
 1.7.2
 Tue, 21 Nov 2006 15:13:47 +0000
   * doc/index.html: add list of distributions that are known to include

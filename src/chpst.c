@@ -66,15 +66,16 @@ void suidgid(char *user, unsigned int ext) {
 
   if (ext) {
     if (! uidgids_get(&ugid, user)) {
-      if (*user == ':')
-        fatalx("invalid uid/gids", user +1);
-      else
+      if (*user == ':') fatalx("invalid uid/gids", user +1);
+      if (errno) fatal("unable to get password/group file entry");
       fatalx("unknown user/group", user);
     }
   }
-    else
-    if (! uidgid_get(&ugid, user))
+  else
+    if (! uidgid_get(&ugid, user)) {
+      if (errno) fatal("unable to get password file entry");
       fatalx("unknown account", user);
+    }
   if (setgroups(ugid.gids, ugid.gid) == -1) fatal("unable to setgroups");
   if (setgid(*ugid.gid) == -1) fatal("unable to setgid");
   if (prot_uid(ugid.uid) == -1) fatal("unable to setuid");
@@ -86,15 +87,16 @@ void euidgid(char *user, unsigned int ext) {
 
   if (ext) {
     if (! uidgids_get(&ugid, user)) {
-      if (*user == ':')
-        fatalx("invalid uid/gids", user +1);
-      else
+      if (*user == ':') fatalx("invalid uid/gids", user +1);
+      if (errno) fatal("unable to get password/group file entry");
       fatalx("unknown user/group", user);
     }
   }
-    else
-    if (! uidgid_get(&ugid, user))
+  else
+    if (! uidgid_get(&ugid, user)) {
+      if (errno) fatal("unable to get password file entry");
       fatalx("unknown account", user);
+    }
   bufnum[fmt_ulong(bufnum, *ugid.gid)] =0;
   if (! pathexec_env("GID", bufnum)) die_nomem();
   bufnum[fmt_ulong(bufnum, ugid.uid)] =0;
@@ -320,7 +322,7 @@ int main(int argc, const char *const *argv) {
     case '0': nostdin =1; break;
     case '1': nostdout =1; break;
     case '2': nostderr =1; break;
-    case 'V': strerr_warn1("$Id: chpst.c,v 1.11 2006/11/02 22:59:15 pape Exp $", 0);
+    case 'V': strerr_warn1("$Id: 1bfc8e0a2f6eadcb47d4db127340f41be9ee3ed4 $", 0);
     case '?': usage();
     }
   argv +=optind;
@@ -332,7 +334,6 @@ int main(int argc, const char *const *argv) {
     if (chdir(root) == -1) fatal2("unable to change directory", root);
     if (chroot(".") == -1) fatal("unable to change root directory");
   }
-  slimit();
   if (nicelvl) {
     errno =0;
     if (nice(nicelvl) == -1) if (errno) fatal("unable to set nice level");
@@ -343,6 +344,7 @@ int main(int argc, const char *const *argv) {
   if (nostdin) if (close(0) == -1) fatal("unable to close stdin");
   if (nostdout) if (close(1) == -1) fatal("unable to close stdout");
   if (nostderr) if (close(2) == -1) fatal("unable to close stderr");
+  slimit();
   pathexec(argv);
   fatal2("unable to run", *argv);
   return(0);

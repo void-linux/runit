@@ -93,7 +93,7 @@ int main (int argc, const char * const *argv, const char * const *envp) {
       wtmp =1;
       break;
     case 'V':
-      strerr_warn1("$Id: utmpset.c,v 1.7 2003/10/28 12:06:45 pape Exp $", 0);
+      strerr_warn1("$Id: cb399098f794012a7f5e6a3a7090b2d53b86c08c $", 0);
     case '?':
       usage();
     }
@@ -103,10 +103,10 @@ int main (int argc, const char * const *argv, const char * const *envp) {
   if (! argv || ! *argv) usage();
   if (utmp_logout(*argv) == -1)
     strerr_die4x(111, WARNING, "unable to logout line ", *argv,
-		 " in utmp: no such entry");
+                 " in utmp: no such entry");
   if (wtmp)
     if (wtmp_logout(*argv) == -1)
       strerr_die4sys(111, WARNING,
-		     "unable to logout line ", *argv, " in wtmp: ");
+                     "unable to logout line ", *argv, " in wtmp: ");
   _exit(0);
 }

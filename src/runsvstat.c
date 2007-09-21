@@ -11,7 +11,7 @@
 
 #define USAGE " [ -l ] service ..."
 
-#define VERSION "$Id: runsvstat.c,v 1.8 2005/07/11 10:13:53 pape Exp $"
+#define VERSION "$Id: c17bbd3eda6f3c57027dfb47ff676bdd3fefff9f $"
 
 #define FATAL "runsvstat: fatal: "
 #define WARNING "runsvstat: warning: "
@@ -139,21 +139,21 @@ int main(int argc, char **argv) {
     }
     if (show_status(*dir) == 1) {
       if (showlog) {
-	if (stat("log", &s) == -1) {
-	  if (errno != error_noent)
-	    warn("unable to stat()", "./log");
-	}
-	else {
-	  if (! S_ISDIR(s.st_mode))
-	    warnx("./log", "not a directory.");
-	  else {
-	    if (chdir("log") == -1) {
-	      warn(*dir, "unable to change directory");
-	      continue;
-	    }
-	    show_status("\n  log");
-	  }
-	}
+        if (stat("log", &s) == -1) {
+          if (errno != error_noent)
+            warn("unable to stat()", "./log");
+        }
+        else {
+          if (! S_ISDIR(s.st_mode))
+            warnx("./log", "not a directory.");
+          else {
+            if (chdir("log") == -1) {
+              warn(*dir, "unable to change directory");
+              continue;
+            }
+            show_status("\n  log");
+          }
+        }
       }
       buffer_puts(buffer_1, "\n"); buffer_flush(buffer_1);
     }

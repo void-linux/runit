@@ -34,7 +34,7 @@
 #include "iopause.h"
 
 #define USAGE " [-ttv] [-r c] [-R abc] [-l len] [-b buflen] dir ..."
-#define VERSION "$Id: svlogd.c,v 1.20 2006/07/24 21:01:37 pape Exp $"
+#define VERSION "$Id: 5e55a90e0a1b35ec47fed3021453c50675ea1117 $"
 
 #define FATAL "svlogd: fatal: "
 #define WARNING "svlogd: warning: "
@@ -507,14 +507,6 @@ unsigned int logdir_open(struct logdir *ld, const char *fn) {
         else
           port =514;
         ld->udpaddr.sin_port =htons(port);
-        if (fdudp == -1) {
-          fdudp =socket(AF_INET, SOCK_DGRAM, 0);
-          if (fdudp)
-            if (ndelay_on(fdudp) == -1) {
-              close(fdudp);
-              fdudp =-1;
-            }
-        }
         break;
       case 'p':
         if (len > 1) {
@@ -756,7 +748,7 @@ int main(int argc, const char **argv) {
         case 2: fmt_ptime(stamp, &now); break;
         case 3: fmt_ptime_iso8601(stamp, &now); break;
         }
-	stamp[25] =' '; stamp[26] =0;
+        stamp[25] =' '; stamp[26] =0;
       }
       if (ch == '\n') break;
       if (repl) {
@@ -784,6 +776,12 @@ int main(int argc, const char **argv) {
         }
         if (dir[i].match != '+') continue;
         if (dir[i].udpaddr.sin_port != 0) {
+          fdudp =socket(AF_INET, SOCK_DGRAM, 0);
+          if (fdudp)
+            if (ndelay_on(fdudp) == -1) {
+              close(fdudp);
+              fdudp =-1;
+            }
           if (fdudp == -1) {
             buffer_puts(&dir[i].b, "warning: no udp socket available: ");
             if (timestamp) buffer_puts(&dir[i].b, stamp);
@@ -809,6 +807,7 @@ int main(int argc, const char **argv) {
               buffer_put(&dir[i].b, sa.s, sa.len);
               buffer_flush(&dir[i].b);
             }
+            close(fdudp);
           }
         }
         if (! dir[i].udponly) {

@@ -17,7 +17,7 @@
 #define USAGE " [-v] [-w sec] command service ..."
 #define USAGELSB " [-w sec] command"
 
-#define VERSION "$Id: sv.c,v 1.13 2006/11/02 22:59:15 pape Exp $"
+#define VERSION "$Id: 855ae391050675c7c3bc640f7d7e89e007b3a59d $"
 
 #define FATAL   "fatal: "
 #define FAIL    "fail: "
@@ -58,7 +58,8 @@ void usage() {
 void done(unsigned int e) { if (curdir != -1) fchdir(curdir); _exit(e); }
 void fatal(char *m1) {
   strerr_warn3(FATAL, m1, ": ", &strerr_sys);
-  done(lsb ? 151 : 100); }
+  done(lsb ? 151 : 100);
+}
 void fatal2(char *m1, char *m2) {
   strerr_warn4(FATAL, m1, m2, ": ", &strerr_sys);
   done(lsb ? 151 : 100);
@@ -127,16 +128,15 @@ unsigned int svstatus_print(char *m) {
   pid <<=8; pid +=(unsigned char)svstatus[13];
   pid <<=8; pid +=(unsigned char)svstatus[12];
   tai_unpack(svstatus, &tstatus);
-  if (pid) {
-    switch (svstatus[19]) {
-    case 1: outs(RUN); break;
-    case 2: outs(FINISH); break;
-    }
-    outs(m); outs(": (pid "); sulong[fmt_ulong(sulong, pid)] =0;
-    outs(sulong); outs(") ");
+  switch (svstatus[19]) {
+  case 0: outs(DOWN); break;
+  case 1: outs(RUN); break;
+  case 2: outs(FINISH); break;
   }
-  else {
-    outs(DOWN); outs(m); outs(": ");
+  outs(m); outs(": ");
+  if (svstatus[19]) {
+    outs("(pid "); sulong[fmt_ulong(sulong, pid)] =0;
+    outs(sulong); outs(") ");
   }
   buffer_put(buffer_1, sulong,
     fmt_ulong(sulong, tnow.sec.x < tstatus.x ? 0 : tnow.sec.x -tstatus.x));
@@ -209,30 +209,30 @@ int check(char *a) {
 
   if ((r =svstatus_get()) == -1) return(-1);
   while (*a) {
-  if (r == 0) { if (*a == 'x') return(1); return(-1); }
-  pid =(unsigned char)svstatus[15];
-  pid <<=8; pid +=(unsigned char)svstatus[14];
-  pid <<=8; pid +=(unsigned char)svstatus[13];
-  pid <<=8; pid +=(unsigned char)svstatus[12];
-  switch (*a) {
-  case 'x': return(0);
-  case 'u':
-    if (!pid || svstatus[19] != 1) return(0);
-    if (!checkscript()) return(0);
-    break;
-  case 'd': if (pid) return(0); break;
+    if (r == 0) { if (*a == 'x') return(1); return(-1); }
+    pid =(unsigned char)svstatus[15];
+    pid <<=8; pid +=(unsigned char)svstatus[14];
+    pid <<=8; pid +=(unsigned char)svstatus[13];
+    pid <<=8; pid +=(unsigned char)svstatus[12];
+    switch (*a) {
+    case 'x': return(0);
+    case 'u':
+      if (!pid || svstatus[19] != 1) return(0);
+      if (!checkscript()) return(0);
+      break;
+    case 'd': if (pid || svstatus[19] != 0) return(0); break;
     case 'C': if (pid) if (!checkscript()) return(0); break;
-  case 't':
+    case 't':
     case 'k':
-    if (!pid && svstatus[17] == 'd') break;
-    tai_unpack(svstatus, &tstatus);
-    if ((tstart.sec.x > tstatus.x) || !pid || svstatus[18] || !checkscript())
-      return(0);
-    break;
-  case 'o':
-    tai_unpack(svstatus, &tstatus);
-    if ((!pid && tstart.sec.x > tstatus.x) || (pid && svstatus[17] != 'd'))
-      return(0);
+      if (!pid && svstatus[17] == 'd') break;
+      tai_unpack(svstatus, &tstatus);
+      if ((tstart.sec.x > tstatus.x) || !pid || svstatus[18] || !checkscript())
+        return(0);
+      break;
+    case 'o':
+      tai_unpack(svstatus, &tstatus);
+      if ((!pid && tstart.sec.x > tstatus.x) || (pid && svstatus[17] != 'd'))
+        return(0);
       break;
     case 'p': if (pid && !svstatus[16]) return(0); break;
     case 'c': if (pid && svstatus[16]) return(0); break;
@@ -278,8 +278,7 @@ int main(int argc, char **argv) {
     switch(i) {
     case 'w': scan_ulong(optarg, &wait);
     case 'v': verbose =1; break;
-    case 'V':
-      strerr_warn1("$Id: sv.c,v 1.13 2006/11/02 22:59:15 pape Exp $", 0);
+    case 'V': strerr_warn1(VERSION, 0);
     case '?': usage();
     }
   }

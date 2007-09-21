@@ -52,14 +52,14 @@ void pathexec(const char *const *argv)
     if (!plus.s[i]) {
       split = str_chr(plus.s + j,'=');
       for (t = 0;t < elen;++t)
-	if (byte_equal(plus.s + j,split,e[t]))
-	  if (e[t][split] == '=') {
-	    --elen;
-	    e[t] = e[elen];
-	    break;
-	  }
+        if (byte_equal(plus.s + j,split,e[t]))
+          if (e[t][split] == '=') {
+            --elen;
+            e[t] = e[elen];
+            break;
+          }
       if (plus.s[j + split])
-	e[elen++] = plus.s + j;
+        e[elen++] = plus.s + j;
       j = i + 1;
     }
   e[elen] = 0;

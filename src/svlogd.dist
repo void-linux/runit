@@ -1,7 +1,7 @@
 usage: svlogd [-ttv] [-r c] [-R abc] [-l len] [-b buflen] dir ...
 
 111
-$Id: svlogd.c,v 1.20 2006/07/24 21:01:37 pape Exp $
+$Id: 5e55a90e0a1b35ec47fed3021453c50675ea1117 $
 usage: svlogd [-ttv] [-r c] [-R abc] [-l len] [-b buflen] dir ...
 
 111

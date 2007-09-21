@@ -1,7 +1,7 @@
 usage: runsvstat [ -l ] service ...
 
 1
-$Id: runsvstat.c,v 1.8 2005/07/11 10:13:53 pape Exp $
+$Id$
 usage: runsvstat [ -l ] service ...
 
 1
