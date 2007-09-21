@@ -1,3 +1,5 @@
+  * doc/upgrade.html: typo.
+
 1.8.0
 Fri, 21 Sep 2007 00:33:56 +0000
   * man/svlogd.8: add hint on how to manually remove log files after the
