@@ -74,7 +74,12 @@ void fatalx(char *m1, char *m2) {
 void warn(char *m) {
   strerr_warn5("runsv ", dir, ": warning: ", m, ": ", &strerr_sys);
 }
-void warnx(char *m) { strerr_warn4("runsv ", dir, ": warning: ", m, 0); }
+void warn2(char *m1, char *m2) {
+  strerr_warn6("runsv ", dir, ": warning: ", m1, m2, ": ", &strerr_sys);
+}
+void warnx(char *m1, char *m2, char *m3) {
+  strerr_warn6("runsv ", dir, ": warning: ", m1, m2, m3, 0);
+}
 
 void stopservice(struct svdir *);
 
@@ -91,11 +96,26 @@ void update_status(struct svdir *s) {
   char bspace[64];
   buffer b;
   char spid[FMT_ULONG];
+  char *fstatus ="supervise/status";
+  char *fstatusnew ="supervise/status.new";
+  char *fstat ="supervise/stat";
+  char *fstatnew ="supervise/stat.new";
+  char *fpid ="supervise/pid";
+  char *fpidnew ="supervise/pid.new";
+
+  if (s->islog) {
+    fstatus ="log/supervise/status";
+    fstatusnew ="log/supervise/status.new";
+    fstat ="log/supervise/stat";
+    fstatnew ="log/supervise/stat.new";
+    fpid ="log/supervise/pid";
+    fpidnew ="log/supervise/pid.new";
+  }
 
   /* pid */
   if (pidchanged) {
-    if ((fd =open_trunc("supervise/pid.new")) == -1) {
-      warn("unable to open supervise/pid.new");
+    if ((fd =open_trunc(fpidnew)) == -1) {
+      warn2("unable to open ", fpidnew);
       return;
     }
     buffer_init(&b, buffer_unixwrite, fd, bspace, sizeof bspace);
@@ -106,24 +126,16 @@ void update_status(struct svdir *s) {
       buffer_flush(&b);
     }
     close(fd);
-    if (s->islog) {
-      if (rename("supervise/pid.new", "log/supervise/pid") == -1) {
-        warn("unable to rename supervise/pid.new to log/supervise/pid");
-        return;
-      }
-    }
-    else {
-      if (rename("supervise/pid.new", "supervise/pid") == -1) {
-        warn("unable to rename supervise/pid.new to supervise/pid");
-        return;
-      }
+    if (rename(fpidnew, fpid) == -1) {
+      warn2("unable to rename pid.new to ", fpid);
+      return;
     }
     pidchanged =0;
   }
 
   /* stat */
-  if ((fd =open_trunc("supervise/stat.new")) == -1) {
-    warn("unable to open supervise/stat.new");
+  if ((fd =open_trunc(fstatnew)) == -1) {
+    warn2("unable to open ", fstatnew);
     return;
   }
   buffer_init(&b, buffer_unixwrite, fd, bspace, sizeof bspace);
@@ -152,14 +164,8 @@ void update_status(struct svdir *s) {
   buffer_puts(&b, "\n");
   buffer_flush(&b);
   close(fd);
-  if (s->islog) {
-    if (rename("supervise/stat.new", "log/supervise/stat") == -1)
-      warn("unable to rename supervise/stat.new to log/supervise/stat");
-  }
-  else {
-    if (rename("supervise/stat.new", "supervise/stat") == -1)
-      warn("unable to rename supervise/stat.new to supervise/stat");
-  }
+  if (rename(fstatnew, fstat) == -1)
+    warn2("unable to rename stat.new to ", fstat);
 
   /* supervise compatibility */
   taia_pack(status, &s->start);
@@ -181,29 +187,23 @@ void update_status(struct svdir *s) {
   else
     status[18] =0;
   status[19] =s->state;
-  if ((fd =open_trunc("supervise/status.new")) == -1) {
-    warn("unable to open supervise/status.new");
+  if ((fd =open_trunc(fstatusnew)) == -1) {
+    warn2("unable to open ", fstatusnew);
     return;
   }
   if ((l =write(fd, status, sizeof status)) == -1) {
-    warn("unable to write supervise/status.new");
+    warn2("unable to write ", fstatusnew);
     close(fd);
-    unlink("supervise/status.new");
+    unlink(fstatusnew);
     return;
   }
   close(fd);
   if (l < sizeof status) {
-    warnx("unable to write supervise/status.new: partial write.");
+    warnx("unable to write ", fstatusnew, ": partial write.");
     return;
   }
-  if (s->islog) {
-    if (rename("supervise/status.new", "log/supervise/status") == -1)
-      warn("unable to rename supervise/status.new to log/supervise/status");
-  }
-  else {
-    if (rename("supervise/status.new", "supervise/status") == -1)
-      warn("unable to rename supervise/status.new to supervise/status");
-  }
+  if (rename(fstatusnew, fstatus) == -1)
+    warn2("unable to rename status.new to ", fstatus);
 }
 unsigned int custom(struct svdir *s, char c) {
   int pid;
@@ -218,12 +218,12 @@ unsigned int custom(struct svdir *s, char c) {
   if (stat(a, &st) == 0) {
     if (st.st_mode & S_IXUSR) {
       if ((pid =fork()) == -1) {
-        warn("unable to fork for control/?");
+        warn2("unable to fork for ", a);
         return(0);
       }
       if (! pid) {
         if (haslog && fd_copy(1, logpipe[1]) == -1)
-          warn("unable to setup stdout for control/?");
+          warn2("unable to setup stdout for ", a);
         prog[0] =a;
         prog[1] =0;
         execve(a, prog, environ);
@@ -231,7 +231,7 @@ unsigned int custom(struct svdir *s, char c) {
       }
       while (wait_pid(&w, pid) == -1) {
         if (errno == error_intr) continue;
-        warn("unable to wait for child control/?");
+        warn2("unable to wait for child ", a);
         return(0);
       }
       return(! wait_exitcode(w));
@@ -239,7 +239,7 @@ unsigned int custom(struct svdir *s, char c) {
   }
   else {
     if (errno == error_noent) return(0);
-    warn("unable to stat control/?");
+    warn2("unable to stat ", a);
   }
   return(0);
 }
@@ -418,7 +418,7 @@ int main(int argc, char **argv) {
   }
   else {
     if (! S_ISDIR(s.st_mode))
-      warnx("./log: not a directory.");
+      warnx("./log", 0, ": not a directory.");
     else {
       haslog =1;
       svd[1].state =S_DOWN;
