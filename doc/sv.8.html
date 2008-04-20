@@ -21,7 +21,7 @@ monitored by the <i><b>runsv</b>(8)</i> supervisor. <p>
 <i>services</i> consists of one or more arguments,
 each argument naming a directory <i>service</i> used by <i><b>runsv</b>(8)</i>. If <i>service</i> doesn&rsquo;t
 start with a dot or slash, it is searched in the default services directory
-<i>/var/service/</i>, otherwise relative to the current directory. <p>
+<i>/service/</i>, otherwise relative to the current directory. <p>
 <i>command</i> is one
 of up, down, status, once, pause, cont, hup, alarm, interrupt, 1, 2, term,
 kill, or exit, or start, stop, restart, shutdown, force-stop, force-reload,
@@ -157,7 +157,7 @@ implies <i>-v</i>. </dd>
 
 <dt><b>SVDIR</b> </dt>
 <dd>The environment variable $SVDIR overrides the
-default services directory <i>/var/service/</i>. </dd>
+default services directory <i>/service/</i>. </dd>
 
 <dt><b>SVWAIT</b> </dt>
 <dd>The environment variable

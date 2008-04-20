@@ -216,12 +216,12 @@ How do I tell runit about the new service directory, so that it picks
 up and runs the service by default?
 <p>
 Answer:
-Create a symbolic link in <tt>/var/service/</tt> pointing to the service
+Create a symbolic link in <tt>/service/</tt> pointing to the service
 directory, runit will pick up the service within the next five seconds,
 and automatically start it on system boot.
 E.g.:
 <pre>
- # ln -s /etc/sv/getty-2 /var/service/
+ # ln -s /etc/sv/getty-2 /service/
 </pre>
 
 <hr>
@@ -283,13 +283,13 @@ supervision.
 How do I tell runit?
 <p>
 Answer:
-Remove the symbolic link in <tt>/var/service/</tt> pointing to the service
+Remove the symbolic link in <tt>/service/</tt> pointing to the service
 directory, runit recognizes the removed service within the next five
 seconds, then stops the service, the optional log service, and finally the
 supervisor process.
 E.g.:
 <pre>
- # rm /var/service/getty-2
+ # rm /service/getty-2
 </pre>
 
 <hr>

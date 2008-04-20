@@ -25,17 +25,17 @@ Create the following directories and symbolic links:
  # ln -s /etc/sv/getty-5 /etc/runit/runsvdir/single/
  # ln -s default /etc/runit/runsvdir/current
 </pre>
-Copy the contents of <tt>/var/service/</tt> to
-<tt>/etc/runit/runsvdir/current/</tt> and replace <tt>/var/service/</tt>
+Copy the contents of <tt>/service/</tt> to
+<tt>/etc/runit/runsvdir/current/</tt> and replace <tt>/service/</tt>
 with a symbolic link:
 <pre>
- # cp -pR /var/service/* /etc/runit/runsvdir/current/
- # mv -f /var/service /var/service.old && \
-     ln -s /etc/runit/runsvdir/current /var/service
+ # cp -pR /service/* /etc/runit/runsvdir/current/
+ # mv -f /service /service.old && \
+     ln -s /etc/runit/runsvdir/current /service
 </pre>
 You have now created two runlevels: <tt>default</tt> and <tt>single</tt>.
 The <tt>current</tt> runlevel is <tt>default</tt>.
-It is safe to remove <tt>/var/service.old/</tt> if you don't need it anymore.
+It is safe to remove <tt>/service.old/</tt> if you don't need it anymore.
 <p>
 Finally edit <tt>/etc/runit/2</tt> to set the <tt>default</tt> runlevel when
 stage 2 starts:
@@ -47,7 +47,7 @@ stage 2 starts:
  <b>runsvchdir default &gt;/dev/null</b>
  
  exec env - PATH=$PATH \
- runsvdir /var/service 'log: ...........................................................................................................................................................................................................................................................................................................................................................................................................'
+ runsvdir /service 'log: ...........................................................................................................................................................................................................................................................................................................................................................................................................'
 </pre>
 <hr>
 <a name="switch"><h3>Switching runlevels</h3></a>

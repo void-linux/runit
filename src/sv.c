@@ -32,7 +32,7 @@
 char *progname;
 char *action;
 char *acts;
-char *varservice ="/var/service/";
+char *varservice ="/service/";
 char **service;
 char **servicex;
 unsigned int services;

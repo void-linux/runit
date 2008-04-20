@@ -1,6 +1,7 @@
   * doc/upgrade.html: typo.
   * sv.c: service name is also relative to the current directory if it
     ends with a slash.
+  * change default directory for services from /var/service/ to /service/.
 
 1.8.0
 Fri, 21 Sep 2007 00:33:56 +0000

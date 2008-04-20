@@ -157,9 +157,9 @@ This command is ignored if it is given to
 .IR service /log/supervise/control.
 .P
 Example: to send a TERM signal to the socklog-unix service, either do
-  # sv term /var/service/socklog-unix
+  # sv term /service/socklog-unix
  or
-  # printf t >/var/service/socklog-unix/supervise/control
+  # printf t >/service/socklog-unix/supervise/control
 .P
 .BR printf (1)
 usually blocks if no

@@ -8,7 +8,7 @@
 	<string>runsvdir - starts and monitors a collection of runsv(8) processes</string>
 	<key>QueueDirectories</key>
 	<array>
-		<string>/var/service</string>
+		<string>/service</string>
 	</array>
 	<key>OnDemand</key>
 	<false/>

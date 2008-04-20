@@ -52,8 +52,8 @@ running any getty (edit <tt>/etc/inittab</tt> and <tt>kill -HUP 1</tt> if
 needed), and tell <a href="runsvdir.8.html">runsvdir</a> about the getty-5
 <i>service</i>:
 <pre>
- # mkdir -p /var/service
- # ln -s /etc/sv/getty-5 /var/service/
+ # mkdir -p /service
+ # ln -s /etc/sv/getty-5 /service/
 </pre>
 Start <i>runit</i>'s stage 2 for testing:
 <pre>
@@ -177,8 +177,8 @@ FreeBSD 4.4:
 and tell <a href="runsvdir.8.html">runsvdir</a> about the <tt>getty-5</tt>
 <i>service</i>:
 <pre>
- # mkdir -p /var/service
- # ln -s /etc/sv/getty-5 /var/service/
+ # mkdir -p /service
+ # ln -s /etc/sv/getty-5 /service/
 </pre>
 Start <i>runit</i>'s stage 2 for testing:
 <pre>

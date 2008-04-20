@@ -12,8 +12,8 @@ StartService() {
 }
 StopService() {
   ConsoleMessage "Stopping runit service supervision"
-  sv -w196 force-stop /var/service/*
-  sv exit /var/service/*
+  sv -w196 force-stop /service/*
+  sv exit /service/*
 }
 RestartService() {
   return 0

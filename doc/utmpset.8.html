@@ -23,7 +23,7 @@ update the utmp file, the <i><b>getty</b>(8)</i> processes are handled the same 
 other services. <p>
 To enable local login accounting, add <b>utmpset</b> to the <i><b>getty</b>(8)</i>
 <i>finish</i> scripts, e.g.: <p>
- $ cat /var/service/getty-5/finish<br>
+ $ cat /service/getty-5/finish<br>
   #!/bin/sh<br>
   exec utmpset -w tty5<br>
   $<br>

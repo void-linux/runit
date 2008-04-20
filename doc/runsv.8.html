@@ -108,9 +108,9 @@ command is ignored if it is given to <i>service</i>/log/supervise/control. </dd>
 <p>
 Example:
 to send a TERM signal to the socklog-unix service, either do   # sv term
-/var/service/socklog-unix<br>
+/service/socklog-unix<br>
   or<br>
-   # printf t &gt;/var/service/socklog-unix/supervise/control<br>
+   # printf t &gt;/service/socklog-unix/supervise/control<br>
  <p>
 <i><b>printf</b>(1)</i> usually blocks if no <b>runsv</b> process is running in the service
 directory. 
