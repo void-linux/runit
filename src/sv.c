@@ -331,7 +331,8 @@ int main(int argc, char **argv) {
 
   servicex =service;
   for (i =0; i < services; ++i) {
-    if ((**service != '/') && (**service != '.')) {
+    if ((**service != '/') && (**service != '.') && **service &&
+        ((*service)[str_len(*service) -1] != '/')) {
       if ((chdir(varservice) == -1) || (chdir(*service) == -1)) {
         fail("unable to change to service directory");
         *service =0;

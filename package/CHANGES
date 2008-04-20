@@ -1,4 +1,6 @@
   * doc/upgrade.html: typo.
+  * sv.c: service name is also relative to the current directory if it
+    ends with a slash.
 
 1.8.0
 Fri, 21 Sep 2007 00:33:56 +0000
