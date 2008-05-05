@@ -9,6 +9,19 @@
 <hr>
 <h1>runit - upgrading from previous versions</h1>
 <hr>
+<h3>1.8.0 to 1.9.0</h3>
+The default directory for services is now <tt>/service/</tt>, and no longer
+<tt>/var/service/</tt>.
+To be consistent with the new default location, create a symlink when
+upgrading
+<pre>
+ # ln -s /var/service /
+</pre>
+When installing runit on a system that should comply with the Filesystem
+Hierarchy Standard (FHS), neither <tt>/service/</tt> nor
+<tt>/var/service/</tt> should be chosen, but <tt>/etc/service/</tt>.
+It is recommended to create a compatibility symlink <tt>/service</tt>
+pointing to <tt>/etc/service</tt> in this case.
 <h3>1.7.x to 1.8.0</h3>
 The <a href="runit.8.html">runit</a> program, the process no 1, has been
 fixed to reap dead processes that re-parented to process no 1 (zombies)
