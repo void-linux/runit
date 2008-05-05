@@ -20,11 +20,11 @@ If <i>dir</i> does not start with a slash, it is searched in /etc/runit/runsvdir
 <b>runsvchdir</b> switches to the directory <i>/etc/runit/runsvdir/</i>,
 copies <i>current</i> to <i>previous</i>, and replaces <i>current</i> with a symlink pointing
 to <i>dir</i>. <p>
-Normally  <i>/service</i> is a symlink to <i>current</i>, and <i><b>runsvdir</b>(8)</i>
-is running <i>/service/</i>. 
+Normally  <i>/service</i> is a symlink to <i>current</i>, and <i><b>runsvdir</b>(8)</i> is running
+<i>/service/</i>. 
 <h2><a name='sect3'>Exit Codes</a></h2>
-<b>runsvchdir</b> prints an error message and
-exits 111 on error. <b>runsvchdir</b> exits 0 on success. 
+<b>runsvchdir</b> prints an error message and exits 111 on
+error. <b>runsvchdir</b> exits 0 on success. 
 <h2><a name='sect4'>Files</a></h2>
  /etc/runit/runsvdir/previous<br>
   /etc/runit/runsvdir/current<br>
