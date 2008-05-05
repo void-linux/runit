@@ -17,7 +17,7 @@
 #define USAGE " [-v] [-w sec] command service ..."
 #define USAGELSB " [-w sec] command"
 
-#define VERSION "$Id: 855ae391050675c7c3bc640f7d7e89e007b3a59d $"
+#define VERSION "$Id: 8269ca78d90c5d9b998b87f616d9aa60296314ee $"
 
 #define FATAL   "fatal: "
 #define FAIL    "fail: "
@@ -32,7 +32,7 @@
 char *progname;
 char *action;
 char *acts;
-char *varservice ="/var/service/";
+char *varservice ="/service/";
 char **service;
 char **servicex;
 unsigned int services;
@@ -331,7 +331,8 @@ int main(int argc, char **argv) {
 
   servicex =service;
   for (i =0; i < services; ++i) {
-    if ((**service != '/') && (**service != '.')) {
+    if ((**service != '/') && (**service != '.') && **service &&
+        ((*service)[str_len(*service) -1] != '/')) {
       if ((chdir(varservice) == -1) || (chdir(*service) == -1)) {
         fail("unable to change to service directory");
         *service =0;
