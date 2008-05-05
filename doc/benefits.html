@@ -37,6 +37,10 @@ This reliable interface to control daemons and supervisors obsoletes
 pid-guessing programs, such as <tt>pidof</tt>, <tt>killall</tt>,
 <tt>start-stop-daemon</tt>, which, due to guessing, are prone to failures
 by design.
+It also obsoletes so called <tt>pid-files</tt>, no need for each and every
+service daemon to include code to daemonize, to write the new process id
+into a file, and to take care that the file is removed properly on shutdown,
+which might be very difficult in case of a crash.
 <hr>
 <a name="state"><h3>Clean process state</h3></a>
 <i>runit</i> guarantees each service a clean process state, no matter if the
@@ -81,6 +85,12 @@ With bad init scripts miraculous things could also happen when just doing
  # /etc/init.d/foo-daemon restart
 </pre>
 at the command line.
+<p>
+The clean process state includes open file descriptors, obsoleting the
+widely used hack in many service daemons to force-close all file descriptors
+that might be open, up to the limit of available file descriptors for the
+daemon process (often results in 1024 unnecessary close() system calls in a
+great number of service daemon implementations).
 <hr>
 <a name="log"><h3>Reliable logging facility</h3></a>
 The <a href="runsv.8.html">runsv</a> program provides a reliable logging
