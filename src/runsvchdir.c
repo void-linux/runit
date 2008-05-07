@@ -9,7 +9,7 @@
 #define USAGE " dir"
 #define SVDIR "/etc/runit/runsvdir"
 
-#define VERSION "$Id"
+#define VERSION "$Id$"
 
 char *progname;
 char *new;
