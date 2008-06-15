@@ -116,13 +116,13 @@ to send a TERM signal to the socklog-unix service, either do   # sv term
 directory. 
 <h2><a name='sect4'>Customize Control</a></h2>
 For each control character <i>c</i> sent to the control
-pipe, <b>runsv</b> first checks if <i>service/control/<i>c</i> exists and is executable.
+pipe, <b>runsv</b> first checks if <i>service</i>/control/<i>c</i> exists and is executable.
 If so, it starts <i>service</i>/control/<i>c</i> and waits for it to terminate, before
 interpreting the command. If the program exits with return code 0, <b>runsv</b>
 refrains from sending the service the corresponding signal. The command
-<i>o</i> is always considered as command <i>u</i>. On command <i>d</i> first <i>service</i>/control/t</i>
-is checked, and then <i>service/control/d.</i> On command <i>x</i> first <i>service/control/t</i>
-is checked, and then <i>service/control/x.</i> The control of the optional log
+<i>o</i> is always considered as command <i>u</i>. On command <i>d</i> first <i>service</i>/control/<i>t</i>
+is checked, and then <i>service</i>/control/<i>d</i>. On command <i>x</i> first <i>service</i>/control/<i>t</i>
+is checked, and then <i>service</i>/control/<i>x</i>. The control of the optional log
 service cannot be customized. 
 <h2><a name='sect5'>Signals</a></h2>
 If <b>runsv</b> receives a TERM signal, it

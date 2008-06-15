@@ -8,9 +8,9 @@ test -d src || sh -cx '! : Wrong working directory.'
 here=`env - PATH=$PATH pwd`
 parent=`dirname $here`
 
-echo 'Creating symlink runit -> runit-1.9.0...'
+echo 'Creating symlink runit -> runit-2.0.0...'
 rm -f runit
-ln -s runit-1.9.0 runit
+ln -s runit-2.0.0 runit
 mv -f runit ..
 
 echo 'Making command links in /command...'

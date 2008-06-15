@@ -1,6 +1,6 @@
 DESTDIR=
 
-PACKAGE=runit-1.9.0
+PACKAGE=runit-2.0.0
 DIRS=doc man etc package src
 MANPAGES=runit.8 runit-init.8 runsvdir.8 runsv.8 sv.8 utmpset.8 \
   runsvchdir.8 svlogd.8 chpst.8
