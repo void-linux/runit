@@ -110,7 +110,7 @@ void edir(const char *dirname) {
   direntry *d;
   int i;
 
-  if (! (wdir =open_read(".")))
+  if ((wdir =open_read(".")) == -1)
     fatal("unable to open current working directory");
   if (chdir(dirname)) fatal2("unable to switch to directory", dirname);
   if (! (dir =opendir("."))) fatal2("unable to open directory", dirname);

@@ -65,7 +65,7 @@ int main(int argc, const char * const *argv) {
   argv +=optind;
   if (! argv || ! *argv) usage();
 
-  if (! (wdir =open_read(".")))
+  if ((wdir =open_read(".")) == -1)
     fatal("unable to open current working directory");
 
   for (dir =argv; *dir; ++dir) {
