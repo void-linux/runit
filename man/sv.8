@@ -249,14 +249,13 @@ exits 100 on error.
 If
 .B sv
 is called with a base name other than
-.BR sv ,
-it exits 1 on timeout or trouble sending the command.
-If the
+.BR sv :
+it exits 1 on timeout or trouble sending the command; if the
 .I command
 is
 .BR status ,
-it exits 3 if the service is down, and 4 if the status is unknown.
-It exits 2 on wrong usage, and 151 on error.
+it exits 3 if the service is down, and 4 if the status is unknown;
+it exits 2 on wrong usage, and 151 on error.
 .SH SEE ALSO
 runsv(8),
 chpst(8),
