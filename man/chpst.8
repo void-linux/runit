@@ -8,6 +8,8 @@ chpst \- runs a program with a changed process state
 .IR user ]
 [\-U
 .IR user ]
+[\-b
+.IR argv0 ]
 [-e
 .IR dir ]
 [\-/
@@ -95,6 +97,14 @@ and
 .I group
 arguments are interpreted as uid and gid respectivly, and not looked up in
 the password or group file.
+.TP
+.B \-b \fIargv0
+argv0.
+Run
+.I prog
+with
+.I argv0
+as the 0th argument.
 .TP
 .B \-e \fIdir
 envdir.

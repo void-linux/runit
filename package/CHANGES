@@ -1,3 +1,8 @@
+2.0.1
+  * pathexec_env.c, pathexec.h: add function pathexec_env_run().
+  * chpst.c, man/chpst.8: new option -b argv0: run prog with different
+    0th argument.
+
 2.0.0
 Sun, 15 Jun 2008 15:31:05 +0000
 
