@@ -6,6 +6,8 @@
     Poumeyrol)
   * chpst.c, svwaitdown.c, svwaitup.c: fix checks for return value of
     open_* functions (thx David Reiss).
+  * runsv.c: exit with error if [log/]supervise/control exists, but is
+    not a fifo (thx Charlie Brady).
 
 2.0.0
 Sun, 15 Jun 2008 15:31:05 +0000

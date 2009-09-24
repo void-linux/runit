@@ -479,6 +479,10 @@ int main(int argc, char **argv) {
   }
 
   fifo_make("supervise/control", 0600);
+  if (stat("supervise/control", &s) == -1)
+    fatal("unable to stat supervise/control");
+  if (!S_ISFIFO(s.st_mode))
+    fatalx("supervise/control exists but is not a fifo", "");
   if ((svd[0].fdcontrol =open_read("supervise/control")) == -1)
     fatal("unable to open supervise/control");
   coe(svd[0].fdcontrol);
@@ -488,6 +492,10 @@ int main(int argc, char **argv) {
   update_status(&svd[0]);
   if (haslog) {
     fifo_make("log/supervise/control", 0600);
+    if (stat("supervise/control", &s) == -1)
+      fatal("unable to stat log/supervise/control");
+    if (!S_ISFIFO(s.st_mode))
+      fatalx("log/supervise/control exists but is not a fifo", "");
     if ((svd[1].fdcontrol =open_read("log/supervise/control")) == -1)
       fatal("unable to open log/supervise/control");
     coe(svd[1].fdcontrol);
