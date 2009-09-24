@@ -12,7 +12,7 @@
 #define INFO "svwaitdown: "
 #define USAGE " [-v] [-t 1..6000] service ..."
 
-#define VERSION "$Id: 26b815f965a27539117bd99f66aeca8ed590cbd4 $"
+#define VERSION "$Id: 6cd3efc2e15e5e3d2fa60cd0c028e60958676ec7 $"
 
 const char *progname;
 const char * const *dir;
@@ -65,7 +65,7 @@ int main(int argc, const char * const *argv) {
   argv +=optind;
   if (! argv || ! *argv) usage();
 
-  if (! (wdir =open_read(".")))
+  if ((wdir =open_read(".")) == -1)
     fatal("unable to open current working directory");
 
   for (dir =argv; *dir; ++dir) {

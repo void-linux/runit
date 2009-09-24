@@ -17,7 +17,7 @@
 #include "ndelay.h"
 
 #define USAGE " [-P] dir"
-#define VERSION "$Id: ecebd0a50510e91639c6a45dda8b0947aa8eb885 $"
+#define VERSION "$Id$"
 
 #define MAXSERVICES 1000
 

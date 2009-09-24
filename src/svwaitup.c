@@ -50,7 +50,7 @@ int main(int argc, const char * const *argv) {
       verbose =1;
       break;
     case 'V':
-      strerr_warn1("$Id: b7f21e8069a3cdac781980fa507ae7fae667f810 $", 0);
+      strerr_warn1("$Id: e2d6c574c5e56f9931323fbc0e539c7f9b829b73 $", 0);
     case '?':
       usage();
     }
@@ -58,7 +58,7 @@ int main(int argc, const char * const *argv) {
   argv +=optind;
   if (! argv || ! *argv) usage();
 
-  if (! (wdir =open_read(".")))
+  if ((wdir =open_read(".")) == -1)
     fatal("unable to open current working directory");
 
   dir =argv;

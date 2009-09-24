@@ -20,7 +20,7 @@
 #include "openreadclose.h"
 #include "direntry.h"
 
-#define USAGE_MAIN " [-vP012] [-u user[:group]] [-U user[:group]] [-e dir] [-/ root] [-n nice] [-l|-L lock] [-m n] [-d n] [-o n] [-p n] [-f n] [-c n] prog"
+#define USAGE_MAIN " [-vP012] [-u user[:group]] [-U user[:group]] [-b argv0] [-e dir] [-/ root] [-n nice] [-l|-L lock] [-m n] [-d n] [-o n] [-p n] [-f n] [-c n] prog"
 #define FATAL "chpst: fatal: "
 #define WARNING "chpst: warning: "
 
@@ -40,6 +40,7 @@ void usage() { strerr_die4x(100, "usage: ", progname, USAGE_MAIN, "\n"); }
 
 char *set_user =0;
 char *env_user =0;
+const char *argv0 =0;
 const char *env_dir =0;
 unsigned int verbose =0;
 unsigned int pgrp =0;
@@ -109,7 +110,7 @@ void edir(const char *dirname) {
   direntry *d;
   int i;
 
-  if (! (wdir =open_read(".")))
+  if ((wdir =open_read(".")) == -1)
     fatal("unable to open current working directory");
   if (chdir(dirname)) fatal2("unable to switch to directory", dirname);
   if (! (dir =opendir("."))) fatal2("unable to open directory", dirname);
@@ -264,7 +265,7 @@ void pgrphack(int, const char *const *);
 void setlock(int, const char *const *);
 void softlimit(int, const char *const *);
 
-int main(int argc, const char *const *argv) {
+int main(int argc, const char **argv) {
   int opt;
   int i;
   unsigned long ul;
@@ -285,11 +286,12 @@ int main(int argc, const char *const *argv) {
   if (str_equal(progname, "setlock")) setlock(argc, argv);
   if (str_equal(progname, "softlimit")) softlimit(argc, argv);
 
-  while ((opt =getopt(argc, argv, "u:U:e:m:d:o:p:f:c:r:t:/:n:l:L:vP012V"))
+  while ((opt =getopt(argc, argv, "u:U:b:e:m:d:o:p:f:c:r:t:/:n:l:L:vP012V"))
          != opteof)
     switch(opt) {
     case 'u': set_user =(char*)optarg; break;
     case 'U': env_user =(char*)optarg; break;
+    case 'b': argv0 =(char*)optarg; break;
     case 'e': env_dir =optarg; break;
     case 'm':
       if (optarg[scan_ulong(optarg, &ul)]) usage();
@@ -322,12 +324,12 @@ int main(int argc, const char *const *argv) {
     case '0': nostdin =1; break;
     case '1': nostdout =1; break;
     case '2': nostderr =1; break;
-    case 'V': strerr_warn1("$Id: 1bfc8e0a2f6eadcb47d4db127340f41be9ee3ed4 $", 0);
+    case 'V': strerr_warn1("$Id: f279d44141c981dd7535a12260efcf1ef7beed26 $", 0);
     case '?': usage();
     }
   argv +=optind;
   if (! argv || ! *argv) usage();
-  
+
   if (pgrp) setsid();
   if (env_dir) edir(env_dir);
   if (root) {
@@ -345,7 +347,10 @@ int main(int argc, const char *const *argv) {
   if (nostdout) if (close(1) == -1) fatal("unable to close stdout");
   if (nostderr) if (close(2) == -1) fatal("unable to close stderr");
   slimit();
-  pathexec(argv);
+
+  progname =*argv;
+  if (argv0) *argv =argv0;
+  pathexec_env_run(progname, argv);
   fatal2("unable to run", *argv);
   return(0);
 }

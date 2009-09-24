@@ -12,7 +12,7 @@
 chpst - runs a program with a changed process state 
 <h2><a name='sect1'>Synopsis</a></h2>
 <b>chpst</b> [-vP012]
-[-u <i>user</i>] [-U <i>user</i>] [-e <i>dir</i>] [-/ <i>root</i>] [-n <i>inc</i>] [-l|-L <i>lock</i>] [-m <i>bytes</i>] [-d <i>bytes</i>]
+[-u <i>user</i>] [-U <i>user</i>] [-b <i>argv0</i>] [-e <i>dir</i>] [-/ <i>root</i>] [-n <i>inc</i>] [-l|-L <i>lock</i>] [-m <i>bytes</i>] [-d <i>bytes</i>]
 [-o <i>n</i>] [-p <i>n</i>] [-f <i>bytes</i>] [-c <i>bytes</i>] <i>prog</i> 
 <h2><a name='sect2'>Description</a></h2>
 <i>prog</i> consists of one or
@@ -40,6 +40,10 @@ If <i>user</i> is followed by a colon and a <i>group</i>, set $GID to the <i>gro
 as found in <i>/etc/group</i>, instead of <i>user</i>&rsquo;s gid. If <i>user</i> is prefixed with a
 colon, the <i>user</i> and <i>group</i> arguments are interpreted as uid and gid respectivly,
 and not looked up in the password or group file. </dd>
+
+<dt><b>-b <i>argv0</b> </i></dt>
+<dd>argv0. Run <i>prog</i>
+with <i>argv0</i> as the 0th argument. </dd>
 
 <dt><b>-e <i>dir</b> </i></dt>
 <dd>envdir. Set various

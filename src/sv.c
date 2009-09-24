@@ -17,7 +17,7 @@
 #define USAGE " [-v] [-w sec] command service ..."
 #define USAGELSB " [-w sec] command"
 
-#define VERSION "$Id: 8269ca78d90c5d9b998b87f616d9aa60296314ee $"
+#define VERSION "$Id: 4e5fb1204f3b6b6fd5869ec8c76d6c7a8263fd55 $"
 
 #define FATAL   "fatal: "
 #define FAIL    "fail: "
@@ -150,9 +150,11 @@ unsigned int svstatus_print(char *m) {
   return(pid ? 1 : 2);
 }
 int status(char *unused) {
-  r =svstatus_get();
+  int rc;
+
+  rc =svstatus_get();
   switch(r) { case -1: if (lsb) done(4); case 0: return(0); }
-  r =svstatus_print(*service);
+  rc =svstatus_print(*service);
   if (chdir("log") == -1) {
     if (errno != error_noent) {
       outs("; log: "); outs(WARN);
@@ -165,8 +167,8 @@ int status(char *unused) {
       outs("; "); svstatus_print("log");
     }
   flush("\n");
-  if (lsb) switch(r) { case 1: done(0); case 2: done(3); case 0: done(4); }
-  return(r);
+  if (lsb) switch(rc) { case 1: done(0); case 2: done(3); case 0: done(4); }
+  return(rc);
 }
 
 int checkscript() {

@@ -67,7 +67,7 @@ int main (int argc, const char * const *argv, char * const *envp) {
     break;
   case '-':
     if ((*argv)[1] == 'V')
-      strerr_warn1("$Id: f075d98bf7dd17c893021f9572cbb970cdad8dcf $\n", 0);
+      strerr_warn1("$Id$\n", 0);
   default:
     usage();
   }

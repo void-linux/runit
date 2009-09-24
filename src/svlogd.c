@@ -34,7 +34,7 @@
 #include "iopause.h"
 
 #define USAGE " [-ttv] [-r c] [-R abc] [-l len] [-b buflen] dir ..."
-#define VERSION "$Id: 5e55a90e0a1b35ec47fed3021453c50675ea1117 $"
+#define VERSION "$Id$"
 
 #define FATAL "svlogd: fatal: "
 #define WARNING "svlogd: warning: "

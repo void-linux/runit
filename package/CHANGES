@@ -1,3 +1,17 @@
+2.1.0
+Thu, 24 Sep 2009 22:49:33 +0000
+  * pathexec_env.c, pathexec.h: add function pathexec_env_run().
+  * chpst.c, man/chpst.8: new option -b argv0: run prog with different
+    0th argument.
+  * sv.c: fix exit code of status command in lsb mode (thx Mathieu
+    Poumeyrol)
+  * chpst.c, svwaitdown.c, svwaitup.c: fix checks for return value of
+    open_* functions (thx David Reiss).
+  * runsv.c: exit with error if [log/]supervise/control exists, but is
+    not a fifo (thx Charlie Brady).
+  * man/sv.8: clarify which return values apply to the LSB init script
+    interface.
+
 2.0.0
 Sun, 15 Jun 2008 15:31:05 +0000
 
