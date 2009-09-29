@@ -1,3 +1,7 @@
+2.1.1
+
+  * doc/upgrade.html: fix typo.
+
 2.1.0
 Thu, 24 Sep 2009 22:49:33 +0000
   * pathexec_env.c, pathexec.h: add function pathexec_env_run().
