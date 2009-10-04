@@ -17,7 +17,7 @@
 #define USAGE " [-v] [-w sec] command service ..."
 #define USAGELSB " [-w sec] command"
 
-#define VERSION "$Id: 4e5fb1204f3b6b6fd5869ec8c76d6c7a8263fd55 $"
+#define VERSION "$Id: d126cee39d1887d523c122ffb033d1ea098c9f24 $"
 
 #define FATAL   "fatal: "
 #define FAIL    "fail: "
@@ -246,7 +246,8 @@ int check(char *a) {
 }
 int control(char *a) {
   if (svstatus_get() <= 0) return(-1);
-  if (svstatus[17] == *a) return(0);
+  if (svstatus[17] == *a)
+    if (*a != 'd' || svstatus[18] == 1) return(0); /* once w/o term */
   if ((fd =open_write("supervise/control")) == -1) {
     if (errno != error_nodevice)
       warn("unable to open supervise/control");

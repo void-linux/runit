@@ -22,7 +22,7 @@
 
 #define USAGE " dir"
 
-#define VERSION "$Id: a488d2039fdfb0141d8c55bac439b7ddb8130ecb $"
+#define VERSION "$Id: ecf467746d7b97ff0fddb88b9d44cca201c74160 $"
 
 char *progname;
 int selfpipe[2];

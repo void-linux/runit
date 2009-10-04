@@ -11,7 +11,7 @@
 
 #define USAGE " [ -l ] service ..."
 
-#define VERSION "$Id$"
+#define VERSION "$Id: c17bbd3eda6f3c57027dfb47ff676bdd3fefff9f $"
 
 #define FATAL "runsvstat: fatal: "
 #define WARNING "runsvstat: warning: "
