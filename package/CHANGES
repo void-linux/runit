@@ -1,6 +1,8 @@
 2.1.1
 
   * doc/upgrade.html: fix typo.
+  * sv.c: on 'down', send runsv the 'down' command properly if not yet
+    done (e.g. when taken up with 'once').
 
 2.1.0
 Thu, 24 Sep 2009 22:49:33 +0000
