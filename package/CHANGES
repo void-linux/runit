@@ -1,3 +1,8 @@
+2.1.2
+
+  * doc/index.html: add deepOfix Mail Server to list of distributions
+    that include runit (thx Debayan Banerjee).
+
 2.1.1
 Sun, 04 Oct 2009 20:28:38 +0000
   * doc/upgrade.html: fix typo.
