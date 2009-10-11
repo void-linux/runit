@@ -112,6 +112,11 @@ Same as
 but wait up to 7 seconds for the service to become down.
 Then report the status or timeout.
 .TP
+.B reload
+Same as
+.IR hup ,
+and additionally report the status afterwards.
+.TP
 .B restart
 Send the commands
 .IR term ,
@@ -183,6 +188,15 @@ process to terminate.
 Then report the status, and on timeout send the service the
 .I kill
 command.
+.TP
+.B try-restart
+if the service is running, send it the
+.I term
+and
+.I cont
+commands, and wait up to 7 seconds for the service to restart.
+Then report the status or timeout.
+
 .SS Additional Commands
 .TP
 .B check

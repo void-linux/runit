@@ -305,9 +305,11 @@ int main(int argc, char **argv) {
     acts ="d"; kll =1; cbk =&check; break;
   case 'T':
     acts ="tc"; kll =1; cbk =&check; break;
+  case 't':
+    if (!str_diff(action, "try-restart")) { acts ="tc"; cbk =&check; break; }
   case 'c':
     if (!str_diff(action, "check")) { act =0; acts ="C"; cbk =&check; break; }
-  case 'u': case 'd': case 'o': case 't': case 'p': case 'h':
+  case 'u': case 'd': case 'o': case 'p': case 'h':
   case 'a': case 'i': case 'k': case 'q': case '1': case '2':
     action[1] =0; acts =action; break;
   case 's':
@@ -318,6 +320,7 @@ int main(int argc, char **argv) {
     act =&status; cbk =0; break;
   case 'r':
     if (!str_diff(action, "restart")) { acts ="tcu"; cbk =&check; break; }
+    if (!str_diff(action, "reload")) { acts ="h"; cbk =&check; break; }
     usage();
   case 'f':
     if (!str_diff(action, "force-reload"))
