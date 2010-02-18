@@ -4,6 +4,8 @@
     that include runit (thx Debayan Banerjee).
   * doc/useinit.html: update description on how to use with upstart
     (thx Gabriel de Perthuis).
+  * doc/index.html: add Dragora GNU/Linux to list of distributions that
+    use runit as default init scheme (thx Matias A. Fonzo).
 
 2.1.1
 Sun, 04 Oct 2009 20:28:38 +0000
