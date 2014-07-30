@@ -153,7 +153,7 @@ int status(char *unused) {
   int rc;
 
   rc =svstatus_get();
-  switch(r) { case -1: if (lsb) done(4); case 0: return(0); }
+  switch(rc) { case -1: if (lsb) done(4); case 0: return(0); }
   rc =svstatus_print(*service);
   if (chdir("log") == -1) {
     if (errno != error_noent) {

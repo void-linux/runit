@@ -1,5 +1,7 @@
 2.1.2
 
+  * sv.c: fix typo that may lead to wrong output from sv when reporting
+    status of multiple service directories.
   * doc/index.html: add deepOfix Mail Server to list of distributions
     that include runit (thx Debayan Banerjee).
   * doc/useinit.html: update description on how to use with upstart
