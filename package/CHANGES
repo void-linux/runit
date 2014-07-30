@@ -1,5 +1,7 @@
 2.1.2
 
+  * fmt_ptime.c: 64 bits time_t fix for svlogd (tnx Jérémie
+    Courrèges-Anglas).
   * sv.c: fix typo that may lead to wrong output from sv when reporting
     status of multiple service directories.
   * doc/index.html: add deepOfix Mail Server to list of distributions
