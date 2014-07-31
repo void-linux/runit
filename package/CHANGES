@@ -1,5 +1,7 @@
 2.1.2
 
+  * man/sv.8: "sv exit" does not send a TERM signal to the log service
+    (thx Jonathan Nieder).
   * fmt_ptime.c: 64 bits time_t fix for svlogd (tnx Jérémie
     Courrèges-Anglas).
   * sv.c: fix typo that may lead to wrong output from sv when reporting

@@ -75,8 +75,9 @@ Do not restart the service.
 If the service is down, and no log service exists,
 .BR runsv (8)
 exits.
-If the service is down and a log service exists, send the TERM signal to the
-log service.
+If the service is down and a log service exists,
+.BR runsv (8)
+closes the standard input of the log service and waits for it to terminate.
 If the log service is down,
 .BR runsv (8)
 exits.
