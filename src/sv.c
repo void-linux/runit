@@ -41,6 +41,7 @@ unsigned int lsb;
 unsigned int verbose =0;
 unsigned long wait =7;
 unsigned int kll =0;
+unsigned int islog =0;
 struct taia tstart, tnow, tdiff;
 struct tai tstatus;
 
@@ -67,6 +68,7 @@ void fatal2(char *m1, char *m2) {
 void out(char *p, char *m1) {
   buffer_puts(buffer_1, p);
   buffer_puts(buffer_1, *service);
+  if (islog) buffer_puts(buffer_1, "/log");
   buffer_puts(buffer_1, ": ");
   buffer_puts(buffer_1, m1);
   if (errno) {
@@ -155,18 +157,20 @@ int status(char *unused) {
   rc =svstatus_get();
   switch(rc) { case -1: if (lsb) done(4); case 0: return(0); }
   rc =svstatus_print(*service);
+  islog =1;
   if (chdir("log") == -1) {
     if (errno != error_noent) {
-      outs("; log: "); outs(WARN);
-      outs("unable to change to log service directory: ");
-      outs(error_str(errno));
+      outs("; ");
+      warn("unable to change directory");
     }
+    else outs("\n");
   }
-  else
-    if (svstatus_get()) {
-      outs("; "); svstatus_print("log");
-    }
-  flush("\n");
+  else {
+    outs("; ");
+    if (svstatus_get()) { rc =svstatus_print("log"); outs("\n"); }
+  }
+  islog =0;
+  flush("");
   if (lsb) switch(rc) { case 1: done(0); case 2: done(3); case 0: done(4); }
   return(rc);
 }
