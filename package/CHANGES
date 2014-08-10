@@ -1,3 +1,25 @@
+2.1.2
+Sun, 10 Aug 2014 18:01:54 +0000
+  * doc/index.html: reorder, cleanup links to distributions; add Linux
+    from Scratch, Finnix, VServer.
+  * sv.c: properly format status command's output on failure cases.
+  * sv.c: support optional LSB init script actions reload and
+    try-restart.
+  * man/sv.8: "sv exit" does not send a TERM signal to the log service
+    (thx Jonathan Nieder).
+  * fmt_ptime.c: 64 bits time_t fix for svlogd (tnx Jérémie
+    Courrèges-Anglas).
+  * sv.c: fix typo that may lead to wrong output from sv when reporting
+    status of multiple service directories.
+  * doc/index.html: add deepOfix Mail Server to list of distributions
+    that include runit (thx Debayan Banerjee).
+  * doc/useinit.html: update description on how to use with upstart
+    (thx Gabriel de Perthuis).
+  * doc/index.html: add Dragora GNU/Linux to list of distributions that
+    use runit as default init scheme (thx Matias A. Fonzo).
+  * doc/index.html: add ArchLinux to list of distributions that include
+    runit (thx Kevin Berry).
+
 2.1.1
 Sun, 04 Oct 2009 20:28:38 +0000
   * doc/upgrade.html: fix typo.

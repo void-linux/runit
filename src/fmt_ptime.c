@@ -4,7 +4,7 @@
 
 unsigned int fmt_ptime2(char *s, struct taia *ta, char sep) {
   struct tm *t;
-  unsigned long u;
+  time_t u;
 
   if (ta->sec.x < 4611686018427387914ULL) return(0); /* impossible? */
   u =ta->sec.x -4611686018427387914ULL;

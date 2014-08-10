@@ -48,21 +48,22 @@ and tell <i>init</i> to re-read its configuration, e.g.:
 <a name="upstart"><h2>Using with sysvinit and upstart</h2></a>
 If your system uses a sysvinit alike init scheme that utilizes upstart
 instead of inittab, and which has start and stop scripts located in
-<tt>/etc/event.d</tt>, do:
+<tt>/etc/init/</tt>, do:
 <pre>
- # cat >/etc/event.d/SV <<\EOT
- # for runit - manage /sbin/runsvdir-start
- start on runlevel-2
- start on runlevel-3
- start on runlevel-4
- start on runlevel-5
+ # cat >/etc/init/runsvdir.conf <<\EOT
+ # for runit - manage /usr/sbin/runsvdir-start
+ start on runlevel 2
+ start on runlevel 3
+ start on runlevel 4
+ start on runlevel 5
  stop on shutdown
- respawn /sbin/runsvdir-start
+ respawn
+ exec /usr/sbin/runsvdir-start
  EOT
 </pre>
-and tell init to re-read its configuration, e.g.:
+and tell init to start the new service, e.g.:
 <pre>
- # init q
+ # start runsvdir
 </pre>
 <hr>
 <a name="bsd"><h2>Using with *BSD init</h2></a>

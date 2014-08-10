@@ -75,8 +75,9 @@ Do not restart the service.
 If the service is down, and no log service exists,
 .BR runsv (8)
 exits.
-If the service is down and a log service exists, send the TERM signal to the
-log service.
+If the service is down and a log service exists,
+.BR runsv (8)
+closes the standard input of the log service and waits for it to terminate.
 If the log service is down,
 .BR runsv (8)
 exits.
@@ -110,6 +111,11 @@ Same as
 .IR down ,
 but wait up to 7 seconds for the service to become down.
 Then report the status or timeout.
+.TP
+.B reload
+Same as
+.IR hup ,
+and additionally report the status afterwards.
 .TP
 .B restart
 Send the commands
@@ -182,6 +188,15 @@ process to terminate.
 Then report the status, and on timeout send the service the
 .I kill
 command.
+.TP
+.B try-restart
+if the service is running, send it the
+.I term
+and
+.I cont
+commands, and wait up to 7 seconds for the service to restart.
+Then report the status or timeout.
+
 .SS Additional Commands
 .TP
 .B check

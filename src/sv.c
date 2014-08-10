@@ -17,7 +17,7 @@
 #define USAGE " [-v] [-w sec] command service ..."
 #define USAGELSB " [-w sec] command"
 
-#define VERSION "$Id: d126cee39d1887d523c122ffb033d1ea098c9f24 $"
+#define VERSION "$Id: 900314260c6d52c986c5357673bea2f3bd3f4698 $"
 
 #define FATAL   "fatal: "
 #define FAIL    "fail: "
@@ -41,6 +41,7 @@ unsigned int lsb;
 unsigned int verbose =0;
 unsigned long wait =7;
 unsigned int kll =0;
+unsigned int islog =0;
 struct taia tstart, tnow, tdiff;
 struct tai tstatus;
 
@@ -67,6 +68,7 @@ void fatal2(char *m1, char *m2) {
 void out(char *p, char *m1) {
   buffer_puts(buffer_1, p);
   buffer_puts(buffer_1, *service);
+  if (islog) buffer_puts(buffer_1, "/log");
   buffer_puts(buffer_1, ": ");
   buffer_puts(buffer_1, m1);
   if (errno) {
@@ -153,20 +155,22 @@ int status(char *unused) {
   int rc;
 
   rc =svstatus_get();
-  switch(r) { case -1: if (lsb) done(4); case 0: return(0); }
+  switch(rc) { case -1: if (lsb) done(4); case 0: return(0); }
   rc =svstatus_print(*service);
+  islog =1;
   if (chdir("log") == -1) {
     if (errno != error_noent) {
-      outs("; log: "); outs(WARN);
-      outs("unable to change to log service directory: ");
-      outs(error_str(errno));
+      outs("; ");
+      warn("unable to change directory");
     }
+    else outs("\n");
   }
-  else
-    if (svstatus_get()) {
-      outs("; "); svstatus_print("log");
-    }
-  flush("\n");
+  else {
+    outs("; ");
+    if (svstatus_get()) { rc =svstatus_print("log"); outs("\n"); }
+  }
+  islog =0;
+  flush("");
   if (lsb) switch(rc) { case 1: done(0); case 2: done(3); case 0: done(4); }
   return(rc);
 }
@@ -305,9 +309,11 @@ int main(int argc, char **argv) {
     acts ="d"; kll =1; cbk =&check; break;
   case 'T':
     acts ="tc"; kll =1; cbk =&check; break;
+  case 't':
+    if (!str_diff(action, "try-restart")) { acts ="tc"; cbk =&check; break; }
   case 'c':
     if (!str_diff(action, "check")) { act =0; acts ="C"; cbk =&check; break; }
-  case 'u': case 'd': case 'o': case 't': case 'p': case 'h':
+  case 'u': case 'd': case 'o': case 'p': case 'h':
   case 'a': case 'i': case 'k': case 'q': case '1': case '2':
     action[1] =0; acts =action; break;
   case 's':
@@ -318,6 +324,7 @@ int main(int argc, char **argv) {
     act =&status; cbk =0; break;
   case 'r':
     if (!str_diff(action, "restart")) { acts ="tcu"; cbk =&check; break; }
+    if (!str_diff(action, "reload")) { acts ="h"; cbk =&check; break; }
     usage();
   case 'f':
     if (!str_diff(action, "force-reload"))
