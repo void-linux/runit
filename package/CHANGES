@@ -1,5 +1,7 @@
 2.1.2
-
+  
+  * doc/index.html: reorder, cleanup links to distributions; add Linux
+    from Scratch, Finnix, VServer.
   * sv.c: properly format status command's output on failure cases.
   * sv.c: support optional LSB init script actions reload and
     try-restart.
