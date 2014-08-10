@@ -1,5 +1,5 @@
 2.1.2
-  
+Sun, 10 Aug 2014 18:01:54 +0000
   * doc/index.html: reorder, cleanup links to distributions; add Linux
     from Scratch, Finnix, VServer.
   * sv.c: properly format status command's output on failure cases.
