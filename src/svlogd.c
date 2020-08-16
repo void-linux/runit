@@ -8,6 +8,7 @@
 #include <dirent.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <string.h>
 #include "pmatch.h"
 #include "fmt_ptime.h"
 #include "alloc.h"
