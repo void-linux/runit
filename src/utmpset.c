@@ -24,6 +24,7 @@ void usage(void) { strerr_die4x(1, "usage: ", progname, USAGE, "\n"); }
 int utmp_logout(const char *line) {
   int fd;
   uw_tmp ut;
+  time_t t;
   int ok =-1;
 
   if ((fd =open(UW_TMP_UFILE, O_RDWR, 0)) < 0)
@@ -35,7 +36,8 @@ int utmp_logout(const char *line) {
     if (!ut.ut_name[0] || (str_diff(ut.ut_line, line) != 0)) continue;
     memset(ut.ut_name, 0, sizeof ut.ut_name);
     memset(ut.ut_host, 0, sizeof ut.ut_host);
-    if (time(&ut.ut_time) == -1) break;
+    if (time(&t) == -1) break;
+    ut.ut_time = t;
 #ifdef DEAD_PROCESS
     ut.ut_type =DEAD_PROCESS;
 #endif
@@ -52,6 +54,7 @@ int wtmp_logout(const char *line) {
   int len;
   struct stat st;
   uw_tmp ut;
+  time_t t;
 
   if ((fd = open_append(UW_TMP_WFILE)) == -1)
     strerr_die4sys(111, FATAL, "unable to open ", UW_TMP_WFILE, ": ");
@@ -65,10 +68,11 @@ int wtmp_logout(const char *line) {
   memset(&ut, 0, sizeof(uw_tmp));
   if ((len =str_len(line)) > sizeof ut.ut_line) len =sizeof ut.ut_line -2;
   byte_copy(ut.ut_line, len, line);
-  if (time(&ut.ut_time) == -1) {
+  if (time(&t) == -1) {
     close(fd);
     return(-1);
   }
+  ut.ut_time = t;
 #ifdef DEAD_PROCESS
   ut.ut_type =DEAD_PROCESS;
 #endif
