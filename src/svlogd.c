@@ -705,6 +705,7 @@ int main(int argc, const char **argv) {
   coe(fdwdir);
   dir =(struct logdir*)alloc(dirn *sizeof(struct logdir));
   if (! dir) die_nomem();
+  memset(dir, 0, dirn * sizeof(struct logdir));
   for (i =0; i < dirn; ++i) {
     dir[i].fddir =-1; dir[i].fdcur =-1;
     dir[i].btmp =(char*)alloc(buflen *sizeof(char));
