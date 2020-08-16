@@ -1,6 +1,7 @@
 /* Public domain. */
 
 #include <sys/types.h>
+#include <unistd.h>
 #include "seek.h"
 
 #define SET 0 /* sigh */
