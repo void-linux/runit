@@ -170,12 +170,6 @@ byte_diff.o: byte.h byte_diff.c compile
 byte_rchr.o: byte.h byte_rchr.c compile
 	./compile byte_rchr.c
 
-chkshsgr: chkshsgr.o load
-	./load chkshsgr 
-
-chkshsgr.o: chkshsgr.c compile
-	./compile chkshsgr.c
-
 choose: choose.sh warn-auto.sh
 	rm -f choose
 	cat warn-auto.sh choose.sh \
@@ -232,9 +226,7 @@ hassgact.h: choose compile hassgact.h1 hassgact.h2 load trysgact.c
 hassgprm.h: choose compile hassgprm.h1 hassgprm.h2 load trysgprm.c
 	./choose cl trysgprm hassgprm.h1 hassgprm.h2 > hassgprm.h
 
-hasshsgr.h: chkshsgr choose compile hasshsgr.h1 hasshsgr.h2 load \
-tryshsgr.c warn-shsgr
-	./chkshsgr || ( cat warn-shsgr; exit 1 )
+hasshsgr.h: choose compile hasshsgr.h1 hasshsgr.h2 load tryshsgr.c
 	./choose clr tryshsgr hasshsgr.h1 hasshsgr.h2 > hasshsgr.h
 
 haswaitp.h: choose compile haswaitp.h1 haswaitp.h2 load trywaitp.c
