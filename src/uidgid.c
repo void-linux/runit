@@ -6,7 +6,7 @@
 #include "scan.h"
 
 /* user */
-unsigned int uidgid_get(struct uidgid *u, char *ug) {
+unsigned int uidgid_get(struct uidgid *u, const char *ug) {
   struct passwd *pwd =0;
 
   if (! (pwd =getpwnam(ug))) return(0);
@@ -16,7 +16,7 @@ unsigned int uidgid_get(struct uidgid *u, char *ug) {
 }
 
 /* uid:gid[:gid[:gid]...] */
-unsigned int uidgids_set(struct uidgid *u, char *ug) {
+unsigned int uidgids_set(struct uidgid *u, const char *ug) {
   unsigned long id;
   int i;
 

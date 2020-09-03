@@ -90,7 +90,6 @@ readclose.o
 scan_ulong.o
 seek_set.o
 select.h
-sgetopt.o
 sig.o
 sig_block.o
 sig_catch.o
@@ -108,7 +107,6 @@ stralloc_opys.o
 stralloc_pend.o
 strerr_die.o
 strerr_sys.o
-subgetopt.o
 sysdeps
 systype
 tai_now.o

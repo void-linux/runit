@@ -4,7 +4,6 @@
 #include "str.h"
 #include "strerr.h"
 #include "error.h"
-#include "sgetopt.h"
 #include "open.h"
 #include "env.h"
 #include "buffer.h"
@@ -31,8 +30,8 @@
 
 char *progname;
 char *action;
-char *acts;
-char *varservice ="/var/service/";
+const char *acts;
+const char *varservice ="/var/service/";
 char **service;
 char **servicex;
 unsigned int services;
@@ -45,8 +44,8 @@ unsigned int islog =0;
 struct taia tstart, tnow, tdiff;
 struct tai tstatus;
 
-int (*act)(char*) =0;
-int (*cbk)(char*) =0;
+int (*act)(const char*) =0;
+int (*cbk)(const char*) =0;
 
 int curdir, fd, r;
 char svstatus[20];
@@ -57,15 +56,15 @@ void usage() {
   strerr_die4x(2, "usage: ", progname, USAGELSB, "\n");
 }
 void done(unsigned int e) { if (curdir != -1) fchdir(curdir); _exit(e); }
-void fatal(char *m1) {
+void fatal(const char *m1) {
   strerr_warn3(FATAL, m1, ": ", &strerr_sys);
   done(lsb ? 151 : 100);
 }
-void fatal2(char *m1, char *m2) {
+void fatal2(const char *m1, const char *m2) {
   strerr_warn4(FATAL, m1, m2, ": ", &strerr_sys);
   done(lsb ? 151 : 100);
 }
-void out(char *p, char *m1) {
+void out(const char *p, const char *m1) {
   buffer_puts(buffer_1, p);
   buffer_puts(buffer_1, *service);
   if (islog) buffer_puts(buffer_1, "/log");
@@ -78,11 +77,11 @@ void out(char *p, char *m1) {
   buffer_puts(buffer_1, "\n");
   buffer_flush(buffer_1);
 }
-void fail(char *m1) { ++rc; out(FAIL, m1); }
-void failx(char *m1) { errno =0; fail(m1); }
-void warn(char *m1) { ++rc; out(WARN, m1); }
-void warnx(char *m1) { errno =0; warn(m1); }
-void ok(char *m1) { errno =0; out(OK, m1); }
+void fail(const char *m1) { ++rc; out(FAIL, m1); }
+void failx(const char *m1) { errno =0; fail(m1); }
+void warn(const char *m1) { ++rc; out(WARN, m1); }
+void warnx(const char *m1) { errno =0; warn(m1); }
+void ok(const char *m1) { errno =0; out(OK, m1); }
 
 void outs(const char *s) { buffer_puts(buffer_1, s); }
 void flush(const char *s) { outs(s); buffer_flush(buffer_1); }
@@ -112,7 +111,7 @@ int svstatus_get() {
   }
   return(1);
 }
-unsigned int svstatus_print(char *m) {
+unsigned int svstatus_print(const char *m) {
   int pid;
   int normallyup =0;
   struct stat s;
@@ -151,12 +150,12 @@ unsigned int svstatus_print(char *m) {
   if (pid && svstatus[18]) outs(", got TERM");
   return(pid ? 1 : 2);
 }
-int status(char *unused) {
-  int rc;
+int status(const char *unused) {
+  int rv;
 
-  rc =svstatus_get();
-  switch(rc) { case -1: if (lsb) done(4); case 0: return(0); }
-  rc =svstatus_print(*service);
+  rv =svstatus_get();
+  switch(rv) { case -1: if (lsb) done(4); case 0: return(0); }
+  rv =svstatus_print(*service);
   islog =1;
   if (chdir("log") == -1) {
     if (errno != error_noent) {
@@ -167,16 +166,16 @@ int status(char *unused) {
   }
   else {
     outs("; ");
-    if (svstatus_get()) { rc =svstatus_print("log"); outs("\n"); }
+    if (svstatus_get()) { rv =svstatus_print("log"); outs("\n"); }
   }
   islog =0;
   flush("");
-  if (lsb) switch(rc) { case 1: done(0); case 2: done(3); case 0: done(4); }
-  return(rc);
+  if (lsb) switch(rv) { case 1: done(0); case 2: done(3); case 0: done(4); }
+  return(rv);
 }
 
 int checkscript() {
-  char *prog[2];
+  const char *prog[2];
   struct stat s;
   int pid, w;
 
@@ -210,7 +209,7 @@ int checkscript() {
   return(!wait_exitcode(w));
 }
 
-int check(char *a) {
+int check(const char *a) {
   unsigned int pid;
 
   if ((r =svstatus_get()) == -1) return(-1);
@@ -248,7 +247,7 @@ int check(char *a) {
   outs(OK); svstatus_print(*service); flush("\n");
   return(1);
 }
-int control(char *a) {
+int control(const char *a) {
   if (svstatus_get() <= 0) return(-1);
   if (svstatus[17] == *a)
     if (*a != 'd' || svstatus[18] == 1) return(0); /* once w/o term */
@@ -275,13 +274,13 @@ int main(int argc, char **argv) {
   progname =*argv;
   for (i =str_len(*argv); i; --i) if ((*argv)[i -1] == '/') break;
   *argv +=i;
-  optprogname =progname =*argv;
+  progname =*argv;
   service =argv;
   services =1;
   lsb =(str_diff(progname, "sv"));
   if ((x =env_get("SVDIR"))) varservice =x;
   if ((x =env_get("SVWAIT"))) scan_ulong(x, &wait);
-  while ((i =getopt(argc, (const char* const*)argv, "w:vV")) != opteof) {
+  while ((i =getopt(argc, (const char* const*)argv, "w:vV")) != -1) {
     switch(i) {
     case 'w': scan_ulong(optarg, &wait);
     case 'v': verbose =1; break;

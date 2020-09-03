@@ -62,22 +62,22 @@ char *dir;
 
 void usage () { strerr_die4x(1, "usage: ", progname, USAGE, "\n"); }
 
-void fatal(char *m) {
+void fatal(const char *m) {
   strerr_die5sys(111, "runsv ", dir, ": fatal: ", m, ": ");
 }
-void fatal2(char *m1, char *m2) {
+void fatal2(const char *m1, const char *m2) {
   strerr_die6sys(111, "runsv ", dir, ": fatal: ", m1, m2, ": ");
 }
-void fatalx(char *m1, char *m2) {
+void fatalx(const char *m1, const char *m2) {
   strerr_die5x(111, "runsv ", dir, ": fatal: ", m1, m2);
 }
-void warn(char *m) {
+void warn(const char *m) {
   strerr_warn5("runsv ", dir, ": warning: ", m, ": ", &strerr_sys);
 }
-void warn2(char *m1, char *m2) {
+void warn2(const char *m1, const char *m2) {
   strerr_warn6("runsv ", dir, ": warning: ", m1, m2, ": ", &strerr_sys);
 }
-void warnx(char *m1, char *m2, char *m3) {
+void warnx(const char *m1, const char *m2, const char *m3) {
   strerr_warn6("runsv ", dir, ": warning: ", m1, m2, m3, 0);
 }
 
@@ -96,12 +96,12 @@ void update_status(struct svdir *s) {
   char bspace[64];
   buffer b;
   char spid[FMT_ULONG];
-  char *fstatus ="supervise/status";
-  char *fstatusnew ="supervise/status.new";
-  char *fstat ="supervise/stat";
-  char *fstatnew ="supervise/stat.new";
-  char *fpid ="supervise/pid";
-  char *fpidnew ="supervise/pid.new";
+  const char *fstatus ="supervise/status";
+  const char *fstatusnew ="supervise/status.new";
+  const char *fstat ="supervise/stat";
+  const char *fstatnew ="supervise/stat.new";
+  const char *fpid ="supervise/pid";
+  const char *fpidnew ="supervise/pid.new";
 
   if (s->islog) {
     fstatus ="log/supervise/status";
@@ -261,7 +261,7 @@ void stopservice(struct svdir *s) {
 
 void startservice(struct svdir *s) {
   int p;
-  char *run[4];
+  const char *run[4];
   char code[FMT_ULONG];
   char stat[FMT_ULONG];
 
