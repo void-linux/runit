@@ -39,7 +39,7 @@ void usage() { strerr_die4x(100, "usage: ", progname, USAGE_MAIN, "\n"); }
 
 char *set_user =0;
 char *env_user =0;
-const char *argv0 =0;
+char *argv0 =0;
 const char *env_dir =0;
 unsigned int verbose =0;
 unsigned int pgrp =0;
@@ -257,14 +257,14 @@ void slimit() {
 }
 
 /* argv[0] */
-void setuidgid(int, const char *const *);
-void envuidgid(int, const char *const *);
+void setuidgid(int, char **);
+void envuidgid(int, char **);
 void envdir(int, const char *const *);
 void pgrphack(int, const char *const *);
 void setlock(int, const char *const *);
 void softlimit(int, const char *const *);
 
-int main(int argc, const char **argv) {
+int main(int argc, char **argv) {
   int opt;
   int i;
   unsigned long ul;
@@ -366,12 +366,12 @@ int main(int argc, const char **argv) {
 void setuidgid_usage() {
   strerr_die4x(100, "usage: ", progname, USAGE_SETUIDGID, "\n");
 }
-void setuidgid(int argc, const char *const *argv) {
-  const char *account;
+void setuidgid(int argc, char **argv) {
+  char *account;
 
   if (! (account =*++argv)) setuidgid_usage();
   if (! *++argv) setuidgid_usage();
-  suidgid((char*)account, 0);
+  suidgid(account, 0);
   pathexec(argv);
   fatal2("unable to run", *argv);
 }
@@ -379,12 +379,12 @@ void setuidgid(int argc, const char *const *argv) {
 void envuidgid_usage() {
   strerr_die4x(100, "usage: ", progname, USAGE_ENVUIDGID, "\n");
 }
-void envuidgid(int argc, const char *const *argv) {
-  const char *account;
+void envuidgid(int argc, char **argv) {
+  char *account;
 
   if (! (account =*++argv)) envuidgid_usage();
   if (! *++argv) envuidgid_usage();
-  euidgid((char*)account, 0);
+  euidgid(account, 0);
   pathexec(argv);
   fatal2("unable to run", *argv);
 }
