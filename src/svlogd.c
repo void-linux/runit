@@ -20,7 +20,6 @@
 #include "fd.h"
 #include "wait.h"
 #include "error.h"
-#include "sgetopt.h"
 #include "open.h"
 #include "openreadclose.h"
 #include "coe.h"
@@ -669,7 +668,7 @@ int main(int argc, const char **argv) {
 
   progname =*argv;
 
-  while ((opt =getopt(argc, argv, "R:r:l:b:tvV")) != opteof) {
+  while ((opt =getopt(argc, argv, "R:r:l:b:tvV")) != -1) {
     switch(opt) {
     case 'R':
       replace =optarg;

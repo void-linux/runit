@@ -4,7 +4,6 @@
 #include "str.h"
 #include "strerr.h"
 #include "error.h"
-#include "sgetopt.h"
 #include "open.h"
 #include "env.h"
 #include "buffer.h"
@@ -275,13 +274,13 @@ int main(int argc, char **argv) {
   progname =*argv;
   for (i =str_len(*argv); i; --i) if ((*argv)[i -1] == '/') break;
   *argv +=i;
-  optprogname =progname =*argv;
+  progname =*argv;
   service =argv;
   services =1;
   lsb =(str_diff(progname, "sv"));
   if ((x =env_get("SVDIR"))) varservice =x;
   if ((x =env_get("SVWAIT"))) scan_ulong(x, &wait);
-  while ((i =getopt(argc, (const char* const*)argv, "w:vV")) != opteof) {
+  while ((i =getopt(argc, (const char* const*)argv, "w:vV")) != -1) {
     switch(i) {
     case 'w': scan_ulong(optarg, &wait);
     case 'v': verbose =1; break;

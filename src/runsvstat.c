@@ -3,7 +3,6 @@
 #include <unistd.h>
 #include "strerr.h"
 #include "error.h"
-#include "sgetopt.h"
 #include "open.h"
 #include "buffer.h"
 #include "tai.h"
@@ -112,7 +111,7 @@ int main(int argc, char **argv) {
 
   progname =*argv;
 
-  while ((opt =getopt(argc, (const char * const *)argv, "lV")) != opteof) {
+  while ((opt =getopt(argc, (const char * const *)argv, "lV")) != -1) {
     switch(opt) {
     case 'l':
       showlog =1;
