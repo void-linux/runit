@@ -170,12 +170,6 @@ byte_diff.o: byte.h byte_diff.c compile
 byte_rchr.o: byte.h byte_rchr.c compile
 	./compile byte_rchr.c
 
-chkshsgr: chkshsgr.o load
-	./load chkshsgr 
-
-chkshsgr.o: chkshsgr.c compile
-	./compile chkshsgr.c
-
 choose: choose.sh warn-auto.sh
 	rm -f choose
 	cat warn-auto.sh choose.sh \
@@ -185,7 +179,7 @@ choose: choose.sh warn-auto.sh
 coe.o: coe.c coe.h compile
 	./compile coe.c
 
-compile: conf-cc print-cc.sh systype warn-auto.sh
+compile: conf-cc print-cc.sh warn-auto.sh
 	rm -f compile
 	sh print-cc.sh > compile
 	chmod 555 compile
@@ -232,9 +226,7 @@ hassgact.h: choose compile hassgact.h1 hassgact.h2 load trysgact.c
 hassgprm.h: choose compile hassgprm.h1 hassgprm.h2 load trysgprm.c
 	./choose cl trysgprm hassgprm.h1 hassgprm.h2 > hassgprm.h
 
-hasshsgr.h: chkshsgr choose compile hasshsgr.h1 hasshsgr.h2 load \
-tryshsgr.c warn-shsgr
-	./chkshsgr || ( cat warn-shsgr; exit 1 )
+hasshsgr.h: choose compile hasshsgr.h1 hasshsgr.h2 load tryshsgr.c
 	./choose clr tryshsgr hasshsgr.h1 hasshsgr.h2 > hasshsgr.h
 
 haswaitp.h: choose compile haswaitp.h1 haswaitp.h2 load trywaitp.c
@@ -246,7 +238,7 @@ iopause.h: choose compile iopause.h1 iopause.h2 load trypoll.c
 iopause.o: compile iopause.c iopause.h select.h tai.h taia.h uint64.h
 	./compile iopause.c
 
-load: conf-ld print-ld.sh systype warn-auto.sh
+load: conf-ld print-ld.sh warn-auto.sh
 	rm -f load
 	sh print-ld.sh > load
 	chmod 555 load
@@ -257,7 +249,7 @@ lock_ex.o: compile hasflock.h lock.h lock_ex.c
 lock_exnb.o: compile hasflock.h lock.h lock_exnb.c
 	./compile lock_exnb.c
 
-makelib: print-ar.sh systype warn-auto.sh
+makelib: print-ar.sh warn-auto.sh
 	rm -f makelib
 	sh print-ar.sh > makelib
 	chmod 555 makelib
@@ -372,10 +364,10 @@ subgetopt.o: compile subgetopt.c subgetopt.h
 	./compile subgetopt.c
 
 sysdeps: compile direntry.h hasflock.h hasmkffo.h hassgact.h \
-hassgprm.h hasshsgr.h haswaitp.h iopause.h load select.h systype \
+hassgprm.h hasshsgr.h haswaitp.h iopause.h load select.h \
 uint64.h reboot_system.h uw_tmp.h socket.lib
 	rm -f sysdeps
-	cat systype compile load socket.lib >>sysdeps
+	cat compile load socket.lib >>sysdeps
 	grep sysdep direntry.h >>sysdeps
 	grep sysdep haswaitp.h >>sysdeps
 	grep sysdep hassgact.h >>sysdeps
@@ -389,9 +381,6 @@ uint64.h reboot_system.h uw_tmp.h socket.lib
 	grep sysdep reboot_system.h >>sysdeps
 	grep sysdep uw_tmp.h >>sysdeps
 	cat sysdeps
-
-systype: find-systype.sh trycpp.c x86cpuid.c
-	sh find-systype.sh > systype
 
 tai_now.o: compile tai.h tai_now.c uint64.h
 	./compile tai_now.c
