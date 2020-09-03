@@ -152,11 +152,11 @@ unsigned int svstatus_print(char *m) {
   return(pid ? 1 : 2);
 }
 int status(char *unused) {
-  int rc;
+  int rv;
 
-  rc =svstatus_get();
-  switch(rc) { case -1: if (lsb) done(4); case 0: return(0); }
-  rc =svstatus_print(*service);
+  rv =svstatus_get();
+  switch(rv) { case -1: if (lsb) done(4); case 0: return(0); }
+  rv =svstatus_print(*service);
   islog =1;
   if (chdir("log") == -1) {
     if (errno != error_noent) {
@@ -167,12 +167,12 @@ int status(char *unused) {
   }
   else {
     outs("; ");
-    if (svstatus_get()) { rc =svstatus_print("log"); outs("\n"); }
+    if (svstatus_get()) { rv =svstatus_print("log"); outs("\n"); }
   }
   islog =0;
   flush("");
-  if (lsb) switch(rc) { case 1: done(0); case 2: done(3); case 0: done(4); }
-  return(rc);
+  if (lsb) switch(rv) { case 1: done(0); case 2: done(3); case 0: done(4); }
+  return(rv);
 }
 
 int checkscript() {
