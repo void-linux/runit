@@ -87,7 +87,7 @@ struct logdir {
   stralloc processor;
   int ppid;
   char fnsave[FMT_PTIME];
-  char *name;
+  const char *name;
   int fdcur;
   int fdlock;
   char match;
@@ -100,19 +100,19 @@ unsigned int dirn =0;
 
 void usage() { strerr_die4x(111, "usage: ", progname, USAGE, "\n"); }
 void die_nomem() { strerr_die2x(111, FATAL, "out of memory."); }
-void fatal(char *m0) { strerr_die3sys(111, FATAL, m0, ": "); }
-void fatalx(char *m0) { strerr_die2x(111, FATAL, m0); }
-void fatal2(char *m0, char *m1) {
+void fatal(const char *m0) { strerr_die3sys(111, FATAL, m0, ": "); }
+void fatalx(const char *m0) { strerr_die2x(111, FATAL, m0); }
+void fatal2(const char *m0, const char *m1) {
   strerr_die5sys(111, FATAL, m0, ": ", m1, ": ");
 }
-void warn(char *m0) { strerr_warn3(WARNING, m0, ": ", &strerr_sys); }
-void warn2(char *m0, char *m1) {
+void warn(const char *m0) { strerr_warn3(WARNING, m0, ": ", &strerr_sys); }
+void warn2(const char *m0, const char *m1) {
   strerr_warn5(WARNING, m0, ": ", m1, ": ", &strerr_sys);
 }
-void warnx(char *m0, char *m1) { strerr_warn4(WARNING, m0, ": ", m1, 0); }
+void warnx(const char *m0, const char *m1) { strerr_warn4(WARNING, m0, ": ", m1, 0); }
 void pause_nomem() { strerr_warn2(PAUSE, "out of memory.", 0); sleep(3); }
-void pause1(char *m0) { strerr_warn3(PAUSE, m0, ": ", &strerr_sys); sleep(3); }
-void pause2(char *m0, char *m1) {
+void pause1(const char *m0) { strerr_warn3(PAUSE, m0, ": ", &strerr_sys); sleep(3); }
+void pause2(const char *m0, const char *m1) {
   strerr_warn5(PAUSE, m0, ": ", m1, ": ", &strerr_sys);
   sleep(3);
 }
@@ -128,7 +128,7 @@ unsigned int processorstart(struct logdir *ld) {
   while ((pid =fork()) == -1)
     pause2("unable to fork for processor", ld->name);
   if (! pid) {
-    char *prog[4];
+    const char *prog[4];
     int fd;
 
     /* child */
@@ -405,19 +405,19 @@ unsigned int logdir_open(struct logdir *ld, const char *fn) {
   int i;
 
   if ((ld->fddir =open_read(fn)) == -1) {
-    warn2("unable to open log directory", (char*)fn);
+    warn2("unable to open log directory", fn);
     return(0);
   }
   coe(ld->fddir);
   if (fchdir(ld->fddir) == -1) {
     logdir_close(ld);
-    warn2("unable to change directory", (char*)fn);
+    warn2("unable to change directory", fn);
     return(0);
   }
   ld->fdlock =open_append("lock");
   if ((ld->fdlock == -1) || (lock_exnb(ld->fdlock) == -1)) {
     logdir_close(ld);
-    warn2("unable to lock directory", (char*)fn);
+    warn2("unable to lock directory", fn);
     while (fchdir(fdwdir) == -1)
       pause1("unable to change to initial working directory");
     return(0);
@@ -428,7 +428,7 @@ unsigned int logdir_open(struct logdir *ld, const char *fn) {
   ld->sizemax =1000000;
   ld->nmax =ld->nmin =10;
   ld->tmax =0;
-  ld->name =(char*)fn;
+  ld->name =fn;
   ld->ppid =0;
   ld->match ='+';
   ld->udpaddr.sin_family =AF_INET;
