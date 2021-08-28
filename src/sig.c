@@ -3,13 +3,14 @@
 #include <signal.h>
 #include "sig.h"
 
-int sig_alarm = SIGALRM;
-int sig_child = SIGCHLD;
-int sig_cont = SIGCONT;
-int sig_hangup = SIGHUP;
-int sig_int = SIGINT;
-int sig_pipe = SIGPIPE;
-int sig_term = SIGTERM;
+const int sig_alarm = SIGALRM;
+const int sig_child = SIGCHLD;
+const int sig_cont = SIGCONT;
+const int sig_hangup = SIGHUP;
+const int sig_int = SIGINT;
+const int sig_kill = SIGKILL;
+const int sig_pipe = SIGPIPE;
+const int sig_term = SIGTERM;
 
 void (*sig_defaulthandler)() = SIG_DFL;
 void (*sig_ignorehandler)() = SIG_IGN;

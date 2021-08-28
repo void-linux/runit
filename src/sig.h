@@ -3,13 +3,14 @@
 #ifndef SIG_H
 #define SIG_H
 
-extern int sig_alarm;
-extern int sig_child;
-extern int sig_cont;
-extern int sig_hangup;
-extern int sig_int;
-extern int sig_pipe;
-extern int sig_term;
+extern const int sig_alarm;
+extern const int sig_child;
+extern const int sig_cont;
+extern const int sig_hangup;
+extern const int sig_int;
+extern const int sig_kill;
+extern const int sig_pipe;
+extern const int sig_term;
 
 extern void (*sig_defaulthandler)();
 extern void (*sig_ignorehandler)();
