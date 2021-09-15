@@ -308,9 +308,6 @@ seek_set.o: compile seek.h seek_set.c
 select.h: choose compile select.h1 select.h2 trysysel.c
 	./choose c trysysel select.h1 select.h2 > select.h
 
-sgetopt.o: buffer.h compile sgetopt.c sgetopt.h subgetopt.h
-	./compile sgetopt.c
-
 sig.o: compile sig.c sig.h
 	./compile sig.c
 
@@ -367,9 +364,6 @@ strerr_die.o: buffer.h compile strerr.h strerr_die.c
 
 strerr_sys.o: compile error.h strerr.h strerr_sys.c
 	./compile strerr_sys.c
-
-subgetopt.o: compile subgetopt.c subgetopt.h
-	./compile subgetopt.c
 
 sysdeps: compile direntry.h hasflock.h hasmkffo.h hassgact.h \
 hassgprm.h hasshsgr.h haswaitp.h iopause.h load select.h systype \
@@ -444,20 +438,20 @@ buffer_get.o buffer_put.o buffer_read.o buffer_write.o coe.o env.o \
 error.o error_str.o fd_copy.o fd_move.o fifo.o lock_ex.o lock_exnb.o \
 makelib ndelay_off.o ndelay_on.o open_append.o open_read.o \
 open_trunc.o open_write.o openreadclose.o pathexec_env.o \
-pathexec_run.o prot.o readclose.o seek_set.o sgetopt.o sig.o \
+pathexec_run.o prot.o readclose.o seek_set.o sig.o \
 sig_block.o sig_catch.o sig_pause.o stralloc_cat.o stralloc_catb.o \
 stralloc_cats.o stralloc_eady.o stralloc_opyb.o stralloc_opys.o \
-stralloc_pend.o strerr_die.o strerr_sys.o subgetopt.o wait_nohang.o \
+stralloc_pend.o strerr_die.o strerr_sys.o wait_nohang.o \
 wait_pid.o
 	./makelib unix.a alloc.o alloc_re.o buffer.o buffer_0.o buffer_1.o \
 	buffer_2.o buffer_get.o buffer_put.o buffer_read.o buffer_write.o \
 	coe.o env.o error.o error_str.o fd_copy.o fd_move.o fifo.o lock_ex.o \
 	lock_exnb.o ndelay_off.o ndelay_on.o open_append.o open_read.o \
 	open_trunc.o open_write.o openreadclose.o pathexec_env.o \
-	pathexec_run.o prot.o readclose.o seek_set.o sgetopt.o sig.o \
+	pathexec_run.o prot.o readclose.o seek_set.o sig.o \
 	sig_block.o sig_catch.o sig_pause.o stralloc_cat.o stralloc_catb.o \
 	stralloc_cats.o stralloc_eady.o stralloc_opyb.o stralloc_opys.o \
-	stralloc_pend.o strerr_die.o strerr_sys.o subgetopt.o wait_nohang.o \
+	stralloc_pend.o strerr_die.o strerr_sys.o wait_nohang.o \
 	wait_pid.o
 
 wait_nohang.o: compile haswaitp.h wait_nohang.c

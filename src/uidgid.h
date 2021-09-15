@@ -10,7 +10,7 @@ struct uidgid {
 };
 
 /* user */
-extern unsigned int uidgid_get(struct uidgid *, char *);
+extern unsigned int uidgid_get(struct uidgid *, const char *);
 
 /* [:]user[:group[:group]...] */
 extern unsigned int uidgids_get(struct uidgid *, char *);

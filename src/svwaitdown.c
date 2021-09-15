@@ -1,7 +1,6 @@
 #include <unistd.h>
 #include "strerr.h"
 #include "error.h"
-#include "sgetopt.h"
 #include "scan.h"
 #include "open.h"
 #include "tai.h"
@@ -41,7 +40,7 @@ int main(int argc, const char * const *argv) {
   
   progname =*argv;
   
-  while ((opt =getopt(argc, argv, "t:xkvV")) != opteof) {
+  while ((opt =getopt(argc, argv, "t:xkvV")) != -1) {
     switch(opt) {
     case 't':
       scan_ulong(optarg, &sec);
