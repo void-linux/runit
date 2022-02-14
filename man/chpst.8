@@ -146,6 +146,14 @@ Change the root directory to
 before starting
 .IR prog .
 .TP
+.B \-C \fIpwd
+chdir.
+Change the working directory to
+.I pwd
+before starting
+.IR prog .
+When combined with \-/, the working directory is changed after the chroot.
+.TP
 .B \-n \fIinc
 nice.
 Add

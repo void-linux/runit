@@ -20,7 +20,7 @@
 #include "openreadclose.h"
 #include "direntry.h"
 
-#define USAGE_MAIN " [-vP012] [-u user[:group]] [-U user[:group]] [-b argv0] [-e dir] [-/ root] [-n nice] [-l|-L lock] [-m n] [-d n] [-o n] [-p n] [-f n] [-c n] prog"
+#define USAGE_MAIN " [-vP012] [-u user[:group]] [-U user[:group]] [-b argv0] [-e dir] [-/ root] [-C pwd] [-n nice] [-l|-L lock] [-m n] [-d n] [-o n] [-p n] [-f n] [-c n] prog"
 #define FATAL "chpst: fatal: "
 #define WARNING "chpst: warning: "
 
@@ -60,6 +60,7 @@ long limitt =-2;
 long nicelvl =0;
 const char *lock =0;
 const char *root =0;
+const char *pwd =0;
 unsigned int lockdelay;
 
 void suidgid(char *user, unsigned int ext) {
@@ -286,7 +287,7 @@ int main(int argc, const char **argv) {
   if (str_equal(progname, "setlock")) setlock(argc, argv);
   if (str_equal(progname, "softlimit")) softlimit(argc, argv);
 
-  while ((opt =getopt(argc, argv, "u:U:b:e:m:d:o:p:f:c:r:t:/:n:l:L:vP012V"))
+  while ((opt =getopt(argc, argv, "u:U:b:e:m:d:o:p:f:c:r:t:/:C:n:l:L:vP012V"))
          != opteof)
     switch(opt) {
     case 'u': set_user =(char*)optarg; break;
@@ -305,6 +306,7 @@ int main(int argc, const char **argv) {
     case 'r': if (optarg[scan_ulong(optarg, &ul)]) usage(); limitr =ul; break;
     case 't': if (optarg[scan_ulong(optarg, &ul)]) usage(); limitt =ul; break;
     case '/': root =optarg; break;
+    case 'C': pwd =optarg; break;
     case 'n':
       switch (*optarg) {
         case '-':
@@ -336,6 +338,9 @@ int main(int argc, const char **argv) {
   if (root) {
     if (chdir(root) == -1) fatal2("unable to change directory", root);
     if (chroot(".") == -1) fatal("unable to change root directory");
+  }
+  if (pwd) {
+    if (chdir(pwd) == -1) fatal2("unable to change directory", pwd);
   }
   if (nicelvl) {
     errno =0;
