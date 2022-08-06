@@ -152,7 +152,7 @@ unsigned int svstatus_print(char *m) {
   return(pid ? 1 : 2);
 }
 int status(char *unused) {
-  int rc;
+  int rc, log_rc;
 
   rc =svstatus_get();
   switch(rc) { case -1: if (lsb) done(4); case 0: return(0); }
@@ -167,10 +167,11 @@ int status(char *unused) {
   }
   else {
     outs("; ");
-    if (svstatus_get()) { rc =svstatus_print("log"); outs("\n"); }
+    if (svstatus_get()) { log_rc =svstatus_print("log"); outs("\n"); }
   }
   islog =0;
   flush("");
+  if (rc == 0 && log_rc != 0) { rc =log_rc; }
   if (lsb) switch(rc) { case 1: done(0); case 2: done(3); case 0: done(4); }
   return(rc);
 }
