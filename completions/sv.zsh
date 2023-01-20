@@ -35,7 +35,13 @@ cmds)
         check
     ret=0;;
 args)
-    services=( /var/service/*(-/N:t) )
+    if [[ $BUFFER == "sudo "*
+        || $BUFFER == "doas "*
+        || $BUFFER == "su "*-c* ]] then
+        services=( /var/service/*(-/N:t) )
+    else
+        services=( ${SVDIR:-/var/service}/*(-/N:t) )
+    fi
     (( $#services )) && _values services $services && ret=0
     [[ $words[CURRENT] = */* ]] && _directories && ret=0
     ;;
