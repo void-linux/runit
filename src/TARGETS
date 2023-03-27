@@ -106,7 +106,6 @@ strerr_die.o
 strerr_sys.o
 subgetopt.o
 sysdeps
-systype
 tai_now.o
 tai_pack.o
 tai_sub.o
