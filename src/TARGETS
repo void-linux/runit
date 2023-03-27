@@ -119,7 +119,6 @@ taia_pack.o
 taia_sub.o
 taia_uint.o
 time.a
-uint64.h
 unix.a
 wait_nohang.o
 wait_pid.o

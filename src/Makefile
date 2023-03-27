@@ -232,7 +232,7 @@ haswaitp.h: choose compile haswaitp.h1 haswaitp.h2 load trywaitp.c
 iopause.h: choose compile iopause.h1 iopause.h2 load trypoll.c
 	./choose clr trypoll iopause.h1 iopause.h2 > iopause.h
 
-iopause.o: compile iopause.c iopause.h select.h tai.h taia.h uint64.h
+iopause.o: compile iopause.c iopause.h select.h tai.h taia.h
 	./compile iopause.c
 
 load: conf-ld print-ld.sh warn-auto.sh
@@ -359,7 +359,7 @@ subgetopt.o: compile subgetopt.c subgetopt.h
 
 sysdeps: compile direntry.h hasflock.h hasmkffo.h hassgact.h \
 hassgprm.h haswaitp.h iopause.h load select.h \
-uint64.h reboot_system.h uw_tmp.h socket.lib
+reboot_system.h uw_tmp.h socket.lib
 	rm -f sysdeps
 	cat compile load socket.lib >>sysdeps
 	grep sysdep direntry.h >>sysdeps
@@ -367,7 +367,6 @@ uint64.h reboot_system.h uw_tmp.h socket.lib
 	grep sysdep hassgact.h >>sysdeps
 	grep sysdep hassgprm.h >>sysdeps
 	grep sysdep select.h >>sysdeps
-	grep sysdep uint64.h >>sysdeps
 	grep sysdep iopause.h >>sysdeps
 	grep sysdep hasmkffo.h >>sysdeps
 	grep sysdep hasflock.h >>sysdeps
@@ -375,40 +374,40 @@ uint64.h reboot_system.h uw_tmp.h socket.lib
 	grep sysdep uw_tmp.h >>sysdeps
 	cat sysdeps
 
-tai_now.o: compile tai.h tai_now.c uint64.h
+tai_now.o: compile tai.h tai_now.c
 	./compile tai_now.c
 
-tai_pack.o: compile tai.h tai_pack.c uint64.h
+tai_pack.o: compile tai.h tai_pack.c
 	./compile tai_pack.c
 
-tai_sub.o: compile tai.h tai_sub.c uint64.h
+tai_sub.o: compile tai.h tai_sub.c
 	./compile tai_sub.c
 
-tai_unpack.o: compile tai.h tai_unpack.c uint64.h
+tai_unpack.o: compile tai.h tai_unpack.c
 	./compile tai_unpack.c
 
-taia_add.o: compile tai.h taia.h taia_add.c uint64.h
+taia_add.o: compile tai.h taia.h taia_add.c
 	./compile taia_add.c
 
-taia_approx.o: compile tai.h taia.h taia_approx.c uint64.h
+taia_approx.o: compile tai.h taia.h taia_approx.c
 	./compile taia_approx.c
 
-taia_frac.o: compile tai.h taia.h taia_frac.c uint64.h
+taia_frac.o: compile tai.h taia.h taia_frac.c
 	./compile taia_frac.c
 
-taia_less.o: compile tai.h taia.h taia_less.c uint64.h
+taia_less.o: compile tai.h taia.h taia_less.c
 	./compile taia_less.c
 
-taia_now.o: compile tai.h taia.h taia_now.c uint64.h
+taia_now.o: compile tai.h taia.h taia_now.c
 	./compile taia_now.c
 
-taia_pack.o: compile tai.h taia.h taia_pack.c uint64.h
+taia_pack.o: compile tai.h taia.h taia_pack.c
 	./compile taia_pack.c
 
-taia_sub.o: compile tai.h taia.h taia_sub.c uint64.h
+taia_sub.o: compile tai.h taia.h taia_sub.c
 	./compile taia_sub.c
 
-taia_uint.o: compile tai.h taia.h taia_uint.c uint64.h
+taia_uint.o: compile tai.h taia.h taia_uint.c
 	./compile taia_uint.c
 
 time.a: iopause.o makelib tai_now.o tai_pack.o tai_sub.o tai_unpack.o \
@@ -417,9 +416,6 @@ taia_pack.o taia_sub.o taia_uint.o
 	./makelib time.a iopause.o tai_now.o tai_pack.o tai_sub.o \
 	tai_unpack.o taia_add.o taia_approx.o taia_frac.o taia_less.o \
 	taia_now.o taia_pack.o taia_sub.o taia_uint.o
-
-uint64.h: choose compile load tryulong64.c uint64.h1 uint64.h2
-	./choose clr tryulong64 uint64.h1 uint64.h2 > uint64.h
 
 unix.a: alloc.o alloc_re.o buffer.o buffer_0.o buffer_1.o buffer_2.o \
 buffer_get.o buffer_put.o buffer_read.o buffer_write.o coe.o env.o \

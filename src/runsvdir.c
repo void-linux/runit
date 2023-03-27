@@ -233,7 +233,7 @@ int main(int argc, char **argv) {
             dev =s.st_dev;
             ino =s.st_ino;
             check =0;
-            if (now.sec.x <= (4611686018427387914ULL +(uint64)mtime))
+            if (now.sec.x <= (4611686018427387914ULL +(uint64_t)mtime))
               sleep(1);
             runsvdir();
             while (fchdir(curdir) == -1) {
