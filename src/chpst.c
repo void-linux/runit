@@ -8,7 +8,6 @@
 #include "strerr.h"
 #include "str.h"
 #include "uidgid.h"
-#include "prot.h"
 #include "strerr.h"
 #include "scan.h"
 #include "fmt.h"
@@ -80,7 +79,7 @@ void suidgid(char *user, unsigned int ext) {
     }
   if (setgroups(ugid.gids, ugid.gid) == -1) fatal("unable to setgroups");
   if (setgid(*ugid.gid) == -1) fatal("unable to setgid");
-  if (prot_uid(ugid.uid) == -1) fatal("unable to setuid");
+  if (setuid(ugid.uid) == -1) fatal("unable to setuid");
 }
 
 void euidgid(char *user, unsigned int ext) {

@@ -49,8 +49,6 @@ byte_copy.o
 byte_cr.o
 byte_diff.o
 byte_rchr.o
-chkshsgr
-chkshsgr.o
 choose
 coe.o
 compile
@@ -68,7 +66,6 @@ hasflock.h
 hasmkffo.h
 hassgact.h
 hassgprm.h
-hasshsgr.h
 haswaitp.h
 iopause.h
 iopause.o
@@ -85,7 +82,6 @@ open_write.o
 openreadclose.o
 pathexec_env.o
 pathexec_run.o
-prot.o
 readclose.o
 scan_ulong.o
 seek_set.o
