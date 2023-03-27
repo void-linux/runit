@@ -1,5 +1,6 @@
 #include <unistd.h>
 #include "strerr.h"
+#include "strquote.h"
 #include "error.h"
 #include "sgetopt.h"
 #include "scan.h"
@@ -50,7 +51,7 @@ int main(int argc, const char * const *argv) {
       verbose =1;
       break;
     case 'V':
-      strerr_warn1("$Id$", 0);
+      strerr_warn1(STR(VERSION), 0);
     case '?':
       usage();
     }

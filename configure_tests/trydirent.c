@@ -3,7 +3,7 @@
 #include <sys/types.h>
 #include <dirent.h>
 
-void foo()
+void main()
 {
   DIR *dir;
   struct dirent *d;

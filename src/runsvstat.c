@@ -2,6 +2,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include "strerr.h"
+#include "strquote.h"
 #include "error.h"
 #include "sgetopt.h"
 #include "open.h"
@@ -10,8 +11,6 @@
 #include "fmt.h"
 
 #define USAGE " [ -l ] service ..."
-
-#define VERSION "$Id$"
 
 #define FATAL "runsvstat: fatal: "
 #define WARNING "runsvstat: warning: "
@@ -118,7 +117,7 @@ int main(int argc, char **argv) {
       showlog =1;
       break;
     case 'V':
-      strerr_warn1(VERSION, 0);
+      strerr_warn1(STR(VERSION), 0);
     case '?':
       usage();
     }

@@ -5,8 +5,6 @@
 
 #define USAGE " u|d|o|p|c|h|a|i|q|1|2|t|k|x|e service ..."
 
-#define VERSION "$Id$"
-
 #define FATAL "runsvctrl: fatal: "
 #define WARNING "runsvctrl: warning: "
 

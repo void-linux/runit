@@ -1,5 +1,6 @@
 #include <unistd.h>
 #include "strerr.h"
+#include "strquote.h"
 #include "error.h"
 #include "sgetopt.h"
 #include "scan.h"
@@ -11,8 +12,6 @@
 #define WARN "svwaitdown: warning: "
 #define INFO "svwaitdown: "
 #define USAGE " [-v] [-t 1..6000] service ..."
-
-#define VERSION "$Id$"
 
 const char *progname;
 const char * const *dir;
@@ -57,7 +56,7 @@ int main(int argc, const char * const *argv) {
       verbose =1;
       break;
     case 'V':
-      strerr_warn1(VERSION, 0);
+      strerr_warn1(STR(VERSION), 0);
     case '?':
       usage();
     }

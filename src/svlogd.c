@@ -14,6 +14,7 @@
 #include "alloc.h"
 #include "stralloc.h"
 #include "strerr.h"
+#include "strquote.h"
 #include "buffer.h"
 #include "sig.h"
 #include "env.h"
@@ -35,7 +36,6 @@
 #include "iopause.h"
 
 #define USAGE " [-ttv] [-r c] [-R abc] [-l len] [-b buflen] dir ..."
-#define VERSION "$Id$"
 
 #define FATAL "svlogd: fatal: "
 #define WARNING "svlogd: warning: "
@@ -693,7 +693,7 @@ int main(int argc, const char **argv) {
     case 'v':
       ++verbose;
       break;
-    case 'V': strerr_warn1(VERSION, 0);
+    case 'V': strerr_warn1(STR(VERSION), 0);
     case '?': usage();
     }
   }

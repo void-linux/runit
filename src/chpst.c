@@ -3,10 +3,12 @@
 #include <sys/time.h>
 #include <sys/resource.h>
 #include <unistd.h>
+#include <grp.h>
 #include "sgetopt.h"
 #include "error.h"
 #include "strerr.h"
 #include "str.h"
+#include "strquote.h"
 #include "uidgid.h"
 #include "strerr.h"
 #include "scan.h"
@@ -326,7 +328,7 @@ int main(int argc, const char **argv) {
     case '0': nostdin =1; break;
     case '1': nostdout =1; break;
     case '2': nostderr =1; break;
-    case 'V': strerr_warn1("$Id$", 0);
+    case 'V': strerr_warn1(STR(VERSION), 0);
     case '?': usage();
     }
   argv +=optind;

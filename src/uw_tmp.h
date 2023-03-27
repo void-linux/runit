@@ -1,7 +1,24 @@
-#include <sys/types.h>
-#include <utmp.h>
+#ifndef UW_TMP_H
+#define UW_TMP_H
 
-/* sysdep: -utmpx */
+#include <sys/types.h>
+
+#ifdef HASUTMPX
+
+#include <utmpx.h>
+
+#define UW_TMP_UFILE _UTMPX_FILE
+#define UW_TMP_WFILE _WTMPX_FILE
+
+#ifndef ut_time
+#define ut_time ut_tv.tv_sec
+#endif
+
+typedef struct futmpx uw_tmp;
+
+#else
+
+#include <utmp.h>
 
 #ifdef _PATH_UTMP
 #define UW_TMP_UFILE _PATH_UTMP
@@ -17,3 +34,7 @@
 #endif
 
 typedef struct utmp uw_tmp;
+
+#endif
+
+#endif
