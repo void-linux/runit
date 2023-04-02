@@ -34,23 +34,7 @@ runsvdir: runsvdir.o unix.a byte.a time.a
 	@printf " [CCLD]\t\t$@\n"
 	${SILENT}$(CC) $^ $(LDFLAGS) $(BUILD_STATIC) -o $@
 
-runsvstat: runsvstat.o unix.a byte.a time.a
-	@printf " [CCLD]\t\t$@\n"
-	${SILENT}$(CC) $^ $(LDFLAGS) $(BUILD_STATIC) -o $@
-
-runsvctrl: runsvctrl.o unix.a byte.a
-	@printf " [CCLD]\t\t$@\n"
-	${SILENT}$(CC) $^ $(LDFLAGS) $(BUILD_STATIC) -o $@
-
 sv: sv.o unix.a byte.a time.a
-	@printf " [CCLD]\t\t$@\n"
-	${SILENT}$(CC) $^ $(LDFLAGS) $(BUILD_STATIC) -o $@
-
-svwaitup: svwaitup.o unix.a byte.a time.a
-	@printf " [CCLD]\t\t$@\n"
-	${SILENT}$(CC) $^ $(LDFLAGS) $(BUILD_STATIC) -o $@
-
-svwaitdown: svwaitdown.o unix.a byte.a time.a
 	@printf " [CCLD]\t\t$@\n"
 	${SILENT}$(CC) $^ $(LDFLAGS) $(BUILD_STATIC) -o $@
 
