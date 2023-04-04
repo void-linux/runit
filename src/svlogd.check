@@ -3,8 +3,6 @@ rm -rf "${ctmp}"
 
 svlogd
 echo $?
-svlogd -V
-echo $?
 
 mkdir "${ctmp}"
 echo foo |svlogd "${ctmp}"

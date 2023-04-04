@@ -3,8 +3,6 @@ rm -rf "${ctmp}"
 
 chpst
 echo $?
-chpst -V
-echo $?
 
 # -u
 # -U

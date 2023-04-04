@@ -16,7 +16,7 @@ install: all
 	done
 
 clean:
-	rm -f *.o *.a $(PROGS)
+	rm -f *.o *.a $(PROGS) *.local
 
 runit: runit.o unix.a byte.a
 	@printf " [CCLD]\t\t$@\n"

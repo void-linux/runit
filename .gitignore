@@ -25,3 +25,6 @@ src/utmpset
 # Generated completions
 sv.bash
 sv.zsh
+
+# Test output
+src/*.local
