@@ -111,7 +111,10 @@ else
 	echo "Using compiler $CC"
 fi
 
+: "${AR:=ar crs}"
+
 echo "CC =	$CC" >>$CONFIG_MK
+echo "AR = $AR" >> $CONFIG_MK
 echo "CFLAGS =	-O2" >>$CONFIG_MK
 echo "CPPFLAGS	+=	-D_DEFAULT_SOURCE" >>$CONFIG_MK
 
@@ -223,22 +226,6 @@ fi
 if [ "$CC" = "tcc" ]; then
 	echo "CFLAGS += -Wno-error" >>$CONFIG_MK
 fi
-
-# XXX: this whole mechanism reeks of trying to one-up the system's toolchain,
-# but it's the one that was there and I'm not sure what are the implications
-kern="$(uname -s | tr '/:[A-Z]' '..[a-z])')-$(uname -r | tr /: ..)" || kern="unknown"
-AR="ar cr"
-case $kern in
-  sunos-5.*) ;;
-  unix_sv*) ;;
-  irix64-*) ;;
-  irix-*) ;;
-  dgux-*) ;;
-  hp-ux-*) ;;
-  sco*) ;;
-  *) AR="ar crs" ;;
-esac
-echo "AR = $AR" >> $CONFIG_MK
 
 #
 # Check for flock().
