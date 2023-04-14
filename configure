@@ -328,34 +328,6 @@ if test -n "$HASWAITPID"; then
 fi
 
 #
-# Check for socket() link args.
-# XXX: Is this correct?
-#
-printf "Checking for socket library ... "
-if test -n "$SOCKETLIB"; then
-    # XXX: this seems very wrong, the value we want is empty in most cases, yet empty means "check again"?
-	echo "$SOCKETLIB (cached)."
-else
-    _CC="$XCC configure_tests/trysocketlib.c -o trysocketlib"
-	if $_CC 2>/dev/null; then
-		SOCKETLIB=
-		echo yes.
-    elif $_CC -lxnet 2>/dev/null; then
-        SOCKETLIB="-lxnet"
-        echo "-lxnet"
-    elif $_CC -lsocket -lnsl 2>/dev/null; then
-        SOCKETLIB="-lsocket -lnsl"
-        echo "-lsocket -lnsl"
-	else
-		echo no.
-        echo "Can't find socket library!"
-        exit 1
-	fi
-	rm -f trysocketlib
-fi
-echo "SOCKETLIB_LDFLAGS =	$SOCKETLIB" >> $CONFIG_MK
-
-#
 # Check for utmpx/utmp.
 #
 printf "Checking for utmpx ... "

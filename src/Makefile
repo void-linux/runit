@@ -48,7 +48,7 @@ runsvchdir: runsvchdir.o unix.a byte.a
 
 svlogd: svlogd.o pmatch.o fmt_ptime.o unix.a byte.a time.a
 	@printf " [CCLD]\t\t$@\n"
-	${SILENT}$(CC) $^ $(LDFLAGS) $(BUILD_STATIC) $(SOCKETLIB_LDFLAGS) -o $@
+	${SILENT}$(CC) $^ $(LDFLAGS) $(BUILD_STATIC) -o $@
 
 chpst: chpst.o uidgid.o unix.a byte.a
 	@printf " [CCLD]\t\t$@\n"
