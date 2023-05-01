@@ -229,10 +229,7 @@ hassgprm.h: choose compile hassgprm.h1 hassgprm.h2 load trysgprm.c
 haswaitp.h: choose compile haswaitp.h1 haswaitp.h2 load trywaitp.c
 	./choose cl trywaitp haswaitp.h1 haswaitp.h2 > haswaitp.h
 
-iopause.h: choose compile iopause.h1 iopause.h2 load trypoll.c
-	./choose clr trypoll iopause.h1 iopause.h2 > iopause.h
-
-iopause.o: compile iopause.c iopause.h select.h tai.h taia.h
+iopause.o: compile iopause.c tai.h taia.h
 	./compile iopause.c
 
 load: conf-ld print-ld.sh warn-auto.sh
@@ -290,9 +287,6 @@ scan_ulong.o: compile scan.h scan_ulong.c
 
 seek_set.o: compile seek.h seek_set.c
 	./compile seek_set.c
-
-select.h: choose compile select.h1 select.h2 trysysel.c
-	./choose c trysysel select.h1 select.h2 > select.h
 
 sgetopt.o: buffer.h compile sgetopt.c sgetopt.h subgetopt.h
 	./compile sgetopt.c
@@ -358,7 +352,7 @@ subgetopt.o: compile subgetopt.c subgetopt.h
 	./compile subgetopt.c
 
 sysdeps: compile direntry.h hasflock.h hasmkffo.h hassgact.h \
-hassgprm.h haswaitp.h iopause.h load select.h \
+hassgprm.h haswaitp.h load \
 reboot_system.h uw_tmp.h socket.lib
 	rm -f sysdeps
 	cat compile load socket.lib >>sysdeps
@@ -366,8 +360,6 @@ reboot_system.h uw_tmp.h socket.lib
 	grep sysdep haswaitp.h >>sysdeps
 	grep sysdep hassgact.h >>sysdeps
 	grep sysdep hassgprm.h >>sysdeps
-	grep sysdep select.h >>sysdeps
-	grep sysdep iopause.h >>sysdeps
 	grep sysdep hasmkffo.h >>sysdeps
 	grep sysdep hasflock.h >>sysdeps
 	grep sysdep reboot_system.h >>sysdeps

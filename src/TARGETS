@@ -67,7 +67,6 @@ hasmkffo.h
 hassgact.h
 hassgprm.h
 haswaitp.h
-iopause.h
 iopause.o
 load
 lock_ex.o
@@ -85,7 +84,6 @@ pathexec_run.o
 readclose.o
 scan_ulong.o
 seek_set.o
-select.h
 sgetopt.o
 sig.o
 sig_block.o

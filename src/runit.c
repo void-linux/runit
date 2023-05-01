@@ -47,10 +47,6 @@ int main (int argc, const char * const *argv, char * const *envp) {
   int wstat;
   int st;
   iopause_fd x;
-#ifndef IOPAUSE_POLL
-  fd_set rfds;
-  struct timeval t;
-#endif
   char ch;
   int ttyfd;
   struct stat s;
@@ -145,14 +141,7 @@ int main (int argc, const char * const *argv, char * const *envp) {
       sig_unblock(sig_child);
       sig_unblock(sig_cont);
       sig_unblock(sig_int);
-#ifdef IOPAUSE_POLL
       poll(&x, 1, 14000);
-#else
-      t.tv_sec =14; t.tv_usec =0;
-      FD_ZERO(&rfds);
-      FD_SET(x.fd, &rfds);
-      select(x.fd +1, &rfds, (fd_set*)0, (fd_set*)0, &t);
-#endif
       sig_block(sig_cont);
       sig_block(sig_child);
       sig_block(sig_int);

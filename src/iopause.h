@@ -3,16 +3,12 @@
 #ifndef IOPAUSE_H
 #define IOPAUSE_H
 
-/* sysdep: -poll */
+#include <sys/types.h>
+#include <poll.h>
 
-typedef struct {
-  int fd;
-  short events;
-  short revents;
-} iopause_fd;
-
-#define IOPAUSE_READ 1
-#define IOPAUSE_WRITE 4
+typedef struct pollfd iopause_fd;
+#define IOPAUSE_READ POLLIN
+#define IOPAUSE_WRITE POLLOUT
 
 #include "taia.h"
 
