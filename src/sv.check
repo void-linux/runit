@@ -4,8 +4,6 @@ trap 'rm -rf "${ctmp}"' EXIT
 
 sv
 echo $?
-sv -V
-echo $?
 
 mkdir "${ctmp}"
 cat >"${ctmp}"/run <<-\EOT

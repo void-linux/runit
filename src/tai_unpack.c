@@ -4,7 +4,7 @@
 
 void tai_unpack(const char *s,struct tai *t)
 {
-  uint64 x;
+  uint64_t x;
 
   x = (unsigned char) s[0];
   x <<= 8; x += (unsigned char) s[1];

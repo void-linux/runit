@@ -6,6 +6,7 @@
 #include <string.h>
 #include "uw_tmp.h"
 #include "strerr.h"
+#include "strquote.h"
 #include "sgetopt.h"
 #include "seek.h"
 #include "str.h"
@@ -97,7 +98,7 @@ int main (int argc, const char * const *argv, const char * const *envp) {
       wtmp =1;
       break;
     case 'V':
-      strerr_warn1("$Id$", 0);
+      strerr_warn1(STR(VERSION), 0);
     case '?':
       usage();
     }

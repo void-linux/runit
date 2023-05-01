@@ -1,0 +1,30 @@
+# Generated config
+config.mk
+
+# Objects
+*.o
+*.a
+
+# Generated manual pages
+runsv.8
+runsvchdir.8
+sv.8
+utmpset.8
+
+# Binaries
+src/chpst
+src/runit
+src/runit-init
+src/runsv
+src/runsvdir
+src/runsvchdir
+src/sv
+src/svlogd
+src/utmpset
+
+# Generated completions
+sv.bash
+sv.zsh
+
+# Test output
+src/*.local

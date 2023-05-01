@@ -2,7 +2,6 @@
 
 #include <signal.h>
 #include "sig.h"
-#include "hassgact.h"
 
 void sig_catch(int sig,void (*f)())
 {

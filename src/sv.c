@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include "str.h"
 #include "strerr.h"
+#include "strquote.h"
 #include "error.h"
 #include "sgetopt.h"
 #include "open.h"
@@ -17,8 +18,6 @@
 #define USAGE " [-v] [-w sec] command service ..."
 #define USAGELSB " [-w sec] command"
 
-#define VERSION "$Id$"
-
 #define FATAL   "fatal: "
 #define FAIL    "fail: "
 #define WARN    "warning: "
@@ -32,7 +31,7 @@
 char *progname;
 char *action;
 char *acts;
-char *varservice ="/var/service/";
+char *varservice = STR(SERVICEDIR);
 char **service;
 char **servicex;
 unsigned int services;
@@ -285,7 +284,7 @@ int main(int argc, char **argv) {
     switch(i) {
     case 'w': scan_ulong(optarg, &wait);
     case 'v': verbose =1; break;
-    case 'V': strerr_warn1(VERSION, 0);
+    case 'V': strerr_warn1(STR(VERSION), 0);
     case '?': usage();
     }
   }

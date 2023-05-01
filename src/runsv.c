@@ -22,8 +22,6 @@
 
 #define USAGE " dir"
 
-#define VERSION "$Id$"
-
 char *progname;
 int selfpipe[2];
 

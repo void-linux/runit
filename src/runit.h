@@ -1,4 +1,6 @@
-#define RUNIT "/sbin/runit"
-#define STOPIT "/etc/runit/stopit"
-#define REBOOT "/etc/runit/reboot"
-#define CTRLALTDEL "/etc/runit/ctrlaltdel"
+#include "strquote.h"
+
+#define RUNIT STR(SBINDIR) "/runit"
+#define STOPIT STR(SYSCONFDIR) "/runit/stopit"
+#define REBOOT STR(SYSCONFDIR) "/runit/reboot"
+#define CTRLALTDEL STR(SYSCONFDIR) "/runit/ctrlaltdel"

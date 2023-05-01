@@ -1,0 +1,443 @@
+#!/bin/sh
+
+VERSION=2.1.2
+
+# Ensure that we do not inherit these from env
+BUILD_STATIC=
+SILENT=yes
+DEBUG=
+
+usage()
+{
+	cat <<_EOF
+\`configure' configures runit to adapt to many kinds of systems.
+
+By default, \`make install' will install all the files in
+\`/usr/local/sbin', \`/usr/local/lib' etc.  You can specify
+an installation prefix other than \`/usr/local' using \`--prefix',
+for instance \`--prefix=\$HOME'.
+
+--prefix=DIR 		Install architecture-independent files in PREFIX
+--exec-prefix=DIR 	Install architecture-dependent files in EPREFIX
+--bindir=DIR 		Executables [PREFIX/bin]
+--sysconfdir=DIR 	Configuration files directory [PREFIX/etc]
+--mandir=DIR 		Man documentation [EPREFIX/share/man]
+--datadir=DIR 		Read-only architecture-independent data [EPREFIX/share]
+--servicedir=DIR	Directory to store services in [/var/service]
+
+--verbose 		Disable silent build to see compilation details
+--enable-debug		Enables debugging (assertions and -g, default enabled)
+--disable-debug		Disables debugging (assertions and -g)
+--enable-static 	Build all runit utils statically (default disabled)
+--disable-static 	Don't build all runit utils statically
+_EOF
+	exit 1
+}
+
+for x; do
+	opt=${x%%=*}
+	var=${x#*=}
+	case "$opt" in
+	--prefix) PREFIX=$var ;;
+	--exec-prefix) EPREFIX=$var ;;
+	--bindir) BINDIR=$var ;;
+	--mandir) MANDIR=$var ;;
+	--datadir) SHAREDIR=$var ;;
+	--sysconfdir) SYSCONFDIR=$var ;;
+	--servicedir) SERVICEDIR=$var ;;
+	--infodir) ;; # ignore autotools
+	--verbose) unset SILENT ;;
+	--enable-debug) DEBUG=yes ;;
+	--disable-debug) DEBUG=no ;;
+	--enable-static) BUILD_STATIC=yes ;;
+	--disable-static) BUILD_STATIC=no ;;
+	--help) usage;;
+	*) echo "$0: WARNING: unknown option $opt" >&2 ;;
+	esac
+done
+
+: "${SED:=sed}"
+
+: "${PREFIX:=/usr/local}"
+: "${EPREFIX:=${PREFIX}}"
+: "${BINDIR:=${PREFIX}/bin}"
+: "${SYSCONFDIR:=/etc}"
+: "${SHAREDIR:=${EPREFIX}/share}"
+: "${MANDIR:=${EPREFIX}/share/man}"
+: "${SERVICEDIR:=/var/service}"
+
+CONFIG_MK=config.mk
+
+echo "Configuring runit ..."
+rm -f $CONFIG_MK
+echo "# Common vars used by runit." >$CONFIG_MK
+
+if type git >/dev/null; then
+	GIT_REV="$(git rev-parse --short=8 HEAD 2>/dev/null)"
+	if [ -n "$GIT_REV" ]; then
+		VERSION="$VERSION-$GIT_REV"
+	fi
+fi
+
+echo "VERSION = $VERSION" >>$CONFIG_MK
+echo "CPPFLAGS += -DVERSION=$VERSION" >>$CONFIG_MK
+echo "PREFIX ?=	$PREFIX" >>$CONFIG_MK
+echo "EPREFIX ?= $EPREFIX" >>$CONFIG_MK
+echo "SBINDIR ?= $BINDIR" >>$CONFIG_MK
+echo "CPPFLAGS += -DSBINDIR=$BINDIR" >>$CONFIG_MK
+echo "MANDIR ?=	$MANDIR" >>$CONFIG_MK
+echo "SHAREDIR ?= $SHAREDIR" >>$CONFIG_MK
+echo "SYSCONFDIR ?= $SYSCONFDIR" >>$CONFIG_MK
+echo "CPPFLAGS += -DSYSCONFDIR=$SYSCONFDIR" >>$CONFIG_MK
+echo "SERVICEDIR ?= $SERVICEDIR" >>$CONFIG_MK
+echo "CPPFLAGS += -DSERVICEDIR=$SERVICEDIR" >>$CONFIG_MK
+echo "SED ?= $SED" >>$CONFIG_MK
+
+if [ -z "$CC" ]; then
+	printf "Looking for compiler ... "
+	for cc in gcc icc clang tcc pcc cc; do
+		if type $cc >/dev/null 2>&1; then
+			CC=$cc
+			echo "$CC"
+			break
+		fi
+	done
+	if [ -z "$CC" ]; then
+		echo
+		echo "no suitable compiler found - aborting" >&2
+		exit 1
+	fi
+else
+	echo "Using compiler $CC"
+fi
+
+: "${AR:=ar crs}"
+
+echo "CC =	$CC" >>$CONFIG_MK
+echo "AR = $AR" >> $CONFIG_MK
+echo "CFLAGS =	-O2" >>$CONFIG_MK
+echo "CPPFLAGS	+=	-D_DEFAULT_SOURCE" >>$CONFIG_MK
+
+[ -z "$DEBUG" ] && DEBUG=yes
+if [ -n "$DEBUG" ] && [ "$DEBUG" != no ] && [ "$DEBUG" != false ]; then
+	echo "Building with debugging symbols."
+	echo "CPPFLAGS += -DDEBUG" >>$CONFIG_MK
+	echo "CFLAGS +=	-g" >>$CONFIG_MK
+else
+	echo "CPPFLAGS+= -DNDEBUG" >>$CONFIG_MK
+fi
+
+# Add CPPFLAGS/CFLAGS/LDFLAGS to CC for testing features
+XCC="$CC $CFLAGS $CPPFLAGS $LDFLAGS"
+
+check_compiler_flag()
+{
+	flag="$1"
+	mode="$2"
+	var="$3"
+	rv=0
+
+	[ -z "$var" ] && var="CFLAGS"
+
+	printf "Checking if %s supports -%s%s ... " "$CC" "$mode" "$flag"
+	cat <<EOF >_ccflag.c
+#include <stdio.h>
+int main(void) { return 0; }
+EOF
+	if $XCC -${mode}${flag} _ccflag.c -o _ccflag 2>_ccflag.err; then
+		if ! test -s _ccflag.err; then
+			if [ "$mode" = "W" ] && [ -z "$var" ]; then
+				echo "CFLAGS +=	-${mode}${flag}" >>$CONFIG_MK
+			else
+				echo "$var +=	-${mode}${flag}" >>$CONFIG_MK
+			fi
+			echo "yes."
+		else
+			rv=1
+			echo "no."
+		fi
+	else
+		rv=1
+		echo "no."
+	fi
+	[ -z "$SILENT" ] && cat _ccflag.err
+	rm -f _ccflag.c _ccflag _ccflag.err
+	return $rv
+}
+
+# If supported, make sure to disable --as-needed for CC tests.
+if check_compiler_flag "l,--no-as-needed" W LDFLAGS; then
+	XCC="$XCC -Wl,--no-as-needed"
+fi
+
+# Check for some compiler warning flags
+# TODO: check more compiler warning flags
+# for f in all extra shadow "format=2" missing-prototypes \
+# 	missing-declarations nested-externs vla overlength-strings \
+# 	unsafe-loop-optimizations undef sign-compare \
+# 	missing-include-dirs old-style-definition \
+# 	init-self redundant-decls float-equal missing-noreturn \
+# 	cast-align cast-qual pointer-arith comment \
+# 	declaration-after-statement write-strings stack-protector; do
+for f in all; do
+	check_compiler_flag "$f" W
+done
+
+# Check for some compiler flags.
+check_compiler_flag PIC f CFLAGS
+check_compiler_flag "inline-functions" f CFLAGS
+
+if ! check_compiler_flag stack-protector-strong f CFLAGS; then
+	if check_compiler_flag stack-protector f CFLAGS; then
+		if [ "$CC" = "gcc" ]; then
+			check_compiler_flag "param ssp-buffer-size=1" - CFLAGS
+		fi
+	fi
+fi
+
+# Check for some linker flags.
+check_compiler_flag "l,-z,relro,-z,now,-z,noexecstack" W LDFLAGS
+
+# Check if PIE is supported.
+if check_compiler_flag PIE f CFLAGS; then
+	if check_compiler_flag pie "" LDFLAGS; then
+		BUILD_PIE_VALUE=yes
+	else
+		BUILD_PIE_VALUE=no
+	fi
+fi
+
+# A C99 compiler is required to build runit.
+if ! check_compiler_flag "std=c99" "" CFLAGS; then
+	echo "ERROR: A compatible C99 compiler is required, exiting..."
+	exit 1
+fi
+
+if [ -n "$CFLAGS" ]; then
+	echo "CFLAGS +=	$CFLAGS" >>$CONFIG_MK
+fi
+if [ -n "$LDFLAGS" ]; then
+	echo "LDFLAGS += $LDFLAGS" >>$CONFIG_MK
+fi
+if [ -n "$CPPFLAGS" ]; then
+	echo "CPPFLAGS += $CPPFLAGS" >>$CONFIG_MK
+fi
+
+if [ "$CC" = "tcc" ]; then
+	echo "CFLAGS += -Wno-error" >>$CONFIG_MK
+fi
+
+#
+# Check for flock().
+#
+func=flock
+printf "Checking for $func() ... "
+if test -n "$HASFLOCK"; then
+	echo "yes (cached)."
+else
+	if $XCC configure_tests/try$func.c -o try$func 2>/dev/null; then
+		echo yes.
+		HASFLOCK=1
+	else
+		echo no.
+	fi
+	rm -f try$func
+fi
+if test -n "$HASFLOCK"; then
+	echo "CPPFLAGS +=	-DHASFLOCK" >> $CONFIG_MK
+fi
+
+#
+# Check for sigprocmask().
+#
+func=sigprocmask
+printf "Checking for $func() ... "
+if test -n "$HASSIGPROCMASK"; then
+	echo "yes (cached)."
+else
+	if $XCC configure_tests/try$func.c -o try$func 2>/dev/null; then
+		echo yes.
+		HASSIGPROCMASK=1
+	else
+		echo no.
+	fi
+	rm -f try$func
+fi
+if test -n "$HASSIGPROCMASK"; then
+	echo "CPPFLAGS +=	-DHASSIGPROCMASK" >> $CONFIG_MK
+fi
+
+#
+# Check for mkfifo().
+#
+func="mkfifo"
+printf "Checking for $func() ... "
+if test -n "$HASMKFIFO"; then
+	echo "yes (cached)."
+else
+	if $XCC configure_tests/try$func.c -o try$func 2>/dev/null; then
+		echo yes.
+		HASMKFIFO=1
+	else
+		echo no.
+	fi
+	rm -f try$func
+fi
+if test -n "$HASMKFIFO"; then
+	echo "CPPFLAGS +=	-DHASMKFIFO" >> $CONFIG_MK
+fi
+
+#
+# Check for sigaction().
+#
+func=sigaction
+printf "Checking for $func() ... "
+if test -n "$HASSIGACTION"; then
+	echo "yes (cached)."
+else
+	if $XCC configure_tests/try$func.c -o try$func 2>/dev/null; then
+		echo yes.
+		HASSIGACTION=1
+	else
+		echo no.
+	fi
+	rm -f try$func
+fi
+if test -n "$HASSIGACTION"; then
+	echo "CPPFLAGS +=	-DHASSIGACTION" >> $CONFIG_MK
+fi
+
+#
+# Check for waitpid().
+#
+func=waitpid
+printf "Checking for $func() ... "
+if test -n "$HASWAITPID"; then
+	echo "yes (cached)."
+else
+	if $XCC configure_tests/try$func.c -o try$func 2>/dev/null; then
+		echo yes.
+		HASWAITPID=1
+	else
+		echo no.
+	fi
+	rm -f try$func
+fi
+if test -n "$HASWAITPID"; then
+	echo "CPPFLAGS +=	-DHASWAITPID" >> $CONFIG_MK
+fi
+
+#
+# Check for utmpx/utmp.
+#
+printf "Checking for utmpx ... "
+if test -n "$HASUTMPX"; then
+	echo "$HASUTMPX (cached)."
+else
+    if $XCC configure_tests/tryuwtmpx.c -o tryuwtmpx 2>/dev/null; then
+		HASUTMPX=1
+		echo yes.
+	else
+		echo no.
+	fi
+	rm -f tryuwtmpx
+fi
+
+printf "Checking for utmp ... "
+if test -n "$HASUTMP"; then
+	echo "$HASUTMP (cached)."
+else
+	if $XCC configure_tests/tryuwtmp.c -o tryuwtmp 2>/dev/null; then
+		HASUTMP=1
+		echo yes.
+	else
+		echo no.
+	fi
+	rm -f tryuwtmp
+fi
+
+if test -n "$HASUTMPX"; then
+	echo "Using utmpx"
+	echo "CPPFLAGS +=	-DHASUTMPX" >> $CONFIG_MK
+elif test -n "$HASUTMP"; then
+	echo "Using utmp"
+else
+	echo "Cannot find utmpx or utmp!"
+	exit 1
+fi
+
+#
+# Check for dirent.h.
+#
+func=dirent
+printf "Checking for $func.h ... "
+if test -n "$HASDIRENT"; then
+	echo "yes (cached)."
+else
+	if $XCC configure_tests/try$func.c -o try$func 2>/dev/null; then
+		echo yes.
+		HASDIRENT=1
+	else
+		echo no.
+	fi
+	rm -f try$func
+fi
+if test -n "$HASDIRENT"; then
+	echo "CPPFLAGS +=	-DHASDIRENT" >> $CONFIG_MK
+fi
+
+#
+# Check for one argument reboot().
+#
+printf "Checking for one argument reboot() ... "
+if test -n "$HASONEARGREBOOT"; then
+	echo "yes (cached)."
+else
+	if $XCC configure_tests/tryreboot.c -o tryreboot 2>/dev/null; then
+		echo yes.
+		HASONEARGREBOOT=1
+	else
+		echo no.
+	fi
+	rm -f tryreboot
+fi
+if test -n "$HASONEARGREBOOT"; then
+	echo "CPPFLAGS +=	-DHASONEARGREBOOT" >> $CONFIG_MK
+fi
+
+# If --enable-static enabled, build static binaries.
+if [ "$BUILD_STATIC" = "yes" ]; then
+	echo "BUILD_STATIC = -static" >>$CONFIG_MK
+	BUILD_STATIC_VALUE=yes
+else
+	echo "BUILD_STATIC = " >>$CONFIG_MK
+	BUILD_STATIC_VALUE=no
+fi
+
+if [ -n "$SILENT" ]; then
+	echo "SILENT = @" >>$CONFIG_MK
+else
+	echo "SILENT =" >>$CONFIG_MK
+fi
+
+echo
+echo "  runit has been configured with the following options:"
+echo
+echo "   PREFIX = 		$PREFIX"
+echo "   EPREFIX = 		$EPREFIX"
+echo "   BINDIR =		$BINDIR"
+echo "   SYSCONFDIR =		$SYSCONFDIR"
+echo "   SHAREDIR =		$SHAREDIR"
+echo "   MANDIR =		$MANDIR"
+echo "   SERVICEDIR =		$SERVICEDIR"
+echo "   CFLAGS =		$CFLAGS"
+echo "   LDFLAGS =		$LDFLAGS"
+echo
+echo "   Build programs as PIE =	$BUILD_PIE_VALUE"
+echo "   Build static programs =	$BUILD_STATIC_VALUE"
+echo "   Build with debugging = 	$DEBUG"
+echo
+echo "  You can now run make && make install clean."
+echo
+
+exit 0
