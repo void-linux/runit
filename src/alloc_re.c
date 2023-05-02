@@ -3,10 +3,7 @@
 #include "alloc.h"
 #include "byte.h"
 
-int alloc_re(x,m,n)
-char **x;
-unsigned int m;
-unsigned int n;
+int alloc_re(char **x, unsigned int m, unsigned int n)
 {
   char *y;
  
